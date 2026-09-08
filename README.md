@@ -2,6 +2,8 @@
 
 A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The three opening essays are original commissioned copy, with credited archival illustrations.
 
+Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio) (private).
+
 ## Run locally
 
 Use Node.js 22.13 or newer and npm.
