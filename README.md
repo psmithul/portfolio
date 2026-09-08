@@ -1,97 +1,93 @@
-# Mithul Sourav — portfolio & The Margins
+# Mithul Sourav · Portfolio & Mika’s Life
 
-A mechanical engineering and robotics portfolio, with a personally maintained Markdown journal. The CV provided on 8 September 2026 is the source for all academic and project claims.
+A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The three opening essays are original commissioned copy, with credited archival illustrations.
 
-## Start the site
+## Run locally
 
-Requires Node.js 22.13 or newer and npm.
+Use Node.js 22.13 or newer and npm.
 
 ```sh
 npm ci
+npm run db:migrate
 npm run dev
 ```
 
-Open the local address printed by the server. The portfolio, project pages, and journal are server-rendered and work without client-side JavaScript. Fonts are served locally.
+Open the address printed by the server. Visit `/write` and choose **Sign in with ChatGPT**. Local development simulates an account called Seedy; no password or API key is needed. This local sign-in is absent from production builds.
 
-## Write a journal entry
+## Write on the website
 
-1. Create a draft:
+1. Open **Writing desk** in the footer, or go to `/write`.
+2. Choose **New entry**, or open an existing essay.
+3. Add a title, a short introduction, topics separated by commas, and your text.
+4. Use the toolbar for headings, emphasis, quotations, lists, links, and images. The image button accepts a hosted image URL and a description. You can also type Markdown directly.
+5. Switch to **Preview** to read the essay with the journal’s typography.
+6. Choose **Publish** when it is ready. For an existing article, use **Update post**.
 
-   ```sh
-   npm run post -- "What mechanisms can teach us about uncertainty"
-   ```
+Drafts save automatically after you pause for 1.5 seconds. **Save draft**, or Cmd/Ctrl+S, saves immediately. The status line confirms whether changes have reached the database. If a save fails, your text stays in the editor and an error explains what to do. If another tab has edited the same post, the server refuses to overwrite its changes; copy your text before reloading.
 
-2. Open the new file in `content/posts/`. Edit its title, description, tags, date, and Markdown body.
-3. Stop the regular development server, then run `npm run dev:drafts`. Open `/blog` to read the draft in the actual article layout. This mode clearly labels the site as a local draft preview. Editing a Markdown file updates the preview automatically.
-4. When the entry is ready, change `draft: true` to `draft: false`. Use a quoted date, such as `date: "2026-09-08"`.
-5. Run `npm run build`, then publish the updated version with Sites.
+Saving an edit to a published article does not change the public version. Readers see the previous version until you choose **Update post**. **Unpublish** removes an article from the journal while keeping its draft. Published URLs stay stable after title changes. Dates use UTC, and reading time is estimated at 220 words per minute.
 
-A complete syntax example lives at `content/templates/post.md`; it is excluded from the journal. The blog intentionally starts with zero published posts. No sample essay is presented as your writing.
+**Download a backup** on the desk exports all saved drafts and published versions as JSON. It does not include text still waiting to save in an open editor.
 
-Production builds exclude drafts and future-dated posts, even if the draft-preview environment variable is set. A future-dated post becomes eligible at the next build on or after that date (UTC); there is no automatic publishing scheduler.
+## Storage and access
 
-### Front matter
+The writing desk uses Cloudflare D1 through the `DB` binding. Local data lives in the ignored `.wrangler/state/` directory and survives development-server restarts. Production data belongs to the existing Sites deployment. Posts written online are stored in that database, not committed to GitHub; use the backup button to retain a separate copy.
 
-```yaml
----
-title: 'Your essay title'
-date: '2026-09-08'
-description: 'A short, specific introduction for the journal index.'
-tags: ['Engineering', 'Reflections']
-draft: true
----
-```
+The public portfolio and journal are readable without sign-in. Writing pages and every draft API enforce an owner allowlist on the server. The production owner is `miastromika@gmail.com`. Only the Sites development identity is additionally allowed during local development. Authenticated requests use the platform’s trusted identity headers; mutations also require a same-origin JSON request.
 
-The filename becomes the URL: `a-small-observation.md` → `/blog/a-small-observation`. Use lowercase letters, digits, and hyphens. Avoid renaming a published file because that changes its URL.
+The auth flow is provided by Sites. Do not expose the raw Worker publicly outside that trusted dispatcher or move it to a different host without implementing the equivalent trusted authentication boundary. GitHub holds the source; GitHub Pages does not run the database or server routes.
 
-Headings, paragraphs, emphasis, links, blockquotes, lists, code, tables, and footnotes are supported. Raw HTML is deliberately omitted by the renderer. Add your own images to `public/images/` and reference them as `![Useful alt text](/images/filename.webp)`. Ensure referenced files exist before publishing. A post's title is already the page heading; start body headings with `##`.
+The initial essays are bundled from `content/posts/*.md`. On the owner’s first desk visit, the server imports them once. From then on, the database is authoritative. Redeploying source does not overwrite edited posts or restore unpublished essays. The Markdown files are a record of the initial issue, not a second CMS. New regular posts should be written through `/write`.
 
-The homepage automatically links to the newest visible entry. Reading time is estimated from the word count. The article order is newest first.
+## Change the portfolio
 
-## Update the portfolio
+| Content                                                  | Location                      |
+| -------------------------------------------------------- | ----------------------------- |
+| Project facts, contribution, method, status, and results | `content/projects.ts`         |
+| Homepage introduction                                    | `app/page.tsx`                |
+| Education, experience, skills, and recognition           | `app/about/page.tsx`          |
+| Name, contacts, and navigation                           | `app/layout.tsx`              |
+| CV download                                              | `public/Mithul-Sourav-CV.pdf` |
+| Journal introduction                                     | `app/blog/page.tsx`           |
+| Colours, typography, spacing, and responsive layout      | `app/globals.css`             |
+| Owner authorization                                      | `lib/journal-model.ts`        |
 
-| What to update                                      | File                          |
-| --------------------------------------------------- | ----------------------------- |
-| Project facts, methods, outcomes, status, and tools | `content/projects.ts`         |
-| Homepage introduction                               | `app/page.tsx`                |
-| Education, experience, skills, and recognition      | `app/about/page.tsx`          |
-| Name, contact links, and navigation                 | `app/layout.tsx`              |
-| Downloadable CV                                     | `public/Mithul-Sourav-CV.pdf` |
-| Journal introduction                                | `app/blog/page.tsx`           |
-| Colours, typography, spacing, and responsive layout | `app/globals.css`             |
-| Actual journal entries                              | `content/posts/*.md`          |
+The five project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. The tensegrity illustration is conceptual; the project graphics describe methods. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
-The five main project records generate both index cards and full project pages. Keep your personal contribution distinct from team work, and distinguish modeled outcomes from physical test results. The tensegrity illustration is a conceptual principle schematic. The other graphics describe engineering workflows; they are not prototype images or experimental results.
-
-The primary source is `Mithul_MIT_Mechanical_Engineering_SM_CV_FINAL.pdf`. Its filename does not imply MIT affiliation: the website correctly identifies NITK Surathkal. CGPA is 7.37/10 and the official Vayu role is Product Intern.
-
-## Check and build
+## Verify changes
 
 ```sh
 npm test
 npm run typecheck
 npm run lint
 npm run build
+npm run smoke -- http://localhost:3000
+npm run smoke:journal -- http://localhost:3000
 ```
 
-`npm run smoke -- http://localhost:3000` checks the live local routes, missing-page behavior, metadata, and CV download. Use the address actually printed by the server.
+Use the address printed by your actual development server. The journal integration check creates a clearly named local test entry, verifies save/reload, publication, private revisions, conflicts, and unpublishing, then prints its ID. It finishes as an unpublished draft. Run it only against a disposable local preview, never a live site.
 
-`npm start` serves the built Cloudflare Worker locally. Content is compiled at build time into `lib/posts.generated.ts`; do not edit that generated file. The deployed Worker has no dependency on a writable filesystem and the site needs no database or CMS account.
+`npm start` serves the production build locally using the same local database. It checks production rendering but does not simulate Sites sign-in. All built Worker assets are under `dist/`; database files, environment files, and dependency folders are excluded from source control and deployment archives.
 
-## Hosting and ownership
+The editor includes a feature-detected `save_journal_draft` WebMCP action for compatible browsers. The regular writing desk works without it. A supported WebMCP validation context was not available in the development session; no browser integration verification is claimed for this optional action.
 
-The existing Sites registration belongs to the `miastromika` destination and is recorded in `.openai/hosting.json`. Reuse that registration for updates; do not create another Site.
+## Database changes and hosting
 
-This build is prepared for Sites hosting. Publication requires the explicit confirmation requested by the supplied AGENTS.md. No deployment should be described as live until the Sites deployment-status check succeeds.
+```sh
+npm run db:generate
+npm run db:migrate
+npm run build
+```
 
-To request an update later: “Update my portfolio in Life creative, preview the changes, and publish after I approve.” To add a post: “Add this essay to The Margins as a draft.” You can also maintain all content directly without an assistant.
+Define schema changes in `db/schema.ts`, generate and inspect a new migration, then apply it locally. Never edit an applied migration. Migrations contain schema changes only; initial article import is an authenticated application action.
 
-Draft source files are part of the local project and its private source history; draft exclusion protects the published site output, not the source repository. Keep confidential notes outside the site project.
+Reuse the Site registration in `.openai/hosting.json`. It contains only the Site ID and logical bindings. Sites packages the Worker, assets, and `drizzle/` migrations and supplies the production database and sign-in flow. Source pushes and website deployment are separate actions: a GitHub push alone does not publish this website. No site should be called live until deployment succeeds and its URL is verified.
 
-## Design and implementation
+## Design and credits
 
-The engineering pages use a structured fieldbook layout, Manrope, Fraunces, and Space Mono. The journal takes its reading-first editorial direction from [The Marginalian](https://www.themarginalian.org/), while using original copy, layout, and identity. No articles or imagery were copied from the reference.
+The engineering pages use Manrope, Fraunces, and Space Mono, locally hosted with their SIL Open Font Licenses in `public/fonts/`. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
 
-Stack: React, TypeScript, Vinext, Vite, Cloudflare Workers, and the Sites plugin. Journal rendering uses [react-markdown](https://github.com/remarkjs/react-markdown) with remark-gfm, and gray-matter for author-controlled front matter.
+- **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
+- **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).
 
-Fonts are locally hosted under their SIL Open Font Licenses in `public/fonts/`. The website includes responsive layouts, visible keyboard focus, a skip link, reduced-motion support, a custom 404 page, and print styles.
+Stack: React, TypeScript, Vinext, Vite, Cloudflare Workers, Sites, D1, and Drizzle migrations. Articles render with react-markdown and remark-gfm; raw HTML and executable link protocols are not rendered.
