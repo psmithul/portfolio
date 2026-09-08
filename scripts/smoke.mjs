@@ -7,9 +7,18 @@ if (!base) {
   process.exit(1);
 }
 const cases = [
-  ['/', 200, 'Making sense', 'Mechanical Engineering &amp; Robotics'],
+  ['/', 200, 'Mithul', 'Mechanical Engineering &amp; Robotics'],
+  ['/blog/the-small-blue-thing', 200, 'Most of the photograph', 'small blue'],
+  ['/blog/a-walk-in-twenty-four-pictures', 200, 'Muybridge', 'A walk'],
+  [
+    '/blog/leave-room-for-the-unfinished',
+    200,
+    'two kinds of satisfaction',
+    'unfinished',
+  ],
+  ['/write', 200, 'Sign in with ChatGPT', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
-  ['/blog', 200, 'The Margins', 'Journal'],
+  ['/blog', 200, 'Mika’s', 'Mika’s Life'],
   [
     '/work/tensegrity-joint',
     200,
@@ -25,9 +34,9 @@ const cases = [
   ],
   ['/work/neoleg-knee-mechanism', 200, '75–120', 'NeoLeg'],
   ['/work/off-road-leaf-robot', 200, 'bottom-up BOM', 'Off-road'],
-  ['/work/not-a-real-project', 404, 'uncharted territory', ''],
-  ['/blog/not-a-published-entry', 404, 'uncharted territory', ''],
-  ['/this-page-does-not-exist', 404, 'uncharted territory', ''],
+  ['/work/not-a-real-project', 404, 'here yet.', ''],
+  ['/blog/not-a-published-entry', 404, 'here yet.', ''],
+  ['/this-page-does-not-exist', 404, 'here yet.', ''],
 ];
 for (const [path, status, content, title] of cases) {
   const response = await fetch(new URL(path, base));

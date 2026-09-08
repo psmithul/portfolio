@@ -28,23 +28,23 @@ export default function About() {
   return (
     <main id="main" className="about-page">
       <section className="about-hero shell">
-        <p className="eyebrow">A LITTLE CONTEXT</p>
+        <p className="eyebrow">ABOUT ME</p>
         <h1>
-          An engineer.
+          Hi, I’m Mithul.
           <br />
-          <em>Still asking why.</em>
+          <em>Also Mika.</em>
         </h1>
         <div className="about-introduction">
           <p>
             I’m P S Mithul Sourav, a final-year Mechanical Engineering student
-            at NITK Surathkal, interested in the point where mechanical design
-            meets sensing, computation, and control.
+            at NITK Surathkal. I work on mechanisms, dynamics, and robotics, and
+            expect to graduate in June 2027.
           </p>
           <p>
-            My work spans compliant robotic mechanisms, structural dynamics,
-            navigation under uncertainty, and the practical details of
-            integrating hardware. I’m especially drawn to understanding how a
-            system behaves before deciding how to improve it.
+            My current projects include a tensegrity knee joint and
+            reaction-wheel vibration modeling. I’ve also built a robot
+            navigation simulator and worked on avionics integration at Vayu
+            Aerospace. This site brings that work together with my writing.
           </p>
         </div>
       </section>
@@ -121,8 +121,8 @@ export default function About() {
         </div>
         <div className="about-body">
           <p className="large-body">
-            Engineering is also about people, trade-offs, and making things work
-            together.
+            I’ve also worked in product strategy, workflow design, and
+            consulting.
           </p>
           <div className="compact-experience">
             <div>
@@ -216,9 +216,9 @@ export default function About() {
       <section className="contact-section shell">
         <p className="eyebrow">LET’S COMPARE NOTES</p>
         <h2>
-          Good work starts
+          Get in
           <br />
-          <em>with a conversation.</em>
+          <em>touch.</em>
         </h2>
         <a href="mailto:psmithul@gmail.com" className="contact-email">
           psmithul@gmail.com <ArrowUpRight />

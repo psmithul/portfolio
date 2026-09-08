@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: '%s — Mithul Sourav',
   },
   description:
-    'Mechanical engineering, robotics, and intelligent physical systems. Selected research and projects by P S Mithul Sourav, NITK Surathkal.',
+    'Mechanical engineering and robotics projects by Mithul Sourav at NITK Surathkal, with essays from his personal journal, Mika’s Life.',
   icons: { icon: '/favicon.svg' },
 };
 
@@ -29,7 +29,7 @@ export default function RootLayout({
             </span>
             <span>
               Mithul Sourav
-              <span className="wordmark-caption">ENGINEER & EXPLORER</span>
+              <span className="wordmark-caption">MECHANICAL ENGINEERING</span>
             </span>
           </Link>
           <nav aria-label="Main navigation">
@@ -54,7 +54,7 @@ export default function RootLayout({
             <Link href="/" className="footer-name">
               Mithul Sourav<span>.</span>
             </Link>
-            <p>Mechanisms. Motion. An open mind.</p>
+            <p>Mechanical engineering & robotics · NITK Surathkal</p>
           </div>
           <div className="footer-links">
             <a href="mailto:psmithul@gmail.com">
@@ -73,7 +73,7 @@ export default function RootLayout({
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getUTCFullYear()} P S Mithul Sourav</span>
-            <span>Surathkal, India · Always learning</span>
+            <Link href="/write">Writing desk</Link>
             <a href="#top">Back to top ↑</a>
           </div>
         </footer>

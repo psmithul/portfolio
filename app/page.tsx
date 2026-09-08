@@ -3,9 +3,11 @@ import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { TensegrityDiagram } from '@/components/engineering-diagrams';
 import { MethodDiagram } from '@/components/method-diagram';
 import { projects } from '@/content/projects';
-import { posts } from '@/lib/posts.generated';
+import { getPublicPosts } from '@/lib/journal-store';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+export default async function Home() {
+  const posts = await getPublicPosts();
   const latestPost = posts[0];
   return (
     <main id="main">
@@ -16,16 +18,17 @@ export default function Home() {
             Surathkal
           </p>
           <h1>
-            Making sense
+            Mithul
             <br />
-            of <em>motion.</em>
+            <em>Sourav.</em>
           </h1>
           <p className="hero-intro">
-            I’m Mithul. I explore how mechanisms, sensing, and control come
-            together to make physical systems move intelligently.
+            I study mechanical engineering at NITK Surathkal. My work is in
+            robotics: how a mechanism moves, what its sensors can tell us, and
+            how to control it.
           </p>
           <a className="button primary" href="#work">
-            Explore my work <ArrowDown size={17} />
+            Selected projects <ArrowDown size={17} />
           </a>
           <div className="hero-footnote">
             <span>Mechanisms & mechatronics</span>
@@ -34,15 +37,15 @@ export default function Home() {
         </div>
         <figure className="hero-figure">
           <div className="figure-heading">
-            <span>FIELD STUDY / 001</span>
-            <span>FORM + FORCE</span>
+            <span>MECHANISM STUDY / 01</span>
+            <span>TENSEGRITY</span>
           </div>
           <TensegrityDiagram />
           <figcaption>
             <span>
-              Tension, compression.
+              Cables in tension. Struts in compression.
               <br />
-              <strong>A different kind of balance.</strong>
+              <strong>The starting point for my joint research.</strong>
             </span>
             <span className="diagram-note">
               Tensegrity principle
@@ -57,15 +60,15 @@ export default function Home() {
           <div>
             <p className="eyebrow">01 / SELECTED WORK</p>
             <h2>
-              From first principles
+              Problems I’m
               <br />
-              to <em>physical systems.</em>
+              <em>working on.</em>
             </h2>
           </div>
           <p>
-            Research, simulations, and mechanisms.
+            Mechanisms, simulation, and robot navigation.
             <br />
-            An evolving body of engineering work.
+            Five projects, with their methods and current status.
           </p>
         </div>
         <div className="featured-projects">
@@ -126,22 +129,23 @@ export default function Home() {
       </section>
       <section className="about-teaser shell">
         <div>
-          <p className="eyebrow">02 / THE ENGINEER BEHIND THE WORK</p>
+          <p className="eyebrow">02 / ABOUT ME</p>
           <h2>
-            Curiosity, with
+            Mechanical by
             <br />
-            <em>a method.</em>
+            <em>training.</em>
           </h2>
         </div>
         <div>
           <p>
             I’m a final-year Mechanical Engineering student at NITK Surathkal.
-            My interests sit between compliant mechanisms, system dynamics, and
-            autonomous robotics.
+            I’m interested in compliant mechanisms, vibration, and the decisions
+            a robot makes when its measurements are imperfect.
           </p>
           <p>
-            Alongside research and design projects, I’ve worked on UAV avionics
-            integration and hardware bring-up at Vayu Aerospace.
+            At Vayu Aerospace, I worked on UAV avionics integration: modeling
+            measured hardware, checking fit and cable routing, and helping bring
+            the electronics up.
           </p>
           <Link href="/about" className="text-link">
             A little more about me <ArrowUpRight size={18} />
@@ -150,14 +154,12 @@ export default function Home() {
       </section>
       <section className="journal-teaser shell">
         <div>
-          <p className="eyebrow">03 / THE OTHER SIDE OF THE NOTEBOOK</p>
+          <p className="eyebrow">03 / A PERSONAL JOURNAL</p>
           <h2>
-            Some things need
-            <br />
-            <em>more than a diagram.</em>
+            Mika’s <em>Life.</em>
           </h2>
           <Link href="/blog" className="text-link">
-            Step into The Margins <ArrowUpRight size={19} />
+            Read the journal <ArrowUpRight size={19} />
           </Link>
         </div>
         <div className="journal-teaser-aside">
@@ -176,12 +178,8 @@ export default function Home() {
             </>
           ) : (
             <>
-              <p>
-                A personal journal on engineering,
-                <br />
-                curiosity, and everything in between.
-              </p>
-              <span className="eyebrow">THE FIRST ENTRY IS STILL TO COME.</span>
+              <p>Science, books, and the things I keep thinking about.</p>
+              <span className="eyebrow">MORE WRITING SOON.</span>
             </>
           )}
         </div>
