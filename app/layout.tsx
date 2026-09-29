@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: '%s — Mithul Sourav',
   },
   description:
-    'Mechanical engineering and robotics projects by Mithul Sourav at NITK Surathkal, with essays from his personal journal, Mika’s Life.',
+    'Field robotics, mechanisms, dynamics, and vibration research by Mithul Sourav at NITK Surathkal. Explore interactive 3D concept models and Mika’s Life, a personal journal.',
   icons: { icon: '/favicon.svg' },
 };
 
@@ -44,7 +44,7 @@ export default function RootLayout({
               rel="noreferrer"
               className="cv-link"
             >
-              Résumé <ArrowUpRight size={15} />
+              Résumé
             </a>
           </nav>
         </header>
@@ -57,24 +57,22 @@ export default function RootLayout({
             <p>Mechanical engineering & robotics · NITK Surathkal</p>
           </div>
           <div className="footer-links">
-            <a href="mailto:psmithul@gmail.com">
-              Email <ArrowUpRight size={15} />
-            </a>
+            <a href="mailto:psmithul@gmail.com">Email</a>
             <a
               href="https://www.linkedin.com/in/psmithulsourav"
               target="_blank"
               rel="noreferrer"
             >
-              LinkedIn <ArrowUpRight size={15} />
+              LinkedIn
             </a>
             <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-              CV <ArrowUpRight size={15} />
+              CV
             </a>
           </div>
           <div className="footer-bottom">
             <span>© {new Date().getUTCFullYear()} P S Mithul Sourav</span>
             <Link href="/write">Writing desk</Link>
-            <a href="#top">Back to top ↑</a>
+            <a href="#top">Back to top</a>
           </div>
         </footer>
       </body>

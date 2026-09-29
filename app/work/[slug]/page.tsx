@@ -1,16 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+
 import { projects } from '@/content/projects';
-import { TensegrityDiagram } from '@/components/engineering-diagrams';
-import { MethodDiagram } from '@/components/method-diagram';
+import { EngineeringPlayground } from '@/components/engineering-playground';
+import { ProjectVisual } from '@/components/project-visual';
+import type { ModelKind } from '@/lib/engineering-scene';
+
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = projects.find((p) => p.slug === slug);
   return p
-    ? { title: p.title, description: p.summary }
+    ? { title: p.shortTitle, description: p.summary }
     : { title: 'Project not found' };
 }
 export default async function ProjectPage({ params }: Props) {
@@ -19,21 +21,14 @@ export default async function ProjectPage({ params }: Props) {
   if (index < 0) notFound();
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
-  const kinds: Record<
-    string,
-    'navigation' | 'dynamics' | 'mechanism' | 'architecture' | 'structure'
-  > = {
-    'uncertainty-aware-navigation': 'navigation',
-    'reaction-wheel-microvibrations': 'dynamics',
-    'neoleg-knee-mechanism': 'mechanism',
-    'off-road-leaf-robot': 'architecture',
-  };
-  const kind = kinds[slug] || 'structure';
+  const hasModel = ['rover', 'tensegrity', 'knee', 'satellite'].includes(
+    project.model,
+  );
   return (
     <main id="main">
       <section className="project-hero shell">
         <Link href="/#work" className="back-link">
-          <ArrowLeft size={16} /> All projects
+          All projects
         </Link>
         <div className="project-kicker">
           <p className="eyebrow">
@@ -43,7 +38,7 @@ export default async function ProjectPage({ params }: Props) {
             {project.status}
           </span>
         </div>
-        <h1>{project.title}</h1>
+        <h1>{project.shortTitle}</h1>
         <p className="project-deck">{project.summary}</p>
         <div className="project-meta">
           <div>
@@ -65,15 +60,18 @@ export default async function ProjectPage({ params }: Props) {
           <p className="eyebrow">THE ENGINEERING QUESTION</p>
           <h2>{project.question}</h2>
         </div>
-        {index === 0 ? (
-          <figure className="project-tensegrity">
-            <TensegrityDiagram />
+        {hasModel ? (
+          <EngineeringPlayground
+            initialModel={project.model as ModelKind}
+            compact
+          />
+        ) : (
+          <figure className="project-reading-visual">
+            <ProjectVisual kind={project.model} />
             <figcaption>
-              Conceptual tensegrity schematic · not a prototype image
+              Conceptual illustration · {project.visualLabel.toLowerCase()}
             </figcaption>
           </figure>
-        ) : (
-          <MethodDiagram kind={kind} />
         )}
       </section>
       <section className="about-section shell">
@@ -121,7 +119,6 @@ export default async function ProjectPage({ params }: Props) {
         <p className="eyebrow">NEXT PROJECT / {next.number}</p>
         <Link href={`/work/${next.slug}`}>
           <h2>{next.title}</h2>
-          <ArrowUpRight size={38} />
         </Link>
       </section>
     </main>

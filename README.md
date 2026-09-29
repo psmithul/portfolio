@@ -54,7 +54,7 @@ The initial essays are bundled from `content/posts/*.md`. On the owner’s first
 | Colours, typography, spacing, and responsive layout      | `app/globals.css`             |
 | Owner authorization                                      | `lib/journal-model.ts`        |
 
-The five project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. The tensegrity illustration is conceptual; the project graphics describe methods. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
+The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. The WebGL workbench and project illustrations are original conceptual models, not exported project CAD or measured results. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
 ## Verify changes
 
@@ -85,11 +85,21 @@ Define schema changes in `db/schema.ts`, generate and inspect a new migration, t
 
 Reuse the Site registration in `.openai/hosting.json`. It contains only the Site ID and logical bindings. Sites packages the Worker, assets, and `drizzle/` migrations and supplies the production database and sign-in flow. Source pushes and website deployment are separate actions: a GitHub push alone does not publish this website. No site should be called live until deployment succeeds and its URL is verified.
 
+## Interactive workbench
+
+The homepage includes four Three.js models: a six-wheel rover, a tensegrity joint, an actuated brace, and a satellite-panel assembly. Orbit and zoom with a pointer or touch, or use the Orbit button. Set in motion animates the selected assembly. Pull apart provides an exploded view. Model controls illustrate suspension settings, geometry, assistance, or wheel speed; they are not engineering predictions. The rover roughness control changes its illustrative suspension motion.
+
+The renderer loads only in the browser, caps pixel density, pauses off-screen and in hidden tabs, respects reduced-motion preferences for automatic camera movement, and disposes its graphics resources when leaving the page. WebGL 2 is required; the rest of the site and project reading pages remain available without it.
+
+Project and experience facts were refreshed from `Mithul_Sourav_MIT_SM_Research_CV.pdf` on 30 September 2026. That document classifies the reaction-wheel study as completed and lists its period as August–October 2026; the site preserves that supplied classification and date range.
+
+The visual direction follows the dark background, oversized condensed type, purple lighting, and playful spatial treatment of the supplied [Neha Yadav portfolio](https://nehayadav.framer.website/). The implementation, engineering models, and copy are original.
+
 ## Design and credits
 
-The engineering pages use Manrope, Fraunces, and Space Mono, locally hosted with their SIL Open Font Licenses in `public/fonts/`. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
+The engineering pages use Barlow Condensed, Manrope, Fraunces, and Space Mono, locally hosted with their SIL Open Font Licenses in `public/fonts/`. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).
 
-Stack: React, TypeScript, Vinext, Vite, Cloudflare Workers, Sites, D1, and Drizzle migrations. Articles render with react-markdown and remark-gfm; raw HTML and executable link protocols are not rendered.
+Stack: React, Three.js, TypeScript, Vinext, Vite, Cloudflare Workers, Sites, D1, and Drizzle migrations. Articles render with react-markdown and remark-gfm; raw HTML and executable link protocols are not rendered.

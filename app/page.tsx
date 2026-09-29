@@ -1,188 +1,205 @@
 import Link from 'next/link';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
-import { TensegrityDiagram } from '@/components/engineering-diagrams';
-import { MethodDiagram } from '@/components/method-diagram';
+import { Cog, Move3d, Radio, Waves, Asterisk } from 'lucide-react';
+import { EngineeringPlayground } from '@/components/engineering-playground';
+import { EngineeringThumbnail } from '@/components/engineering-thumbnail';
+import { MotionDirector } from '@/components/motion-director';
+import type { ModelKind } from '@/lib/engineering-scene';
 import { projects } from '@/content/projects';
 import { getPublicPosts } from '@/lib/journal-store';
 
 export const dynamic = 'force-dynamic';
 export default async function Home() {
   const posts = await getPublicPosts();
-  const latestPost = posts[0];
   return (
-    <main id="main">
-      <section className="hero shell">
-        <div className="hero-copy">
-          <p className="eyebrow">
-            <span className="status-dot" /> Mechanical engineering · NITK
-            Surathkal
+    <main id="main" className="research-home">
+      <MotionDirector />
+      <section className="lab-hero orbit-hero shell">
+        <div className="lab-hero-copy">
+          <p className="eyebrow hero-kicker">
+            MITHUL SOURAV / MECHANICAL ENGINEERING
           </p>
           <h1>
-            Mithul
+            MAKING
             <br />
-            <em>Sourav.</em>
-          </h1>
-          <p className="hero-intro">
-            I study mechanical engineering at NITK Surathkal. My work is in
-            robotics: how a mechanism moves, what its sensors can tell us, and
-            how to control it.
-          </p>
-          <a className="button primary" href="#work">
-            Selected projects <ArrowDown size={17} />
-          </a>
-          <div className="hero-footnote">
-            <span>Mechanisms & mechatronics</span>
-            <span>Robotics & autonomy</span>
-          </div>
-        </div>
-        <figure className="hero-figure">
-          <div className="figure-heading">
-            <span>MECHANISM STUDY / 01</span>
-            <span>TENSEGRITY</span>
-          </div>
-          <TensegrityDiagram />
-          <figcaption>
             <span>
-              Cables in tension. Struts in compression.
-              <br />
-              <strong>The starting point for my joint research.</strong>
+              THINGS MOVE<span className="name-period">.</span>
             </span>
-            <span className="diagram-note">
-              Tensegrity principle
-              <br />
-              Conceptual schematic
+          </h1>
+          <div className="hero-personal-note">
+            <Asterisk size={24} aria-hidden="true" />
+            <span>
+              A little curiosity.
+              <br />A lot of moving parts.
             </span>
-          </figcaption>
-        </figure>
+          </div>
+          <p className="lab-intro">
+            I’m a mechanical engineering student at NITK Surathkal. I work on
+            robots, mechanisms, and the vibration between them.
+          </p>
+          <div className="hero-actions">
+            <a className="lab-button" href="#work">
+              Explore my work
+            </a>
+            <Link className="quiet-link" href="/about">
+              Meet Mithul
+            </Link>
+          </div>
+          <p className="hero-coordinate">
+            CLASS OF 2027 <span>SURATHKAL, INDIA</span>
+          </p>
+        </div>
+        <EngineeringPlayground />
       </section>
-      <section id="work" className="work-section shell">
-        <div className="section-heading">
+      <div className="discipline-strip" aria-label="Research interests">
+        <div className="shell">
+          {[
+            ['Rough-terrain robotics', Move3d],
+            ['Dynamics & vibration', Waves],
+            ['Mechanisms', Cog],
+            ['Sensing & control', Radio],
+          ].map(([label, Icon]) => {
+            const Item = Icon as typeof Cog;
+            return (
+              <span key={String(label)}>
+                <Item size={20} aria-hidden="true" />
+                {String(label)}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+      <section id="work" className="lab-work shell">
+        <div className="lab-section-heading showcase-heading">
           <div>
-            <p className="eyebrow">01 / SELECTED WORK</p>
+            <p className="eyebrow">01 / THE ENGINEERING</p>
             <h2>
-              Problems I’m
-              <br />
-              <em>working on.</em>
+              Selected <em>projects.</em>
             </h2>
           </div>
           <p>
-            Mechanisms, simulation, and robot navigation.
+            A few questions I’ve spent time on.
             <br />
-            Five projects, with their methods and current status.
+            The mechanism, the method, and what came out of it.
           </p>
         </div>
-        <div className="featured-projects">
-          {projects.slice(0, 2).map((project, i) => (
+        <div className="lab-project-grid">
+          {projects.slice(0, 4).map((project) => (
             <Link
-              className="project-card"
               href={`/work/${project.slug}`}
+              className={`lab-project-card project-${project.model}`}
               key={project.slug}
             >
-              <MethodDiagram kind={i === 0 ? 'structure' : 'navigation'} />
-              <div className="project-card-meta">
-                <span className="eyebrow">
-                  {project.number} / {project.discipline}
-                </span>
-                <span
-                  className={`status-badge ${project.status.toLowerCase()}`}
-                >
-                  {project.status}
+              <div className="project-visual-wrap">
+                <div className="visual-card-top">
+                  <span>
+                    {project.number} / {project.discipline}
+                  </span>
+                  <span className="project-status">{project.status}</span>
+                </div>
+                <EngineeringThumbnail kind={project.model as ModelKind} />
+                <span className="visual-card-bottom">
+                  {project.visualLabel}
                 </span>
               </div>
-              <h3>
-                {project.title}
-                <ArrowUpRight size={25} aria-hidden="true" />
-              </h3>
-              <p>{project.summary}</p>
-              <div className="project-card-tools">
-                {project.tools.slice(0, 3).map((tool) => (
-                  <span key={tool}>{tool}</span>
-                ))}
+              <div className="lab-project-info">
+                <span className="eyebrow">{project.period}</span>
+                <h3>{project.title}</h3>
+                <p>{project.summary}</p>
+                <div className="lab-tool-tags">
+                  {project.tools.slice(0, 3).map((tool) => (
+                    <span key={tool}>{tool}</span>
+                  ))}
+                </div>
               </div>
             </Link>
           ))}
         </div>
-        <div className="project-list">
-          {projects.slice(2).map((project) => (
-            <Link
-              className="project-row"
-              key={project.slug}
-              href={`/work/${project.slug}`}
-            >
-              <span className="project-number">{project.number}</span>
+        <div className="lab-archive-heading">
+          <h3>More from the workbench</h3>
+          <span className="eyebrow">
+            {String(projects.length - 4).padStart(2, '0')} PROJECTS
+          </span>
+        </div>
+        <div className="lab-project-archive">
+          {projects.slice(4).map((project) => (
+            <Link href={`/work/${project.slug}`} key={project.slug}>
+              <span className="archive-number">{project.number}</span>
               <div>
-                <p className="eyebrow">{project.discipline}</p>
+                <span className="eyebrow">{project.discipline}</span>
                 <h3>{project.title}</h3>
-                <p className="project-row-summary">{project.summary}</p>
               </div>
-              <div className="project-row-end">
-                <span
-                  className={`status-badge ${project.status.toLowerCase()}`}
-                >
-                  {project.status}
-                </span>
-                <ArrowUpRight size={23} aria-hidden="true" />
-              </div>
+              <span className="archive-period">{project.period}</span>
+              <span className="archive-open">Open</span>
             </Link>
           ))}
         </div>
       </section>
-      <section className="about-teaser shell">
+      <section className="lab-about shell">
         <div>
-          <p className="eyebrow">02 / ABOUT ME</p>
+          <p className="eyebrow">02 / A LITTLE CONTEXT</p>
           <h2>
-            Mechanical by
+            From a model
             <br />
-            <em>training.</em>
+            to the <em>messy world.</em>
           </h2>
         </div>
         <div>
           <p>
-            I’m a final-year Mechanical Engineering student at NITK Surathkal.
-            I’m interested in compliant mechanisms, vibration, and the decisions
-            a robot makes when its measurements are imperfect.
+            I’m interested in experimental and field robotics—especially
+            machines that have to work on uneven ground, with imperfect
+            measurements.
           </p>
           <p>
-            At Vayu Aerospace, I worked on UAV avionics integration: modeling
-            measured hardware, checking fit and cable routing, and helping bring
-            the electronics up.
+            At Vayu Aerospace, I compared flight-controller mounting concepts,
+            supported ground motor-run tests, and studied IMU logs to help
+            choose a vibration-isolation direction.
           </p>
-          <Link href="/about" className="text-link">
-            A little more about me <ArrowUpRight size={18} />
+          <Link href="/about" className="lab-button secondary">
+            The longer version
           </Link>
         </div>
+        <div className="about-stamp">
+          <span>NITK</span>
+          <p>
+            MECHANICAL
+            <br />
+            ENGINEERING
+          </p>
+          <b>2027</b>
+        </div>
       </section>
-      <section className="journal-teaser shell">
-        <div>
-          <p className="eyebrow">03 / A PERSONAL JOURNAL</p>
+      <section className="lab-journal shell">
+        <div className="journal-teaser-heading">
+          <p className="eyebrow">03 / OFF THE CLOCK</p>
           <h2>
             Mika’s <em>Life.</em>
           </h2>
-          <Link href="/blog" className="text-link">
-            Read the journal <ArrowUpRight size={19} />
+          <p>Science, books, and the things I keep thinking about.</p>
+          <Link href="/blog" className="quiet-link">
+            Visit the journal
           </Link>
         </div>
-        <div className="journal-teaser-aside">
-          <span className="journal-teaser-letter" aria-hidden="true">
-            m.
-          </span>
-          {latestPost ? (
-            <>
-              <span className="eyebrow">LATEST ENTRY</span>
-              <Link
-                href={`/blog/${latestPost.slug}`}
-                className="latest-post-link"
-              >
-                {latestPost.title} <ArrowUpRight size={17} />
-              </Link>
-            </>
-          ) : (
-            <>
-              <p>Science, books, and the things I keep thinking about.</p>
-              <span className="eyebrow">MORE WRITING SOON.</span>
-            </>
-          )}
+        <div className="journal-mini-entries">
+          {posts.slice(0, 3).map((post, i) => (
+            <Link href={`/blog/${post.slug}`} key={post.slug}>
+              <span className="journal-mini-number">0{i + 1}</span>
+              <div>
+                <span className="eyebrow">
+                  {post.tags.slice(0, 2).join(' / ')}
+                </span>
+                <h3>{post.title}</h3>
+                <p>{post.description}</p>
+              </div>
+            </Link>
+          ))}
         </div>
+      </section>
+      <section className="lab-contact shell">
+        <p className="eyebrow">HAVE A QUESTION OR A GOOD ROBOT PROBLEM?</p>
+        <a href="mailto:psmithul@gmail.com">
+          Let’s talk<span>.</span>
+        </a>
+        <p>psmithul@gmail.com</p>
       </section>
     </main>
   );

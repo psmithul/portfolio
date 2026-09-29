@@ -22,18 +22,29 @@ const cases = [
   [
     '/work/tensegrity-joint',
     200,
-    'Three defined engineering hypotheses',
+    'MATLAB member-force calculations',
     'Tensegrity',
   ],
   ['/work/uncertainty-aware-navigation', 200, 'Monte Carlo', 'Uncertainty'],
+  ['/work/reaction-wheel-microvibrations', 200, '0.33%', 'microvibration'],
   [
-    '/work/reaction-wheel-microvibrations',
+    '/work/neoleg-knee-mechanism',
     200,
-    'held-out FEM',
-    'microvibration',
+    'Spring-position comparisons',
+    'Passive spring-assisted',
   ],
-  ['/work/neoleg-knee-mechanism', 200, '75–120', 'NeoLeg'],
   ['/work/off-road-leaf-robot', 200, 'bottom-up BOM', 'Off-road'],
+  [
+    '/work/adaptive-suspension-rover',
+    200,
+    'mechanical lock',
+    'Adaptive suspension',
+  ],
+  ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated brace'],
+  ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-bar'],
+  ['/work/easy-access-wallet', 200, 'card access', 'Wallet'],
+  ['/work/solar-smart-home', 200, 'photovoltaic', 'Arduino'],
+  ['/work/traffic-and-elevated-bus', 200, 'logic gates', 'Traffic'],
   ['/work/not-a-real-project', 404, 'here yet.', ''],
   ['/blog/not-a-published-entry', 404, 'here yet.', ''],
   ['/this-page-does-not-exist', 404, 'here yet.', ''],
@@ -44,9 +55,9 @@ for (const [path, status, content, title] of cases) {
   assert.equal(response.status, status, path + ': HTTP status');
   assert.ok(body.includes(content), path + ': expected content');
   if (title) {
-    const match = body.match(/<title>([\s\S]*?)<\/title>/i);
+    const titles = [...body.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
     assert.ok(
-      match && match[1].includes(title),
+      titles.some((match) => match[1].includes(title)),
       path + ': page-specific title',
     );
   }
@@ -55,6 +66,7 @@ for (const [path, status, content, title] of cases) {
 }
 for (const path of [
   '/fonts/manrope-latin-variable.woff2',
+  '/fonts/barlow-condensed-800.ttf',
   '/fonts/fraunces-latin-variable.woff2',
   '/fonts/space-mono-latin-regular.woff2',
   '/favicon.svg',

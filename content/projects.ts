@@ -1,3 +1,4 @@
+import type { ModelKind } from '@/lib/engineering-scene';
 export type Project = {
   slug: string;
   number: string;
@@ -15,201 +16,467 @@ export type Project = {
   outcome: string;
   scope: string;
   evidence: string[];
+  model:
+    | ModelKind
+    | 'navigation'
+    | 'linkage'
+    | 'electronics'
+    | 'collection'
+    | 'wallet';
+  visualLabel: string;
 };
 export const projects: Project[] = [
   {
-    slug: 'tensegrity-joint',
+    slug: 'adaptive-suspension-rover',
     number: '01',
-    title: 'Tensegrity-based variable-stiffness joint',
-    shortTitle: 'Geometry, loading, and stiffness in a compliant joint.',
+    title: 'A rover that listens to the terrain',
+    shortTitle: 'Adaptive suspension & vibration-aware control',
+    discipline: 'Field robotics',
+    period: 'Sep 2026 — Present',
+    status: 'Ongoing',
+    context: 'Research & staged hardware development',
+    model: 'rover',
+    visualLabel: 'SIX-WHEEL ROVER / CONCEPT STUDY',
+    tools: [
+      'Variable-stiffness suspension',
+      'IMU & encoders',
+      'Control design',
+    ],
+    summary:
+      'A six-wheel rover that changes suspension stiffness when the ride gets rough—and checks whether the change helped.',
+    question:
+      'Can a rover reduce vibration by changing its suspension before it has to slow down?',
+    role: 'I am designing a six-wheel rover with adjustable spring leverage. The suspension moves between soft, medium, and stiff settings, then mechanically locks the selected setting.',
+    approach: [
+      {
+        title: 'Start with one suspension unit',
+        body: 'Build and evaluate one adjustable unit before committing to the full rover. Vary spring leverage to get three stiffness settings, with a mechanical lock at each setting.',
+      },
+      {
+        title: 'Measure, adjust, then measure again',
+        body: 'Use IMU and wheel-encoder data to detect sustained vibration. Change stiffness, verify the setting, and assess the new vibration level. Reduce speed only when needed.',
+      },
+      {
+        title: 'Compare the alternatives',
+        body: 'Plan rough-terrain tests comparing fixed stiffness, speed-only control, stiffness-only control, and the combined system.',
+      },
+    ],
+    outcome:
+      'The rover is in the design stage. Development is planned from one suspension unit through a complete rough-terrain test.',
+    scope:
+      'Ongoing research. The interactive rover is an illustrative concept, not the project CAD. Full-system performance comparisons are planned work.',
+    evidence: [
+      'Three mechanically locked stiffness settings',
+      'IMU and encoder feedback architecture',
+      'Four planned control comparisons',
+    ],
+  },
+  {
+    slug: 'tensegrity-joint',
+    number: '02',
+    title: 'Stiffness, without a rigid answer',
+    shortTitle: 'Tensegrity-based variable-stiffness joint',
     discipline: 'Compliant mechanisms',
     period: 'May 2026 — Present',
     status: 'Ongoing',
     context: 'Research project',
-    tools: ['MATLAB', 'Force modeling', 'Mechanism design'],
+    model: 'tensegrity',
+    visualLabel: 'TENSEGRITY JOINT / GEOMETRY & FORCE',
+    tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
-      'Studying how geometry and loading shape the response of a tensegrity knee joint.',
+      'Exploring how a tensegrity joint changes its stiffness through geometry and internal force distribution.',
     question:
-      'How do the geometry and load paths of a tensegrity joint influence its mechanical response?',
-    role: 'I am developing an element-level force model and a structured simulation study of a tensegrity knee joint.',
+      'How can geometry and internal forces make the same joint respond differently to a load?',
+    role: 'I use MATLAB to calculate member forces, joint response, and stiffness across different geometries and external loads.',
     approach: [
       {
-        title: 'Model the elements',
-        body: 'Develop an element-level force model to investigate how loads travel through the joint.',
+        title: 'Follow the forces',
+        body: 'Calculate how tension and compression are distributed among the joint members under external loading.',
       },
       {
-        title: 'Make the questions testable',
-        body: 'Define three engineering hypotheses and a simulation plan that compares controlled cases in MATLAB.',
+        title: 'Change the geometry',
+        body: 'Compare the joint response and stiffness across different geometries and load cases in MATLAB.',
       },
       {
-        title: 'Study sensitivity',
-        body: 'Compare the response to changes in geometry and loading to identify parameters for later prototype testing and refinement.',
+        title: 'Let the model guide the mechanism',
+        body: 'Use the results to guide a tensegrity-based joint design, with an exoskeleton or wearable robotic mechanism as a possible later application.',
       },
     ],
     outcome:
-      'The project is in the modeling and simulation stage. Three engineering hypotheses and a structured simulation plan have been defined.',
+      'The computational study is informing the design of a variable-stiffness joint.',
     scope:
-      'Ongoing computational work. Prototype testing and design refinement are future stages; the schematic on this site illustrates the tensegrity principle.',
+      'Ongoing modeling and design. A wearable application is a future direction, not a validated device.',
     evidence: [
-      'Element-level force model under development',
-      'Three defined engineering hypotheses',
-      'Controlled MATLAB simulation plan',
+      'MATLAB member-force calculations',
+      'Geometry and loading comparisons',
+      'Stiffness-informed design direction',
     ],
   },
   {
-    slug: 'uncertainty-aware-navigation',
-    number: '02',
-    title: 'Uncertainty-aware indoor robot navigation',
-    shortTitle: 'Navigation with noisy sensors and uncertain position.',
-    discipline: 'Robotics & state estimation',
-    period: 'June — July 2026',
+    slug: 'kneeassist',
+    number: '03',
+    title: 'KneeAssist: help, when it is needed',
+    shortTitle: 'Actuated brace for knee extension deficit',
+    discipline: 'Assistive mechatronics',
+    period: 'Sep 2026',
     status: 'Completed',
-    context: 'Independent simulation project',
-    tools: ['Python', 'Extended Kalman filter', 'A* planning', 'Monte Carlo'],
+    context: 'Team project · Incubate X Prosthetic Challenge',
+    model: 'knee',
+    visualLabel: 'ACTUATED BRACE / CONCEPT ASSEMBLY',
+    tools: ['CAD & integration', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'Combining planning, localization, and confidence-aware behavior in a differential-drive robot simulator.',
+      'An actuated brace concept that senses knee angle, preserves active extension, and adds controlled assistance.',
     question:
-      'How can an indoor robot adapt its speed and recovery behavior when its position estimate becomes uncertain?',
-    role: 'I developed a differential-drive simulator and evaluated confidence-aware speed and recovery logic through Monte Carlo trials.',
+      'How can a brace assist knee extension while allowing the patient to keep doing the work?',
+    role: 'I helped turn the team CAD into a buildable system: adjustable rails and cuffs, a motor drive, angle sensing, power protection, and an independent manual release.',
     approach: [
       {
-        title: 'Build the simulation',
-        body: 'Implement differential-drive motion, A* path planning, and heading control in Python.',
+        title: 'Sense before assisting',
+        body: 'Start with the knee angle and the patient’s active extension. Add controlled cable-and-spring assistance when needed.',
       },
       {
-        title: 'Model imperfect sensing',
-        body: 'Introduce encoder and IMU noise, yaw-bias drift, and wheel-slip events; use an extended Kalman filter for localization.',
+        title: 'Make the assembly buildable',
+        body: 'Integrate adjustable rails, cuffs, actuation, sensing, and power protection. Include an independent manual release.',
       },
       {
-        title: 'Evaluate behavior',
-        body: 'Measure success, collisions, localization error, recovery events, and time to goal across Monte Carlo trials.',
+        title: 'Define the bench checks',
+        body: 'Plan tests for angle accuracy, spring force, assisted motion, jam release, faults, and cycle life.',
       },
     ],
     outcome:
-      'Completed an independent simulation with uncertainty-aware speed and recovery logic and a Monte Carlo evaluation workflow.',
+      'Our team was selected in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge.',
     scope:
-      'Completed simulation study covering planning, sensing noise, localization, and recovery behavior.',
+      'Completed team concept and integration work. Bench tests were planned; clinical efficacy and patient outcomes are not established.',
     evidence: [
-      'Differential-drive simulator',
-      'A* planning and EKF localization',
-      'Monte Carlo evaluation across five outcome measures',
+      'Top 5 of 70 teams nationwide',
+      'Buildable system integration',
+      'Six categories of planned bench checks',
     ],
   },
   {
     slug: 'reaction-wheel-microvibrations',
-    number: '03',
-    title: 'Reaction-wheel microvibration prediction',
-    shortTitle: 'From wheel excitation to camera-interface vibration.',
-    discipline: 'Structural dynamics & simulation',
-    period: 'August 2026 — Present',
-    status: 'Ongoing',
-    context: 'Course project',
-    tools: ['ANSYS Mechanical', 'Python', 'Modal & harmonic FEM', 'Regression'],
-    summary:
-      'Modeling satellite-panel vibration under reaction-wheel excitation, with particular attention to resonance.',
-    question:
-      'How does reaction-wheel excitation affect a camera mounting interface across the wheel operating-speed range?',
-    role: 'I am building modal and harmonic finite-element models and developing a parametric FEM dataset for regression-based prediction.',
-    approach: [
-      {
-        title: 'Model the structure',
-        body: 'Build modal and harmonic finite-element models of a satellite panel under reaction-wheel excitation.',
-      },
-      {
-        title: 'Locate resonant regions',
-        body: 'Estimate vibration at the camera mounting interface across the wheel operating-speed range.',
-      },
-      {
-        title: 'Evaluate the predictor',
-        body: 'Generate a parametric FEM dataset and evaluate regression predictions on held-out FEM cases, focusing on behavior near resonance.',
-      },
-    ],
-    outcome:
-      'The finite-element modeling and prediction workflow is under development.',
-    scope:
-      'Ongoing course project. Held-out FEM cases are the planned reference for evaluating the regression models.',
-    evidence: [
-      'Modal and harmonic modeling in progress',
-      'Parametric FEM dataset workflow',
-      'Evaluation focused on behavior near resonance',
-    ],
-  },
-  {
-    slug: 'neoleg-knee-mechanism',
     number: '04',
-    title: 'NeoLeg spring-assisted knee mechanism',
-    shortTitle: 'A passive spring-assist mechanism for knee motion.',
-    discipline: 'Mechanical design & analysis',
-    period: 'December 2025 — March 2026',
+    title: 'A small vibration, a distant response',
+    shortTitle: 'Reaction-wheel microvibration prediction',
+    discipline: 'Structural dynamics',
+    period: 'Aug — Oct 2026',
     status: 'Completed',
-    context: 'Team project',
-    tools: ['SolidWorks', 'ANSYS', 'Assembly design', 'Interference checks'],
+    context: 'FEM & machine-learning study',
+    model: 'satellite',
+    visualLabel: 'SATELLITE PANEL / VIBRATION PATH',
+    tools: ['ANSYS Mechanical', 'Modal & harmonic FEM', 'Regression'],
     summary:
-      'Co-designing a passive spring-assist knee and evaluating its modeled motion and attachment geometry.',
+      'Following reaction-wheel vibration through a satellite panel to a camera mounting point, with a peak near 5,800 rpm.',
     question:
-      'How can a passive spring-assist mechanism be integrated around knee motion without modeled interference?',
-    role: 'I co-designed the mechanism and contributed to the complete SolidWorks knee-joint assembly and ANSYS analysis.',
+      'Where does a reaction wheel excite the structure—and can a faster model capture the response?',
+    role: 'I built modal and harmonic FEM models of the satellite panel and camera mounting interface, then checked a strong response peak by refining the mesh.',
     approach: [
       {
-        title: 'Develop the mechanism',
-        body: 'Co-design a passive spring-assist knee mechanism as a team.',
+        title: 'Model the vibration path',
+        body: 'Use modal and harmonic FEM to follow reaction-wheel excitation through the panel to the camera mounting point.',
       },
       {
-        title: 'Integrate the assembly',
-        body: 'Contribute to the complete SolidWorks knee-joint assembly and its ANSYS analysis.',
+        title: 'Check the peak',
+        body: 'Locate a strong camera-response peak near 5,800 rpm. Refine the mesh to test numerical sensitivity; the peak changed by 0.33%.',
       },
       {
-        title: 'Check motion and geometry',
-        body: 'Verify interference-free modeled motion through approximately 75–120 degrees of flexion and support evaluation of spring and attachment geometry.',
+        title: 'Explore a faster predictor',
+        body: 'Set up a 24-design parameter sweep and a held-out regression workflow to explore structural-response prediction, especially near resonance.',
       },
     ],
     outcome:
-      'Verified interference-free modeled motion through approximately 75–120° of flexion.',
+      'The FEM study identified a strong response peak near 5,800 rpm. Mesh refinement changed that peak by 0.33%. A 24-design sweep and held-out regression workflow were set up.',
     scope:
-      'Completed team design and analysis project. The reported flexion range describes the CAD model and its interference checks.',
+      'Computational study. The 0.33% figure describes mesh-refinement sensitivity, not prediction error. No measured flight or hardware vibration result is claimed.',
     evidence: [
-      'Complete knee-joint CAD assembly',
-      'ANSYS analysis contribution',
-      'Modeled interference check at approximately 75–120°',
+      'Response peak near 5,800 rpm',
+      '0.33% change after mesh refinement',
+      '24-design parameter sweep',
     ],
   },
   {
     slug: 'off-road-leaf-robot',
     number: '05',
-    title: 'Off-road leaf-collection robot',
-    shortTitle: 'Locomotion and leaf pickup on uneven terrain.',
-    discipline: 'Mechatronics & system architecture',
-    period: 'July 2026 — Present',
+    title: 'Picking up leaves, leaving the soil',
+    shortTitle: 'Off-road leaf-collection robot',
+    discipline: 'Robot architecture',
+    period: 'Jul 2026 — Present',
     status: 'Ongoing',
-    context: 'NITK IDEA Factory',
-    tools: ['Mechanical design', 'Concept selection', 'BOM', 'Test planning'],
+    context: 'Robot design & subsystem architecture',
+    model: 'collection',
+    visualLabel: 'PICKUP / TRANSFER / TERRAIN FOLLOWING',
+    tools: [
+      'Subsystem architecture',
+      'Mechanism selection',
+      'BOM & test planning',
+    ],
     summary:
-      'Developing an outdoor robot architecture that connects locomotion, collection, and terrain following.',
-    question:
-      'How can locomotion, leaf pickup, and debris handling work together on uneven outdoor terrain?',
-    role: 'I am developing the system architecture, comparing mechanism concepts, and defining a bottom-up bill of materials and test metrics.',
+      'Working out how to collect dry or wet leaves on uneven ground without pulling in too much soil.',
+    question: 'How do you pick up the leaves without picking up the ground?',
+    role: 'I broke the robot into locomotion, pickup, transfer, storage, and terrain-following systems, then compared mechanisms against space, manufacturing, and integration limits.',
     approach: [
       {
-        title: 'Break down the system',
-        body: 'Define locomotion, leaf pickup, debris transfer, storage, and terrain-following subsystems.',
+        title: 'Separate the functions',
+        body: 'Define what locomotion, pickup, transfer, storage, and terrain following each need to do.',
       },
       {
-        title: 'Compare the concepts',
-        body: 'Benchmark existing products and compare mechanisms against integration constraints.',
+        title: 'Compare mechanisms in context',
+        body: 'Evaluate mechanism ideas against packaging, manufacturing, and integration constraints rather than selecting them in isolation.',
       },
       {
-        title: 'Plan the build and tests',
-        body: 'Build a bottom-up BOM and define metrics for traction, pickup efficiency, soil rejection, and endurance.',
+        title: 'Prepare the next decision',
+        body: 'Build a bottom-up BOM and define tests for traction, pickup efficiency, soil rejection, and endurance.',
       },
     ],
     outcome:
-      'Architecture development is ongoing. Products and mechanisms have been benchmarked, a bottom-up BOM has been built, and test metrics have been defined.',
+      'A subsystem architecture, bottom-up BOM, and test criteria support the next design decisions.',
     scope:
-      'Ongoing architecture and design work at NITK IDEA Factory, with traction, collection, soil rejection, and endurance as the intended test areas.',
+      'Ongoing design. Collection performance and field endurance have not yet been established.',
     evidence: [
-      'Subsystem architecture in development',
-      'Product and mechanism benchmarking',
-      'BOM and four test-metric categories',
+      'Five subsystem groups',
+      'Bottom-up BOM',
+      'Four defined test areas',
+    ],
+  },
+  {
+    slug: 'neoleg-knee-mechanism',
+    number: '06',
+    title: 'NeoLeg: a spring, a knee, a question',
+    shortTitle: 'Passive spring-assisted knee mechanism',
+    discipline: 'Mechanical design',
+    period: 'Dec 2025 — Mar 2026',
+    status: 'Completed',
+    context: 'Team mechanism-design project',
+    model: 'linkage',
+    visualLabel: 'PASSIVE KNEE / SPRING GEOMETRY',
+    tools: ['SolidWorks', 'ANSYS', 'Interference checks'],
+    summary:
+      'Exploring passive spring assistance for squatting and lifting, through assembly geometry and modeled motion.',
+    question:
+      'Can a passive spring assist knee motion without making the mechanism bulky or restrictive?',
+    role: 'I helped build and refine the knee assembly in SolidWorks, and used ANSYS and interference checks to evaluate modeled flexion.',
+    approach: [
+      {
+        title: 'Build the assembly',
+        body: 'Develop the spring-assisted knee layout in SolidWorks and refine the relationships between the moving parts.',
+      },
+      {
+        title: 'Check the motion',
+        body: 'Use ANSYS and interference checks to assess whether the assembly can move through its modeled flexion range.',
+      },
+      {
+        title: 'Compare spring locations',
+        body: 'Study how spring positions and attachment geometry affect usable motion and the assist concept.',
+      },
+    ],
+    outcome:
+      'The completed design study compared spring layouts and evaluated the assembly’s modeled motion.',
+    scope:
+      'Design and simulation work. Modeled motion is distinct from measured human assistance or physical performance.',
+    evidence: [
+      'SolidWorks assembly',
+      'ANSYS and interference checks',
+      'Spring-position comparisons',
+    ],
+  },
+  {
+    slug: 'uncertainty-aware-navigation',
+    number: '07',
+    title: 'Navigation with imperfect information',
+    shortTitle: 'Uncertainty-aware indoor robot navigation',
+    discipline: 'State estimation & autonomy',
+    period: 'Sep — Dec 2025',
+    status: 'Completed',
+    context: 'Differential-drive simulation project',
+    model: 'navigation',
+    visualLabel: 'PLANNING / LOCALIZATION / RECOVERY',
+    tools: ['Python', 'A* & EKF', 'Monte Carlo'],
+    summary:
+      'An indoor robot simulator that slows down or recovers when its confidence in its own position drops.',
+    question:
+      'What should a robot do when it no longer trusts its position estimate?',
+    role: 'I built a differential-drive simulator with A* planning, heading control, encoders, an IMU, and extended Kalman filter localization.',
+    approach: [
+      {
+        title: 'Build the navigation loop',
+        body: 'Connect differential-drive motion, A* path planning, heading control, sensing, and EKF localization.',
+      },
+      {
+        title: 'Make the robot imperfect',
+        body: 'Add encoder noise, IMU drift, yaw bias, and wheel slip. Use confidence-aware logic to slow down or recover.',
+      },
+      {
+        title: 'Look for failure',
+        body: 'Run Monte Carlo trials and track success, collisions, localization error, recovery events, and time to goal.',
+      },
+    ],
+    outcome:
+      'Completed a simulation and Monte Carlo evaluation workflow for uncertainty-aware speed and recovery behavior.',
+    scope: 'A simulation study, not a physical indoor-robot deployment.',
+    evidence: [
+      'Differential-drive simulator',
+      'Deliberately imperfect sensors',
+      'Five evaluation measures',
+    ],
+  },
+  {
+    slug: 'four-bar-door-mechanism',
+    number: '08',
+    title: 'Four links, one coordinated motion',
+    shortTitle: 'Four-bar door-opening mechanism',
+    discipline: 'Kinematics & fabrication',
+    period: 'Feb — Apr 2024',
+    status: 'Completed',
+    context: 'Team build',
+    model: 'linkage',
+    visualLabel: 'LINK LENGTHS / PIVOTS / DOOR MOTION',
+    tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
+    summary:
+      'A physical four-bar door-opening mechanism, developed from the motion we wanted to a set of links and joints.',
+    question:
+      'Which link lengths and pivot positions produce the door motion we want?',
+    role: 'I worked with my team to build a four-bar mechanism and choose link lengths and pivot locations within its kinematic limits.',
+    approach: [
+      {
+        title: 'Start with the motion',
+        body: 'Define the desired door movement before fixing the linkage geometry.',
+      },
+      {
+        title: 'Work through the geometry',
+        body: 'Choose link lengths and pivots to coordinate the door motion while respecting the mechanism’s kinematic limits.',
+      },
+      {
+        title: 'Build and observe',
+        body: 'Turn the geometry into a physical mechanism and observe how small link changes affect the whole movement.',
+      },
+    ],
+    outcome: 'Built a working door-opening mechanism with the team.',
+    scope:
+      'An educational team build focused on mechanism geometry and coordinated motion.',
+    evidence: [
+      'Physical links, pivots, and joints',
+      'Kinematic layout development',
+      'Working team-built mechanism',
+    ],
+  },
+  {
+    slug: 'easy-access-wallet',
+    number: '09',
+    title: 'A better way to get a card out',
+    shortTitle: 'Wallet for easier card access',
+    discipline: 'User-centred mechanical design',
+    period: 'Sep — Nov 2023',
+    status: 'Completed',
+    context: 'Design project',
+    model: 'wallet',
+    visualLabel: 'USER PROBLEM / MECHANICAL RESPONSE',
+    tools: ['Problem framing', 'Mechanical design', 'Layout development'],
+    summary:
+      'A compact wallet layout developed around a small, familiar frustration: getting a card out quickly.',
+    question:
+      'How can a compact card holder make its contents easier to reach?',
+    role: 'I developed a wallet layout around easier card access and turned that observation into a tangible mechanical design idea.',
+    approach: [
+      {
+        title: 'Notice the friction',
+        body: 'Start with the difficulty of pulling cards out of compact holders.',
+      },
+      {
+        title: 'Design around access',
+        body: 'Develop the layout around reaching and retrieving a card, rather than starting with a preferred mechanism.',
+      },
+      {
+        title: 'Carry the lesson forward',
+        body: 'Use the project to practise a design rule: begin with the user problem, then build the mechanism around it.',
+      },
+    ],
+    outcome: 'Developed a mechanical design concept for easier card access.',
+    scope:
+      'An early design project. No production or user-study performance claim is made.',
+    evidence: [
+      'Observed access problem',
+      'User-centred layout',
+      'Tangible mechanical design idea',
+    ],
+  },
+  {
+    slug: 'solar-smart-home',
+    number: '10',
+    title: 'A small house, wired to respond',
+    shortTitle: 'Arduino smart home with solar power',
+    discipline: 'Electronics & sensing',
+    period: 'Sep 2019 — Jan 2020',
+    status: 'Completed',
+    context: 'Working electronic model',
+    model: 'electronics',
+    visualLabel: 'SENSORS / LOGIC / SOLAR POWER',
+    tools: ['Arduino', 'Sensor integration', 'Circuit debugging'],
+    summary:
+      'An Arduino smart-home model that connected sensors, automated functions, and a photovoltaic power source.',
+    question:
+      'How do several sensors and automated functions work reliably as one system?',
+    role: 'I designed the wiring and control logic, debugged the connections and code, and added a photovoltaic cell power source.',
+    approach: [
+      {
+        title: 'Connect the functions',
+        body: 'Bring several sensors and automated functions into one wired Arduino-based model.',
+      },
+      {
+        title: 'Debug the system',
+        body: 'Work through connections and code until the functions operate reliably together.',
+      },
+      {
+        title: 'Change the power source',
+        body: 'Test how the model behaves when powered from the photovoltaic cell instead of only an external supply.',
+      },
+    ],
+    outcome:
+      'Built and debugged a working smart-home model with a solar-power option.',
+    scope:
+      'A model-scale electronics project, not a deployed building-control system.',
+    evidence: [
+      'Integrated sensor inputs',
+      'Wired control logic',
+      'Photovoltaic power testing',
+    ],
+  },
+  {
+    slug: 'traffic-and-elevated-bus',
+    number: '11',
+    title: 'My first systems that moved',
+    shortTitle: 'Traffic lights & elevated-bus model',
+    discipline: 'Logic & working models',
+    period: 'Sep 2018 — Jan 2019',
+    status: 'Completed',
+    context: 'Two electronic model builds',
+    model: 'electronics',
+    visualLabel: 'LOGIC GATES / SIGNALS / SEQUENCING',
+    tools: ['Logic gates', 'Circuit wiring', 'Fault tracing'],
+    summary:
+      'Hand-wired traffic-light and transit elevated-bus models, with repeatable control sequences built from logic gates.',
+    question: 'How can a wired circuit create a reliable operating sequence?',
+    role: 'I built both models, wired the circuits by hand, and used logic gates to control their operating sequences.',
+    approach: [
+      {
+        title: 'Sequence the junction',
+        body: 'Create a logic-gate signal sequence and connect the traffic lights so the junction follows a repeatable pattern.',
+      },
+      {
+        title: 'Build a separate control circuit',
+        body: 'Wire the operating sequence for the elevated-bus model independently.',
+      },
+      {
+        title: 'Trace faults',
+        body: 'Follow connection and logic faults until each model behaves consistently.',
+      },
+    ],
+    outcome: 'Built two working electronic models with repeatable sequences.',
+    scope:
+      'Early model-scale projects in circuit wiring, logic, and debugging.',
+    evidence: [
+      'Two working models',
+      'Hand-wired circuits',
+      'Logic-gate control sequences',
     ],
   },
 ];
