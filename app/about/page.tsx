@@ -1,34 +1,24 @@
 import type { Metadata } from 'next';
-import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'P S Mithul Sourav, final-year mechanical engineering student at NITK Surathkal. Background, engineering experience, and research interests.',
+    'Mithul Sourav, Mechanical Engineering at NITK Surathkal. Research in field robotics, dynamics, vibration, sensing, control, and mechatronic systems.',
 };
 const skills = [
+  ['Design & simulation', 'SolidWorks · ANSYS Mechanical · MATLAB'],
+  ['Programming', 'Python · MATLAB · C · C++'],
   [
-    'Mechanical design',
-    'SolidWorks · 3D CAD & assemblies · Mechanical packaging · Mechanism design',
+    'Research interests',
+    'Experimental and field robotics · Rough-terrain mobile robots · Dynamics and vibration · Sensing, control, and autonomy',
   ],
-  [
-    'Modeling & simulation',
-    'ANSYS Mechanical · Modal & harmonic FEM · MATLAB · Dynamic-system modeling',
-  ],
-  [
-    'Robotics & computation',
-    'Python · C · C++ · State estimation · Data analysis · Regression & machine learning',
-  ],
-  [
-    'Mechatronics & test',
-    'QGroundControl · Hardware bring-up · IMU calibration support · Test planning · Verification & validation',
-  ],
+  ['Languages', 'English · Hindi · Tamil · French (basic)'],
 ];
 export default function About() {
   return (
     <main id="main" className="about-page">
       <section className="about-hero shell">
-        <p className="eyebrow">ABOUT ME</p>
+        <p className="eyebrow">A LITTLE ABOUT ME</p>
         <h1>
           Hi, I’m Mithul.
           <br />
@@ -37,14 +27,13 @@ export default function About() {
         <div className="about-introduction">
           <p>
             I’m P S Mithul Sourav, a final-year Mechanical Engineering student
-            at NITK Surathkal. I work on mechanisms, dynamics, and robotics, and
-            expect to graduate in June 2027.
+            at NITK Surathkal. I expect to graduate in June 2027.
           </p>
           <p>
-            My current projects include a tensegrity knee joint and
-            reaction-wheel vibration modeling. I’ve also built a robot
-            navigation simulator and worked on avionics integration at Vayu
-            Aerospace. This site brings that work together with my writing.
+            I’m interested in experimental and field robotics, especially
+            rough-terrain mobile robots. I work across mechanisms, dynamics,
+            vibration, sensing, control, and autonomy. The useful part is seeing
+            how they behave together.
           </p>
         </div>
       </section>
@@ -62,11 +51,6 @@ export default function About() {
               CGPA <strong>7.37 / 10</strong>
             </span>
           </div>
-          <p className="body-muted">
-            Selected coursework: Mechatronics; Control Systems; Instrumentation
-            and Measurement; Finite Element Methods; Engineering Mathematics;
-            Probability and Statistics.
-          </p>
         </div>
       </section>
       <section className="about-section shell">
@@ -78,33 +62,74 @@ export default function About() {
             <h2>Vayu Aerospace</h2>
             <span className="eyebrow">JUN — JUL 2026</span>
           </div>
-          <p className="education-degree">Product Intern · Bengaluru, India</p>
+          <p className="education-degree">
+            Product Intern · UAV Vibration Analysis & Isolation
+          </p>
           <p className="body-muted">
-            At Vayu Aerospace Pvt. Ltd., I worked on the physical integration
-            and bring-up of UAV avionics hardware.
+            Bengaluru, India. I compared three company-proposed
+            flight-controller mounting architectures and helped move the
+            isolation concepts towards hardware evaluation.
           </p>
           <ul className="prose-list">
             <li>
-              Built SolidWorks models from measured dimensions, mounting points,
-              and connector locations; integrated them into the existing
-              assembly to check fit, clearances, cable routing, and
-              serviceability.
+              Compared a rigid baseline, an elastomer-isolated modular tray, and
+              a suspended mount using ANSYS modal and response-oriented
+              analysis. Shortlisted the two isolation concepts for hardware
+              evaluation.
             </li>
             <li>
-              Supported electrical and power-path checks around the flight
-              controller, IMU calibration in QGroundControl, and motor mapping
-              and rotation checks without propellers.
+              Supported manufacturing, integration, and ground motor-run
+              testing.
             </li>
             <li>
-              Documented mounting, wiring, sensor-detection, and motor-mapping
-              issues in a subsystem checklist and repeated checks after fixes.
+              Analyzed controller IMU logs in MATLAB using comparable steady
+              windows, RMS reduction, and FFT review. This contributed to
+              selecting the elastomer-isolated modular tray as the preferred
+              design direction.
             </li>
           </ul>
         </div>
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">03 / TOOLKIT</p>
+          <p className="eyebrow">03 / CURRENT QUESTIONS</p>
+        </div>
+        <div className="about-body skill-list">
+          <div>
+            <h3>Can suspension adapt before a rover has to slow down?</h3>
+            <p>
+              A six-wheel rough-terrain rover with mechanically locked stiffness
+              settings and a vibration-aware control loop.
+            </p>
+            <Link className="text-link" href="/work/adaptive-suspension-rover">
+              Explore the rover
+            </Link>
+          </div>
+          <div>
+            <h3>What changes when the geometry changes?</h3>
+            <p>
+              MATLAB force and stiffness calculations for a tensegrity-based
+              variable-stiffness joint.
+            </p>
+            <Link className="text-link" href="/work/tensegrity-joint">
+              Explore the joint
+            </Link>
+          </div>
+          <div>
+            <h3>How do you collect the leaves without collecting the soil?</h3>
+            <p>
+              A robot architecture that connects locomotion, pickup, transfer,
+              storage, and terrain following.
+            </p>
+            <Link className="text-link" href="/work/off-road-leaf-robot">
+              Explore the robot
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="about-section shell">
+        <div className="section-label">
+          <p className="eyebrow">04 / TOOLKIT</p>
         </div>
         <div className="about-body skill-list">
           {skills.map(([title, body]) => (
@@ -117,34 +142,20 @@ export default function About() {
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">04 / WIDER EXPERIENCE</p>
+          <p className="eyebrow">05 / WIDER EXPERIENCE</p>
         </div>
         <div className="about-body">
-          <p className="large-body">
-            I’ve also worked in product strategy, workflow design, and
-            consulting.
-          </p>
-          <div className="compact-experience">
-            <div>
-              <h3>Napses Technologies</h3>
-              <p>Product & Strategy Intern</p>
-            </div>
-            <span>May — Jun 2026</span>
-            <p>
-              Translated recurring BriskFit user problems into product
-              requirements, interface changes, operating rules, and SOPs; worked
-              with teams through testing and release review.
-            </p>
-          </div>
           <div className="compact-experience">
             <div>
               <h3>Thinkify Labs</h3>
-              <p>Product & Strategy Intern</p>
+              <p>Product and Strategy Intern · Workflow Automation</p>
             </div>
             <span>May — Aug 2025</span>
             <p>
-              Worked on lead qualification, workflow improvement, a website
-              overhaul, and targeted outreach.
+              Built an AI-based lead-qualification workflow using profile and
+              email data, then routed qualified prospects to sales
+              representatives. The work contributed to a reported 25%
+              improvement in operational efficiency.
             </p>
           </div>
           <div className="compact-experience">
@@ -154,86 +165,72 @@ export default function About() {
             </div>
             <span>May — Jul 2024</span>
             <p>
-              Built financial models for M&A due diligence and developed a
-              market-entry assessment for Ireland.
+              Built DCF, LBO, and three-statement financial models for M&A due
+              diligence and transaction analysis. Contributed to an Ireland
+              market-entry assessment covering political, regulatory, and
+              competitive factors.
             </p>
           </div>
         </div>
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">05 / BEYOND THE WORKBENCH</p>
+          <p className="eyebrow">06 / LEADERSHIP & RECOGNITION</p>
         </div>
-        <div className="about-body">
-          <div className="recognition-grid">
-            <div>
-              <span className="big-figure">500+</span>
-              <h3>Participants, ISTE NITK</h3>
-              <p>
-                As Secretary, led sponsor outreach, budgeting, vendor
-                coordination, and event logistics; secured three sponsors.
-              </p>
-            </div>
-            <div>
-              <span className="big-figure">Top 50</span>
-              <h3>Global Case Competition at Harvard, 2026</h3>
-              <p>
-                Worked in a four-member team analyzing the European defence
-                landscape.
-              </p>
-            </div>
-          </div>
-          <p className="body-muted">
-            I also managed the NH66 student fund, mentored three junior
-            analysts, and co-led a campus venture that served more than 400
-            customers.
-          </p>
-        </div>
-      </section>
-      <section className="about-section shell">
-        <div className="section-label">
-          <p className="eyebrow">06 / EARLY EXPLORATIONS</p>
-        </div>
-        <div className="about-body early-projects">
+        <div className="about-body recognition-grid">
           <div>
-            <span className="eyebrow">SEMESTER 3</span>
-            <h3>Four-bar door-opening mechanism</h3>
+            <span className="big-figure">5 / 70</span>
+            <h3>Incubate X Prosthetic Challenge</h3>
             <p>
-              Co-developed and built a linkage as a team, working through
-              kinematic constraints, link geometry, and mechanism motion.
+              Our KneeAssist team was selected in the top 5 of 70 teams
+              nationwide in September 2026.
             </p>
           </div>
           <div>
-            <span className="eyebrow">SEMESTER 1</span>
-            <h3>A wallet for easier card access</h3>
+            <span className="big-figure">500+</span>
+            <h3>ISTE, NITK · Secretary</h3>
             <p>
-              A design-thinking course concept responding to the difficulty of
-              removing cards from existing holders.
+              September 2024 — Present. Led sponsorship, budgeting, vendor
+              coordination, and logistics for a technical event with 500+
+              participants. Secured three sponsors.
+            </p>
+          </div>
+          <div>
+            <span className="big-figure">₹150K</span>
+            <h3>NH66 Fund, P&L Club · Fund Manager</h3>
+            <p>
+              January 2025 — April 2026. Directed strategy for the student-run
+              fund and mentored three junior analysts. Organized two recruitment
+              drives and a training workshop.
+            </p>
+          </div>
+          <div>
+            <span className="big-figure">Top 50</span>
+            <h3>Global Case Competition at Harvard</h3>
+            <p>
+              February — March 2026. Advanced to a Top 50 global placement in a
+              team of four, analyzing the European defence landscape.
             </p>
           </div>
         </div>
       </section>
-      <section className="contact-section shell">
-        <p className="eyebrow">LET’S COMPARE NOTES</p>
-        <h2>
-          Get in
-          <br />
-          <em>touch.</em>
-        </h2>
-        <a href="mailto:psmithul@gmail.com" className="contact-email">
-          psmithul@gmail.com <ArrowUpRight />
+      <section className="lab-contact shell">
+        <p className="eyebrow">ALWAYS HAPPY TO COMPARE NOTES</p>
+        <a href="mailto:psmithul@gmail.com">
+          Let’s talk<span>.</span>
         </a>
-        <div className="contact-actions">
+        <p>psmithul@gmail.com</p>
+        <div className="about-contact-links">
           <a
-            className="text-link"
             href="/Mithul-Sourav-CV.pdf"
             target="_blank"
             rel="noreferrer"
+            className="quiet-link"
           >
-            Read my full CV <ArrowUpRight size={18} />
+            Read my CV
           </a>
-          <Link className="text-link" href="/#work">
-            Explore the projects <ArrowUpRight size={18} />
+          <Link href="/#work" className="quiet-link">
+            Explore the projects
           </Link>
         </div>
       </section>
