@@ -699,6 +699,15 @@ export function createEngineeringScene(
     interactedUntil = performance.now() + 6000;
   };
   controls.addEventListener('start', onInteract);
+  // Keep ordinary page scrolling available over the model. Trackpad pinch
+  // (Ctrl+wheel) and touch pinch still reach OrbitControls for zooming.
+  const onWheel = (event: WheelEvent) => {
+    if (!event.ctrlKey) event.stopImmediatePropagation();
+  };
+  renderer.domElement.addEventListener('wheel', onWheel, {
+    capture: true,
+    passive: true,
+  });
   function resize() {
     const width = host.clientWidth,
       height = host.clientHeight;
@@ -773,6 +782,7 @@ export function createEngineeringScene(
       visibility.disconnect();
       controls.removeEventListener('start', onInteract);
       controls.dispose();
+      renderer.domElement.removeEventListener('wheel', onWheel, true);
       renderer.domElement.removeEventListener('webglcontextlost', onLost);
       disposeObject(scene);
       environment.dispose();
