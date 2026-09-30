@@ -7,6 +7,7 @@ import './experience.css';
 import './flow.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://psmithul.com'),
   title: {
     default: 'Mithul Sourav — Projects & Notes',
     template: '%s — Mithul Sourav',

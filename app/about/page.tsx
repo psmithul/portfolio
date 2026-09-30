@@ -26,10 +26,10 @@ export default function About() {
             at NITK Surathkal. I expect to graduate in June 2027.
           </p>
           <p>
-            I like understanding how something works, then trying to make it
-            work myself. My projects bring together mechanical design,
-            electronics, and software, so there’s usually something new to
-            learn.
+            I like going deep into an idea: where it came from, why it works,
+            and how people figured it out. My projects bring together mechanical
+            design, electronics, and software. Building gives me a way to test
+            what I’ve understood and find the questions I missed.
           </p>
           <p>
             Right now, I’m designing robots for uncertain terrain, including a

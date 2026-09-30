@@ -101,7 +101,6 @@ html {
   overflow: clip;
   --portrait-drift: 0px;
   --note-drift: 0px;
-  --hero-drift: 0px;
 }
 .flow-statement {
   position: relative;
@@ -129,7 +128,7 @@ html {
   color: var(--ink);
 }
 .flow-statement h1 span + span {
-  font-size: clamp(48px, 6.9vw, 106px);
+  font-size: clamp(48px, 6vw, 88px);
 }
 .flow-statement h1 span:last-child {
   color: var(--accent);
@@ -185,45 +184,24 @@ html {
   margin-top: 0;
 }
 .flow-hero-objects {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: center;
+  position: relative;
   min-width: 0;
-  height: 230px;
-  padding: 22px 0;
-  gap: 14px;
+  height: 260px;
   pointer-events: none;
-  transform: translateY(var(--hero-drift));
 }
-.flow-hero-object {
-  min-width: 0;
-  width: 100%;
-  max-width: 180px;
-  justify-self: center;
-  filter: drop-shadow(3px 10px 7px #24231f12);
-  animation: hero-float 7s ease-in-out infinite;
-}
-.flow-hero-object img {
-  width: 100%;
-  height: auto;
+.flow-hero-objects canvas {
   display: block;
+  width: 100%;
+  height: 100%;
 }
-.flow-hero-rover {
-  animation-duration: 8.5s;
-  animation-delay: -2s;
+.flow-hero-canvas {
+  width: 100%;
+  height: 100%;
 }
-.flow-hero-rocket {
-  animation-duration: 6.5s;
-  animation-delay: -4s;
-}
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translateY(5px) rotate(-3deg);
-  }
-  50% {
-    transform: translateY(-7px) rotate(3deg);
-  }
+.flow-hero-model-error {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 28px;
 }
 .flow-portrait-stage {
   position: relative;
@@ -537,7 +515,7 @@ html {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   mix-blend-mode: normal;
 }
 .quest-card-1 .quest-image {
@@ -893,7 +871,7 @@ html {
 }
 .archive-reveal[data-layout='fan'] {
   --archive-stage-height: max(760px, calc(100svh - 80px));
-  --archive-container-size: clamp(190px, calc(100svh - 650px), 300px);
+  --archive-container-size: clamp(190px, calc(100svh - 780px), 300px);
   --burst-origin-y: calc(
     var(--archive-stage-height) - var(--archive-container-size) * 0.5 - 530px
   );
@@ -948,6 +926,15 @@ html {
 }
 .archive-reveal[data-layout='fan'] .archive-highlights {
   font-size: 14px;
+}
+.archive-toolbox[data-layout='fan'] .archive-card {
+  height: 460px;
+}
+.archive-toolbox[data-layout='fan'] .archive-card h3 {
+  min-height: 61px;
+}
+.archive-toolbox[data-layout='fan'] .archive-role {
+  min-height: 40px;
 }
 .archive-reveal[data-layout='fan'] .archive-card h3 {
   font-size: 27px;
@@ -1870,7 +1857,7 @@ html[data-portfolio-cursor='active'] .flow-home a {
     gap: 20px;
   }
   .flow-hero-objects {
-    gap: 2px;
+    height: 230px;
   }
   .flow-portrait-stage {
     height: 600px;
@@ -1967,10 +1954,8 @@ html[data-portfolio-cursor='active'] .flow-home a {
     grid-template-columns: minmax(0, 1fr);
   }
   .flow-hero-objects {
-    height: 170px;
+    height: 200px;
     max-width: 440px;
-    padding-block: 12px;
-    gap: 18px;
   }
 }
 @media (max-width: 640px) {
@@ -2044,13 +2029,8 @@ html[data-portfolio-cursor='active'] .flow-home a {
     padding-bottom: 18px;
   }
   .flow-hero-objects {
-    height: 138px;
-    padding-block: 14px;
-    gap: 12px;
+    height: 165px;
     max-width: 350px;
-  }
-  .flow-hero-object {
-    max-width: 110px;
   }
   .flow-portrait-stage {
     display: grid;
@@ -2407,7 +2387,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
     transform: none;
   }
   .flow-hero-objects,
-  .flow-hero-object,
   .flow-person,
   .flow-quote-note,
   .flow-cover-body,
