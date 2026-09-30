@@ -80,3 +80,13 @@ Six original logo assets are served locally from `public/images/tools/`. ANSYS c
 The [asset manifest](tool-logo-assets.json) records exact source URLs, original hashes, dimensions, validation, and reuse notes. The ANSYS repository and Devicon license notices are retained alongside the assets. These marks identify software used by Mithul; they do not imply vendor affiliation or endorsement.
 
 The toolbox and folder each use two aligned copies of their existing image: one back layer and one CSS-clipped front layer. Their original files and colours are preserved. The source masks are display framing, not new project imagery.
+
+## Active photography update, 30 September 2026
+
+The currently rendered project covers use the eleven entries in [project-photo-assets.json](project-photo-assets.json): ten real reference photographs and the verified native reaction-wheel assembly image. No temporary generated illustration is selected by `content/projects.ts`. External photographs depict related reference subjects and carry visible credits; they are not claimed as the user’s prototypes. `content/project-images.ts` keeps dimensions, accurate alt text, captions, source links, license links and display fit together. Proportional WebP encoding preserves original image content; the production assets retain their source licenses.
+
+The updated opening removes all four generated floating mechanical objects. It keeps the existing supplied photographic portrait and exact quote note. Native SVG `tool-case.svg` and `folder-open.svg` illustrations use the Wada-inspired portfolio colours and replace the generated archive containers. Earlier prompts and provenance above document superseded assets; they do not describe currently rendered artwork. Native tensegrity reconstruction views remain only in the detailed mechanism study with explicit reconstruction captions.
+
+## Space and robotics hero details, 1 October 2026
+
+`public/images/hero/satellite.svg`, `rover.svg`, and `rocket.svg` are native vector illustrations authored for the requested floating hero elements. They use the existing indigo, paper, ochre, and celadon palette. Dedicated grid cells reserve space around them at every breakpoint; gentle CSS animation and scroll drift stop when reduced motion is enabled. They depict generic subjects and do not claim to document Mithul’s project hardware.

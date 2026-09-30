@@ -1,12 +1,9 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { WritingDesk } from '@/components/writing-desk';
-import {
-  getChatGPTUser,
-  chatGPTSignInPath,
-  chatGPTSignOutPath,
-} from '@/app/chatgpt-auth';
-import { isJournalOwner } from '@/lib/journal-model';
+import { getJournalOwner, journalLoginConfigured } from '@/lib/journal-auth';
+import { journalStorageConfigured } from '@/lib/journal-store';
+import { DeskLogin, DeskSignOut } from '@/components/desk-login';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -14,8 +11,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 export default async function Write() {
-  const user = await getChatGPTUser();
-  if (!user || !isJournalOwner(user, import.meta.env.DEV))
+  const user = await getJournalOwner();
+  if (!user)
     return (
       <main id="main" className="desk-signin shell">
         <span className="eyebrow">MIKA’S LIFE / WRITING DESK</span>
@@ -25,19 +22,17 @@ export default async function Write() {
           <em>to write.</em>
         </h1>
         <p>
-          {user
-            ? 'You’re signed in, but this account doesn’t have access to Mika’s writing desk.'
-            : 'Sign in to write an entry, return to a draft, or edit a published essay.'}
+          Sign in to write an entry, return to a draft, or edit a published
+          essay.
         </p>
-        <a
-          className="button primary"
-          href={
-            user ? chatGPTSignOutPath('/write') : chatGPTSignInPath('/write')
-          }
-          target="_top"
-        >
-          {user ? 'Sign out and switch account' : 'Sign in with ChatGPT'}
-        </a>
+        {journalLoginConfigured() && journalStorageConfigured() ? (
+          <DeskLogin />
+        ) : (
+          <p>
+            The writing desk is being connected. Published entries are available
+            below.
+          </p>
+        )}
         <Link href="/blog" className="text-link">
           Read Mika’s Life
         </Link>
@@ -48,9 +43,7 @@ export default async function Write() {
       <WritingDesk />
       <div className="desk-account">
         <span>Signed in as {user.email}</span>
-        <a href={chatGPTSignOutPath('/blog')} target="_top">
-          Sign out
-        </a>
+        <DeskSignOut />
       </div>
     </main>
   );

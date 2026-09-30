@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 type Props = {
   id: string;
@@ -12,8 +10,6 @@ type Props = {
   description: string;
   image: string;
   kind: 'toolbox' | 'folder';
-  count: number;
-  itemLabel: string;
   children: ReactNode;
 };
 
@@ -24,102 +20,96 @@ export function ArchiveReveal({
   description,
   image,
   kind,
-  count,
-  itemLabel,
   children,
 }: Props) {
   const section = useRef<HTMLElement>(null);
-  const viewport = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-
-  const browse = (direction: number) => {
-    const row = viewport.current;
-    if (!row) return;
-    const cards = Array.from(
-      row.querySelectorAll<HTMLElement>('[data-archive-card]'),
-    );
-    const next = cards[Math.max(0, Math.min(count - 1, active + direction))];
-    if (!next) return;
-    row.scrollTo({
-      left: next.offsetLeft - (cards[0]?.offsetLeft ?? 0),
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'instant'
-        : 'smooth',
-    });
-  };
 
   useEffect(() => {
     const element = section.current;
-    const row = viewport.current;
-    if (!element || !row) return;
-    const desktop = window.matchMedia('(min-width: 1240px)');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!element) return;
     const cards = Array.from(
-      row.querySelectorAll<HTMLElement>('[data-archive-card]'),
+      element.querySelectorAll<HTMLElement>('[data-archive-card]'),
     );
+    const wide = window.matchMedia('(min-width: 1580px)');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let fan = false;
+    let observer: IntersectionObserver | undefined;
+
     const draw = () => {
       frame = 0;
-      const bounds = element.getBoundingClientRect();
-      const focused = element.contains(document.activeElement);
-      const progress =
-        reduce.matches || focused
-          ? 1
-          : Math.max(
-              0,
-              Math.min(
-                1,
-                fan
-                  ? (68 - bounds.top) / 520
-                  : (window.innerHeight * 0.86 - bounds.top) /
-                      (window.innerHeight * 0.66),
-              ),
-            );
-      element.style.setProperty('--archive-progress', progress.toFixed(4));
-      if (!fan) {
-        let nearest = 0;
-        let distance = Infinity;
-        cards.forEach((card, index) => {
-          const current = Math.abs(
-            card.offsetLeft - (cards[0]?.offsetLeft ?? 0) - row.scrollLeft,
-          );
-          if (current < distance) {
-            distance = current;
-            nearest = index;
-          }
-        });
-        setActive(nearest);
+      if (fan) {
+        const focused = element.contains(document.activeElement);
+        element.dataset.open = String(
+          focused || element.getBoundingClientRect().top <= 108,
+        );
+        element.dataset.focused = String(focused);
       }
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(draw);
     };
     const configure = () => {
-      fan = desktop.matches && !reduce.matches;
-      element.dataset.mode = fan ? 'fan' : 'native';
-      if (fan) row.scrollLeft = 0;
+      observer?.disconnect();
+      fan = wide.matches && window.innerHeight >= 840 && !reduce.matches;
+      element.dataset.layout = fan ? 'fan' : 'stack';
+      element.dataset.enhanced = String(!reduce.matches);
+      element.dataset.focused = 'false';
+      cards.forEach((card) => delete card.dataset.revealed);
+      if (!fan && !reduce.matches) {
+        observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              const card = entry.target as HTMLElement;
+              if (
+                entry.isIntersecting ||
+                card.contains(document.activeElement)
+              ) {
+                card.dataset.revealed = 'true';
+              } else if (entry.boundingClientRect.top >= window.innerHeight) {
+                card.dataset.revealed = 'false';
+              }
+            }
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -5% 0px' },
+        );
+        cards.forEach((card) => {
+          card.dataset.revealed =
+            card.getBoundingClientRect().top < window.innerHeight * 0.9
+              ? 'true'
+              : 'false';
+          observer?.observe(card);
+        });
+      }
       schedule();
     };
+    const focus = (event: FocusEvent) => {
+      const target = event.target as HTMLElement;
+      const card = target.closest<HTMLElement>('[data-archive-card]');
+      if (card) card.dataset.revealed = 'true';
+      schedule();
+    };
+
     configure();
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', configure);
-    row.addEventListener('scroll', schedule, { passive: true });
-    element.addEventListener('focusin', schedule);
+    element.addEventListener('focusin', focus);
     element.addEventListener('focusout', schedule);
-    desktop.addEventListener('change', configure);
+    wide.addEventListener('change', configure);
     reduce.addEventListener('change', configure);
     return () => {
       cancelAnimationFrame(frame);
+      observer?.disconnect();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', configure);
-      row.removeEventListener('scroll', schedule);
-      element.removeEventListener('focusin', schedule);
+      element.removeEventListener('focusin', focus);
       element.removeEventListener('focusout', schedule);
-      desktop.removeEventListener('change', configure);
+      wide.removeEventListener('change', configure);
       reduce.removeEventListener('change', configure);
-      element.style.removeProperty('--archive-progress');
-      delete element.dataset.mode;
+      ['layout', 'enhanced', 'open', 'focused'].forEach(
+        (key) => delete element.dataset[key],
+      );
+      cards.forEach((card) => delete card.dataset.revealed);
     };
   }, []);
 
@@ -136,42 +126,6 @@ export function ArchiveReveal({
           <h2 id={`${id}-heading`}>{title}</h2>
           <p className="archive-description">{description}</p>
         </div>
-        <div className="archive-navigation shell">
-          <div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => browse(-1)}
-              disabled={active === 0}
-              aria-label={`Previous ${itemLabel}`}
-            >
-              <ArrowLeft aria-hidden="true" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => browse(1)}
-              disabled={active === count - 1}
-              aria-label={`Next ${itemLabel}`}
-            >
-              <ArrowRight aria-hidden="true" />
-            </Button>
-          </div>
-          <p>
-            {String(active + 1).padStart(2, '0')} /{' '}
-            {String(count).padStart(2, '0')}
-            <span>Swipe to browse</span>
-          </p>
-        </div>
-        <div
-          className="archive-cards"
-          ref={viewport}
-          role="group"
-          aria-label={`${title} cards`}
-          tabIndex={0}
-        >
-          {children}
-        </div>
         <div className="archive-container" aria-hidden="true">
           <Image src={image} alt="" width={800} height={800} unoptimized />
           <Image
@@ -183,6 +137,12 @@ export function ArchiveReveal({
             unoptimized
           />
         </div>
+        <section
+          className="archive-cards"
+          aria-label={`${title} cards`}
+        >
+          {children}
+        </section>
       </div>
     </section>
   );

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PostEditor } from '@/components/post-editor';
-import { requireChatGPTUser } from '@/app/chatgpt-auth';
+import { requireJournalOwner } from '@/lib/journal-auth';
 import { isJournalOwner, JournalError } from '@/lib/journal-model';
 import { getEntry } from '@/lib/journal-store';
 
@@ -19,8 +19,8 @@ export default async function EditPage({
   return <ProtectedEditor id={(await params).id} />;
 }
 async function ProtectedEditor({ id }: { id: string }) {
-  const user = await requireChatGPTUser(`/write/${encodeURIComponent(id)}`);
-  if (!isJournalOwner(user, import.meta.env.DEV))
+  const user = await requireJournalOwner();
+  if (!isJournalOwner(user))
     return (
       <main id="main" className="desk-signin shell">
         <h1>This desk belongs to Mika.</h1>

@@ -10,21 +10,24 @@ import {
   validateVersion,
 } from '../lib/journal-model.ts';
 
-await test('only the owner can write; local sign-in is development-only', () => {
-  assert.equal(isJournalOwner(null, true), false);
+await test('only the verified owner can write; no development identity bypass', () => {
+  assert.equal(isJournalOwner(null), false);
   assert.equal(
     isJournalOwner({ userId: 'visitor', email: 'visitor@example.com' }),
     false,
   );
   assert.equal(
-    isJournalOwner({ userId: 'owner', email: 'miastromika@gmail.com' }),
+    isJournalOwner({ userId: 'mika', email: 'miastromika@gmail.com' }),
     true,
   );
   const local = { userId: 'local_seedy', email: 'seedy@sites.test' };
-  assert.equal(isJournalOwner(local, true), true);
-  assert.equal(isJournalOwner(local, false), false);
+  assert.equal(isJournalOwner(local), false);
   assert.equal(
-    isJournalOwner({ ...local, email: 'visitor@example.com' }, true),
+    isJournalOwner({ ...local, email: 'miastromika@gmail.com' }),
+    false,
+  );
+  assert.equal(
+    isJournalOwner({ userId: 'mika', email: 'visitor@example.com' }),
     false,
   );
 });
@@ -43,6 +46,16 @@ await test('mutations require a same-origin JSON request', () => {
   assert.throws(() =>
     assertSameOrigin(request('https://portfolio.example', 'text/plain')),
   );
+  assert.doesNotThrow(() => assertSameOrigin(new Request('http://0.0.0.0:3001/api/journal', {
+    method: 'POST', headers: {
+      host: 'localhost:3001', origin: 'http://localhost:3001', 'Content-Type': 'application/json',
+    },
+  })));
+  assert.throws(() => assertSameOrigin(new Request('http://0.0.0.0:3001/api/journal', {
+    method: 'POST', headers: {
+      host: 'localhost:3001', origin: 'http://attacker.example', 'Content-Type': 'application/json',
+    },
+  })));
 });
 
 await test('drafts may be unfinished, but publication validates all required text', () => {

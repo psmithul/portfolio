@@ -3,22 +3,13 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
-const objects = [
-  'precision-ball-bearing',
-  'steel-compression-spring',
-  'rover-wheel',
-  'compact-universal-joint',
-];
 export function PortraitStory() {
   const story = useRef<HTMLElement>(null);
   useEffect(() => {
     const element = story.current;
     if (!element) return;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-    let frame = 0,
-      x = 0,
-      y = 0;
+    let frame = 0;
     const draw = () => {
       frame = 0;
       const bounds = element.getBoundingClientRect();
@@ -27,44 +18,22 @@ export function PortraitStory() {
         : Math.max(0, Math.min(900, -bounds.top));
       element.style.setProperty('--portrait-drift', `${offset * 0.07}px`);
       element.style.setProperty('--note-drift', `${offset * -0.045}px`);
-      element.style.setProperty(
-        '--object-x',
-        `${preference.matches ? 0 : x}px`,
-      );
-      element.style.setProperty(
-        '--object-y',
-        `${preference.matches ? 0 : y}px`,
-      );
+      element.style.setProperty('--hero-drift', `${offset * -0.025}px`);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(draw);
     };
-    const move = (event: PointerEvent) => {
-      if (!pointer.matches || preference.matches) return;
-      x = (event.clientX / window.innerWidth - 0.5) * 12;
-      y = (event.clientY / window.innerHeight - 0.5) * 12;
-      schedule();
-    };
-    const reset = () => {
-      x = 0;
-      y = 0;
-      schedule();
-    };
     schedule();
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
-    element.addEventListener('pointermove', move);
-    element.addEventListener('pointerleave', reset);
-    preference.addEventListener('change', reset);
+    preference.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
-      element.removeEventListener('pointermove', move);
-      element.removeEventListener('pointerleave', reset);
-      preference.removeEventListener('change', reset);
-      ['--portrait-drift', '--note-drift', '--object-x', '--object-y'].forEach(
-        (property) => element.style.removeProperty(property),
+      preference.removeEventListener('change', schedule);
+      ['--portrait-drift', '--note-drift', '--hero-drift'].forEach((property) =>
+        element.style.removeProperty(property),
       );
     };
   }, []);
@@ -73,30 +42,37 @@ export function PortraitStory() {
       <div className="flow-statement shell">
         <p className="flow-opening-note">Mithul Sourav · NITK Surathkal</p>
         <h1>
-          <span>Mechanical</span>
-          <span>engineering</span>
-          <span>& robotics.</span>
+          <span>Hi, I’m Mithul.</span>
+          <span>Curious about how things work.</span>
+          <span>Driven to build them myself.</span>
         </h1>
-        <p className="flow-hero-aside">
-          Final-year student working on mechanisms, vibration, and mobile
-          robots.
-        </p>
-        <a className="flow-scroll-cue" href="#intro">
-          About me <ArrowDown className="link-arrow" aria-hidden="true" />
-        </a>
-        <div className="flow-mechanical-objects" aria-hidden="true">
-          {objects.map((name, index) => (
-            <div className={`flow-object flow-object-${index + 1}`} key={name}>
-              <Image
-                src={`/images/mechanical/${name}.webp`}
-                alt=""
-                width={720}
-                height={720}
-                priority
-                unoptimized
-              />
-            </div>
-          ))}
+        <div className="flow-hero-details">
+          <div>
+            <p className="flow-hero-aside">
+              I’m a final-year mechanical engineering student at NITK Surathkal.
+              I like learning new technologies and using them to build things.
+              I’m especially interested in robotics, control systems, and space.
+            </p>
+            <a className="flow-scroll-cue" href="#intro">
+              About me <ArrowDown className="link-arrow" aria-hidden="true" />
+            </a>
+          </div>
+          <div className="flow-hero-objects" aria-hidden="true">
+            {['satellite', 'rover', 'rocket'].map((object) => (
+              <div
+                className={`flow-hero-object flow-hero-${object}`}
+                key={object}
+              >
+                <Image
+                  src={`/images/hero/${object}.svg`}
+                  alt=""
+                  width={240}
+                  height={240}
+                  unoptimized
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="flow-portrait-stage shell">
@@ -122,21 +98,27 @@ export function PortraitStory() {
       </div>
       <div id="intro" className="flow-intro shell">
         <h2>
-          Hi, I’m
-          <br /> Mithul.
+          A little
+          <br /> about me.
         </h2>
         <div>
           <p>
-            I’m a final-year mechanical engineering student at{' '}
-            <strong>NITK Surathkal</strong>. I’m interested in experimental and
-            field robotics, especially how mobile robots move over rough
-            terrain.
+            I like understanding how something works, then trying to make it
+            work myself. That’s what draws me to hard problems: there’s always
+            something I haven’t figured out yet.
           </p>
           <p>
-            My current work covers variable-stiffness mechanisms,
-            vibration-aware suspension, and a leaf-collection robot. I use CAD,
-            MATLAB, and finite element analysis to develop the designs and plan
-            their tests.
+            Right now, I’m designing robots for uncertain terrain: a rover with
+            adjustable suspension and a robot for collecting leaves on uneven
+            ground. I’m also studying a tensegrity joint and how its stiffness
+            can be changed.
+          </p>
+          <p>
+            These projects sit between mechanical design, electronics, and
+            software. I enjoy learning enough of each to understand the whole
+            system, and then checking whether the idea holds up. Outside these
+            projects, I keep coming back to space and the technologies that make
+            exploration possible.
           </p>
           <Link href="/about" className="flow-text-link">
             Background & experience{' '}

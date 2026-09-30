@@ -1,0 +1,149 @@
+import type { Project } from '@/content/projects';
+
+export const projectImages: Record<string, NonNullable<Project['image']>> = {
+  'uav-vibration-integration': {
+    kind: 'reference',
+    src: '/images/projects/photos/uav-vibration-integration.webp',
+    width: 1800,
+    height: 914,
+    alt: 'A photographic macro view of the front and back of a Naze32 multicopter flight-controller board.',
+    caption:
+      'Reference photograph · Naze32 flight controller. Lucasbosch / Wikimedia Commons.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:AbuseMark_AfroFlight_Naze_32_Flight_Controller_rev5_white.jpg',
+    referenceLabel: 'Photo source',
+  },
+  'adaptive-suspension-rover': {
+    kind: 'reference',
+    src: '/images/projects/photos/adaptive-suspension-rover.webp',
+    width: 1800,
+    height: 1200,
+    alt: 'NASA/JPL-Caltech Scarecrow six-wheel rover during a desert mobility test.',
+    caption: 'Reference photograph · NASA/JPL-Caltech Scarecrow rover.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:Curiosity-rover-stunt-double-scarecrow-dumont-dunes-br2.jpg',
+    referenceLabel: 'Photo source',
+  },
+  'tensegrity-joint': {
+    kind: 'reference',
+    src: '/images/projects/photos/tensegrity-joint.webp',
+    width: 1616,
+    height: 1080,
+    alt: 'NASA Ames Super Ball tensegrity robot with rigid struts and tension cables at the Roverscape.',
+    caption: 'Reference photograph · NASA Ames Super Ball Bot.',
+    fit: 'cover',
+    referenceUrl:
+      'https://www.nasa.gov/intelligent-systems-division/autonomous-systems-and-robotics/intelligent-robotics-group/',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://www.nasa.gov/nasa-brand-center/images-and-media/',
+  },
+  kneeassist: {
+    kind: 'reference',
+    src: '/images/projects/photos/kneeassist.webp',
+    width: 1070,
+    height: 1600,
+    alt: 'A knee brace photographed at the Science Museum, with its mechanical hinge and actuator visible.',
+    caption:
+      'Reference photograph · Knee brace at the Science Museum. Paul Hudson / CC BY 2.0.',
+    fit: 'contain',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:Knee_Brace_-_Science_Museum,_London.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by/2.0',
+  },
+  'reaction-wheel-microvibrations': {
+    kind: 'documentation',
+    src: '/images/projects/reaction-wheel-reference-cad.webp',
+    width: 1500,
+    height: 1125,
+    alt: 'A sectioned reaction-wheel housing inside the project’s engineering reference satellite assembly.',
+    caption:
+      'Project reference CAD · Verified assembly; surface finishes are illustrative.',
+    fit: 'cover',
+  },
+  'off-road-leaf-robot': {
+    kind: 'reference',
+    src: '/images/projects/photos/off-road-leaf-robot.webp',
+    width: 1800,
+    height: 1201,
+    alt: 'Fallen leaves covering a forest floor.',
+    caption: 'Reference photograph · Leaf litter. Yinan Chen / public domain.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:Gfp-leafy-autumn-forest-floor.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl:
+      'https://web.archive.org/web/20230926203737/https://creativecommons.org/licenses/publicdomain/',
+  },
+  'uncertainty-aware-navigation': {
+    kind: 'reference',
+    src: '/images/projects/photos/uncertainty-aware-navigation.webp',
+    width: 1319,
+    height: 1800,
+    alt: 'A photographed TurtleBot3 Burger mobile robot with wheels, sensing and control electronics.',
+    caption:
+      'Reference photograph · TurtleBot3 mobile robot. Kuscu0 / CC BY-SA 4.0.',
+    fit: 'contain',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:TurtleBot3_Burger.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0',
+  },
+  'four-bar-door-mechanism': {
+    kind: 'reference',
+    src: '/images/projects/photos/four-bar-door-mechanism.webp',
+    width: 1800,
+    height: 1200,
+    alt: 'A physical Bennett four-bar rotational linkage photographed against a neutral background.',
+    caption:
+      'Reference photograph · Bennett four-bar linkage. Twdragon / CC BY-SA 3.0.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:Bennett_four-bar_linkage.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0',
+  },
+  'easy-access-wallet': {
+    kind: 'reference',
+    src: '/images/projects/photos/easy-access-wallet.webp',
+    width: 1800,
+    height: 1350,
+    alt: 'A ZNAP slim card holder with cards and its removable coin compartment visible.',
+    caption:
+      'Reference photograph · ZNAP card holder. kartenetui.info / CC BY 4.0.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:ZNAP_Kreditkartenetui_mit_Geldklammer_und_M%C3%BCnzfach_(Slimpuro)_01.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by/4.0',
+  },
+  'solar-smart-home': {
+    kind: 'reference',
+    src: '/images/projects/photos/solar-smart-home.webp',
+    width: 1280,
+    height: 826,
+    alt: 'An Arduino Uno connected to a breadboard with jumper wires and a push button.',
+    caption:
+      'Reference photograph · Arduino circuit. Shuiwiiki / CC BY-SA 4.0.',
+    fit: 'cover',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:Breadboard_example_by_shuiwiki.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0',
+  },
+  'traffic-and-elevated-bus': {
+    kind: 'reference',
+    src: '/images/projects/photos/traffic-and-elevated-bus.webp',
+    width: 951,
+    height: 1500,
+    alt: 'A real three-aspect LED traffic signal in Forest Hill, New South Wales.',
+    caption: 'Reference photograph · LED traffic signal. Bidgee / CC BY 3.0.',
+    fit: 'contain',
+    referenceUrl:
+      'https://commons.wikimedia.org/wiki/File:LED_traffic_light.jpg',
+    referenceLabel: 'Photo source',
+    licenseUrl: 'https://creativecommons.org/licenses/by/3.0',
+  },
+};

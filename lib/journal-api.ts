@@ -1,4 +1,4 @@
-import { getChatGPTUser } from '@/app/chatgpt-auth';
+import { getJournalOwner } from './journal-auth';
 import {
   assertSameOrigin,
   isJournalOwner,
@@ -10,10 +10,10 @@ export async function journalApi(
   action: (body: Record<string, unknown>) => Promise<unknown>,
 ) {
   try {
-    const user = await getChatGPTUser();
+    const user = await getJournalOwner();
     if (!user)
       throw new JournalError('Sign in to open your writing desk.', 401);
-    if (!isJournalOwner(user, import.meta.env.DEV))
+    if (!isJournalOwner(user))
       throw new JournalError('This writing desk belongs to Mika.', 403);
     let body: Record<string, unknown> = {};
     if (request.method !== 'GET') {
@@ -46,7 +46,10 @@ export async function journalApi(
           headers: { 'Cache-Control': 'private, no-store' },
         },
       );
-    console.error('Journal request failed:', error);
+    console.error(
+      'Journal request failed:',
+      error instanceof Error ? error.name : 'Unknown error',
+    );
     return Response.json(
       {
         error:

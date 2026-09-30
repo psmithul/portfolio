@@ -8,11 +8,11 @@ import './flow.css';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Mithul Sourav — Mechanical Engineering & Robotics',
+    default: 'Mithul Sourav — Projects & Notes',
     template: '%s — Mithul Sourav',
   },
   description:
-    'Mechanical engineering and robotics by Mithul Sourav, a final-year student at NITK Surathkal. Project studies, CAD, and Mika’s Life, a personal journal.',
+    'Mithul Sourav’s projects in robotics, mechanisms, and sensing, alongside Mika’s Life, a personal journal. Final-year student at NITK Surathkal.',
   icons: { icon: '/favicon.svg' },
 };
 
@@ -45,7 +45,7 @@ export default function RootLayout({
             <Link href="/" className="footer-name">
               Mithul Sourav
             </Link>
-            <p>Mechanical engineering & robotics · NITK Surathkal</p>
+            <p>NITK Surathkal · Projects, experiments & notes</p>
           </div>
           <div className="footer-links">
             <a
