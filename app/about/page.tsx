@@ -30,10 +30,11 @@ export default function About() {
             at NITK Surathkal. I expect to graduate in June 2027.
           </p>
           <p>
-            I’m interested in experimental and field robotics, especially
-            rough-terrain mobile robots. I work across mechanisms, dynamics,
-            vibration, sensing, control, and autonomy. The useful part is seeing
-            how they behave together.
+            I like building things, and I’m increasingly interested in the
+            research behind them. A mechanism gives me something to make; a
+            model helps me ask better questions; a test tells me where I was
+            wrong. Right now, I’m working across field robotics, dynamics,
+            vibration, sensing, and control.
           </p>
         </div>
       </section>

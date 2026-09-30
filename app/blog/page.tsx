@@ -23,11 +23,8 @@ export default async function Blog() {
         </div>
         <h1>
           Mika’s <em>Life.</em>
-          <span className="masthead-star" aria-hidden="true">
-            ✳
-          </span>
         </h1>
-        <p>Science, books, and the things I keep thinking about.</p>
+        <p>Notes on science, books, and the questions I come back to.</p>
         <div className="journal-rule">
           <span>ESSAYS & OCCASIONAL NOTES</span>
           <span>
@@ -42,17 +39,17 @@ export default async function Blog() {
             m.
           </span>
           <h2>
-            A place to
+            What caught
             <br />
-            stay with a thought.
+            my attention.
           </h2>
           <p>
-            I’m Mika. I study mechanical engineering, and this is where I write
-            about the things that hold my attention outside a project report.
+            I’m Mika. I study mechanical engineering. This is where I write
+            about science, books, and the ideas that stay with me.
           </p>
           <p>
-            Expect photographs, questions about science, notes on learning, and
-            the occasional unfinished idea.
+            Sometimes there’s a connection to something I’m building. Sometimes
+            it’s just a question I haven’t quite worked out.
           </p>
           <div className="journal-subjects">
             <h3>In these pages</h3>

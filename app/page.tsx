@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Cog, Move3d, Radio, Waves, Asterisk } from 'lucide-react';
-import { EngineeringPlayground } from '@/components/engineering-playground';
+import { Cog, Move3d, Radio, Waves, ArrowUpRight } from 'lucide-react';
+import { PortraitStory } from '@/components/portrait-story';
 import { EngineeringThumbnail } from '@/components/engineering-thumbnail';
 import { MotionDirector } from '@/components/motion-director';
 import type { ModelKind } from '@/lib/engineering-scene';
@@ -13,43 +13,7 @@ export default async function Home() {
   return (
     <main id="main" className="research-home">
       <MotionDirector />
-      <section className="lab-hero orbit-hero shell">
-        <div className="lab-hero-copy">
-          <p className="eyebrow hero-kicker">
-            MITHUL SOURAV / MECHANICAL ENGINEERING
-          </p>
-          <h1>
-            MAKING
-            <br />
-            <span>
-              THINGS MOVE<span className="name-period">.</span>
-            </span>
-          </h1>
-          <div className="hero-personal-note">
-            <Asterisk size={24} aria-hidden="true" />
-            <span>
-              A little curiosity.
-              <br />A lot of moving parts.
-            </span>
-          </div>
-          <p className="lab-intro">
-            I’m a mechanical engineering student at NITK Surathkal. I work on
-            robots, mechanisms, and the vibration between them.
-          </p>
-          <div className="hero-actions">
-            <a className="lab-button" href="#work">
-              Explore my work
-            </a>
-            <Link className="quiet-link" href="/about">
-              Meet Mithul
-            </Link>
-          </div>
-          <p className="hero-coordinate">
-            CLASS OF 2027 <span>SURATHKAL, INDIA</span>
-          </p>
-        </div>
-        <EngineeringPlayground />
-      </section>
+      <PortraitStory />
       <div className="discipline-strip" aria-label="Research interests">
         <div className="shell">
           {[
@@ -77,9 +41,8 @@ export default async function Home() {
             </h2>
           </div>
           <p>
-            A few questions I’ve spent time on.
-            <br />
-            The mechanism, the method, and what came out of it.
+            Some are still taking shape. Others have a result to share. Here’s
+            what I’ve been building and studying.
           </p>
         </div>
         <div className="lab-project-grid">
@@ -96,14 +59,19 @@ export default async function Home() {
                   </span>
                   <span className="project-status">{project.status}</span>
                 </div>
-                <EngineeringThumbnail kind={project.model as ModelKind} />
+                <div className="project-art">
+                  <EngineeringThumbnail kind={project.model as ModelKind} />
+                </div>
                 <span className="visual-card-bottom">
-                  {project.visualLabel}
+                  CONCEPT VISUAL / {project.discipline.toUpperCase()}
                 </span>
               </div>
               <div className="lab-project-info">
                 <span className="eyebrow">{project.period}</span>
-                <h3>{project.title}</h3>
+                <div className="project-title-line">
+                  <h3>{project.title}</h3>
+                  <ArrowUpRight size={24} aria-hidden="true" />
+                </div>
                 <p>{project.summary}</p>
                 <div className="lab-tool-tags">
                   {project.tools.slice(0, 3).map((tool) => (
@@ -115,7 +83,7 @@ export default async function Home() {
           ))}
         </div>
         <div className="lab-archive-heading">
-          <h3>More from the workbench</h3>
+          <h3>Earlier builds & other questions</h3>
           <span className="eyebrow">
             {String(projects.length - 4).padStart(2, '0')} PROJECTS
           </span>
@@ -138,16 +106,17 @@ export default async function Home() {
         <div>
           <p className="eyebrow">02 / A LITTLE CONTEXT</p>
           <h2>
-            From a model
+            I like making things.
             <br />
-            to the <em>messy world.</em>
+            And <em>understanding them.</em>
           </h2>
         </div>
         <div>
           <p>
-            I’m interested in experimental and field robotics—especially
-            machines that have to work on uneven ground, with imperfect
-            measurements.
+            I’m a builder with a growing interest in research. I like working
+            through a mechanism, making a model, and figuring out which test
+            would tell me something useful. Field robotics brings those
+            interests together.
           </p>
           <p>
             At Vayu Aerospace, I compared flight-controller mounting concepts,
@@ -155,17 +124,8 @@ export default async function Home() {
             choose a vibration-isolation direction.
           </p>
           <Link href="/about" className="lab-button secondary">
-            The longer version
+            More about me
           </Link>
-        </div>
-        <div className="about-stamp">
-          <span>NITK</span>
-          <p>
-            MECHANICAL
-            <br />
-            ENGINEERING
-          </p>
-          <b>2027</b>
         </div>
       </section>
       <section className="lab-journal shell">
@@ -174,7 +134,10 @@ export default async function Home() {
           <h2>
             Mika’s <em>Life.</em>
           </h2>
-          <p>Science, books, and the things I keep thinking about.</p>
+          <p>
+            Notes on science, books, and whatever stays with me after the day is
+            done.
+          </p>
           <Link href="/blog" className="quiet-link">
             Visit the journal
           </Link>
@@ -195,7 +158,7 @@ export default async function Home() {
         </div>
       </section>
       <section className="lab-contact shell">
-        <p className="eyebrow">HAVE A QUESTION OR A GOOD ROBOT PROBLEM?</p>
+        <p className="eyebrow">RESEARCH, ROBOTS, OR SOMETHING INTERESTING</p>
         <a href="mailto:psmithul@gmail.com">
           Let’s talk<span>.</span>
         </a>
