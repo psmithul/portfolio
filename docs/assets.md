@@ -65,11 +65,11 @@ Constraints: Real alpha transparency. No text, no logos, no symbols, no floating
 
 Four independent built-in ImageGen outputs were generated once each and visually inspected: a precision ball bearing, a dark steel compression spring, a rubber rover wheel, and a machined universal joint. They are generic decorative components, not project documentation. Original RGBA PNGs are preserved outside the Site; production copies are 720 px WebP encodings with their alpha retained. [Exact prompts, saved paths, dimensions, and alpha verification](mechanical-hero-assets.json).
 
-The current opening pairs the original photographic cutout with the paper-based tensegrity study. The café portrait remains an unused source asset. Extra tensegrity-leg and reaction-wheel section views are now on the corresponding project pages. Ten labelled subject illustrations use restrained accents on transparent SVG backgrounds; they do not claim to depict built prototypes or measured data.
+The current opening pairs the original photographic cutout with a CSS paper note carrying Mithul’s supplied favourite quote. No second hero photograph or CAD image remains in that transition. The café portrait remains an unused source asset. Extra tensegrity-leg and reaction-wheel section views are now on the corresponding project pages. Ten labelled subject illustrations use restrained accents on transparent SVG backgrounds; they do not claim to depict built prototypes or measured data.
 
 ## Experience toolbox and image refinements
 
-The folder is now an unused historical asset. `public/images/experience-toolbox.webp` is an 800 × 800 RGBA encoding of one built-in ImageGen output, a generic open mechanic’s toolbox. It is decorative, not a photograph of Mithul’s equipment. The exact prompt, source path, and production path are in `experience-toolbox-asset.json`. Alpha 0–255 is preserved.
+The existing folder asset is reused for the Accolades reveal. Two HTML cards present verified team achievements in a certificate-style layout; they are not scans of issued certificates. `public/images/experience-toolbox.webp` is an 800 × 800 RGBA encoding of one built-in ImageGen output, a generic open mechanic’s toolbox. It is decorative, not a photograph of Mithul’s equipment. The exact prompt, source path, and production path are in `experience-toolbox-asset.json`. Alpha 0–255 is preserved.
 
 The leaf-robot image now diagrams the five CV-defined subsystems. The UAV internship image compares the rigid baseline, elastomer tray, and suspended mount. These are authored schematics, not source CAD or hardware photographs. CAD and illustrations are displayed without multiply blending, and contain sizing preserves every edge. Cover annotations and image overlays were removed.
 
@@ -78,3 +78,5 @@ The leaf-robot image now diagrams the five CV-defined subsystems. The UAV intern
 Six original logo assets are served locally from `public/images/tools/`. ANSYS comes from the vendor's Sphinx theme repository, Python from the Python Software Foundation, Arduino from its brand resources, and C++ from the Standard C++ Foundation. MATLAB uses the existing Devicon membrane SVG; SolidWorks uses the original Dassault Systèmes wordmark hosted on Wikimedia Commons. No logo was generated, redrawn, cropped, or recoloured. The C++ mark accompanies the résumé's combined C / C++ skill.
 
 The [asset manifest](tool-logo-assets.json) records exact source URLs, original hashes, dimensions, validation, and reuse notes. The ANSYS repository and Devicon license notices are retained alongside the assets. These marks identify software used by Mithul; they do not imply vendor affiliation or endorsement.
+
+The toolbox and folder each use two aligned copies of their existing image: one back layer and one CSS-clipped front layer. Their original files and colours are preserved. The source masks are display framing, not new project imagery.

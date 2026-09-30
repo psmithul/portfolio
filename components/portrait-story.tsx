@@ -26,7 +26,7 @@ export function PortraitStory() {
         ? 0
         : Math.max(0, Math.min(900, -bounds.top));
       element.style.setProperty('--portrait-drift', `${offset * 0.07}px`);
-      element.style.setProperty('--study-drift', `${offset * -0.045}px`);
+      element.style.setProperty('--note-drift', `${offset * -0.045}px`);
       element.style.setProperty(
         '--object-x',
         `${preference.matches ? 0 : x}px`,
@@ -63,7 +63,7 @@ export function PortraitStory() {
       element.removeEventListener('pointermove', move);
       element.removeEventListener('pointerleave', reset);
       preference.removeEventListener('change', reset);
-      ['--portrait-drift', '--study-drift', '--object-x', '--object-y'].forEach(
+      ['--portrait-drift', '--note-drift', '--object-x', '--object-y'].forEach(
         (property) => element.style.removeProperty(property),
       );
     };
@@ -111,16 +111,14 @@ export function PortraitStory() {
           />
           <figcaption>P S Mithul Sourav</figcaption>
         </figure>
-        <figure className="flow-second-portrait">
-          <Image
-            src="/images/projects/tensegrity-joint-cad.webp"
-            alt="Paper-based CAD reconstruction for the tensegrity joint study"
-            width={1200}
-            height={1200}
-            unoptimized
-          />
-          <figcaption>Tensegrity joint · CAD reconstruction study</figcaption>
-        </figure>
+        <aside className="flow-quote-note" aria-label="A favourite quote">
+          <p className="eyebrow">A favourite quote</p>
+          <blockquote>
+            {
+              "Satisfaction of one's curiosity is one of the greatest sources of happiness in life"
+            }
+          </blockquote>
+        </aside>
       </div>
       <div id="intro" className="flow-intro shell">
         <h2>

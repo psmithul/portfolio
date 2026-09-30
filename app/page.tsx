@@ -5,6 +5,7 @@ import { PortraitStory } from '@/components/portrait-story';
 import { MotionDirector } from '@/components/motion-director';
 import { PortfolioCursor } from '@/components/portfolio-cursor';
 import { ExperienceRail } from '@/components/experience-rail';
+import { Accolades } from '@/components/accolades';
 import { SideQuests } from '@/components/side-quests';
 import { ToolsCarousel } from '@/components/tools-carousel';
 import { projects } from '@/content/projects';
@@ -116,11 +117,12 @@ export default async function Home() {
       </section>
       <SideQuests projects={completedProjects} />
       <ExperienceRail />
+      <Accolades />
       <ToolsCarousel tools={portfolioTools} />
       <section className="flow-journal flow-section shell">
         <div className="flow-section-heading">
           <div>
-            <p className="eyebrow">05 — Journal</p>
+            <p className="eyebrow">06 — Journal</p>
             <h2>Mika’s Life</h2>
           </div>
           <p>

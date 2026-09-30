@@ -22,7 +22,7 @@ export function ToolsCarousel({ tools }: { tools: PortfolioTool[] }) {
       data-paused={paused}
     >
       <div className="tools-heading shell">
-        <p className="eyebrow">04 — Technical skills</p>
+        <p className="eyebrow">05 — Technical skills</p>
         <h2 id="tools-heading">Tools</h2>
       </div>
       <div className="tools-viewport">
