@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import './globals.css';
+import './experience.css';
 
 export const metadata: Metadata = {
   title: {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
     template: '%s — Mithul Sourav',
   },
   description:
-    'Field robotics, mechanisms, dynamics, and vibration research by Mithul Sourav at NITK Surathkal. Explore interactive 3D concept models and Mika’s Life, a personal journal.',
+    'Mithul Sourav is a curious builder and mechanical engineering student at NITK Surathkal, exploring robotics, mechanisms, dynamics, and vibration. Projects, research, and Mika’s Life, a personal journal.',
   icons: { icon: '/favicon.svg' },
 };
 

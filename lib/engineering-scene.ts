@@ -135,11 +135,11 @@ function rover(): AnimatedModel {
   const root = new THREE.Group();
   const chassis = new THREE.Group();
   root.add(chassis);
-  const dark = material('#19292d', 0.75, 0.27),
-    rubber = material('#192326', 0.03, 0.86),
-    mint = material('#cbfbc4', 0.32, 0.35),
+  const dark = material('#172713', 0.75, 0.27),
+    rubber = material('#172713', 0.03, 0.86),
+    mint = material('#f5f5b8', 0.32, 0.35),
     alloy = material('#a1b7b6', 0.9, 0.26),
-    orange = material('#ff603b', 0.45, 0.28),
+    orange = material('#b08699', 0.45, 0.28),
     pale = material('#eff1e9', 0.5, 0.26),
     glass = new THREE.MeshPhysicalMaterial({
       color: '#203e41',
@@ -329,9 +329,9 @@ function tensegrity(): AnimatedModel {
     upper = new THREE.Group();
   root.add(lower, upper);
   const metal = material('#8eaaa7', 0.85, 0.25),
-    mint = material('#bfe9b9', 0.45, 0.3),
-    orange = material('#ff603b', 0.4, 0.3),
-    cable = material('#273c40', 0.5, 0.4);
+    mint = material('#f5f5b8', 0.45, 0.3),
+    orange = material('#b08699', 0.4, 0.3),
+    cable = material('#172713', 0.5, 0.4);
   const struts: THREE.Mesh[] = [],
     cables: THREE.Mesh[] = [];
   const radius = 0.85;
@@ -434,9 +434,9 @@ function knee(): AnimatedModel {
   upper.position.y = 1.52;
   lower.position.y = 1.52;
   const alloy = material('#adbcbc', 0.82, 0.25),
-    dark = material('#24383b', 0.65, 0.34),
-    mint = material('#ceefc0', 0.3, 0.42),
-    orange = material('#ff603b', 0.4, 0.33);
+    dark = material('#172713', 0.65, 0.34),
+    mint = material('#96bfe6', 0.3, 0.42),
+    orange = material('#b08699', 0.4, 0.33);
   [-1, 1].forEach((side) => {
     upper.add(
       box([0.11, 1.04, 0.13], alloy, [side * 0.38, 0.45, 0]),
@@ -517,10 +517,10 @@ function satellite(): AnimatedModel {
     wheel = new THREE.Group(),
     camera = new THREE.Group();
   root.add(panel, wheel, camera);
-  const dark = material('#152c39', 0.65, 0.35),
+  const dark = material('#172713', 0.65, 0.35),
     gold = material('#ccb36b', 0.82, 0.27),
     alloy = material('#a9bec1', 0.85, 0.24),
-    orange = material('#ff603b', 0.4, 0.3),
+    orange = material('#b08699', 0.4, 0.3),
     glass = new THREE.MeshPhysicalMaterial({
       color: '#395261',
       metalness: 0.45,
@@ -648,8 +648,8 @@ export function createEngineeringScene(
   scene.environment = environment.texture;
   room.dispose();
   pmrem.dispose();
-  scene.add(new THREE.HemisphereLight('#e6dcff', '#51455f', 2.1));
-  const light = new THREE.DirectionalLight('#fff9ed', 4);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#172713', 2.1));
+  const light = new THREE.DirectionalLight('#ffffff', 4);
   light.position.set(3.5, 6, 4);
   light.castShadow = true;
   light.shadow.mapSize.set(1024, 1024);
@@ -659,7 +659,7 @@ export function createEngineeringScene(
   light.shadow.camera.bottom = -4;
   light.shadow.normalBias = 0.03;
   scene.add(light);
-  const rim = new THREE.DirectionalLight('#b4a1ff', 3.2);
+  const rim = new THREE.DirectionalLight('#96bfe6', 2.4);
   rim.position.set(-4, 3, -3);
   scene.add(rim);
   const floor = mesh(
@@ -672,14 +672,14 @@ export function createEngineeringScene(
   scene.add(floor);
   const platform = mesh(
     new THREE.CylinderGeometry(2.05, 2.07, 0.055, 96),
-    material('#252634', 0.25, 0.75),
+    material('#f0f2e5', 0.15, 0.75),
     [0, -0.02, 0],
   );
   platform.castShadow = false;
   scene.add(platform);
   const guide = new THREE.Mesh(
     new THREE.TorusGeometry(1.91, 0.008, 6, 96),
-    new THREE.MeshBasicMaterial({ color: '#5f576b' }),
+    new THREE.MeshBasicMaterial({ color: '#96bfe6' }),
   );
   guide.rotation.x = Math.PI / 2;
   guide.position.y = 0.019;

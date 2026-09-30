@@ -35,7 +35,7 @@ Saving an edit to a published article does not change the public version. Reader
 
 The writing desk uses Cloudflare D1 through the `DB` binding. Local data lives in the ignored `.wrangler/state/` directory and survives development-server restarts. Production data belongs to the existing Sites deployment. Posts written online are stored in that database, not committed to GitHub; use the backup button to retain a separate copy.
 
-The public portfolio and journal are readable without sign-in. Writing pages and every draft API enforce an owner allowlist on the server. The production owner is `miastromika@gmail.com`. Only the Sites development identity is additionally allowed during local development. Authenticated requests use the platform’s trusted identity headers; mutations also require a same-origin JSON request.
+The portfolio and published journal routes do not require an additional app sign-in, but the current Site audience is owner-private and the Sites access gate still applies. Writing pages and every draft API enforce an owner allowlist on the server. The production owner is `miastromika@gmail.com`. Only the Sites development identity is additionally allowed during local development. Authenticated requests use the platform’s trusted identity headers; mutations also require a same-origin JSON request.
 
 The auth flow is provided by Sites. Do not expose the raw Worker publicly outside that trusted dispatcher or move it to a different host without implementing the equivalent trusted authentication boundary. GitHub holds the source; GitHub Pages does not run the database or server routes.
 
@@ -43,16 +43,17 @@ The initial essays are bundled from `content/posts/*.md`. On the owner’s first
 
 ## Change the portfolio
 
-| Content                                                  | Location                      |
-| -------------------------------------------------------- | ----------------------------- |
-| Project facts, contribution, method, status, and results | `content/projects.ts`         |
-| Homepage introduction                                    | `app/page.tsx`                |
-| Education, experience, skills, and recognition           | `app/about/page.tsx`          |
-| Name, contacts, and navigation                           | `app/layout.tsx`              |
-| CV download                                              | `public/Mithul-Sourav-CV.pdf` |
-| Journal introduction                                     | `app/blog/page.tsx`           |
-| Colours, typography, spacing, and responsive layout      | `app/globals.css`             |
-| Owner authorization                                      | `lib/journal-model.ts`        |
+| Content                                                  | Location                        |
+| -------------------------------------------------------- | ------------------------------- |
+| Project facts, contribution, method, status, and results | `content/projects.ts`           |
+| Portrait opening and introduction                        | `components/portrait-story.tsx` |
+| Education, experience, skills, and recognition           | `app/about/page.tsx`            |
+| Name, contacts, and navigation                           | `app/layout.tsx`                |
+| CV download                                              | `public/Mithul-Sourav-CV.pdf`   |
+| Journal introduction                                     | `app/blog/page.tsx`             |
+| Palette and scroll experience                            | `app/experience.css`            |
+| Base typography and reading layouts                      | `app/globals.css`               |
+| Owner authorization                                      | `lib/journal-model.ts`          |
 
 The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. The WebGL workbench and project illustrations are original conceptual models, not exported project CAD or measured results. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
@@ -85,19 +86,21 @@ Define schema changes in `db/schema.ts`, generate and inspect a new migration, t
 
 Reuse the Site registration in `.openai/hosting.json`. It contains only the Site ID and logical bindings. Sites packages the Worker, assets, and `drizzle/` migrations and supplies the production database and sign-in flow. Source pushes and website deployment are separate actions: a GitHub push alone does not publish this website. No site should be called live until deployment succeeds and its URL is verified.
 
-## Interactive workbench
+## Scroll experience and project viewers
 
-The homepage includes four Three.js models: a six-wheel rover, a tensegrity joint, an actuated brace, and a satellite-panel assembly. Orbit and zoom with a pointer or touch, or use the Orbit button. Set in motion animates the selected assembly. Pull apart provides an exploded view. Model controls illustrate suspension settings, geometry, assistance, or wheel speed; they are not engineering predictions. The rover roughness control changes its illustrative suspension motion.
+The homepage uses the supplied courtyard photograph of Mithul without reconstructing his face. Encoding and CSS cropping are the only image changes. The portrait, frame, outline, and introductory copy respond to native page scrolling. There are no hero model controls or scroll interception. Reduced-motion preferences and an unenhanced page show a static opening. The project gallery is staggered on larger screens and follows a vertical reading order on phones.
+
+Four project reading pages include Three.js concept viewers: a six-wheel rover, a tensegrity joint, an actuated brace, and a satellite-panel assembly. Orbit and zoom with a pointer or touch, or use the Orbit button. Set in motion animates the selected assembly. Pull apart provides an exploded view. Model controls illustrate suspension settings, geometry, assistance, or wheel speed; they are not engineering predictions. The rover roughness control changes its illustrative suspension motion.
 
 The renderer loads only in the browser, caps pixel density, pauses off-screen and in hidden tabs, respects reduced-motion preferences for automatic camera movement, and disposes its graphics resources when leaving the page. WebGL 2 is required; the rest of the site and project reading pages remain available without it.
 
 Project and experience facts were refreshed from `Mithul_Sourav_MIT_SM_Research_CV.pdf` on 30 September 2026. That document classifies the reaction-wheel study as completed and lists its period as August–October 2026; the site preserves that supplied classification and date range.
 
-The visual direction follows the dark background, oversized condensed type, purple lighting, and playful spatial treatment of the supplied [Neha Yadav portfolio](https://nehayadav.framer.website/). The implementation, engineering models, and copy are original.
+The light palette uses [Sanzo Wada combination 321](https://sanzo-wada.dmbk.io/combination/321): Light Brown Drab `#b08699`, Sulpher Yellow `#f5f5b8`, Deep Slate Olive `#172713`, and Salvia Blue `#96bfe6`. White tints create quiet reading surfaces; dark olive and accessible mixtures handle body text. See [design notes](docs/design.md) for color roles and portrait constraints.
 
 ## Design and credits
 
-The engineering pages use Barlow Condensed, Manrope, Fraunces, and Space Mono, locally hosted with their SIL Open Font Licenses in `public/fonts/`. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
+The engineering pages use Manrope, Fraunces, and Space Mono, locally hosted with their SIL Open Font Licenses in `public/fonts/`. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).

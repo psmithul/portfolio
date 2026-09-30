@@ -29,7 +29,7 @@ export const projects: Project[] = [
   {
     slug: 'adaptive-suspension-rover',
     number: '01',
-    title: 'A rover that listens to the terrain',
+    title: 'Adaptive suspension rover',
     shortTitle: 'Adaptive suspension & vibration-aware control',
     discipline: 'Field robotics',
     period: 'Sep 2026 — Present',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
   {
     slug: 'tensegrity-joint',
     number: '02',
-    title: 'Stiffness, without a rigid answer',
+    title: 'Tensegrity variable-stiffness joint',
     shortTitle: 'Tensegrity-based variable-stiffness joint',
     discipline: 'Compliant mechanisms',
     period: 'May 2026 — Present',
@@ -115,7 +115,7 @@ export const projects: Project[] = [
   {
     slug: 'kneeassist',
     number: '03',
-    title: 'KneeAssist: help, when it is needed',
+    title: 'KneeAssist',
     shortTitle: 'Actuated brace for knee extension deficit',
     discipline: 'Assistive mechatronics',
     period: 'Sep 2026',
@@ -156,7 +156,7 @@ export const projects: Project[] = [
   {
     slug: 'reaction-wheel-microvibrations',
     number: '04',
-    title: 'A small vibration, a distant response',
+    title: 'Reaction-wheel microvibrations',
     shortTitle: 'Reaction-wheel microvibration prediction',
     discipline: 'Structural dynamics',
     period: 'Aug — Oct 2026',
@@ -197,7 +197,7 @@ export const projects: Project[] = [
   {
     slug: 'off-road-leaf-robot',
     number: '05',
-    title: 'Picking up leaves, leaving the soil',
+    title: 'Off-road leaf-collection robot',
     shortTitle: 'Off-road leaf-collection robot',
     discipline: 'Robot architecture',
     period: 'Jul 2026 — Present',
@@ -241,7 +241,7 @@ export const projects: Project[] = [
   {
     slug: 'neoleg-knee-mechanism',
     number: '06',
-    title: 'NeoLeg: a spring, a knee, a question',
+    title: 'NeoLeg: passive knee assistance',
     shortTitle: 'Passive spring-assisted knee mechanism',
     discipline: 'Mechanical design',
     period: 'Dec 2025 — Mar 2026',
@@ -282,7 +282,7 @@ export const projects: Project[] = [
   {
     slug: 'uncertainty-aware-navigation',
     number: '07',
-    title: 'Navigation with imperfect information',
+    title: 'Robot navigation with A* & EKF',
     shortTitle: 'Uncertainty-aware indoor robot navigation',
     discipline: 'State estimation & autonomy',
     period: 'Sep — Dec 2025',
@@ -322,7 +322,7 @@ export const projects: Project[] = [
   {
     slug: 'four-bar-door-mechanism',
     number: '08',
-    title: 'Four links, one coordinated motion',
+    title: 'Four-bar linkage',
     shortTitle: 'Four-bar door-opening mechanism',
     discipline: 'Kinematics & fabrication',
     period: 'Feb — Apr 2024',
@@ -362,7 +362,7 @@ export const projects: Project[] = [
   {
     slug: 'easy-access-wallet',
     number: '09',
-    title: 'A better way to get a card out',
+    title: 'Wallet Shield',
     shortTitle: 'Wallet for easier card access',
     discipline: 'User-centred mechanical design',
     period: 'Sep — Nov 2023',
@@ -402,7 +402,7 @@ export const projects: Project[] = [
   {
     slug: 'solar-smart-home',
     number: '10',
-    title: 'A small house, wired to respond',
+    title: 'Arduino home & solar models',
     shortTitle: 'Arduino smart home with solar power',
     discipline: 'Electronics & sensing',
     period: 'Sep 2019 — Jan 2020',
@@ -443,7 +443,7 @@ export const projects: Project[] = [
   {
     slug: 'traffic-and-elevated-bus',
     number: '11',
-    title: 'My first systems that moved',
+    title: 'Traffic signals & elevated-bus models',
     shortTitle: 'Traffic lights & elevated-bus model',
     discipline: 'Logic & working models',
     period: 'Sep 2018 — Jan 2019',
