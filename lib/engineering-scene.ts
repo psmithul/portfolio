@@ -323,6 +323,36 @@ function rover(): AnimatedModel {
   };
 }
 
+/** Static, mechanically assembled six-wheel model used by the hero display. */
+export function createHeroRover() {
+  const root = rover().root;
+  const recoloured = new Set<THREE.Material>();
+  root.traverse((object) => {
+    if (!(object instanceof THREE.Mesh)) return;
+    const materials = Array.isArray(object.material)
+      ? object.material
+      : [object.material];
+    for (const mat of materials) {
+      if (!(mat instanceof THREE.MeshStandardMaterial) || recoloured.has(mat))
+        continue;
+      recoloured.add(mat);
+      const colour = mat.color.getHexString();
+      const palette: Record<string, string> = {
+        '172713': mat.metalness < 0.1 ? '#24231f' : '#334e68',
+        f5f5b8: '#e9e3d7',
+        a1b7b6: '#8296a5',
+        b08699: '#c59a4a',
+        eff1e9: '#f4f0e6',
+      };
+      if (palette[colour]) mat.color.set(palette[colour]);
+    }
+  });
+  root.position.y = -1.15;
+  root.scale.setScalar(0.78);
+  root.rotation.set(0.18, -0.62, 0.02);
+  return root;
+}
+
 function tensegrity(): AnimatedModel {
   const root = new THREE.Group();
   const lower = new THREE.Group(),

@@ -80,8 +80,8 @@ export function ExperienceRail() {
             style={
               {
                 '--fan-x': `${(index - 2) * 17}vw`,
-                '--fan-y': `${Math.abs(index - 2) * 18}px`,
-                '--fan-angle': `${(index - 2) * 1.2}deg`,
+                '--fan-y': '0px',
+                '--fan-angle': '0deg',
                 '--card-order': 5 - Math.abs(index - 2),
                 '--burst-delay': `${Math.abs(index - 2) * 65}ms`,
               } as CSSProperties

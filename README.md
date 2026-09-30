@@ -2,7 +2,7 @@
 
 A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes seven original essays, including four student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
 
-Public website: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
+Public website: [psmithul.com](https://psmithul.com/). Vercel fallback: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
 
 Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). Vercel is connected to this repository; pushes to `main` deploy production and other branches create previews.
 
@@ -82,7 +82,7 @@ The editor includes a feature-detected `save_journal_draft` WebMCP action for co
 
 The Vercel project is `portfolio` in `psmithulsouravs-projects`, linked to `psmithul/portfolio` with `main` as its production branch. `vercel.json` selects Next.js and `npm run build`. Node.js 22 is specified in `package.json`.
 
-Vercel supplies `BLOB_READ_WRITE_TOKEN`, `JOURNAL_PASSWORD_HASH`, and `JOURNAL_SESSION_SECRET`. Keep all three server-only. The Blob store must remain private. The project domain `psmithul-portfolio.vercel.app` is the public production entry point; deployment-specific preview domains may require Vercel sign-in.
+Vercel supplies `BLOB_READ_WRITE_TOKEN`, `JOURNAL_PASSWORD_HASH`, and `JOURNAL_SESSION_SECRET`. Keep all three server-only. The Blob store must remain private. The Hostinger-managed domain `psmithul.com`, its `www` alias, and `psmithul-portfolio.vercel.app` point to the same public production project; deployment-specific preview domains may require Vercel sign-in.
 
 After a push, check that the Vercel deployment is Ready, its commit matches the pushed revision, and the public URL returns the current site without authentication. A successful Git push alone is not a successful deployment.
 

@@ -51,7 +51,7 @@ export function ArchiveReveal({
     };
     const configure = () => {
       observer?.disconnect();
-      fan = wide.matches && window.innerHeight >= 840 && !reduce.matches;
+      fan = wide.matches && window.innerHeight >= 960 && !reduce.matches;
       element.dataset.layout = fan ? 'fan' : 'stack';
       element.dataset.enhanced = String(!reduce.matches);
       element.dataset.focused = 'false';
@@ -137,10 +137,7 @@ export function ArchiveReveal({
             unoptimized
           />
         </div>
-        <section
-          className="archive-cards"
-          aria-label={`${title} cards`}
-        >
+        <section className="archive-cards" aria-label={`${title} cards`}>
           {children}
         </section>
       </div>

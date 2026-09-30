@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { HeroModels } from '@/components/hero-models';
 export function PortraitStory() {
   const story = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -18,7 +19,6 @@ export function PortraitStory() {
         : Math.max(0, Math.min(900, -bounds.top));
       element.style.setProperty('--portrait-drift', `${offset * 0.07}px`);
       element.style.setProperty('--note-drift', `${offset * -0.045}px`);
-      element.style.setProperty('--hero-drift', `${offset * -0.025}px`);
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(draw);
@@ -32,7 +32,7 @@ export function PortraitStory() {
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       preference.removeEventListener('change', schedule);
-      ['--portrait-drift', '--note-drift', '--hero-drift'].forEach((property) =>
+      ['--portrait-drift', '--note-drift'].forEach((property) =>
         element.style.removeProperty(property),
       );
     };
@@ -43,8 +43,8 @@ export function PortraitStory() {
         <p className="flow-opening-note">Mithul Sourav · NITK Surathkal</p>
         <h1>
           <span>Hi, I’m Mithul.</span>
-          <span>Curious about how things work.</span>
-          <span>Driven to build them myself.</span>
+          <span>I like understanding things deeply</span>
+          <span>and building with what I learn.</span>
         </h1>
         <div className="flow-hero-details">
           <div>
@@ -57,22 +57,7 @@ export function PortraitStory() {
               About me <ArrowDown className="link-arrow" aria-hidden="true" />
             </a>
           </div>
-          <div className="flow-hero-objects" aria-hidden="true">
-            {['satellite', 'rover', 'rocket'].map((object) => (
-              <div
-                className={`flow-hero-object flow-hero-${object}`}
-                key={object}
-              >
-                <Image
-                  src={`/images/hero/${object}.svg`}
-                  alt=""
-                  width={240}
-                  height={240}
-                  unoptimized
-                />
-              </div>
-            ))}
-          </div>
+          <HeroModels />
         </div>
       </div>
       <div className="flow-portrait-stage shell">
@@ -114,11 +99,11 @@ export function PortraitStory() {
             can be changed.
           </p>
           <p>
-            These projects sit between mechanical design, electronics, and
-            software. I enjoy learning enough of each to understand the whole
-            system, and then checking whether the idea holds up. Outside these
-            projects, I keep coming back to space and the technologies that make
-            exploration possible.
+            These projects bring together mechanical design, electronics, and
+            software. I like going deep: where an idea came from, why it works,
+            and how people figured it out in the first place. Building gives me
+            a way to test what I’ve understood. I also spend a lot of time
+            reading about space and how we explore it.
           </p>
           <Link href="/about" className="flow-text-link">
             Background & experience{' '}

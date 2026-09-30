@@ -90,3 +90,7 @@ The updated opening removes all four generated floating mechanical objects. It k
 ## Space and robotics hero details, 1 October 2026
 
 `public/images/hero/satellite.svg`, `rover.svg`, and `rocket.svg` are native vector illustrations authored for the requested floating hero elements. They use the existing indigo, paper, ochre, and celadon palette. Dedicated grid cells reserve space around them at every breakpoint; gentle CSS animation and scroll drift stop when reduced motion is enabled. They depict generic subjects and do not claim to document Mithul’s project hardware.
+
+## Active 3D hero correction, 1 October 2026
+
+The satellite, rover, and rocket SVGs above are superseded. `lib/hero-models.ts` now constructs actual Three.js meshes, using the existing mechanically assembled six-wheel rover geometry from `engineering-scene.ts`. Satellite panels contain separate solar cells and mounting frames. The rocket uses a revolved ogive, cylindrical stages, four equally spaced fins, and an open engine bell. `lib/hero-physics.ts` uses the official Rapier engine for mass, inertia, forces, torques, and damping; movement is a suspended display, not a claim of orbital or vehicle simulation. Fixed-step tests cover frame-rate consistency, sustained scrolling, separation, and return to rest.
