@@ -39,7 +39,7 @@ export default async function Write() {
           {user ? 'Sign out and switch account' : 'Sign in with ChatGPT'}
         </a>
         <Link href="/blog" className="text-link">
-          Read Mika’s Life ↗
+          Read Mika’s Life
         </Link>
       </main>
     );

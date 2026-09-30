@@ -9,7 +9,7 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "wrangler dev --config dist/server/wrangler.json --persist-to .wrangler/state",
-    "lint": "oxlint app content components/engineering-playground.tsx components/engineering-thumbnail.tsx components/project-visual.tsx components/side-quests.tsx components/portfolio-cursor.tsx components/motion-director.tsx components/portrait-story.tsx components/engineering-diagrams.tsx components/method-diagram.tsx components/article-body.tsx components/journal-cover.tsx components/writing-desk.tsx components/post-editor.tsx lib db scripts vite.config.ts drizzle.config.ts",
+    "lint": "oxlint app content components/engineering-playground.tsx components/engineering-thumbnail.tsx components/project-visual.tsx components/side-quests.tsx components/scroll-rail.tsx components/experience-rail.tsx components/portfolio-cursor.tsx components/motion-director.tsx components/portrait-story.tsx components/engineering-diagrams.tsx components/method-diagram.tsx components/article-body.tsx components/journal-cover.tsx components/writing-desk.tsx components/post-editor.tsx lib db scripts vite.config.ts drizzle.config.ts",
     "format": "oxfmt",
     "predev": "node scripts/content.mjs",
     "prebuild": "node scripts/content.mjs --production",

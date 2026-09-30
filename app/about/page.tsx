@@ -18,12 +18,8 @@ export default function About() {
   return (
     <main id="main" className="about-page">
       <section className="about-hero shell">
-        <p className="eyebrow">A LITTLE ABOUT ME</p>
-        <h1>
-          Hi, I’m Mithul.
-          <br />
-          <em>Also Mika.</em>
-        </h1>
+        <p className="eyebrow">ABOUT</p>
+        <h1>Hi, I’m Mithul.</h1>
         <div className="about-introduction">
           <p>
             I’m P S Mithul Sourav, a final-year Mechanical Engineering student
@@ -93,7 +89,7 @@ export default function About() {
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">03 / CURRENT WORK</p>
+          <p className="eyebrow">03 / ONGOING PROJECTS</p>
         </div>
         <div className="about-body skill-list">
           <div>

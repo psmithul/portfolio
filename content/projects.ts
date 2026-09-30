@@ -34,13 +34,16 @@ export type Project = {
     | 'wallet';
   visualLabel: string;
 };
-const illustration = (slug: string, subject: string): Project['image'] => ({
+const illustration = (
+  slug: string,
+  subject: string,
+): NonNullable<Project['image']> => ({
   kind: 'illustration',
   src: `/images/projects/illustration-${slug}.svg`,
   width: 1200,
   height: 800,
-  alt: `Temporary illustration of ${subject}`,
-  caption: 'Temporary project illustration.',
+  alt: `Concept illustration of ${subject}`,
+  caption: 'Concept illustration · project photographs to be added.',
 });
 export const projects: Project[] = [
   {
@@ -54,10 +57,14 @@ export const projects: Project[] = [
     context: 'Product internship · Vayu Aerospace, Bengaluru',
     model: 'electronics',
     visualLabel: 'FLIGHT CONTROLLER / MOUNTING STUDY',
-    image: illustration(
-      'uav-vibration-integration',
-      'a flight-controller mounting concept',
-    ),
+    image: {
+      ...illustration(
+        'uav-vibration-integration',
+        'three flight-controller mounting architectures',
+      ),
+      caption:
+        'Rigid, elastomer-isolated, and suspended mounts · comparison schematic.',
+    },
     tools: ['ANSYS Mechanical', 'MATLAB', 'IMU log analysis'],
     summary:
       'Compared flight-controller mounts, supported ground motor-run testing, and used IMU logs to evaluate vibration isolation.',
@@ -289,7 +296,14 @@ export const projects: Project[] = [
     context: 'Robot design & subsystem architecture',
     model: 'collection',
     visualLabel: 'PICKUP / TRANSFER / TERRAIN FOLLOWING',
-    image: illustration('off-road-leaf-robot', 'a leaf-collection robot'),
+    image: {
+      ...illustration(
+        'off-road-leaf-robot',
+        'leaf-collection robot subsystems',
+      ),
+      caption:
+        'Locomotion, pickup, transfer, storage, and terrain following · architecture schematic.',
+    },
     tools: [
       'Subsystem architecture',
       'Mechanism selection',
@@ -452,7 +466,7 @@ export const projects: Project[] = [
   {
     slug: 'easy-access-wallet',
     number: '09',
-    title: 'Wallet Shield',
+    title: 'Wallet for easier card access',
     shortTitle: 'Wallet for easier card access',
     discipline: 'User-centred mechanical design',
     period: 'Sep — Nov 2023',
@@ -492,7 +506,7 @@ export const projects: Project[] = [
   {
     slug: 'solar-smart-home',
     number: '10',
-    title: 'Arduino home & solar models',
+    title: 'Arduino smart home with solar power',
     shortTitle: 'Arduino smart home with solar power',
     discipline: 'Electronics & sensing',
     period: 'Sep 2019 — Jan 2020',

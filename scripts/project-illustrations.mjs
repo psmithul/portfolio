@@ -176,6 +176,33 @@ const illustrations = {
   },
 };
 
+// Architecture diagrams replace generic vehicle renders where the project is still a design study.
+const label = (x, y, text, size = 30) =>
+  `<text x="${x}" y="${y}" text-anchor="middle" font-family="Arial,sans-serif" font-size="${size}" fill="${olive}" stroke="none">${text}</text>`;
+const connector = (x1, y1, x2, y2) =>
+  `${line(x1, y1, x2, y2, `stroke="${blue}" stroke-width="4"`)}<path d="M${x2 - 13} ${y2 - 8}L${x2} ${y2}L${x2 - 13} ${y2 + 8}" fill="none" stroke="${blue}" stroke-width="4"/>`;
+illustrations['off-road-leaf-robot'].drawing = `<g>
+  ${rect(130, 130, 385, 130, '#f4f0e6')}${label(322, 208, 'Locomotion', 34)}
+  ${rect(685, 130, 385, 130, '#f4f0e6')}${label(877, 208, 'Terrain following', 34)}
+  <path d="M322 260V322H877V260" fill="none" stroke="${blue}" stroke-width="4"/>
+  ${rect(110, 400, 280, 185, '#f4f0e6')}${rect(460, 400, 280, 185, '#f4f0e6')}${rect(810, 400, 280, 185, '#f4f0e6')}
+  ${label(250, 480, 'Pickup', 40)}${label(250, 532, 'Leaves / soil rejection', 21)}
+  ${label(600, 480, 'Transfer', 40)}${label(600, 532, 'Material handling', 24)}
+  ${label(950, 480, 'Storage', 40)}${label(950, 532, 'Capacity / unloading', 23)}
+  ${connector(390, 492, 460, 492)}${connector(740, 492, 810, 492)}
+  <path d="M600 322V400" fill="none" stroke="${blue}" stroke-width="4"/>
+</g>`;
+illustrations['uav-vibration-integration'].drawing = `<g>
+  ${label(240, 155, 'Rigid baseline', 32)}${label(600, 155, 'Elastomer tray', 32)}${label(960, 155, 'Suspended mount', 32)}
+  ${[240, 600, 960].map((x) => `${rect(x - 112, 240, 224, 65, blue)}${circle(x, 272, 17, olive)}<path d="M${x - 140} 495H${x + 140}" stroke-width="7"/><path d="M${x - 140} 508H${x + 140}" stroke="${blue}" stroke-width="2"/>`).join('')}
+  <path d="M155 305V495M325 305V495" fill="none" stroke-width="15"/>
+  ${rect(489, 369, 222, 35, drab)}<path d="M515 305V350M685 305V350M515 404V495M685 404V495" fill="none" stroke-width="7"/>
+  <path d="M490 350H545V375H490ZM660 350H715V375H660Z" fill="${yellow}"/>
+  <path d="M820 200V495M1100 200V495M820 200H1100" fill="none" stroke-width="7"/>
+  <path d="M820 212L875 240M1100 212L1045 240" fill="none" stroke="${blue}" stroke-width="5"/>
+  ${label(240, 565, 'Direct mounting', 26)}${label(600, 565, 'Isolated modular tray', 26)}${label(960, 565, 'Suspension supports', 26)}
+</g>`;
+
 await mkdir(directory, { recursive: true });
 const accents = {
   'adaptive-suspension-rover': '#c59a4a',

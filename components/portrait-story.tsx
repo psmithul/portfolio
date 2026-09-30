@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ArrowDown, ArrowUpRight } from 'lucide-react';
 const objects = [
   'precision-ball-bearing',
   'steel-compression-spring',
@@ -70,22 +71,18 @@ export function PortraitStory() {
   return (
     <section className="flow-opening" ref={story} aria-label="Meet Mithul">
       <div className="flow-statement shell">
-        <p className="flow-opening-note">
-          Mechanical engineering / experimental robotics
-        </p>
+        <p className="flow-opening-note">Mithul Sourav · NITK Surathkal</p>
         <h1>
-          Building machines
-          <br />
-          to understand
-          <br />
-          <span>how they behave.</span>
+          <span>Mechanical</span>
+          <span>engineering</span>
+          <span>& robotics.</span>
         </h1>
         <p className="flow-hero-aside">
-          physics + prototypes +<br />
-          questionable amounts of testing
+          Final-year student working on mechanisms, vibration, and mobile
+          robots.
         </p>
         <a className="flow-scroll-cue" href="#intro">
-          A little about me <span aria-hidden="true">↓</span>
+          About me <ArrowDown className="link-arrow" aria-hidden="true" />
         </a>
         <div className="flow-mechanical-objects" aria-hidden="true">
           {objects.map((name, index) => (
@@ -112,7 +109,7 @@ export function PortraitStory() {
             priority
             unoptimized
           />
-          <figcaption>Mithul / usually asking one more question.</figcaption>
+          <figcaption>P S Mithul Sourav</figcaption>
         </figure>
         <figure className="flow-second-portrait">
           <Image
@@ -122,7 +119,7 @@ export function PortraitStory() {
             height={1200}
             unoptimized
           />
-          <figcaption>On the desk / a tensegrity mechanism study.</figcaption>
+          <figcaption>Tensegrity joint · CAD reconstruction study</figcaption>
         </figure>
       </div>
       <div id="intro" className="flow-intro shell">
@@ -133,30 +130,21 @@ export function PortraitStory() {
         <div>
           <p>
             I’m a final-year mechanical engineering student at{' '}
-            <strong>NITK Surathkal</strong>, interested in experimental
-            robotics, mechatronics, and intelligent physical systems.
+            <strong>NITK Surathkal</strong>. I’m interested in experimental and
+            field robotics, especially how mobile robots move over rough
+            terrain.
           </p>
           <p>
-            I like working through a machine’s behaviour: model it, build what I
-            can, measure what happens, and figure out where the prediction went
-            wrong.
+            My current work covers variable-stiffness mechanisms,
+            vibration-aware suspension, and a leaf-collection robot. I use CAD,
+            MATLAB, and finite element analysis to develop the designs and plan
+            their tests.
           </p>
           <Link href="/about" className="flow-text-link">
-            More about me <span aria-hidden="true">↗</span>
+            Background & experience{' '}
+            <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </Link>
         </div>
-      </div>
-      <div
-        className="flow-principles shell"
-        aria-label="Build. Measure. Question. Iterate."
-      >
-        {['Build.', 'Measure.', 'Question.', 'Iterate.'].map((word, index) => (
-          <span className="flow-reveal-word" key={word}>
-            <small aria-hidden="true">0{index + 1}</small>
-            {word}
-          </span>
-        ))}
-        <p>I want to understand machines deeply enough to build better ones.</p>
       </div>
     </section>
   );

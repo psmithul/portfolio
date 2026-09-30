@@ -1,6 +1,6 @@
 # Portfolio asset provenance
 
-Verified CAD views are used where available. At the user’s request, nine projects without imagery use temporary vector subject illustrations. These are explicitly identified as illustrations and do not depict the actual build, CAD, or measured results. No fabricated hardware photograph is used.
+Verified CAD views are used where available. At the user’s request, ten case studies without imagery use temporary vector subject illustrations. These are explicitly identified as illustrations and do not depict the actual build, CAD, or measured results. No fabricated hardware photograph is used.
 
 ## Tensegrity joint
 
@@ -31,7 +31,7 @@ Exact edit prompt:
 
 ## Temporary project illustrations
 
-Nine `public/images/projects/illustration-*.svg` files provide the requested temporary visuals for the rover, KneeAssist, leaf robot, NeoLeg, navigation simulation, four-bar linkage, Wallet Shield, smart-home model, and traffic/bus models. They are authored as simple vector subject illustrations and generated reproducibly with `node scripts/project-illustrations.mjs`. The colors are Wada combination 321, white, and an 8% yellow/white surface tint. Each visual says “PROJECT ILLUSTRATION”; the image captions and alt text also identify their scope. They are not source diagrams, CAD reconstructions, prototype photographs, or test plots. Replace the corresponding `illustration(...)` entry in `content/projects.ts` when real imagery becomes available.
+Ten `public/images/projects/illustration-*.svg` files provide the requested temporary visuals for the rover, KneeAssist, leaf robot, NeoLeg, navigation simulation, four-bar linkage, Wallet Shield, smart-home model, and traffic/bus models. They are authored as simple vector subject illustrations and generated reproducibly with `node scripts/project-illustrations.mjs`. The colours follow the current warm-paper, indigo, ochre, celadon, and charcoal palette. Each visual says “PROJECT ILLUSTRATION”; the image captions and alt text also identify their scope. They are not source diagrams, CAD reconstructions, prototype photographs, or test plots. Replace the corresponding `illustration(...)` entry in `content/projects.ts` when real imagery becomes available.
 
 ## Café portrait
 
@@ -66,3 +66,9 @@ Constraints: Real alpha transparency. No text, no logos, no symbols, no floating
 Four independent built-in ImageGen outputs were generated once each and visually inspected: a precision ball bearing, a dark steel compression spring, a rubber rover wheel, and a machined universal joint. They are generic decorative components, not project documentation. Original RGBA PNGs are preserved outside the Site; production copies are 720 px WebP encodings with their alpha retained. [Exact prompts, saved paths, dimensions, and alpha verification](mechanical-hero-assets.json).
 
 The current opening pairs the original photographic cutout with the paper-based tensegrity study. The café portrait remains an unused source asset. Extra tensegrity-leg and reaction-wheel section views are now on the corresponding project pages. Ten labelled subject illustrations use restrained accents on transparent SVG backgrounds; they do not claim to depict built prototypes or measured data.
+
+## Experience toolbox and image refinements
+
+The folder is now an unused historical asset. `public/images/experience-toolbox.webp` is an 800 × 800 RGBA encoding of one built-in ImageGen output, a generic open mechanic’s toolbox. It is decorative, not a photograph of Mithul’s equipment. The exact prompt, source path, and production path are in `experience-toolbox-asset.json`. Alpha 0–255 is preserved.
+
+The leaf-robot image now diagrams the five CV-defined subsystems. The UAV internship image compares the rigid baseline, elastomer tray, and suspended mount. These are authored schematics, not source CAD or hardware photographs. CAD and illustrations are displayed without multiply blending, and contain sizing preserves every edge. Cover annotations and image overlays were removed.
