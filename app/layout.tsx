@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ArrowUp, ArrowUpRight } from 'lucide-react';
 
 import './globals.css';
 import './experience.css';
@@ -34,7 +35,7 @@ export default function RootLayout({
             <Link href="/about">About</Link>
             <Link href="/blog">Journal</Link>
             <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-              Résumé <span aria-hidden="true">↗</span>
+              Résumé <ArrowUpRight className="link-arrow" aria-hidden="true" />
             </a>
           </nav>
         </header>
@@ -69,7 +70,9 @@ export default function RootLayout({
           <div className="footer-bottom">
             <span>© {new Date().getUTCFullYear()} P S Mithul Sourav</span>
             <Link href="/write">Writing desk</Link>
-            <a href="#top">Back to top</a>
+            <a href="#top">
+              Back to top <ArrowUp className="link-arrow" aria-hidden="true" />
+            </a>
           </div>
         </footer>
       </body>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 import { projects } from '@/content/projects';
 
@@ -40,7 +41,7 @@ export default async function ProjectPage({ params }: Props) {
     <main id="main">
       <section className="project-hero shell">
         <Link href="/#work" className="back-link">
-          All projects
+          <ArrowLeft className="link-arrow" aria-hidden="true" /> All projects
         </Link>
         <div className="project-kicker">
           <p className="eyebrow">
@@ -163,6 +164,7 @@ export default async function ProjectPage({ params }: Props) {
         <p className="eyebrow">NEXT PROJECT / {next.number}</p>
         <Link href={`/work/${next.slug}`}>
           <h2>{next.title}</h2>
+          <ArrowUpRight className="link-arrow" aria-hidden="true" />
         </Link>
       </section>
     </main>

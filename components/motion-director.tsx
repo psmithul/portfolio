@@ -5,7 +5,7 @@ export function MotionDirector() {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const header = document.querySelector<HTMLElement>('.site-header');
     const reveals = document.querySelectorAll<HTMLElement>(
-      '.flow-reveal-word, .flow-section-heading, .flow-intro, .flow-philosophy, .flow-experience-card',
+      '.flow-section-heading, .flow-intro',
     );
     const covers = document.querySelectorAll<HTMLElement>('.flow-project-card');
     let frame = 0;

@@ -1,13 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Temporary robot architecture subject illustration">
-    <g stroke="#24231f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(135 75)">
-      <g><circle cx="355" cy="445" r="63" fill="#24231f" /><circle cx="355" cy="445" r="48" fill="#8296a5" /><circle cx="355" cy="445" r="10" fill="#24231f" /><path d="M314 445H396" transform="rotate(0 355 445)" stroke="#24231f" stroke-width="2"/><path d="M314 445H396" transform="rotate(60 355 445)" stroke="#24231f" stroke-width="2"/><path d="M314 445H396" transform="rotate(120 355 445)" stroke="#24231f" stroke-width="2"/></g><g><circle cx="740" cy="445" r="63" fill="#24231f" /><circle cx="740" cy="445" r="48" fill="#8296a5" /><circle cx="740" cy="445" r="10" fill="#24231f" /><path d="M699 445H781" transform="rotate(0 740 445)" stroke="#24231f" stroke-width="2"/><path d="M699 445H781" transform="rotate(60 740 445)" stroke="#24231f" stroke-width="2"/><path d="M699 445H781" transform="rotate(120 740 445)" stroke="#24231f" stroke-width="2"/></g>
-      <path d="M320 210H765V410H300Z" fill="#8296a5"/><path d="M320 210L390 140H825L765 210Z" fill="#ddd7cb"/><path d="M765 210L825 140V345L765 410Z" fill="#c9c6bb"/>
-      <path d="M175 425L320 320H435V392L305 465Z" fill="#ddd7cb"/>
-      <circle cx="210" cy="442" r="48" fill="#24231f" /><circle cx="210" cy="442" r="30" fill="#8296a5" />
-      <path d="M147 442H273" transform="rotate(0 210 442)" stroke-width="5"/><path d="M147 442H273" transform="rotate(45 210 442)" stroke-width="5"/><path d="M147 442H273" transform="rotate(90 210 442)" stroke-width="5"/><path d="M147 442H273" transform="rotate(135 210 442)" stroke-width="5"/>
-      <path d="M415 210V410M570 210V410" opacity=".3"/><g transform="translate(105 445) rotate(-30)"><path d="M0 0C-35-45-14-78 18-100C42-65 42-22 0 0Z" fill="#ddd7cb"/><path d="M0 0L18-90" fill="none"/></g><g transform="translate(70 515) rotate(50)"><path d="M0 0C-35-45-14-78 18-100C42-65 42-22 0 0Z" fill="#ddd7cb"/><path d="M0 0L18-90" fill="none"/></g><g transform="translate(865 365) rotate(15)"><path d="M0 0C-35-45-14-78 18-100C42-65 42-22 0 0Z" fill="#ddd7cb"/><path d="M0 0L18-90" fill="none"/></g>
-      <path d="M80 510H910" opacity=".25"/>
-    </g></g>
+    <g stroke="#24231f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g>
+  <rect x="130" y="130" width="385" height="130" rx="12" fill="#f4f0e6" /><text x="322" y="208" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#24231f" stroke="none">Locomotion</text>
+  <rect x="685" y="130" width="385" height="130" rx="12" fill="#f4f0e6" /><text x="877" y="208" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#24231f" stroke="none">Terrain following</text>
+  <path d="M322 260V322H877V260" fill="none" stroke="#8296a5" stroke-width="4"/>
+  <rect x="110" y="400" width="280" height="185" rx="12" fill="#f4f0e6" /><rect x="460" y="400" width="280" height="185" rx="12" fill="#f4f0e6" /><rect x="810" y="400" width="280" height="185" rx="12" fill="#f4f0e6" />
+  <text x="250" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="40" fill="#24231f" stroke="none">Pickup</text><text x="250" y="532" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" fill="#24231f" stroke="none">Leaves / soil rejection</text>
+  <text x="600" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="40" fill="#24231f" stroke="none">Transfer</text><text x="600" y="532" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" fill="#24231f" stroke="none">Material handling</text>
+  <text x="950" y="480" text-anchor="middle" font-family="Arial,sans-serif" font-size="40" fill="#24231f" stroke="none">Storage</text><text x="950" y="532" text-anchor="middle" font-family="Arial,sans-serif" font-size="23" fill="#24231f" stroke="none">Capacity / unloading</text>
+  <line x1="390" y1="492" x2="460" y2="492" stroke="#8296a5" stroke-width="4"/><path d="M447 484L460 492L447 500" fill="none" stroke="#8296a5" stroke-width="4"/><line x1="740" y1="492" x2="810" y2="492" stroke="#8296a5" stroke-width="4"/><path d="M797 484L810 492L797 500" fill="none" stroke="#8296a5" stroke-width="4"/>
+  <path d="M600 322V400" fill="none" stroke="#8296a5" stroke-width="4"/>
+</g></g>
     <path d="M56 718H1144" stroke="#24231f" stroke-opacity=".15"/>
     <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#24231f" opacity=".6">PROJECT ILLUSTRATION</text>
     <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#24231f" opacity=".6">M / 04</text>

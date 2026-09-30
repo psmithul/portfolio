@@ -5,128 +5,52 @@ import {
   Box,
   Braces,
   ChartSpline,
-  Cpu,
-  GitBranch,
+  Code2,
+  ArrowUpRight,
 } from 'lucide-react';
 import { PortraitStory } from '@/components/portrait-story';
 import { MotionDirector } from '@/components/motion-director';
 import { PortfolioCursor } from '@/components/portfolio-cursor';
+import { ExperienceRail } from '@/components/experience-rail';
 import { SideQuests } from '@/components/side-quests';
 import { projects } from '@/content/projects';
 import { getPublicPosts } from '@/lib/journal-store';
 
 export const dynamic = 'force-dynamic';
 const featuredOrder = [
-  'adaptive-suspension-rover',
-  'reaction-wheel-microvibrations',
   'tensegrity-joint',
-  'uav-vibration-integration',
+  'adaptive-suspension-rover',
+  'off-road-leaf-robot',
 ];
 const featured = featuredOrder.map((slug) =>
   projects.find((project) => project.slug === slug)!,
 );
-const sideOrder = [
-  'four-bar-door-mechanism',
-  'easy-access-wallet',
-  'kneeassist',
-  'uncertainty-aware-navigation',
-  'neoleg-knee-mechanism',
-  'off-road-leaf-robot',
-  'solar-smart-home',
-  'traffic-and-elevated-bus',
-];
-const sideProjects = sideOrder.map((slug) =>
-  projects.find((project) => project.slug === slug)!,
+const completedProjects = projects.filter(
+  (project) =>
+    project.status === 'Completed' &&
+    project.slug !== 'uav-vibration-integration',
 );
-const covers: Record<
-  string,
-  { title: string[]; note: string; tags: string[]; focus: string[] }
-> = {
+const covers: Record<string, { title: string[]; tags: string[] }> = {
   'adaptive-suspension-rover': {
     title: ['Adaptive suspension', 'for rough terrain'],
-    note: 'Design in progress / 2026',
     tags: ['Field robotics', 'Suspension', 'Vibrations'],
-    focus: [
-      'Three stiffness settings',
-      'IMU + encoder feedback',
-      'Terrain tests planned',
-    ],
   },
-  'reaction-wheel-microvibrations': {
-    title: ['Reaction-wheel', 'microvibrations'],
-    note: 'FEM + machine learning / 2026',
-    tags: ['Space systems', 'Structural dynamics', 'FEM'],
-    focus: [
-      'Response peak ≈ 5,800 rpm',
-      'Mesh refinement: 0.33% change',
-      '24-design parameter sweep',
-    ],
+  'off-road-leaf-robot': {
+    title: ['Off-road leaf-collection', 'robot'],
+    tags: ['Field robotics', 'Mechanism design', 'Test planning'],
   },
   'tensegrity-joint': {
     title: ['Tensegrity', 'variable-stiffness joint'],
-    note: 'Mechanism modelling / 2026',
     tags: ['Robotics', 'Mechanisms', 'Tensegrity'],
-    focus: [
-      'Member-force calculations',
-      'Geometry + load comparisons',
-      'Paper-based CAD reconstruction',
-    ],
-  },
-  'uav-vibration-integration': {
-    title: ['UAV vibration &', 'hardware integration'],
-    note: 'Vayu Aerospace / 2026',
-    tags: ['UAV hardware', 'IMU', 'Vibration isolation'],
-    focus: [
-      'Three mounts compared',
-      'Ground motor-run testing',
-      'RMS + frequency analysis',
-    ],
   },
 };
-const experience = [
-  {
-    company: 'Vayu Aerospace',
-    role: 'Product Intern',
-    period: 'Jun — Jul 2026',
-    detail:
-      'Compared flight-controller mounts, supported ground tests, and analysed IMU vibration logs.',
-  },
-  {
-    company: 'ISTE NITK',
-    role: 'Secretary',
-    period: 'Sep 2024 — Present',
-    detail:
-      'Sponsor outreach, budgets, vendors, and event logistics. Three sponsors; a technical event with 500+ participants.',
-  },
-  {
-    company: 'Thinkify Labs',
-    role: 'Product & Strategy Intern',
-    period: 'May — Aug 2025',
-    detail:
-      'Redesigned a lead-qualification workflow so the team could spend more time on the right prospects.',
-  },
-  {
-    company: 'NH66 Fund · P&L Club',
-    role: 'Fund Manager',
-    period: 'Jan 2025 — Apr 2026',
-    detail:
-      'Managed a ₹150K student fund, mentored three junior analysts, and organised recruitment and training.',
-  },
-  {
-    company: 'ILO Consulting',
-    role: 'Investment Banking Intern',
-    period: 'May — Jul 2024',
-    detail:
-      'Financial modelling, due diligence, and an Ireland market-entry assessment.',
-  },
-];
 const tools = [
   { name: 'SolidWorks', icon: Box },
   { name: 'ANSYS', icon: Activity },
-  { name: 'MATLAB / Simulink', icon: ChartSpline },
+  { name: 'MATLAB', icon: ChartSpline },
   { name: 'Python', icon: Braces },
-  { name: 'ESP32 / embedded', icon: Cpu },
-  { name: 'Git / GitHub', icon: GitBranch },
+  { name: 'C / C++', icon: Code2 },
+  { name: 'Arduino', icon: Braces },
 ];
 
 export default async function Home() {
@@ -140,15 +64,15 @@ export default async function Home() {
         <div className="flow-section-heading">
           <div>
             <p className="eyebrow">01 — Projects</p>
-            <h2>Selected builds</h2>
+            <h2>Ongoing projects</h2>
           </div>
           <p>
-            Mechanisms, vibration, and the questions that keep me at the
-            workbench.
+            Current research and design work in robotics, mechanisms, and
+            vibration.
           </p>
         </div>
         <div className="flow-project-list">
-          {featured.map((project, index) => {
+          {featured.map((project) => {
             const cover = covers[project.slug];
             return (
               <Link
@@ -159,8 +83,6 @@ export default async function Home() {
               >
                 <figure className="flow-project-image">
                   <div className="flow-cover-body">
-                    <span className="flow-cover-number">0{index + 1}</span>
-                    <span className="flow-cover-label">{cover.note}</span>
                     {project.image && (
                       <Image
                         src={project.image.src}
@@ -171,19 +93,18 @@ export default async function Home() {
                         unoptimized
                       />
                     )}
-                    <div className="flow-cover-annotations" aria-hidden="true">
-                      {cover.focus.map((focus) => (
-                        <span key={focus}>{focus}</span>
-                      ))}
-                    </div>
-                    <span className="flow-cover-cta">
-                      View project <span aria-hidden="true">↗</span>
-                    </span>
                   </div>
                   <figcaption>{project.image?.caption}</figcaption>
                 </figure>
                 <div className="flow-project-details">
-                  <span className="flow-project-date">2026</span>
+                  <div className="flow-project-timeline">
+                    <span
+                      className={`status-badge ${project.status.toLowerCase()}`}
+                    >
+                      {project.status}
+                    </span>
+                    <span className="flow-project-date">{project.period}</span>
+                  </div>
                   <div className="flow-project-description">
                     <h3>
                       {cover.title[0]}
@@ -196,6 +117,10 @@ export default async function Home() {
                       ))}
                     </div>
                     <p>{project.summary}</p>
+                    <span className="flow-read-project">
+                      Project details{' '}
+                      <ArrowUpRight className="link-arrow" aria-hidden="true" />
+                    </span>
                   </div>
                 </div>
               </Link>
@@ -203,58 +128,17 @@ export default async function Home() {
           })}
         </div>
       </section>
-      <SideQuests projects={sideProjects} />
-      <section className="flow-experience flow-section shell">
-        <div className="flow-section-heading">
-          <div>
-            <p className="eyebrow">03 — People & places</p>
-            <h2>Experience</h2>
-          </div>
-          <p>
-            Work, student teams, and learning to make things happen together.
-          </p>
-        </div>
-        <div className="flow-experience-board">
-          <div className="flow-experience-list">
-            {experience.map((job, index) => (
-              <article className="flow-experience-card" key={job.company}>
-                <span className="flow-experience-index">0{index + 1}</span>
-                <div>
-                  <span className="flow-experience-period">{job.period}</span>
-                  <h3>{job.company}</h3>
-                  <p className="flow-role">{job.role}</p>
-                </div>
-                <p className="flow-experience-detail">{job.detail}</p>
-              </article>
-            ))}
-          </div>
-          <Link
-            href="/about"
-            className="flow-work-folder"
-            aria-label="Read more about my background"
-          >
-            <Image
-              src="/images/work-folder.webp"
-              alt=""
-              width={800}
-              height={800}
-              unoptimized
-            />
-            <span>
-              Work, in a little more detail <span aria-hidden="true">↗</span>
-            </span>
-          </Link>
-        </div>
-      </section>
+      <SideQuests projects={completedProjects} />
+      <ExperienceRail />
       <section className="flow-tools flow-section shell">
         <div className="flow-section-heading">
           <div>
-            <p className="eyebrow">04 — On the desk</p>
+            <p className="eyebrow">04 — Technical skills</p>
             <h2>Tools</h2>
           </div>
           <p>
-            Things I use to turn an idea into a model, a mechanism, or a useful
-            test.
+            Software and programming tools I use for design, analysis, and
+            control.
           </p>
         </div>
         <ul>
@@ -271,30 +155,15 @@ export default async function Home() {
           <span>·</span> Experimental testing
         </p>
       </section>
-      <section className="flow-philosophy shell">
-        <p className="eyebrow">A working principle</p>
-        <h2>
-          I like machines
-          <br />
-          that have to work
-          <br />
-          <span>outside the simulation.</span>
-        </h2>
-        <p>
-          My interests sit where mechanics, sensing, control, and
-          experimentation meet. I care about understanding the physics,
-          predicting what should happen, and checking whether I was right.
-        </p>
-      </section>
       <section className="flow-journal flow-section shell">
         <div className="flow-section-heading">
           <div>
-            <p className="eyebrow">05 — Notes along the way</p>
+            <p className="eyebrow">05 — Journal</p>
             <h2>Mika’s Life</h2>
           </div>
           <p>
-            What I’m reading, noticing, and trying to understand outside the
-            project files.
+            Personal essays on books, photographs, and things I notice outside
+            engineering.
           </p>
         </div>
         <div className="flow-journal-entries">
@@ -305,43 +174,45 @@ export default async function Home() {
               </span>
               <h3>{post.title}</h3>
               <p>{post.description}</p>
-              <span className="flow-journal-arrow" aria-hidden="true">
-                ↗
-              </span>
+              <ArrowUpRight
+                className="flow-journal-arrow link-arrow"
+                aria-hidden="true"
+              />
             </Link>
           ))}
         </div>
         <Link href="/blog" className="flow-text-link">
-          Read the journal <span aria-hidden="true">↗</span>
+          Read the journal{' '}
+          <ArrowUpRight className="link-arrow" aria-hidden="true" />
         </Link>
       </section>
       <section className="flow-contact shell">
-        <p className="eyebrow">A good question is a good place to start.</p>
-        <h2>
-          Let’s build
-          <br />
-          <span>something real.</span>
-        </h2>
+        <p className="eyebrow">Contact</p>
+        <h2>Get in touch.</h2>
+        <p className="flow-contact-note">
+          For research opportunities, project collaboration, or a conversation
+          about mechanical engineering and robotics.
+        </p>
         <div>
           <a
             href="https://www.linkedin.com/in/psmithulsourav"
             target="_blank"
             rel="noreferrer"
           >
-            LinkedIn <span aria-hidden="true">↗</span>
+            LinkedIn <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </a>
           <a
             href="https://github.com/psmithul"
             target="_blank"
             rel="noreferrer"
           >
-            GitHub <span aria-hidden="true">↗</span>
+            GitHub <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </a>
           <a href="mailto:psmithul@gmail.com">
-            Email <span aria-hidden="true">↗</span>
+            Email <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </a>
           <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-            Résumé <span aria-hidden="true">↗</span>
+            Résumé <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </a>
         </div>
       </section>
