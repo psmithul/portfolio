@@ -24,7 +24,7 @@ export default async function Blog() {
         <h1>
           Mika’s <em>Life.</em>
         </h1>
-        <p>Notes on science, books, and the questions I come back to.</p>
+        <p>Science, books, and the occasional engineering detour.</p>
         <div className="journal-rule">
           <span>ESSAYS & OCCASIONAL NOTES</span>
           <span>
@@ -35,21 +35,18 @@ export default async function Blog() {
       </header>
       <div className="journal-layout shell">
         <aside className="journal-sidebar">
-          <span className="journal-symbol" aria-hidden="true">
-            m.
-          </span>
           <h2>
-            What caught
+            Thinking
             <br />
-            my attention.
+            out loud.
           </h2>
           <p>
-            I’m Mika. I study mechanical engineering. This is where I write
-            about science, books, and the ideas that stay with me.
+            I’m Mithul, also Mika. I study mechanical engineering and write here
+            about science, books, and whatever catches my attention.
           </p>
           <p>
-            Sometimes there’s a connection to something I’m building. Sometimes
-            it’s just a question I haven’t quite worked out.
+            Some entries connect to my engineering work. Others are simply
+            things I wanted to spend more time with.
           </p>
           <div className="journal-subjects">
             <h3>In these pages</h3>

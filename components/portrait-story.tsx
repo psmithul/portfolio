@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
@@ -58,15 +57,16 @@ export function PortraitStory() {
   return (
     <section className="flow-opening" ref={story} aria-label="Meet Mithul">
       <div className="flow-statement shell">
-        <p className="eyebrow">MECHANICAL ENGINEERING & ROBOTICS</p>
-        <h1>
-          Building.
+        <p className="flow-opening-note">
+          A mechanical engineer
           <br />
-          <span>Asking why.</span>
-        </h1>
-        <p className="flow-statement-location">
-          NITK SURATHKAL · CLASS OF 2027
+          in the making.
         </p>
+        <h1>
+          Making things
+          <br />
+          <span>that move.</span>
+        </h1>
       </div>
       <div className="flow-portrait-stage shell">
         <div className="flow-person">
@@ -79,23 +79,25 @@ export function PortraitStory() {
             unoptimized
           />
         </div>
+        <figure className="flow-second-portrait">
+          <Image
+            src="/images/mithul-cafe.webp"
+            alt="Mithul at a café, wearing glasses and a black sweater"
+            width={1100}
+            height={1375}
+            unoptimized
+          />
+        </figure>
       </div>
       <div className="flow-intro shell">
-        <h2>Hi, I’m Mithul.</h2>
+        <h2>Hi, I’m Mithul!</h2>
         <p>
-          A mechanical engineering student at NITK Surathkal. I build robots and
-          mechanisms, and study how they move, sense, and respond. My work
-          brings together mechanical design, dynamics, and control—with a
-          growing interest in research.
+          I’m a final-year mechanical engineering student at{' '}
+          <strong>NITK Surathkal</strong>. My work is in{' '}
+          <strong>robotics, mechanisms, and control</strong>. Right now, I’m
+          designing a rover with adjustable suspension and studying how a
+          tensegrity joint changes stiffness.
         </p>
-        <div className="hero-actions">
-          <a className="lab-button" href="#work">
-            Explore my work
-          </a>
-          <Link className="quiet-link" href="/about">
-            More about me
-          </Link>
-        </div>
       </div>
     </section>
   );

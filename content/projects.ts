@@ -17,6 +17,7 @@ export type Project = {
   scope: string;
   evidence: string[];
   image?: {
+    kind?: 'documentation' | 'illustration';
     src: string;
     alt: string;
     width: number;
@@ -33,6 +34,14 @@ export type Project = {
     | 'wallet';
   visualLabel: string;
 };
+const illustration = (slug: string, subject: string): Project['image'] => ({
+  kind: 'illustration',
+  src: `/images/projects/illustration-${slug}.svg`,
+  width: 1200,
+  height: 800,
+  alt: `Temporary illustration of ${subject}`,
+  caption: 'Temporary project illustration.',
+});
 export const projects: Project[] = [
   {
     slug: 'adaptive-suspension-rover',
@@ -45,13 +54,17 @@ export const projects: Project[] = [
     context: 'Research & staged hardware development',
     model: 'rover',
     visualLabel: 'SIX-WHEEL ROVER / CONCEPT STUDY',
+    image: illustration(
+      'adaptive-suspension-rover',
+      'a rover and adjustable suspension',
+    ),
     tools: [
       'Variable-stiffness suspension',
       'IMU & encoders',
       'Control design',
     ],
     summary:
-      'A six-wheel rover that changes suspension stiffness when the ride gets rough—and checks whether the change helped.',
+      'Designing a six-wheel rover with adjustable suspension, using vibration feedback to decide when to change stiffness.',
     question:
       'Can a rover reduce vibration by changing its suspension before it has to slow down?',
     role: 'I am designing a six-wheel rover with adjustable spring leverage. The suspension moves between soft, medium, and stiff settings, then mechanically locks the selected setting.',
@@ -72,7 +85,7 @@ export const projects: Project[] = [
     outcome:
       'The rover is in the design stage. Development is planned from one suspension unit through a complete rough-terrain test.',
     scope:
-      'Ongoing design and staged hardware development. Full-system performance comparisons are planned work.',
+      'Design and staged hardware development. Rough-terrain testing and full-system comparisons are planned.',
     evidence: [
       'Three mechanically locked stiffness settings',
       'IMU and encoder feedback architecture',
@@ -101,7 +114,7 @@ export const projects: Project[] = [
     },
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
-      'Exploring how a tensegrity joint changes its stiffness through geometry and internal force distribution.',
+      'A MATLAB study of member forces and stiffness, alongside the design of a tensegrity joint.',
     question:
       'How can geometry and internal forces make the same joint respond differently to a load?',
     role: 'I use MATLAB to calculate member forces, joint response, and stiffness across different geometries and external loads.',
@@ -122,7 +135,7 @@ export const projects: Project[] = [
     outcome:
       'The computational study is informing the design of a variable-stiffness joint.',
     scope:
-      'Ongoing modeling and design. A wearable application is a future direction, not a validated device.',
+      'Modeling and design are ongoing. A wearable application is a possible later direction.',
     evidence: [
       'MATLAB member-force calculations',
       'Geometry and loading comparisons',
@@ -140,9 +153,10 @@ export const projects: Project[] = [
     context: 'Team project · Incubate X Prosthetic Challenge',
     model: 'knee',
     visualLabel: 'ACTUATED BRACE / CONCEPT ASSEMBLY',
+    image: illustration('kneeassist', 'a sensing and actuation brace'),
     tools: ['CAD & integration', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'An actuated brace concept that senses knee angle, preserves active extension, and adds controlled assistance.',
+      'A knee-assistance brace concept with angle sensing, controlled actuation, and an independent manual release.',
     question:
       'How can a brace assist knee extension while allowing the patient to keep doing the work?',
     role: 'I helped turn the team CAD into a buildable system: adjustable rails and cuffs, a motor drive, angle sensing, power protection, and an independent manual release.',
@@ -163,7 +177,7 @@ export const projects: Project[] = [
     outcome:
       'Our team was selected in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge.',
     scope:
-      'Completed team concept and integration work. Bench tests were planned; clinical efficacy and patient outcomes are not established.',
+      'Team concept and integration work for the challenge. Bench verification remains to be carried out.',
     evidence: [
       'Top 5 of 70 teams nationwide',
       'Buildable system integration',
@@ -191,7 +205,7 @@ export const projects: Project[] = [
     },
     tools: ['ANSYS Mechanical', 'Modal & harmonic FEM', 'Regression'],
     summary:
-      'Following reaction-wheel vibration through a satellite panel to a camera mounting point, with a peak near 5,800 rpm.',
+      'Tracing reaction-wheel vibration from a satellite panel to a camera mount, using modal and harmonic analysis.',
     question:
       'Where does a reaction wheel excite the structure—and can a faster model capture the response?',
     role: 'I built modal and harmonic FEM models of the satellite panel and camera mounting interface, then checked a strong response peak by refining the mesh.',
@@ -212,7 +226,7 @@ export const projects: Project[] = [
     outcome:
       'The FEM study identified a strong response peak near 5,800 rpm. Mesh refinement changed that peak by 0.33%. A 24-design sweep and held-out regression workflow were set up.',
     scope:
-      'Computational study. The 0.33% figure describes mesh-refinement sensitivity, not prediction error. No measured flight or hardware vibration result is claimed.',
+      'A simulation study. The 0.33% figure is the change after mesh refinement. Experimental validation remains separate.',
     evidence: [
       'Response peak near 5,800 rpm',
       '0.33% change after mesh refinement',
@@ -230,13 +244,14 @@ export const projects: Project[] = [
     context: 'Robot design & subsystem architecture',
     model: 'collection',
     visualLabel: 'PICKUP / TRANSFER / TERRAIN FOLLOWING',
+    image: illustration('off-road-leaf-robot', 'a leaf-collection robot'),
     tools: [
       'Subsystem architecture',
       'Mechanism selection',
       'BOM & test planning',
     ],
     summary:
-      'Working out how to collect dry or wet leaves on uneven ground without pulling in too much soil.',
+      'Designing a robot to collect wet and dry leaves on uneven ground while leaving the soil behind.',
     question: 'How do you pick up the leaves without picking up the ground?',
     role: 'I broke the robot into locomotion, pickup, transfer, storage, and terrain-following systems, then compared mechanisms against space, manufacturing, and integration limits.',
     approach: [
@@ -256,7 +271,7 @@ export const projects: Project[] = [
     outcome:
       'A subsystem architecture, bottom-up BOM, and test criteria support the next design decisions.',
     scope:
-      'Ongoing design. Collection performance and field endurance have not yet been established.',
+      'Architecture and mechanism selection are ongoing. Pickup and endurance tests are planned.',
     evidence: [
       'Five subsystem groups',
       'Bottom-up BOM',
@@ -274,9 +289,10 @@ export const projects: Project[] = [
     context: 'Team mechanism-design project',
     model: 'linkage',
     visualLabel: 'PASSIVE KNEE / SPRING GEOMETRY',
+    image: illustration('neoleg-knee-mechanism', 'a spring-assisted mechanism'),
     tools: ['SolidWorks', 'ANSYS', 'Interference checks'],
     summary:
-      'Exploring passive spring assistance for squatting and lifting, through assembly geometry and modeled motion.',
+      'A SolidWorks and ANSYS design study of a spring-assisted knee mechanism for squatting and lifting.',
     question:
       'Can a passive spring assist knee motion without making the mechanism bulky or restrictive?',
     role: 'I helped build and refine the knee assembly in SolidWorks, and used ANSYS and interference checks to evaluate modeled flexion.',
@@ -296,8 +312,7 @@ export const projects: Project[] = [
     ],
     outcome:
       'The completed design study compared spring layouts and evaluated the assembly’s modeled motion.',
-    scope:
-      'Design and simulation work. Modeled motion is distinct from measured human assistance or physical performance.',
+    scope: 'CAD and simulation study of the assembly and its range of motion.',
     evidence: [
       'SolidWorks assembly',
       'ANSYS and interference checks',
@@ -315,9 +330,13 @@ export const projects: Project[] = [
     context: 'Differential-drive simulation project',
     model: 'navigation',
     visualLabel: 'PLANNING / LOCALIZATION / RECOVERY',
+    image: illustration(
+      'uncertainty-aware-navigation',
+      'robot path planning and localization',
+    ),
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
-      'An indoor robot simulator that slows down or recovers when its confidence in its own position drops.',
+      'A differential-drive simulation combining A* planning, EKF localization, and recovery when the position estimate becomes uncertain.',
     question:
       'What should a robot do when it no longer trusts its position estimate?',
     role: 'I built a differential-drive simulator with A* planning, heading control, encoders, an IMU, and extended Kalman filter localization.',
@@ -337,7 +356,7 @@ export const projects: Project[] = [
     ],
     outcome:
       'Completed a simulation and Monte Carlo evaluation workflow for uncertainty-aware speed and recovery behavior.',
-    scope: 'A simulation study, not a physical indoor-robot deployment.',
+    scope: 'Simulation and Monte Carlo evaluation.',
     evidence: [
       'Differential-drive simulator',
       'Deliberately imperfect sensors',
@@ -355,9 +374,10 @@ export const projects: Project[] = [
     context: 'Team build',
     model: 'linkage',
     visualLabel: 'LINK LENGTHS / PIVOTS / DOOR MOTION',
+    image: illustration('four-bar-door-mechanism', 'a four-bar door linkage'),
     tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
     summary:
-      'A physical four-bar door-opening mechanism, developed from the motion we wanted to a set of links and joints.',
+      'A team-built door-opening mechanism, developed through link-length and pivot-position studies.',
     question:
       'Which link lengths and pivot positions produce the door motion we want?',
     role: 'I worked with my team to build a four-bar mechanism and choose link lengths and pivot locations within its kinematic limits.',
@@ -395,9 +415,10 @@ export const projects: Project[] = [
     context: 'Design project',
     model: 'wallet',
     visualLabel: 'USER PROBLEM / MECHANICAL RESPONSE',
+    image: illustration('easy-access-wallet', 'a card-access concept'),
     tools: ['Problem framing', 'Mechanical design', 'Layout development'],
     summary:
-      'A compact wallet layout developed around a small, familiar frustration: getting a card out quickly.',
+      'A compact card-holder concept designed to make cards easier to reach and remove.',
     question:
       'How can a compact card holder make its contents easier to reach?',
     role: 'I developed a wallet layout around easier card access and turned that observation into a tangible mechanical design idea.',
@@ -411,13 +432,12 @@ export const projects: Project[] = [
         body: 'Develop the layout around reaching and retrieving a card, rather than starting with a preferred mechanism.',
       },
       {
-        title: 'Carry the lesson forward',
-        body: 'Use the project to practise a design rule: begin with the user problem, then build the mechanism around it.',
+        title: 'Develop the layout',
+        body: 'Turn the access requirement into a compact mechanical layout.',
       },
     ],
     outcome: 'Developed a mechanical design concept for easier card access.',
-    scope:
-      'An early design project. No production or user-study performance claim is made.',
+    scope: 'An early mechanical design concept for card access.',
     evidence: [
       'Observed access problem',
       'User-centred layout',
@@ -435,9 +455,10 @@ export const projects: Project[] = [
     context: 'Working electronic model',
     model: 'electronics',
     visualLabel: 'SENSORS / LOGIC / SOLAR POWER',
+    image: illustration('solar-smart-home', 'home sensors and solar power'),
     tools: ['Arduino', 'Sensor integration', 'Circuit debugging'],
     summary:
-      'An Arduino smart-home model that connected sensors, automated functions, and a photovoltaic power source.',
+      'An Arduino smart-home model with connected sensors, control logic, and a photovoltaic power option.',
     question:
       'How do several sensors and automated functions work reliably as one system?',
     role: 'I designed the wiring and control logic, debugged the connections and code, and added a photovoltaic cell power source.',
@@ -457,8 +478,7 @@ export const projects: Project[] = [
     ],
     outcome:
       'Built and debugged a working smart-home model with a solar-power option.',
-    scope:
-      'A model-scale electronics project, not a deployed building-control system.',
+    scope: 'A working model with integrated sensors and a solar-power option.',
     evidence: [
       'Integrated sensor inputs',
       'Wired control logic',
@@ -476,6 +496,10 @@ export const projects: Project[] = [
     context: 'Two electronic model builds',
     model: 'electronics',
     visualLabel: 'LOGIC GATES / SIGNALS / SEQUENCING',
+    image: illustration(
+      'traffic-and-elevated-bus',
+      'traffic signals and an elevated bus',
+    ),
     tools: ['Logic gates', 'Circuit wiring', 'Fault tracing'],
     summary:
       'Hand-wired traffic-light and transit elevated-bus models, with repeatable control sequences built from logic gates.',

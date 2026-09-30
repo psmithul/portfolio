@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: '%s — Mithul Sourav',
   },
   description:
-    'Mithul Sourav is a curious builder and mechanical engineering student at NITK Surathkal, exploring robotics, mechanisms, dynamics, and vibration. Projects, research, and Mika’s Life, a personal journal.',
+    'Mechanical engineering and robotics by Mithul Sourav, a final-year student at NITK Surathkal. Project studies, CAD, and Mika’s Life, a personal journal.',
   icons: { icon: '/favicon.svg' },
 };
 
@@ -25,24 +25,12 @@ export default function RootLayout({
           Skip to content
         </a>
         <header className="site-header shell">
-          <Link href="/" className="wordmark" aria-label="Mithul Sourav home">
-            <span className="wordmark-name">
-              Mithul Sourav
-              <span className="wordmark-caption">
-                Mechanical engineering & robotics
-              </span>
-            </span>
-          </Link>
           <nav aria-label="Main navigation">
-            <Link href="/#work">Work</Link>
+            <Link href="/">Home</Link>
+            <Link href="/#work">Projects</Link>
             <Link href="/about">About</Link>
             <Link href="/blog">Journal</Link>
-            <a
-              href="/Mithul-Sourav-CV.pdf"
-              target="_blank"
-              rel="noreferrer"
-              className="cv-link"
-            >
+            <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
               Résumé
             </a>
           </nav>

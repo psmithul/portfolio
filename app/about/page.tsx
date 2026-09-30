@@ -30,11 +30,11 @@ export default function About() {
             at NITK Surathkal. I expect to graduate in June 2027.
           </p>
           <p>
-            I like building things, and I’m increasingly interested in the
-            research behind them. A mechanism gives me something to make; a
-            model helps me ask better questions; a test tells me where I was
-            wrong. Right now, I’m working across field robotics, dynamics,
-            vibration, sensing, and control.
+            I work on mechanical design, robotics, and control. My current
+            projects include a rover with adjustable suspension and a tensegrity
+            joint with variable stiffness. I use CAD and simulation to develop
+            the designs, and I’m interested in the experiments that connect a
+            model to what happens in hardware.
           </p>
         </div>
       </section>
@@ -93,11 +93,11 @@ export default function About() {
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">03 / CURRENT QUESTIONS</p>
+          <p className="eyebrow">03 / CURRENT WORK</p>
         </div>
         <div className="about-body skill-list">
           <div>
-            <h3>Can suspension adapt before a rover has to slow down?</h3>
+            <h3>Adaptive suspension rover</h3>
             <p>
               A six-wheel rough-terrain rover with mechanically locked stiffness
               settings and a vibration-aware control loop.
@@ -107,7 +107,7 @@ export default function About() {
             </Link>
           </div>
           <div>
-            <h3>What changes when the geometry changes?</h3>
+            <h3>Tensegrity joint</h3>
             <p>
               MATLAB force and stiffness calculations for a tensegrity-based
               variable-stiffness joint.
@@ -117,7 +117,7 @@ export default function About() {
             </Link>
           </div>
           <div>
-            <h3>How do you collect the leaves without collecting the soil?</h3>
+            <h3>Leaf-collection robot</h3>
             <p>
               A robot architecture that connects locomotion, pickup, transfer,
               storage, and terrain following.
@@ -216,7 +216,7 @@ export default function About() {
         </div>
       </section>
       <section className="lab-contact shell">
-        <p className="eyebrow">ALWAYS HAPPY TO COMPARE NOTES</p>
+        <p className="eyebrow">GET IN TOUCH</p>
         <a href="mailto:psmithul@gmail.com">
           Let’s talk<span>.</span>
         </a>
