@@ -16,6 +16,14 @@ export type Project = {
   outcome: string;
   scope: string;
   evidence: string[];
+  image?: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    caption: string;
+    referenceUrl?: string;
+  };
   model:
     | ModelKind
     | 'navigation'
@@ -64,7 +72,7 @@ export const projects: Project[] = [
     outcome:
       'The rover is in the design stage. Development is planned from one suspension unit through a complete rough-terrain test.',
     scope:
-      'Ongoing research. The interactive rover is an illustrative concept, not the project CAD. Full-system performance comparisons are planned work.',
+      'Ongoing design and staged hardware development. Full-system performance comparisons are planned work.',
     evidence: [
       'Three mechanically locked stiffness settings',
       'IMU and encoder feedback architecture',
@@ -82,6 +90,15 @@ export const projects: Project[] = [
     context: 'Research project',
     model: 'tensegrity',
     visualLabel: 'TENSEGRITY JOINT / GEOMETRY & FORCE',
+    image: {
+      src: '/images/projects/tensegrity-joint-cad.webp',
+      width: 1200,
+      height: 1200,
+      alt: 'CAD reconstruction of a tensegrity knee joint, showing crossed tension members, connectors, and cable routing',
+      caption:
+        'CAD reconstruction for mechanism study, based on Mortensen et al. (2025).',
+      referenceUrl: 'https://arxiv.org/abs/2504.19685',
+    },
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
       'Exploring how a tensegrity joint changes its stiffness through geometry and internal force distribution.',
@@ -164,6 +181,14 @@ export const projects: Project[] = [
     context: 'FEM & machine-learning study',
     model: 'satellite',
     visualLabel: 'SATELLITE PANEL / VIBRATION PATH',
+    image: {
+      src: '/images/projects/reaction-wheel-reference-cad.webp',
+      width: 1500,
+      height: 1125,
+      alt: 'Project reference CAD showing a sectioned reaction wheel inside a satellite structure',
+      caption:
+        'Reference assembly from the project CAD. Surface finishes are illustrative.',
+    },
     tools: ['ANSYS Mechanical', 'Modal & harmonic FEM', 'Regression'],
     summary:
       'Following reaction-wheel vibration through a satellite panel to a camera mounting point, with a peak near 5,800 rpm.',

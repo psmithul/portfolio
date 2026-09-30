@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { projects } from '@/content/projects';
-import { EngineeringPlayground } from '@/components/engineering-playground';
-import { ProjectVisual } from '@/components/project-visual';
-import type { ModelKind } from '@/lib/engineering-scene';
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,9 +19,6 @@ export default async function ProjectPage({ params }: Props) {
   if (index < 0) notFound();
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
-  const hasModel = ['rover', 'tensegrity', 'knee', 'satellite'].includes(
-    project.model,
-  );
   return (
     <main id="main">
       <section className="project-hero shell">
@@ -55,24 +50,45 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         </div>
       </section>
+      {project.image && (
+        <figure className="project-documentation shell">
+          <Image
+            src={project.image.src}
+            alt={project.image.alt}
+            width={project.image.width}
+            height={project.image.height}
+            unoptimized
+          />
+          <figcaption>
+            {project.image.caption}
+            {project.image.referenceUrl && (
+              <>
+                {' '}
+                <a
+                  href={project.image.referenceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Reference paper
+                </a>
+              </>
+            )}
+          </figcaption>
+        </figure>
+      )}
       <section className="project-question shell">
         <div>
           <p className="eyebrow">THE ENGINEERING QUESTION</p>
           <h2>{project.question}</h2>
         </div>
-        {hasModel ? (
-          <EngineeringPlayground
-            initialModel={project.model as ModelKind}
-            compact
-          />
-        ) : (
-          <figure className="project-reading-visual">
-            <ProjectVisual kind={project.model} />
-            <figcaption>
-              Conceptual illustration · {project.visualLabel.toLowerCase()}
-            </figcaption>
-          </figure>
-        )}
+        <div className="project-at-a-glance">
+          <p className="eyebrow">PROJECT DETAILS</p>
+          <ul>
+            {project.evidence.map((detail) => (
+              <li key={detail}>{detail}</li>
+            ))}
+          </ul>
+        </div>
       </section>
       <section className="about-section shell">
         <div className="section-label">

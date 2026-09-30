@@ -40,13 +40,19 @@ body {
   color: var(--accent);
 }
 .wordmark-caption {
-  display: none;
+  display: block;
+  margin-top: 5px;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
 }
-.wordmark > span:last-child {
-  font-size: 0.875rem;
-}
-.brand-mark {
-  font-size: 2.3rem;
+.site-header .wordmark .wordmark-name {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.035em;
 }
 .cv-link {
   border-color: var(--line);
@@ -163,19 +169,17 @@ body {
 }
 .portrait-subject {
   position: absolute;
-  inset: 34px 12% 28px 9%;
-  overflow: hidden;
-  border-radius: 48% 48% 8px 8px;
+  inset: 0;
+  overflow: visible;
   transform-origin: 50% 85%;
 }
 .portrait-subject img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center 58%;
-  transform: scale(1.12);
-  transform-origin: center 45%;
+  object-fit: contain;
+  object-position: center bottom;
+  mask-image: linear-gradient(to bottom, black 91%, transparent 100%);
 }
 .portrait-signature {
   position: absolute;
@@ -571,6 +575,52 @@ body {
 .next-project {
   background: color-mix(in srgb, var(--wada-yellow) 24%, white);
 }
+.project-question {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding-block: 48px;
+}
+.project-question h2 {
+  font-family: var(--sans);
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  font-weight: 550;
+  line-height: 1.4;
+}
+.project-at-a-glance ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+.project-at-a-glance li {
+  border-bottom: 1px solid var(--line);
+  font-size: 1rem;
+  line-height: 1.65;
+  padding-block: 14px;
+}
+.project-at-a-glance li:last-child {
+  border-bottom: 0;
+}
+.project-documentation {
+  margin-block: 10px 64px;
+}
+.project-documentation img {
+  display: block;
+  width: 100%;
+  max-height: 680px;
+  object-fit: contain;
+  background: #f5f7f9;
+}
+.project-documentation figcaption {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--muted);
+  padding-top: 15px;
+  max-width: 760px;
+}
+.project-documentation figcaption a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .scope-note {
   background: color-mix(in srgb, var(--wada-yellow) 28%, white);
   border-left-color: var(--wada-blue);
@@ -783,11 +833,23 @@ body {
 }
 @media (max-width: 620px) {
   .site-header {
-    height: 80px;
+    height: 108px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+    padding-block: 8px;
+  }
+  .site-header .wordmark .wordmark-name {
+    font-size: 1rem;
+  }
+  .wordmark-caption {
+    display: none;
   }
   .site-header nav {
-    gap: 17px;
-    font-size: 0.75rem;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 0.875rem;
   }
   .cv-link {
     padding: 8px 12px;
@@ -834,7 +896,7 @@ body {
     margin: 0 auto;
   }
   .portrait-subject {
-    inset: 22px 12% 20px 9%;
+    inset: 0;
   }
   .portrait-backplate {
     inset: 14px 8% 12px 5%;
@@ -879,7 +941,7 @@ body {
     height: 156svh;
   }
   .portrait-story[data-motion='scroll'] .portrait-layout {
-    height: calc(100svh - 80px);
+    height: calc(100svh - 108px);
     min-height: 740px;
     max-height: 870px;
   }

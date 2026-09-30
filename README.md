@@ -51,11 +51,12 @@ The initial essays are bundled from `content/posts/*.md`. On the owner’s first
 | Name, contacts, and navigation                           | `app/layout.tsx`                |
 | CV download                                              | `public/Mithul-Sourav-CV.pdf`   |
 | Journal introduction                                     | `app/blog/page.tsx`             |
-| Palette and scroll experience                            | `app/experience.css`            |
+| Shared palette and reading-page styles                   | `app/experience.css`            |
+| Homepage flow and display typography                     | `app/flow.css`                  |
 | Base typography and reading layouts                      | `app/globals.css`               |
 | Owner authorization                                      | `lib/journal-model.ts`          |
 
-The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. The WebGL workbench and project illustrations are original conceptual models, not exported project CAD or measured results. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
+The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. Project images are optional: add an `image` object with `src`, `alt`, `width`, `height`, and an accurate `caption` only when the asset is verified. A `referenceUrl` may credit a paper. Without an image, the site shows the project summary and details without a placeholder. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
 ## Verify changes
 
@@ -86,13 +87,11 @@ Define schema changes in `db/schema.ts`, generate and inspect a new migration, t
 
 Reuse the Site registration in `.openai/hosting.json`. It contains only the Site ID and logical bindings. Sites packages the Worker, assets, and `drizzle/` migrations and supplies the production database and sign-in flow. Source pushes and website deployment are separate actions: a GitHub push alone does not publish this website. No site should be called live until deployment succeeds and its URL is verified.
 
-## Scroll experience and project viewers
+## Scroll experience and project imagery
 
-The homepage uses the supplied courtyard photograph of Mithul without reconstructing his face. Encoding and CSS cropping are the only image changes. The portrait, frame, outline, and introductory copy respond to native page scrolling. There are no hero model controls or scroll interception. Reduced-motion preferences and an unenhanced page show a static opening. The project gallery is staggered on larger screens and follows a vertical reading order on phones.
+The homepage follows the supplied [Neha Yadav flow reference](https://nehayadav.framer.website/): a bold centered opening, transparent portrait, personal introduction, full-width project stories, smaller builds, a CAD gallery, experience, tools, and a large contact ending. Mika’s Life remains before contact. The portrait is edited from the supplied courtyard photograph, with likeness as the priority. There is no surrounding photograph background, frame, or outline. Gentle portrait depth follows native scrolling. Reduced-motion preferences and an unenhanced page show a static opening. `app/flow.css` controls this sequence; `app/experience.css` retains the shared palette and reading-page styles.
 
-Four project reading pages include Three.js concept viewers: a six-wheel rover, a tensegrity joint, an actuated brace, and a satellite-panel assembly. Orbit and zoom with a pointer or touch, or use the Orbit button. Set in motion animates the selected assembly. Pull apart provides an exploded view. Model controls illustrate suspension settings, geometry, assistance, or wheel speed; they are not engineering predictions. The rover roughness control changes its illustrative suspension motion.
-
-The renderer loads only in the browser, caps pixel density, pauses off-screen and in hidden tabs, respects reduced-motion preferences for automatic camera movement, and disposes its graphics resources when leaving the page. WebGL 2 is required; the rest of the site and project reading pages remain available without it.
+Generic concept illustrations and Three.js viewers have been removed from the portfolio routes. The tensegrity image is an existing CAD reconstruction based on Mortensen et al. (2025), credited in its caption and reading page; it is not a photograph of the user's hardware. The reaction-wheel image comes from the project's original reference CAD assembly, with illustrative surface finishes. See [asset provenance and portrait prompt](docs/assets.md). The unused legacy viewer components are not imported by the portfolio pages and do not load WebGL.
 
 Project and experience facts were refreshed from `Mithul_Sourav_MIT_SM_Research_CV.pdf` on 30 September 2026. That document classifies the reaction-wheel study as completed and lists its period as August–October 2026; the site preserves that supplied classification and date range.
 

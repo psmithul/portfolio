@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
@@ -57,68 +56,45 @@ export function PortraitStory() {
   }, []);
 
   return (
-    <section className="portrait-story" ref={story} aria-label="Meet Mithul">
-      <div className="portrait-sticky">
-        <div className="portrait-layout shell">
-          <div className="portrait-copy">
-            <p className="eyebrow">MITHUL SOURAV · MECHANICAL ENGINEERING</p>
-            <h1>
-              A builder.
-              <br />
-              With a lot
-              <br /> of <em>questions.</em>
-            </h1>
-            <p className="portrait-intro">
-              I’m Mithul, a mechanical engineering student at NITK Surathkal. I
-              build robots and mechanisms, and ask what makes them work.
-            </p>
-          </div>
-          <div className="portrait-fieldnotes">
-            <p className="eyebrow">WHAT I’M THINKING ABOUT</p>
-            <h2>
-              Questions I’m
-              <br />
-              <em>working through.</em>
-            </h2>
-            <p>
-              How a rover adjusts to rough ground. How geometry changes a
-              joint’s stiffness. How to isolate a flight controller from
-              vibration.
-            </p>
-          </div>
-          <div className="portrait-composition">
-            <div className="portrait-backplate" aria-hidden="true" />
-            <div className="portrait-outline" aria-hidden="true" />
-            <div className="portrait-subject">
-              <Image
-                src="/images/mithul-courtyard.webp"
-                alt="Mithul in a courtyard, wearing glasses and a black shirt"
-                width={941}
-                height={1672}
-                priority
-                unoptimized
-              />
-            </div>
-            <p className="portrait-signature">
-              Mithul <span>/ Mika</span>
-            </p>
-          </div>
-          <div className="portrait-bottom">
-            <div className="hero-actions">
-              <a className="lab-button" href="#work">
-                Explore my work <ArrowDown size={16} aria-hidden="true" />
-              </a>
-              <Link className="quiet-link" href="/about">
-                A little about me <ArrowUpRight size={16} aria-hidden="true" />
-              </Link>
-            </div>
-            <p className="hero-coordinate">
-              SURATHKAL, INDIA <span>NITK · CLASS OF 2027</span>
-            </p>
-          </div>
-          <div className="portrait-scroll-note" aria-hidden="true">
-            <span /> SCROLL TO EXPLORE
-          </div>
+    <section className="flow-opening" ref={story} aria-label="Meet Mithul">
+      <div className="flow-statement shell">
+        <p className="eyebrow">MECHANICAL ENGINEERING & ROBOTICS</p>
+        <h1>
+          Building.
+          <br />
+          <span>Asking why.</span>
+        </h1>
+        <p className="flow-statement-location">
+          NITK SURATHKAL · CLASS OF 2027
+        </p>
+      </div>
+      <div className="flow-portrait-stage shell">
+        <div className="flow-person">
+          <Image
+            src="/images/mithul-cutout.webp"
+            alt="Portrait of Mithul, wearing glasses and a black shirt"
+            width={1024}
+            height={1536}
+            priority
+            unoptimized
+          />
+        </div>
+      </div>
+      <div className="flow-intro shell">
+        <h2>Hi, I’m Mithul.</h2>
+        <p>
+          A mechanical engineering student at NITK Surathkal. I build robots and
+          mechanisms, and study how they move, sense, and respond. My work
+          brings together mechanical design, dynamics, and control—with a
+          growing interest in research.
+        </p>
+        <div className="hero-actions">
+          <a className="lab-button" href="#work">
+            Explore my work
+          </a>
+          <Link className="quiet-link" href="/about">
+            More about me
+          </Link>
         </div>
       </div>
     </section>
