@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import type { Project } from '@/content/projects';
 import { ScrollRail } from '@/components/scroll-rail';
 export function SideQuests({ projects }: { projects: Project[] }) {
@@ -21,18 +21,6 @@ export function SideQuests({ projects }: { projects: Project[] }) {
           data-cursor="project"
           key={project.slug}
         >
-          <figure className="quest-image">
-            {project.image && (
-              <Image
-                src={project.image.src}
-                alt={project.image.alt}
-                width={project.image.width}
-                height={project.image.height}
-                unoptimized
-              />
-            )}
-          </figure>
-          <span className="quest-image-caption">{project.image?.caption}</span>
           <div className="quest-copy">
             <div>
               <div className="quest-meta">
@@ -54,11 +42,20 @@ export function SideQuests({ projects }: { projects: Project[] }) {
               </div>
               <p>{project.summary}</p>
             </div>
-            <ArrowUpRight
-              className="quest-arrow link-arrow"
-              aria-hidden="true"
-            />
+            <ArrowRight className="quest-arrow link-arrow" aria-hidden="true" />
           </div>
+          <figure className="quest-image">
+            {project.image && (
+              <Image
+                src={project.image.src}
+                alt={project.image.alt}
+                width={project.image.width}
+                height={project.image.height}
+                unoptimized
+              />
+            )}
+          </figure>
+          <span className="quest-image-caption">{project.image?.caption}</span>
         </Link>
       ))}
     </ScrollRail>

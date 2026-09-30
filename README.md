@@ -89,7 +89,7 @@ Reuse the Site registration in `.openai/hosting.json`. It contains only the Site
 
 ## Scroll experience and project imagery
 
-The homepage retains the supplied [Neha Yadav flow reference](https://nehayadav.framer.website/) with a direct engineering introduction, a portrait and CAD transition, three Ongoing projects, eight Completed projects, six scrollable experience and leadership entries, tools, Mika’s Life, and contact. Dates and statuses follow the résumé. Vayu Aerospace has its own internship case study linked from experience. Extra CAD views stay inside their project pages.
+The homepage retains the supplied [Neha Yadav flow reference](https://nehayadav.framer.website/) with a direct engineering introduction, a portrait and CAD transition, three Ongoing projects, eight Completed projects, six scrollable experience and leadership entries, tools, Mika’s Life, and contact. Compact project headers place the date, title, rounded tags, description, and right-facing arrow above the image, as in the supplied screenshots. Hovering any project shows an “Understand more” cursor pill. Dates and statuses follow the résumé. Vayu Aerospace has its own internship case study linked from experience. Extra CAD views stay inside their project pages.
 
 Completed projects and experience share a measured desktop scroll rail: normal vertical scrolling moves the cards horizontally, then releases after the last item. Native swipe and snap work on phones, short desktop viewports, and with reduced motion. Both rails offer accessible 44-pixel previous/next buttons. The experience section uses a mechanic’s toolbox instead of the folder asset. The mobile header stays in two rows during scrolling. See [design notes](docs/design.md).
 

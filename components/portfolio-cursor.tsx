@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 export function PortfolioCursor() {
   const cursor = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -23,7 +23,15 @@ export function PortfolioCursor() {
         : target?.closest('a, button')
           ? 'link'
           : 'dot';
-      element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      const isProject = element.dataset.kind === 'project';
+      const insetX = isProject ? 112 : 20;
+      const insetY = isProject ? 40 : 20;
+      const drawX = Math.max(
+        insetX,
+        Math.min(document.documentElement.clientWidth - insetX, x),
+      );
+      const drawY = Math.max(insetY, Math.min(window.innerHeight - insetY, y));
+      element.style.transform = `translate3d(${drawX}px, ${drawY}px, 0)`;
       element.dataset.visible = String(
         visible && enabled() && Boolean(target?.closest('.flow-home')),
       );
@@ -83,7 +91,7 @@ export function PortfolioCursor() {
   return (
     <div ref={cursor} className="portfolio-cursor" aria-hidden="true">
       <span>
-        View <ArrowUpRight className="link-arrow" />
+        Understand more <ArrowRight className="link-arrow" />
       </span>
     </div>
   );
