@@ -25,13 +25,16 @@ export default function RootLayout({
           Skip to content
         </a>
         <header className="site-header shell">
+          <Link href="/#top" className="header-name">
+            Mithul Sourav
+          </Link>
           <nav aria-label="Main navigation">
-            <Link href="/">Home</Link>
+            <Link href="/#top">Home</Link>
             <Link href="/#work">Projects</Link>
             <Link href="/about">About</Link>
             <Link href="/blog">Journal</Link>
             <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-              Résumé
+              Résumé <span aria-hidden="true">↗</span>
             </a>
           </nav>
         </header>
@@ -44,6 +47,13 @@ export default function RootLayout({
             <p>Mechanical engineering & robotics · NITK Surathkal</p>
           </div>
           <div className="footer-links">
+            <a
+              href="https://github.com/psmithul"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub
+            </a>
             <a href="mailto:psmithul@gmail.com">Email</a>
             <a
               href="https://www.linkedin.com/in/psmithulsourav"

@@ -1,17 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Temporary passive mechanisms subject illustration">
-    <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#172713" stroke-opacity=".045"/></pattern></defs>
-    <rect width="1200" height="800" fill="#fefef9"/><rect width="1200" height="800" fill="url(#grid)"/>
-    <text x="56" y="59" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="#172713" opacity=".65">PASSIVE MECHANISMS</text>
-    <g stroke="#172713" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(320 40)">
-      <rect x="80" y="65" width="210" height="55" rx="12" fill="#96bfe6" /><rect x="208" y="470" width="210" height="55" rx="12" fill="#96bfe6" />
+    <g stroke="#24231f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(320 40)">
+      <rect x="80" y="65" width="210" height="55" rx="12" fill="#8296a5" /><rect x="208" y="470" width="210" height="55" rx="12" fill="#8296a5" />
       <path d="M135 120L195 285L300 475M235 120L275 285L365 475" fill="none" stroke-width="18"/>
-      <path d="M195 285L275 285L365 475L300 475Z" fill="#f5f5b8"/>
-      <circle cx="236" cy="285" r="53" fill="white" /><circle cx="236" cy="285" r="14" fill="#f5f5b8" /><circle cx="236" cy="285" r="4" fill="#172713" /><path d="M390 200v12l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125v12" fill="none" stroke-width="4"/>
+      <path d="M195 285L275 285L365 475L300 475Z" fill="#ddd7cb"/>
+      <circle cx="236" cy="285" r="53" fill="white" /><circle cx="236" cy="285" r="14" fill="#ddd7cb" /><circle cx="236" cy="285" r="4" fill="#24231f" /><path d="M390 200v12l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125l25 12.8125l-25 12.8125v12" fill="none" stroke-width="4"/>
       <path d="M415 200L230 150M415 428L365 475" fill="none" stroke-width="4"/>
       <path d="M60 270C20 390 80 515 175 550" fill="none" stroke-dasharray="8 9" opacity=".4"/>
       <path d="M168 525L175 550L150 548" fill="none" opacity=".4"/>
     </g></g>
-    <path d="M56 718H1144" stroke="#172713" stroke-opacity=".15"/>
-    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#172713" opacity=".6">PROJECT ILLUSTRATION</text>
-    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#172713" opacity=".6">M / 04</text>
+    <path d="M56 718H1144" stroke="#24231f" stroke-opacity=".15"/>
+    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#24231f" opacity=".6">PROJECT ILLUSTRATION</text>
+    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#24231f" opacity=".6">M / 05</text>
   </svg>

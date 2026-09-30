@@ -6,6 +6,23 @@ import { notFound } from 'next/navigation';
 import { projects } from '@/content/projects';
 
 type Props = { params: Promise<{ slug: string }> };
+const studyViews: Record<
+  string,
+  { src: string; title: string; caption: string }
+> = {
+  'tensegrity-joint': {
+    src: '/images/projects/tensegrity-leg-cad.webp',
+    title: 'The joint in context',
+    caption:
+      'Full leg assembly from the paper-based CAD reconstruction. This is a mechanism study, not a photograph of built hardware.',
+  },
+  'reaction-wheel-microvibrations': {
+    src: '/images/projects/reaction-wheel-cutaway.webp',
+    title: 'Inside the reference assembly',
+    caption:
+      'Section view of the reaction-wheel reference assembly, showing the wheel and surrounding structure. Surface finishes are illustrative.',
+  },
+};
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = projects.find((p) => p.slug === slug);
@@ -98,6 +115,22 @@ export default async function ProjectPage({ params }: Props) {
           <p className="large-body">{project.role}</p>
         </div>
       </section>
+      {studyViews[slug] && (
+        <section className="project-study-gallery shell">
+          <p className="eyebrow">A closer look / CAD study</p>
+          <h2>{studyViews[slug].title}</h2>
+          <figure>
+            <Image
+              src={studyViews[slug].src}
+              alt={studyViews[slug].caption}
+              width={1200}
+              height={1200}
+              unoptimized
+            />
+            <figcaption>{studyViews[slug].caption}</figcaption>
+          </figure>
+        </section>
+      )}
       <section className="about-section shell">
         <div className="section-label">
           <p className="eyebrow">02 / APPROACH</p>

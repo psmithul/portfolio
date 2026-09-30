@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Temporary kinematics subject illustration">
-    <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#172713" stroke-opacity=".045"/></pattern></defs>
-    <rect width="1200" height="800" fill="#fefef9"/><rect width="1200" height="800" fill="url(#grid)"/>
-    <text x="56" y="59" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="#172713" opacity=".65">KINEMATICS</text>
-    <g stroke="#172713" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(175 40)">
-      <path d="M540 75H755V560H540Z" fill="#96bfe6"/><path d="M540 75L470 125V600L540 560Z" fill="#f5f5b8"/>
+    <g stroke="#24231f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(175 40)">
+      <path d="M540 75H755V560H540Z" fill="#c45a3d"/><path d="M540 75L470 125V600L540 560Z" fill="#ddd7cb"/>
       <path d="M190 475H645" stroke-width="12" stroke-linecap="round"/>
-      <path d="M190 475L310 245L575 185L645 475" fill="none" stroke="#b08699" stroke-width="22" stroke-linejoin="round"/>
-      <circle cx="190" cy="475" r="14" fill="#f5f5b8" /><circle cx="190" cy="475" r="4" fill="#172713" /><circle cx="310" cy="245" r="14" fill="#f5f5b8" /><circle cx="310" cy="245" r="4" fill="#172713" /><circle cx="575" cy="185" r="14" fill="#f5f5b8" /><circle cx="575" cy="185" r="4" fill="#172713" /><circle cx="645" cy="475" r="14" fill="#f5f5b8" /><circle cx="645" cy="475" r="4" fill="#172713" />
+      <path d="M190 475L310 245L575 185L645 475" fill="none" stroke="#c9c6bb" stroke-width="22" stroke-linejoin="round"/>
+      <circle cx="190" cy="475" r="14" fill="#ddd7cb" /><circle cx="190" cy="475" r="4" fill="#24231f" /><circle cx="310" cy="245" r="14" fill="#ddd7cb" /><circle cx="310" cy="245" r="4" fill="#24231f" /><circle cx="575" cy="185" r="14" fill="#ddd7cb" /><circle cx="575" cy="185" r="4" fill="#24231f" /><circle cx="645" cy="475" r="14" fill="#ddd7cb" /><circle cx="645" cy="475" r="4" fill="#24231f" />
       <path d="M180 330A150 150 0 0 1 320 120M575 120A350 350 0 0 1 800 350" fill="none" stroke-dasharray="8 8" opacity=".35"/>
-      <circle cx="720" cy="350" r="9" fill="#172713" />
+      <circle cx="720" cy="350" r="9" fill="#24231f" />
     </g></g>
-    <path d="M56 718H1144" stroke="#172713" stroke-opacity=".15"/>
-    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#172713" opacity=".6">PROJECT ILLUSTRATION</text>
-    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#172713" opacity=".6">M / 06</text>
+    <path d="M56 718H1144" stroke="#24231f" stroke-opacity=".15"/>
+    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#24231f" opacity=".6">PROJECT ILLUSTRATION</text>
+    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#24231f" opacity=".6">M / 07</text>
   </svg>

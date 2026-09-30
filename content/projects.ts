@@ -44,6 +44,51 @@ const illustration = (slug: string, subject: string): Project['image'] => ({
 });
 export const projects: Project[] = [
   {
+    slug: 'uav-vibration-integration',
+    number: '12',
+    title: 'UAV vibration & hardware integration',
+    shortTitle: 'Flight-controller mounting & vibration isolation',
+    discipline: 'UAV hardware',
+    period: 'Jun — Jul 2026',
+    status: 'Completed',
+    context: 'Product internship · Vayu Aerospace, Bengaluru',
+    model: 'electronics',
+    visualLabel: 'FLIGHT CONTROLLER / MOUNTING STUDY',
+    image: illustration(
+      'uav-vibration-integration',
+      'a flight-controller mounting concept',
+    ),
+    tools: ['ANSYS Mechanical', 'MATLAB', 'IMU log analysis'],
+    summary:
+      'Compared flight-controller mounts, supported ground motor-run testing, and used IMU logs to evaluate vibration isolation.',
+    question:
+      'Which mounting arrangement keeps motor vibration away from the flight controller?',
+    role: 'As a Product Intern at Vayu Aerospace, I compared three company-proposed mounts and supported manufacturing, subsystem integration, and ground motor-run tests.',
+    approach: [
+      {
+        title: 'Compare three mounts',
+        body: 'Evaluate a rigid baseline, an elastomer-isolated modular tray, and a suspended mount. Use ANSYS modal and response analysis to shortlist two isolation concepts for hardware evaluation.',
+      },
+      {
+        title: 'Support the hardware evaluation',
+        body: 'Work alongside the team on manufacturing, integration, and ground motor-run testing of the mounting arrangements.',
+      },
+      {
+        title: 'Compare the IMU logs',
+        body: 'Use MATLAB to compare consistent operating windows, RMS vibration, and frequency spectra. Contribute to the selection of the elastomer-isolated modular tray.',
+      },
+    ],
+    outcome:
+      'The team selected the elastomer-isolated modular tray after simulation and hardware evaluation. My contribution covered mount comparison, test support, and IMU analysis.',
+    scope:
+      'Internship work on company hardware. The cover is a subject illustration; company photographs and measured plots are not reproduced here.',
+    evidence: [
+      'Three mounting arrangements compared',
+      'Two isolation concepts shortlisted for hardware evaluation',
+      'MATLAB RMS and FFT analysis of IMU logs',
+    ],
+  },
+  {
     slug: 'adaptive-suspension-rover',
     number: '01',
     title: 'Adaptive suspension rover',

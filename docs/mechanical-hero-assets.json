@@ -1,0 +1,158 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "path": "/Users/mika/Documents/Codex/asset-deliveries/mechanical-hero-2026-09-30-01a0f1bc/precision-ball-bearing.png",
+      "source_path": "/Users/mika/.codex/generated_images/01a0f1bc-69a7-7d02-9647-165b4977ea63/exec-c400d2ce-9355-4ddb-9fc7-654f57369d59.png",
+      "dimensions": [1254, 1254],
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "fully_transparent_pixels": 805757,
+      "partially_transparent_pixels": 766170,
+      "fully_opaque_pixels": 589,
+      "transparent_percentage": 51.24,
+      "alpha_bbox": [103, 90, 1126, 1182],
+      "outer_edge_nonzero_alpha_pixels": 0,
+      "all_four_corners_transparent": true,
+      "sha256": "60fd89f88db90755e4992c13d214bef0377e1f1cd71685f099e79b19e59ccd39",
+      "copy_matches_source": true,
+      "prompt": "Use case: product-mockup\nAsset type: an independent transparent decorative bitmap cutout for an engineering portfolio hero\nScene/backdrop: genuinely transparent alpha background; no backdrop or floor plane. Preserve clean transparency through holes and between separated parts of the subject.\nStyle/medium: tactile, realistic industrial catalogue product photography, refined and physically plausible.\nComposition/framing: exactly one subject, centred and fully visible in a square canvas, generous clear margin, slight three-quarter product-photography angle.\nLighting/mood: soft studio lighting, natural material highlights, a subtle soft natural contact shadow only, with the shadow remaining translucent.\nColor palette: natural steel, aluminium, black rubber and muted brass as appropriate. This cutout will float around editorial type on warm ivory #F4F0E6, muted indigo #334E68 and restrained vermilion #C45A3D; do not paint a background with those colours.\nConstraints: generic decorative mechanical component, no claimed connection to any person's project or prototype. No text, labels, logos, watermarks, backdrop, grid, additional objects, neon, glossy chrome sci-fi styling, excessive reflections, or cropped edges.\nPrimary request: one precision ball bearing with brushed steel inner and outer rings and a clearly visible open ball race.\nSubject/materials: an unsealed precision radial ball bearing; distinct polished steel balls visible around the inner race, brushed machined steel rings with fine circular tooling texture, an open centre bore. Clear realistic ring and ball geometry.",
+      "visible_alpha_above_32_bbox": [159, 95, 1122, 1138],
+      "dominant_nonzero_alpha": [
+        {
+          "value": 253,
+          "pixel_count": 663213
+        },
+        {
+          "value": 252,
+          "pixel_count": 69418
+        },
+        {
+          "value": 251,
+          "pixel_count": 5733
+        },
+        {
+          "value": 1,
+          "pixel_count": 5447
+        }
+      ],
+      "visual_inspection": "Visually verified: full bearing, brushed rings, distinct visible steel balls and brass cage, transparent centre bore, no text or extra objects.",
+      "website_path": "/images/mechanical/precision-ball-bearing.webp"
+    },
+    {
+      "path": "/Users/mika/Documents/Codex/asset-deliveries/mechanical-hero-2026-09-30-01a0f1bc/steel-compression-spring.png",
+      "source_path": "/Users/mika/.codex/generated_images/01a0f1bc-69a7-7d02-9647-165b4977ea63/exec-9fa7520b-00f3-47d6-bc7d-e67d4dc075f8.png",
+      "dimensions": [1254, 1254],
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "fully_transparent_pixels": 1019822,
+      "partially_transparent_pixels": 551501,
+      "fully_opaque_pixels": 1193,
+      "transparent_percentage": 64.85,
+      "alpha_bbox": [0, 19, 1224, 1254],
+      "outer_edge_nonzero_alpha_pixels": 11,
+      "all_four_corners_transparent": true,
+      "sha256": "d02fe0e75beab3685b9f845ebf7d31738fc407f6838c0faa47efd7d2b92e4c00",
+      "copy_matches_source": true,
+      "prompt": "Use case: product-mockup\nAsset type: an independent transparent decorative bitmap cutout for an engineering portfolio hero\nScene/backdrop: genuinely transparent alpha background; no backdrop or floor plane. Preserve clean transparency through holes and between separated parts of the subject.\nStyle/medium: tactile, realistic industrial catalogue product photography, refined and physically plausible.\nComposition/framing: exactly one subject, centred and fully visible in a square canvas, generous clear margin, slight three-quarter product-photography angle.\nLighting/mood: soft studio lighting, natural material highlights, a subtle soft natural contact shadow only, with the shadow remaining translucent.\nColor palette: natural steel, aluminium, black rubber and muted brass as appropriate. This cutout will float around editorial type on warm ivory #F4F0E6, muted indigo #334E68 and restrained vermilion #C45A3D; do not paint a background with those colours.\nConstraints: generic decorative mechanical component, no claimed connection to any person's project or prototype. No text, labels, logos, watermarks, backdrop, grid, additional objects, neon, glossy chrome sci-fi styling, excessive reflections, or cropped edges.\nPrimary request: one short steel compression suspension spring with a dark satin finish.\nSubject/materials: a compact cylindrical helical compression spring, short and sturdy proportions, dark satin steel, evenly spaced thick coils, realistic ground end coils. Show the hollow centre and the gaps between coils with transparent background.",
+      "visible_alpha_above_32_bbox": [305, 138, 977, 1137],
+      "dominant_nonzero_alpha": [
+        {
+          "value": 253,
+          "pixel_count": 403451
+        },
+        {
+          "value": 252,
+          "pixel_count": 79122
+        },
+        {
+          "value": 251,
+          "pixel_count": 14390
+        },
+        {
+          "value": 1,
+          "pixel_count": 12062
+        }
+      ],
+      "visual_inspection": "Visually verified: compact dark satin steel spring, full coils and transparent gaps, no text or extra objects. Eleven canvas-edge pixels have alpha 1; visible subject is comfortably inset.",
+      "website_path": "/images/mechanical/steel-compression-spring.webp"
+    },
+    {
+      "path": "/Users/mika/Documents/Codex/asset-deliveries/mechanical-hero-2026-09-30-01a0f1bc/rover-wheel.png",
+      "source_path": "/Users/mika/.codex/generated_images/01a0f1bc-69a7-7d02-9647-165b4977ea63/exec-5e518154-510e-4c5c-a289-6a53a3690225.png",
+      "dimensions": [1254, 1254],
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "fully_transparent_pixels": 622692,
+      "partially_transparent_pixels": 949109,
+      "fully_opaque_pixels": 715,
+      "transparent_percentage": 39.6,
+      "alpha_bbox": [110, 19, 1174, 1190],
+      "outer_edge_nonzero_alpha_pixels": 0,
+      "all_four_corners_transparent": true,
+      "sha256": "849ee35188c5a0fafb7b58967d3908d8b53a74e283899123d6aa132e4c91ee80",
+      "copy_matches_source": true,
+      "prompt": "Use case: product-mockup\nAsset type: an independent transparent decorative bitmap cutout for an engineering portfolio hero\nScene/backdrop: genuinely transparent alpha background; no backdrop or floor plane. Preserve clean transparency through holes and between separated parts of the subject.\nStyle/medium: tactile, realistic industrial catalogue product photography, refined and physically plausible.\nComposition/framing: exactly one subject, centred and fully visible in a square canvas, generous clear margin, slight three-quarter product-photography angle.\nLighting/mood: soft studio lighting, natural material highlights, a subtle soft natural contact shadow only, with the shadow remaining translucent.\nColor palette: natural steel, aluminium, black rubber and muted brass as appropriate. This cutout will float around editorial type on warm ivory #F4F0E6, muted indigo #334E68 and restrained vermilion #C45A3D; do not paint a background with those colours.\nConstraints: generic decorative mechanical component, no claimed connection to any person's project or prototype. No text, labels, logos, watermarks, backdrop, grid, additional objects, neon, glossy chrome sci-fi styling, excessive reflections, or cropped edges.\nPrimary request: one small rover wheel with real black rubber tread and a muted brass and aluminium hub.\nSubject/materials: a single compact rover-style wheel, solid realistic black rubber tyre with clearly defined practical off-road tread blocks, muted brass inner hub with machined aluminium details, small mechanical fasteners, no axle or chassis. Subtle natural rubber texture and restrained metallic highlights.",
+      "visible_alpha_above_32_bbox": [114, 80, 1170, 1187],
+      "dominant_nonzero_alpha": [
+        {
+          "value": 253,
+          "pixel_count": 783985
+        },
+        {
+          "value": 252,
+          "pixel_count": 129326
+        },
+        {
+          "value": 251,
+          "pixel_count": 8474
+        },
+        {
+          "value": 1,
+          "pixel_count": 4173
+        }
+      ],
+      "visual_inspection": "Visually verified: one full wheel with black rubber tread and muted brass/aluminium hub, no text or extra objects.",
+      "website_path": "/images/mechanical/rover-wheel.webp"
+    },
+    {
+      "path": "/Users/mika/Documents/Codex/asset-deliveries/mechanical-hero-2026-09-30-01a0f1bc/compact-universal-joint.png",
+      "source_path": "/Users/mika/.codex/generated_images/01a0f1bc-69a7-7d02-9647-165b4977ea63/exec-6ef8f76d-1f09-45ed-aeee-5be0144a7173.png",
+      "dimensions": [1254, 1254],
+      "mode": "RGBA",
+      "alpha_extrema": [0, 255],
+      "fully_transparent_pixels": 966020,
+      "partially_transparent_pixels": 605966,
+      "fully_opaque_pixels": 530,
+      "transparent_percentage": 61.43,
+      "alpha_bbox": [21, 53, 1238, 1214],
+      "outer_edge_nonzero_alpha_pixels": 0,
+      "all_four_corners_transparent": true,
+      "sha256": "c0d2d4e4302766218fb6d0a05a102737a7b63ca9d616e0ae1fbc74b758584335",
+      "copy_matches_source": true,
+      "prompt": "Use case: product-mockup\nAsset type: an independent transparent decorative bitmap cutout for an engineering portfolio hero\nScene/backdrop: genuinely transparent alpha background; no backdrop or floor plane. Preserve clean transparency through holes and between separated parts of the subject.\nStyle/medium: tactile, realistic industrial catalogue product photography, refined and physically plausible.\nComposition/framing: exactly one subject, centred and fully visible in a square canvas, generous clear margin, slight three-quarter product-photography angle.\nLighting/mood: soft studio lighting, natural material highlights, a subtle soft natural contact shadow only, with the shadow remaining translucent.\nColor palette: natural steel, aluminium, black rubber and muted brass as appropriate. This cutout will float around editorial type on warm ivory #F4F0E6, muted indigo #334E68 and restrained vermilion #C45A3D; do not paint a background with those colours.\nConstraints: generic decorative mechanical component, no claimed connection to any person's project or prototype. No text, labels, logos, watermarks, backdrop, grid, additional objects, neon, glossy chrome sci-fi styling, excessive reflections, or cropped edges.\nPrimary request: one compact universal joint in machined aluminium with a satin black centre.\nSubject/materials: a single small mechanically plausible universal joint, two machined aluminium fork yokes meeting around a compact satin black cross centre, visible circular bearing caps, fine tooling marks and softly chamfered edges. A compact intact component with fully visible geometry.",
+      "visible_alpha_above_32_bbox": [26, 242, 1233, 1023],
+      "dominant_nonzero_alpha": [
+        {
+          "value": 253,
+          "pixel_count": 529520
+        },
+        {
+          "value": 252,
+          "pixel_count": 45508
+        },
+        {
+          "value": 251,
+          "pixel_count": 5937
+        },
+        {
+          "value": 254,
+          "pixel_count": 4023
+        }
+      ],
+      "visual_inspection": "Visually verified: full aluminium universal joint with black cross centre, no text or extra objects.",
+      "website_path": "/images/mechanical/compact-universal-joint.webp"
+    }
+  ],
+  "verification_note": "Exactly four independent built-in image_gen requests ran as one parallel batch. No variants, retries, raster edits, or Site file edits. Original images preserved; saved copies are byte-identical. All files contain real alpha; subject interiors are predominantly alpha 253."
+}
