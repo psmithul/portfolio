@@ -6,105 +6,127 @@ import {
   Braces,
   ChartSpline,
   Cpu,
-  FileCode2,
+  GitBranch,
 } from 'lucide-react';
 import { PortraitStory } from '@/components/portrait-story';
 import { MotionDirector } from '@/components/motion-director';
+import { PortfolioCursor } from '@/components/portfolio-cursor';
+import { SideQuests } from '@/components/side-quests';
 import { projects } from '@/content/projects';
 import { getPublicPosts } from '@/lib/journal-store';
 
 export const dynamic = 'force-dynamic';
-
 const featuredOrder = [
-  'tensegrity-joint',
-  'reaction-wheel-microvibrations',
   'adaptive-suspension-rover',
+  'reaction-wheel-microvibrations',
+  'tensegrity-joint',
+  'uav-vibration-integration',
 ];
-const featured = featuredOrder.flatMap((slug) =>
-  projects.filter((project) => project.slug === slug),
+const featured = featuredOrder.map((slug) =>
+  projects.find((project) => project.slug === slug)!,
 );
-const otherBuilds = projects.filter(
-  (project) =>
-    !featuredOrder.includes(project.slug) && project.slug !== 'kneeassist',
+const sideOrder = [
+  'four-bar-door-mechanism',
+  'easy-access-wallet',
+  'kneeassist',
+  'uncertainty-aware-navigation',
+  'neoleg-knee-mechanism',
+  'off-road-leaf-robot',
+  'solar-smart-home',
+  'traffic-and-elevated-bus',
+];
+const sideProjects = sideOrder.map((slug) =>
+  projects.find((project) => project.slug === slug)!,
 );
-const kneeAssist = projects.find((project) => project.slug === 'kneeassist')!;
-const coverDetails: Record<
+const covers: Record<
   string,
-  { label: string; src: string; alt: string }
+  { title: string[]; note: string; tags: string[]; focus: string[] }
 > = {
-  'tensegrity-joint': {
-    label: 'CAD & member-force study',
-    src: '/images/projects/tensegrity-leg-cad.webp',
-    alt: 'Full leg assembly from the paper-based tensegrity CAD reconstruction',
+  'adaptive-suspension-rover': {
+    title: ['Adaptive suspension', 'for rough terrain'],
+    note: 'Design in progress / 2026',
+    tags: ['Field robotics', 'Suspension', 'Vibrations'],
+    focus: [
+      'Three stiffness settings',
+      'IMU + encoder feedback',
+      'Terrain tests planned',
+    ],
   },
   'reaction-wheel-microvibrations': {
-    label: 'CAD & structural dynamics',
-    src: '/images/projects/reaction-wheel-cutaway.webp',
-    alt: 'Section view of the reaction-wheel reference CAD assembly',
+    title: ['Reaction-wheel', 'microvibrations'],
+    note: 'FEM + machine learning / 2026',
+    tags: ['Space systems', 'Structural dynamics', 'FEM'],
+    focus: [
+      'Response peak ≈ 5,800 rpm',
+      'Mesh refinement: 0.33% change',
+      '24-design parameter sweep',
+    ],
+  },
+  'tensegrity-joint': {
+    title: ['Tensegrity', 'variable-stiffness joint'],
+    note: 'Mechanism modelling / 2026',
+    tags: ['Robotics', 'Mechanisms', 'Tensegrity'],
+    focus: [
+      'Member-force calculations',
+      'Geometry + load comparisons',
+      'Paper-based CAD reconstruction',
+    ],
+  },
+  'uav-vibration-integration': {
+    title: ['UAV vibration &', 'hardware integration'],
+    note: 'Vayu Aerospace / 2026',
+    tags: ['UAV hardware', 'IMU', 'Vibration isolation'],
+    focus: [
+      'Three mounts compared',
+      'Ground motor-run testing',
+      'RMS + frequency analysis',
+    ],
   },
 };
-const visualStudies = [
-  {
-    src: '/images/projects/tensegrity-joint-cad.webp',
-    title: 'Joint & cable routing',
-    caption: 'Mechanism reconstruction from Mortensen et al. (2025).',
-    slug: 'tensegrity-joint',
-  },
-  {
-    src: '/images/projects/reaction-wheel-cutaway.webp',
-    title: 'Reaction-wheel cutaway',
-    caption: 'Section view of the reference assembly.',
-    slug: 'reaction-wheel-microvibrations',
-  },
-  {
-    src: '/images/projects/tensegrity-leg-cad.webp',
-    title: 'Leg assembly',
-    caption: 'CAD reconstruction for the tensegrity study.',
-    slug: 'tensegrity-joint',
-  },
-  {
-    src: '/images/projects/reaction-wheel-reference-cad.webp',
-    title: 'Satellite reference assembly',
-    caption: 'Wheel, structure, and camera mounting arrangement.',
-    slug: 'reaction-wheel-microvibrations',
-  },
-];
 const experience = [
   {
     company: 'Vayu Aerospace',
     role: 'Product Intern',
-    period: 'Jun – Jul 2026',
-    details: [
-      'Compared flight-controller mounts with modal and vibration analysis.',
-      'Supported ground testing and reviewed IMU logs in MATLAB.',
-    ],
+    period: 'Jun — Jul 2026',
+    detail:
+      'Compared flight-controller mounts, supported ground tests, and analysed IMU vibration logs.',
+  },
+  {
+    company: 'ISTE NITK',
+    role: 'Secretary',
+    period: 'Sep 2024 — Present',
+    detail:
+      'Sponsor outreach, budgets, vendors, and event logistics. Three sponsors; a technical event with 500+ participants.',
   },
   {
     company: 'Thinkify Labs',
     role: 'Product & Strategy Intern',
-    period: 'May – Aug 2025',
-    details: [
-      'Built an AI-assisted lead-qualification workflow.',
-      'Improved how qualified prospects reached the sales team.',
-    ],
+    period: 'May — Aug 2025',
+    detail:
+      'Redesigned a lead-qualification workflow so the team could spend more time on the right prospects.',
+  },
+  {
+    company: 'NH66 Fund · P&L Club',
+    role: 'Fund Manager',
+    period: 'Jan 2025 — Apr 2026',
+    detail:
+      'Managed a ₹150K student fund, mentored three junior analysts, and organised recruitment and training.',
   },
   {
     company: 'ILO Consulting',
     role: 'Investment Banking Intern',
-    period: 'May – Jul 2024',
-    details: [
-      'Built financial models for due diligence.',
-      'Contributed to an Ireland market-entry assessment.',
-    ],
+    period: 'May — Jul 2024',
+    detail:
+      'Financial modelling, due diligence, and an Ireland market-entry assessment.',
   },
 ];
 const tools = [
   { name: 'SolidWorks', icon: Box },
-  { name: 'ANSYS Mechanical', icon: Activity },
-  { name: 'MATLAB', icon: ChartSpline },
-  { name: 'Python', icon: FileCode2 },
-  { name: 'C', icon: Braces },
-  { name: 'C++', icon: Cpu },
+  { name: 'ANSYS', icon: Activity },
+  { name: 'MATLAB / Simulink', icon: ChartSpline },
+  { name: 'Python', icon: Braces },
+  { name: 'ESP32 / embedded', icon: Cpu },
+  { name: 'Git / GitHub', icon: GitBranch },
 ];
 
 export default async function Home() {
@@ -112,201 +134,104 @@ export default async function Home() {
   return (
     <main id="main" className="flow-home">
       <MotionDirector />
+      <PortfolioCursor />
       <PortraitStory />
       <section id="work" className="flow-work flow-section shell">
         <div className="flow-section-heading">
-          <h2>Latest projects</h2>
+          <div>
+            <p className="eyebrow">01 — Projects</p>
+            <h2>Selected builds</h2>
+          </div>
           <p>
-            Recent work in mechanical design, robotics, and structural analysis.
+            Mechanisms, vibration, and the questions that keep me at the
+            workbench.
           </p>
         </div>
         <div className="flow-project-list">
-          {featured.map((project) => (
-            <Link
-              href={`/work/${project.slug}`}
-              className={`flow-project-card${project.image ? ' has-project-image' : ''}`}
-              key={project.slug}
-            >
-              {project.image && (
-                <figure
-                  className={`flow-project-image flow-cover-${project.slug}${project.image.kind === 'illustration' ? ' is-illustration' : ''}`}
-                >
+          {featured.map((project, index) => {
+            const cover = covers[project.slug];
+            return (
+              <Link
+                href={`/work/${project.slug}`}
+                className={`flow-project-card flow-cover-${project.slug}`}
+                key={project.slug}
+                data-cursor="project"
+              >
+                <figure className="flow-project-image">
                   <div className="flow-cover-body">
-                    {coverDetails[project.slug] && (
-                      <span className="flow-cover-label">
-                        {coverDetails[project.slug].label}
-                      </span>
-                    )}
-                    <Image
-                      src={project.image.src}
-                      alt={project.image.alt}
-                      width={project.image.width}
-                      height={project.image.height}
-                      className="flow-cover-main"
-                      unoptimized
-                    />
-                    {coverDetails[project.slug] && (
+                    <span className="flow-cover-number">0{index + 1}</span>
+                    <span className="flow-cover-label">{cover.note}</span>
+                    {project.image && (
                       <Image
-                        src={coverDetails[project.slug].src}
-                        alt={coverDetails[project.slug].alt}
-                        width={1200}
-                        height={1200}
-                        className="flow-cover-inset"
+                        src={project.image.src}
+                        alt={project.image.alt}
+                        width={project.image.width}
+                        height={project.image.height}
+                        className="flow-cover-main"
                         unoptimized
                       />
                     )}
-                    <span className="flow-cover-cta">View project</span>
+                    <div className="flow-cover-annotations" aria-hidden="true">
+                      {cover.focus.map((focus) => (
+                        <span key={focus}>{focus}</span>
+                      ))}
+                    </div>
+                    <span className="flow-cover-cta">
+                      View project <span aria-hidden="true">↗</span>
+                    </span>
                   </div>
-                  <figcaption>{project.image.caption}</figcaption>
+                  <figcaption>{project.image?.caption}</figcaption>
                 </figure>
-              )}
-              <div className="flow-project-details">
-                <span className="flow-project-date">
-                  {project.period.match(/\d{4}/)?.[0]}
-                </span>
-                <div className="flow-project-description">
-                  <h3>{project.title}</h3>
-                  <div className="flow-tags">
-                    <span>{project.discipline}</span>
-                    {project.tools.slice(0, 2).map((tool) => (
-                      <span key={tool}>{tool}</span>
-                    ))}
-                    {project.status === 'Ongoing' && <span>In progress</span>}
+                <div className="flow-project-details">
+                  <span className="flow-project-date">2026</span>
+                  <div className="flow-project-description">
+                    <h3>
+                      {cover.title[0]}
+                      <br />
+                      {cover.title[1]}
+                    </h3>
+                    <div className="flow-tags">
+                      {cover.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+                    <p>{project.summary}</p>
                   </div>
-                  <p>{project.summary}</p>
-                  {project.slug === 'reaction-wheel-microvibrations' && (
-                    <div className="flow-project-results">
-                      <div>
-                        <strong>5,800 rpm</strong>
-                        <span>Response peak</span>
-                      </div>
-                      <div>
-                        <strong>0.33%</strong>
-                        <span>Mesh-refinement change</span>
-                      </div>
-                    </div>
-                  )}
-                  {project.slug === 'kneeassist' && (
-                    <div className="flow-project-results">
-                      <div>
-                        <strong>Top 5 / 70</strong>
-                        <span>Incubate X Prosthetic Challenge</span>
-                      </div>
-                    </div>
-                  )}
-                  {!project.image && (
-                    <span className="flow-read-project">View project</span>
-                  )}
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-      <section className="flow-other flow-section shell">
-        <div className="flow-section-heading">
-          <h2>Side projects</h2>
-        </div>
-        <Link href="/work/kneeassist" className="flow-side-project">
-          <figure className="flow-side-illustration">
-            <Image
-              src={kneeAssist.image!.src}
-              alt={kneeAssist.image!.alt}
-              width={1200}
-              height={800}
-              unoptimized
-            />
-            <figcaption>{kneeAssist.image!.caption}</figcaption>
-          </figure>
-          <div className="flow-side-copy">
-            <span className="flow-project-date">2026</span>
-            <h3>KneeAssist</h3>
-            <div className="flow-tags">
-              <span>Assistive mechatronics</span>
-              <span>Team project</span>
-            </div>
-            <p>{kneeAssist.summary}</p>
-            <p className="flow-side-award">
-              Top 5 of 70 · Incubate X Prosthetic Challenge
-            </p>
-            <span className="flow-read-project">View project</span>
-          </div>
-        </Link>
-        <details className="flow-project-archive">
-          <summary>
-            Earlier builds <span>{otherBuilds.length} projects</span>
-          </summary>
-          <div className="flow-other-grid">
-            {otherBuilds.map((project) => (
-              <Link href={`/work/${project.slug}`} key={project.slug}>
-                {project.image && (
-                  <Image
-                    className="flow-archive-image"
-                    src={project.image.src}
-                    alt={project.image.alt}
-                    width={project.image.width}
-                    height={project.image.height}
-                    unoptimized
-                  />
-                )}
-                <span className="flow-project-date">{project.period}</span>
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                <span className="flow-other-discipline">
-                  {project.discipline}
-                </span>
               </Link>
-            ))}
-          </div>
-        </details>
-      </section>
-      <section className="flow-visuals flow-section">
-        <div className="flow-section-heading shell">
-          <h2>From the CAD files</h2>
-        </div>
-        <div className="flow-visual-grid">
-          {visualStudies.map((study) => (
-            <Link href={`/work/${study.slug}`} key={study.src}>
-              <figure>
-                <div className="flow-visual-image">
-                  <Image
-                    src={study.src}
-                    alt={study.title}
-                    width={1200}
-                    height={1200}
-                    unoptimized
-                  />
-                </div>
-                <figcaption>
-                  <strong>{study.title}</strong>
-                  <span>{study.caption}</span>
-                </figcaption>
-              </figure>
-            </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
+      <SideQuests projects={sideProjects} />
       <section className="flow-experience flow-section shell">
         <div className="flow-section-heading">
-          <h2>Experience</h2>
+          <div>
+            <p className="eyebrow">03 — People & places</p>
+            <h2>Experience</h2>
+          </div>
+          <p>
+            Work, student teams, and learning to make things happen together.
+          </p>
         </div>
         <div className="flow-experience-board">
-          {experience.map((job) => (
-            <article className="flow-experience-card" key={job.company}>
-              <span className="flow-experience-period">{job.period}</span>
-              <h3>{job.company}</h3>
-              <p className="flow-role">{job.role}</p>
-              <ul>
-                {job.details.map((detail) => (
-                  <li key={detail}>{detail}</li>
-                ))}
-              </ul>
-            </article>
-          ))}
+          <div className="flow-experience-list">
+            {experience.map((job, index) => (
+              <article className="flow-experience-card" key={job.company}>
+                <span className="flow-experience-index">0{index + 1}</span>
+                <div>
+                  <span className="flow-experience-period">{job.period}</span>
+                  <h3>{job.company}</h3>
+                  <p className="flow-role">{job.role}</p>
+                </div>
+                <p className="flow-experience-detail">{job.detail}</p>
+              </article>
+            ))}
+          </div>
           <Link
             href="/about"
             className="flow-work-folder"
-            aria-label="Read my work experience"
+            aria-label="Read more about my background"
           >
             <Image
               src="/images/work-folder.webp"
@@ -315,31 +240,61 @@ export default async function Home() {
               height={800}
               unoptimized
             />
-            <span>Work</span>
+            <span>
+              Work, in a little more detail <span aria-hidden="true">↗</span>
+            </span>
           </Link>
         </div>
-        <Link href="/about" className="flow-text-link">
-          More about my background
-        </Link>
       </section>
       <section className="flow-tools flow-section shell">
         <div className="flow-section-heading">
-          <h2>Tools</h2>
+          <div>
+            <p className="eyebrow">04 — On the desk</p>
+            <h2>Tools</h2>
+          </div>
+          <p>
+            Things I use to turn an idea into a model, a mechanism, or a useful
+            test.
+          </p>
         </div>
         <ul>
           {tools.map(({ name, icon: Icon }) => (
             <li key={name}>
-              <Icon size={42} strokeWidth={1.4} aria-hidden="true" />
+              <Icon size={44} strokeWidth={1.25} aria-hidden="true" />
               <span>{name}</span>
             </li>
           ))}
         </ul>
+        <p className="flow-instrumentation">
+          IMU <span>·</span> Multimeter <span>·</span> Vernier caliper{' '}
+          <span>·</span> Data acquisition <span>·</span> Prototyping{' '}
+          <span>·</span> Experimental testing
+        </p>
+      </section>
+      <section className="flow-philosophy shell">
+        <p className="eyebrow">A working principle</p>
+        <h2>
+          I like machines
+          <br />
+          that have to work
+          <br />
+          <span>outside the simulation.</span>
+        </h2>
+        <p>
+          My interests sit where mechanics, sensing, control, and
+          experimentation meet. I care about understanding the physics,
+          predicting what should happen, and checking whether I was right.
+        </p>
       </section>
       <section className="flow-journal flow-section shell">
         <div className="flow-section-heading">
-          <h2>Mika’s Life</h2>
+          <div>
+            <p className="eyebrow">05 — Notes along the way</p>
+            <h2>Mika’s Life</h2>
+          </div>
           <p>
-            A notebook for what I’m reading, noticing, and trying to understand.
+            What I’m reading, noticing, and trying to understand outside the
+            project files.
           </p>
         </div>
         <div className="flow-journal-entries">
@@ -350,27 +305,43 @@ export default async function Home() {
               </span>
               <h3>{post.title}</h3>
               <p>{post.description}</p>
+              <span className="flow-journal-arrow" aria-hidden="true">
+                ↗
+              </span>
             </Link>
           ))}
         </div>
         <Link href="/blog" className="flow-text-link">
-          Read the journal
+          Read the journal <span aria-hidden="true">↗</span>
         </Link>
       </section>
-      <section className="flow-contact flow-section shell">
+      <section className="flow-contact shell">
+        <p className="eyebrow">A good question is a good place to start.</p>
         <h2>
-          Have a project
+          Let’s build
           <br />
-          <span>in mind?</span>
+          <span>something real.</span>
         </h2>
         <div>
-          <a href="mailto:psmithul@gmail.com">psmithul@gmail.com</a>
           <a
             href="https://www.linkedin.com/in/psmithulsourav"
             target="_blank"
             rel="noreferrer"
           >
-            LinkedIn
+            LinkedIn <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            href="https://github.com/psmithul"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+          <a href="mailto:psmithul@gmail.com">
+            Email <span aria-hidden="true">↗</span>
+          </a>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+            Résumé <span aria-hidden="true">↗</span>
           </a>
         </div>
       </section>

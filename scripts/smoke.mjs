@@ -28,6 +28,12 @@ const cases = [
   ['/work/uncertainty-aware-navigation', 200, 'Monte Carlo', 'Uncertainty'],
   ['/work/reaction-wheel-microvibrations', 200, '0.33%', 'microvibration'],
   [
+    '/work/uav-vibration-integration',
+    200,
+    'elastomer-isolated modular tray',
+    'Flight-controller',
+  ],
+  [
     '/work/neoleg-knee-mechanism',
     200,
     'Spring-position comparisons',

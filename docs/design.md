@@ -1,32 +1,35 @@
 # Portfolio design notes
 
-## Palette
+## Current brief
 
-Source: Sanzo Wada, A Dictionary of Color Combinations, combination 321, verified at https://sanzo-wada.dmbk.io/combination/321 and against the supplied palette PDF. The website collection supplies the screen HEX values.
+The 30 September reference recording and the accompanying personal brief define the current direction: warm paper, industrial materials, large editorial type, four tactile mechanical cutouts, and motion that follows normal scrolling. The previous exact Wada combination 321 is superseded by the explicit muted palette in that brief. This is a Wada-inspired harmony, not a claim that these HEX values reproduce a numbered combination from the book.
 
-| Swatch           | HEX     | Use                                       |
-| ---------------- | ------- | ----------------------------------------- |
-| Deep Slate Olive | #172713 | Main text, buttons, structure             |
-| Sulpher Yellow   | #f5f5b8 | Pale reading surfaces and button text     |
-| Salvia Blue      | #96bfe6 | Quiet status surfaces and reading accents |
-| Light Brown Drab | #b08699 | Large hero emphasis                       |
+| Role                     | Colour        | HEX     |
+| ------------------------ | ------------- | ------- |
+| Main background          | Warm ivory    | #F4F0E6 |
+| Secondary surface        | Paper         | #E9E3D7 |
+| Text                     | Sumi charcoal | #24231F |
+| Secondary text           | Warm grey     | #5E5A52 |
+| Main accent              | Muted indigo  | #334E68 |
+| Rover / small accents    | Ochre         | #C59A4A |
+| Mechanism study          | Celadon       | #98A886 |
+| UAV study                | Dusty blue    | #8296A5 |
+| Small typographic accent | Vermilion     | #C45A3D |
 
-Body text uses olive or an accessible olive/white mixture. Small accents use a darker olive/drab mixture. Exact dusty rose is reserved for large type and surfaces: it has 3.13:1 contrast on white, while olive on the dusty rose surface has 5.03:1. Olive on yellow has 13.95:1 and on blue 8.15:1. White tints are explicit CSS color mixtures of the selected swatches, not additional unrelated hues.
+Body copy uses charcoal and warm grey. Accent colours are confined to large type, decorative objects, and individual project surfaces. Tanker and Space Grotesk retain the reference's typographic rhythm; Fraunces remains in the journal.
 
-## Portrait
+## Opening and imagery
 
-The opening uses two supplied portraits in an overlapping composition. The main subject is `public/images/mithul-cutout.webp`, edited from the courtyard photograph with its background removed. The secondary café image is a WebP encoding of the supplied PNG, with no face generation or retouching. Preserve the cutout's alpha channel. The short lower-edge fade avoids an abrupt clothing crop. See `docs/assets.md` for provenance.
+The main portrait remains the supplied courtyard photograph with its background removed. It is not a generated face, scanned model, or rigged avatar. A paper-based tensegrity CAD study replaces the second portrait. The two move at slightly different rates. Four transparent mechanical components frame the headline with pointer movement bounded to six pixels in either direction. They are generic decorative assets, never project evidence. Exact generation prompts and file paths are in `mechanical-hero-assets.json`; asset provenance is in `assets.md`.
 
-This is a photographic portrait with layered spatial motion, not a photogrammetric mesh or a rigged avatar.
+Selected builds use one dominant image per cover. Extra CAD views are placed in their relevant case studies, addressing the user's correction about the redundant homepage CAD gallery. Project illustrations have transparent backgrounds, a restrained accent, and clear illustration labels. No invented plots, test results, lab photographs, or prototype images are shown.
 
-## Motion
+## Scroll and cursor
 
-The opening follows native scrolling: a centered two-level headline, overlapping portraits moving at different rates, and a centered introduction. Work-history cards fan above a 3D folder as the section enters the viewport. Updates run on a scheduled animation frame only after scrolling or resizing. Reduced-motion preferences remove movement; content remains readable without JavaScript. The page does not intercept wheel events or pin the reader in a scene.
+Four selected projects are followed by eight side quests. Desktop's side-quest rail uses a sticky viewport and measured travel distance. Ordinary vertical page scrolling translates the rail horizontally. No wheel events are prevented. The final card reaches the starting inset, then the section releases into experience. Keyboard focus scrolls the corresponding card into view. Touch layouts use native horizontal scrolling and snap, with approximately 85 percent of a card visible on phones.
 
-The page follows the supplied https://nehayadav.framer.website/ composition: quiet right-aligned navigation, a centered opening, a portrait transition and introduction, three project stories, one side-project feature, a wide visual gallery, work history, tool cards, and a large contact ending. Mika’s Life remains before contact. Earlier projects sit in a native disclosure under the side-project feature. Text sits under the main project images, with a narrow year column and compact tags. Tanker and Space Grotesk are the reference's actual typefaces; licensed copies are hosted locally. The light Wada palette and personal content are retained.
+Reduced motion disables the pinned rail, custom cursor, parallax, and reveals. Content remains readable without JavaScript through the native carousel fallback. The custom cursor is limited to fine pointers on the homepage and disappears on keyboard use, forms, pointer exit, and other routes.
 
-The tensegrity and reaction-wheel projects use existing, verified CAD screenshots or renders with captions identifying their scope. At the user’s request, the other nine projects now use temporary subject illustrations made from the Wada palette. They are marked as project illustrations in the visual and caption, rather than presented as actual CAD or hardware. Replace each `illustration(...)` entry in `content/projects.ts` with verified imagery when it is available. The visual gallery continues to use four views from the verified CAD packages. Generic interactive project models remain removed.
+## Professional content
 
-## Identity
-
-There is no header logo or wordmark. The name appears in the introduction and footer. Navigation stays in one readable row on phones. The small favicon is retained; the journal's decorative m. symbol has been removed.
+All original eleven projects remain, with a twelfth case study for the verified Vayu Aerospace internship. Featured studies distinguish design-stage work, simulation, reference CAD, and hardware evaluation. ISTE NITK Secretary and NH66 Fund Manager details come from the supplied research CV. The writing desk, database, authorization, and published journal remain part of the same application.

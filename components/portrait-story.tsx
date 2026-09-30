@@ -1,103 +1,162 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-
-const clamp = (value: number) => Math.max(0, Math.min(1, value));
-
+import Link from 'next/link';
+const objects = [
+  'precision-ball-bearing',
+  'steel-compression-spring',
+  'rover-wheel',
+  'compact-universal-joint',
+];
 export function PortraitStory() {
   const story = useRef<HTMLElement>(null);
-
   useEffect(() => {
     const element = story.current;
     if (!element) return;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let frame = 0;
-
+    const pointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let frame = 0,
+      x = 0,
+      y = 0;
     const draw = () => {
       frame = 0;
-      if (preference.matches) return;
       const bounds = element.getBoundingClientRect();
-      const progress = clamp(
-        -bounds.top / Math.max(1, bounds.height - window.innerHeight),
+      const offset = preference.matches
+        ? 0
+        : Math.max(0, Math.min(900, -bounds.top));
+      element.style.setProperty('--portrait-drift', `${offset * 0.07}px`);
+      element.style.setProperty('--study-drift', `${offset * -0.045}px`);
+      element.style.setProperty(
+        '--object-x',
+        `${preference.matches ? 0 : x}px`,
       );
-      const phase = clamp((progress - 0.32) / 0.42);
-      const easedPhase = phase * phase * (3 - 2 * phase);
-      element.style.setProperty('--story-progress', progress.toFixed(4));
-      element.style.setProperty('--story-phase', easedPhase.toFixed(4));
+      element.style.setProperty(
+        '--object-y',
+        `${preference.matches ? 0 : y}px`,
+      );
     };
     const schedule = () => {
-      if (!frame && !preference.matches) frame = requestAnimationFrame(draw);
+      if (!frame) frame = requestAnimationFrame(draw);
     };
-    const configure = () => {
-      element.dataset.motion = preference.matches ? 'still' : 'scroll';
-      element.style.setProperty('--story-progress', '0');
-      element.style.setProperty('--story-phase', '0');
+    const move = (event: PointerEvent) => {
+      if (!pointer.matches || preference.matches) return;
+      x = (event.clientX / window.innerWidth - 0.5) * 12;
+      y = (event.clientY / window.innerHeight - 0.5) * 12;
       schedule();
     };
-
-    configure();
+    const reset = () => {
+      x = 0;
+      y = 0;
+      schedule();
+    };
+    schedule();
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
-    preference.addEventListener('change', configure);
-    const size = new ResizeObserver(schedule);
-    size.observe(element);
+    element.addEventListener('pointermove', move);
+    element.addEventListener('pointerleave', reset);
+    preference.addEventListener('change', reset);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
-      preference.removeEventListener('change', configure);
-      size.disconnect();
-      delete element.dataset.motion;
-      element.style.removeProperty('--story-progress');
-      element.style.removeProperty('--story-phase');
+      element.removeEventListener('pointermove', move);
+      element.removeEventListener('pointerleave', reset);
+      preference.removeEventListener('change', reset);
+      ['--portrait-drift', '--study-drift', '--object-x', '--object-y'].forEach(
+        (property) => element.style.removeProperty(property),
+      );
     };
   }, []);
-
   return (
     <section className="flow-opening" ref={story} aria-label="Meet Mithul">
       <div className="flow-statement shell">
         <p className="flow-opening-note">
-          A mechanical engineer
-          <br />
-          in the making.
+          Mechanical engineering / experimental robotics
         </p>
         <h1>
-          Making things
+          Building machines
           <br />
-          <span>that move.</span>
+          to understand
+          <br />
+          <span>how they behave.</span>
         </h1>
+        <p className="flow-hero-aside">
+          physics + prototypes +<br />
+          questionable amounts of testing
+        </p>
+        <a className="flow-scroll-cue" href="#intro">
+          A little about me <span aria-hidden="true">↓</span>
+        </a>
+        <div className="flow-mechanical-objects" aria-hidden="true">
+          {objects.map((name, index) => (
+            <div className={`flow-object flow-object-${index + 1}`} key={name}>
+              <Image
+                src={`/images/mechanical/${name}.webp`}
+                alt=""
+                width={720}
+                height={720}
+                priority
+                unoptimized
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <div className="flow-portrait-stage shell">
-        <div className="flow-person">
+        <figure className="flow-person">
           <Image
             src="/images/mithul-cutout.webp"
-            alt="Portrait of Mithul, wearing glasses and a black shirt"
+            alt="Mithul, wearing glasses and a black shirt, looking to his right"
             width={1024}
             height={1536}
             priority
             unoptimized
           />
-        </div>
+          <figcaption>Mithul / usually asking one more question.</figcaption>
+        </figure>
         <figure className="flow-second-portrait">
           <Image
-            src="/images/mithul-cafe.webp"
-            alt="Mithul at a café, wearing glasses and a black sweater"
-            width={1100}
-            height={1375}
+            src="/images/projects/tensegrity-joint-cad.webp"
+            alt="Paper-based CAD reconstruction for the tensegrity joint study"
+            width={1200}
+            height={1200}
             unoptimized
           />
+          <figcaption>On the desk / a tensegrity mechanism study.</figcaption>
         </figure>
       </div>
-      <div className="flow-intro shell">
-        <h2>Hi, I’m Mithul!</h2>
-        <p>
-          I’m a final-year mechanical engineering student at{' '}
-          <strong>NITK Surathkal</strong>. My work is in{' '}
-          <strong>robotics, mechanisms, and control</strong>. Right now, I’m
-          designing a rover with adjustable suspension and studying how a
-          tensegrity joint changes stiffness.
-        </p>
+      <div id="intro" className="flow-intro shell">
+        <h2>
+          Hi, I’m
+          <br /> Mithul.
+        </h2>
+        <div>
+          <p>
+            I’m a final-year mechanical engineering student at{' '}
+            <strong>NITK Surathkal</strong>, interested in experimental
+            robotics, mechatronics, and intelligent physical systems.
+          </p>
+          <p>
+            I like working through a machine’s behaviour: model it, build what I
+            can, measure what happens, and figure out where the prediction went
+            wrong.
+          </p>
+          <Link href="/about" className="flow-text-link">
+            More about me <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+      </div>
+      <div
+        className="flow-principles shell"
+        aria-label="Build. Measure. Question. Iterate."
+      >
+        {['Build.', 'Measure.', 'Question.', 'Iterate.'].map((word, index) => (
+          <span className="flow-reveal-word" key={word}>
+            <small aria-hidden="true">0{index + 1}</small>
+            {word}
+          </span>
+        ))}
+        <p>I want to understand machines deeply enough to build better ones.</p>
       </div>
     </section>
   );

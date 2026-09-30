@@ -60,3 +60,9 @@ Constraints: Real alpha transparency. No text, no logos, no symbols, no floating
 - Tanker regular comes directly from Fontshare's official API and CDN. Self-hosting is permitted in Section 01 of the included `public/fonts/Tanker-FFL.txt`; no font modification or conversion was performed.
 - Space Grotesk Latin comes from Google Fonts, with its license in `public/fonts/SpaceGrotesk-OFL.txt`.
 - The reference visit is recorded in `outputs/reference-visit/neha-reference-scroll.mp4`; browser screenshots and captured frames are in that same ignored output directory. Timing is adjusted for inspection. These reference captures are review artifacts and are not included in the portfolio or hosting archive.
+
+## Mechanical hero, 30 September 2026
+
+Four independent built-in ImageGen outputs were generated once each and visually inspected: a precision ball bearing, a dark steel compression spring, a rubber rover wheel, and a machined universal joint. They are generic decorative components, not project documentation. Original RGBA PNGs are preserved outside the Site; production copies are 720 px WebP encodings with their alpha retained. [Exact prompts, saved paths, dimensions, and alpha verification](mechanical-hero-assets.json).
+
+The current opening pairs the original photographic cutout with the paper-based tensegrity study. The café portrait remains an unused source asset. Extra tensegrity-leg and reaction-wheel section views are now on the corresponding project pages. Ten labelled subject illustrations use restrained accents on transparent SVG backgrounds; they do not claim to depict built prototypes or measured data.

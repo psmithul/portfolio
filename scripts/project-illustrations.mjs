@@ -5,11 +5,10 @@ import { fileURLToPath } from 'node:url';
 const directory = fileURLToPath(
   new URL('../public/images/projects/', import.meta.url),
 );
-const olive = '#172713';
-const blue = '#96bfe6';
-const yellow = '#f5f5b8';
-const drab = '#b08699';
-const paper = '#fefef9'; // 8% Wada yellow mixed with white.
+const olive = '#24231f';
+const blue = '#8296a5';
+const yellow = '#c59a4a';
+const drab = '#98a886';
 const escapeXml = (text) =>
   text.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
 const line = (x1, y1, x2, y2, extra = '') =>
@@ -27,6 +26,39 @@ const leaf = (x, y, angle = 0) =>
   `<g transform="translate(${x} ${y}) rotate(${angle})"><path d="M0 0C-35-45-14-78 18-100C42-65 42-22 0 0Z" fill="${yellow}"/><path d="M0 0L18-90" fill="none"/></g>`;
 
 const illustrations = {
+  'uav-vibration-integration': {
+    label: 'UAV HARDWARE / MOUNTING CONCEPT',
+    drawing: `<g transform="translate(170 70)">
+      <path d="M170 440L395 160L635 460M395 160L715 165" fill="none" stroke-width="22" stroke="${blue}"/>
+      ${[
+        [170, 440],
+        [395, 160],
+        [635, 460],
+        [715, 165],
+      ]
+        .map(
+          ([x, y]) =>
+            `<ellipse cx="${x}" cy="${y}" rx="98" ry="24" fill="none" stroke="${olive}" opacity=".55"/>${circle(x, y, 25, olive)}`,
+        )
+        .join('')}
+      <path d="M305 240L515 225L585 310L340 330Z" fill="${blue}"/>
+      <path d="M305 285L515 270L585 355L340 375Z" fill="${drab}"/>
+      ${[
+        [330, 270],
+        [500, 255],
+        [555, 320],
+        [355, 340],
+      ]
+        .map(
+          ([x, y]) =>
+            `<path d="M${x} ${y}v38" stroke-width="13" stroke="${olive}"/>`,
+        )
+        .join('')}
+      <path d="M365 222L445 215L495 267L385 280Z" fill="${yellow}"/>
+      ${circle(425, 247, 15, olive)}<path d="M390 300H620L690 380H780" fill="none" stroke-dasharray="7 8" opacity=".5"/>
+      <path d="M390 225L290 115H150" fill="none" opacity=".5"/>
+    </g>`,
+  },
   'adaptive-suspension-rover': {
     label: 'FIELD ROBOTICS',
     drawing: `<g transform="translate(90 75)">
@@ -145,12 +177,20 @@ const illustrations = {
 };
 
 await mkdir(directory, { recursive: true });
+const accents = {
+  'adaptive-suspension-rover': '#c59a4a',
+  'uav-vibration-integration': '#8296a5',
+  'four-bar-door-mechanism': '#c45a3d',
+  'easy-access-wallet': '#98a886',
+  'uncertainty-aware-navigation': '#8296a5',
+};
 for (const [slug, { label, drawing }] of Object.entries(illustrations)) {
+  const inkedDrawing = drawing
+    .replaceAll(blue, accents[slug] || '#8296a5')
+    .replaceAll(yellow, '#ddd7cb')
+    .replaceAll(drab, '#c9c6bb');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Temporary ${escapeXml(label.toLowerCase())} subject illustration">
-    <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="${olive}" stroke-opacity=".045"/></pattern></defs>
-    <rect width="1200" height="800" fill="${paper}"/><rect width="1200" height="800" fill="url(#grid)"/>
-    <text x="56" y="59" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="${olive}" opacity=".65">${escapeXml(label)}</text>
-    <g stroke="${olive}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${drawing}</g>
+    <g stroke="${olive}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${inkedDrawing}</g>
     <path d="M56 718H1144" stroke="${olive}" stroke-opacity=".15"/>
     <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="${olive}" opacity=".6">PROJECT ILLUSTRATION</text>
     <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="${olive}" opacity=".6">M / ${String(Object.keys(illustrations).indexOf(slug) + 1).padStart(2, '0')}</text>

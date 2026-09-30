@@ -1,17 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Temporary electronics &amp; sensing subject illustration">
-    <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#172713" stroke-opacity=".045"/></pattern></defs>
-    <rect width="1200" height="800" fill="#fefef9"/><rect width="1200" height="800" fill="url(#grid)"/>
-    <text x="56" y="59" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="#172713" opacity=".65">ELECTRONICS &amp; SENSING</text>
-    <g stroke="#172713" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(125 75)">
-      <path d="M405 205L570 70L735 205V445H405Z" fill="#f5f5b8"/><path d="M385 210L570 55L755 210" fill="none" stroke-width="10"/>
-      <rect x="465" y="242" width="80" height="85" rx="12" fill="#96bfe6" /><rect x="590" y="305" width="78" height="140" rx="12" fill="white" />
-      <rect x="60" y="265" width="240" height="180" rx="12" fill="#96bfe6" /><rect x="105" y="310" width="100" height="65" rx="12" fill="#172713" />
-      <circle cx="83" cy="285" r="4" fill="#f5f5b8" /><circle cx="110" cy="285" r="4" fill="#f5f5b8" /><circle cx="137" cy="285" r="4" fill="#f5f5b8" /><circle cx="164" cy="285" r="4" fill="#f5f5b8" /><circle cx="191" cy="285" r="4" fill="#f5f5b8" /><circle cx="218" cy="285" r="4" fill="#f5f5b8" /><circle cx="245" cy="285" r="4" fill="#f5f5b8" /><circle cx="272" cy="285" r="4" fill="#f5f5b8" />
+    <g stroke="#24231f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(125 75)">
+      <path d="M405 205L570 70L735 205V445H405Z" fill="#ddd7cb"/><path d="M385 210L570 55L755 210" fill="none" stroke-width="10"/>
+      <rect x="465" y="242" width="80" height="85" rx="12" fill="#8296a5" /><rect x="590" y="305" width="78" height="140" rx="12" fill="white" />
+      <rect x="60" y="265" width="240" height="180" rx="12" fill="#8296a5" /><rect x="105" y="310" width="100" height="65" rx="12" fill="#24231f" />
+      <circle cx="83" cy="285" r="4" fill="#ddd7cb" /><circle cx="110" cy="285" r="4" fill="#ddd7cb" /><circle cx="137" cy="285" r="4" fill="#ddd7cb" /><circle cx="164" cy="285" r="4" fill="#ddd7cb" /><circle cx="191" cy="285" r="4" fill="#ddd7cb" /><circle cx="218" cy="285" r="4" fill="#ddd7cb" /><circle cx="245" cy="285" r="4" fill="#ddd7cb" /><circle cx="272" cy="285" r="4" fill="#ddd7cb" />
       <path d="M300 320H365V380H405M300 380H345V480H615V445" fill="none" stroke-width="4"/>
-      <g transform="translate(760 195) rotate(12)"><rect x="0" y="0" width="170" height="230" rx="12" fill="#96bfe6" /><line x1="10" y1="55" x2="160" y2="55" opacity=".4"/><line x1="10" y1="110" x2="160" y2="110" opacity=".4"/><line x1="10" y1="165" x2="160" y2="165" opacity=".4"/><line x1="85" y1="10" x2="85" y2="220" opacity=".4"/></g>
-      <circle cx="170" cy="115" r="45" fill="#f5f5b8" /><path d="M105 115H235" transform="rotate(0 170 115)" stroke="#f5f5b8" stroke-width="4"/><path d="M105 115H235" transform="rotate(45 170 115)" stroke="#f5f5b8" stroke-width="4"/><path d="M105 115H235" transform="rotate(90 170 115)" stroke="#f5f5b8" stroke-width="4"/><path d="M105 115H235" transform="rotate(135 170 115)" stroke="#f5f5b8" stroke-width="4"/>
+      <g transform="translate(760 195) rotate(12)"><rect x="0" y="0" width="170" height="230" rx="12" fill="#8296a5" /><line x1="10" y1="55" x2="160" y2="55" opacity=".4"/><line x1="10" y1="110" x2="160" y2="110" opacity=".4"/><line x1="10" y1="165" x2="160" y2="165" opacity=".4"/><line x1="85" y1="10" x2="85" y2="220" opacity=".4"/></g>
+      <circle cx="170" cy="115" r="45" fill="#ddd7cb" /><path d="M105 115H235" transform="rotate(0 170 115)" stroke="#ddd7cb" stroke-width="4"/><path d="M105 115H235" transform="rotate(45 170 115)" stroke="#ddd7cb" stroke-width="4"/><path d="M105 115H235" transform="rotate(90 170 115)" stroke="#ddd7cb" stroke-width="4"/><path d="M105 115H235" transform="rotate(135 170 115)" stroke="#ddd7cb" stroke-width="4"/>
     </g></g>
-    <path d="M56 718H1144" stroke="#172713" stroke-opacity=".15"/>
-    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#172713" opacity=".6">PROJECT ILLUSTRATION</text>
-    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#172713" opacity=".6">M / 08</text>
+    <path d="M56 718H1144" stroke="#24231f" stroke-opacity=".15"/>
+    <text x="56" y="755" font-family="Arial,sans-serif" font-size="14" letter-spacing="2" fill="#24231f" opacity=".6">PROJECT ILLUSTRATION</text>
+    <text x="1144" y="755" text-anchor="end" font-family="monospace" font-size="14" fill="#24231f" opacity=".6">M / 09</text>
   </svg>
