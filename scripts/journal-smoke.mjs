@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 const base = process.argv[2];
 if (!base || !['localhost', '127.0.0.1'].includes(new URL(base).hostname))
   throw new Error(
@@ -46,20 +47,46 @@ const forged = await fetch(new URL('/api/journal', base), {
     'oai-authenticated-user-email': 'miastromika@gmail.com',
   },
 });
-assert.equal(
-  forged.status,
-  401,
-  'local dispatcher strips forged identity headers',
-);
+assert.equal(forged.status, 401, 'forged identity headers do not grant access');
 console.log('PASS anonymous and forged-identity writes denied');
 
-const login = await request('/signin-with-chatgpt?return_to=%2Fwrite');
-assert.ok([302, 303, 307].includes(login.status));
+assert.equal(
+  (
+    await request('/api/journal/session', {
+      method: 'POST',
+      body: { password: 'incorrect-password' },
+    })
+  ).status,
+  401,
+);
+assert.equal(
+  (
+    await request('/api/journal/session', {
+      method: 'POST',
+      body: { password: 'anything' },
+      requestOrigin: 'https://other.example',
+    })
+  ).status,
+  403,
+);
+const password =
+  process.env.JOURNAL_SMOKE_PASSWORD ??
+  readFileSync(
+    '/Users/mika/.config/mithul-portfolio/writing-desk-password.txt',
+    'utf8',
+  ).trim();
+const login = await request('/api/journal/session', {
+  method: 'POST',
+  body: { password },
+});
+assert.equal(login.status, 200, 'owner password sign-in succeeds');
+assert.ok(login.headers.get('set-cookie')?.includes('HttpOnly'));
+assert.match(login.headers.get('set-cookie') ?? '', /SameSite=Strict/i);
 cookie = login.headers
   .getSetCookie()
   .map((value) => value.split(';')[0])
   .join('; ');
-assert.ok(cookie, 'local sign-in sets a session cookie');
+assert.ok(cookie, 'password sign-in sets a signed session cookie');
 const desk = await request('/write');
 const deskHtml = await desk.text();
 assert.equal(desk.status, 200, deskHtml.slice(0, 3500));
@@ -80,7 +107,7 @@ assert.equal(
   403,
 );
 console.log(
-  'PASS owner sign-in, database initialization, and cross-origin rejection',
+  'PASS owner sign-in, private storage initialization, and cross-origin rejection',
 );
 
 const { entry: created } = await json('/api/journal', {
@@ -180,3 +207,15 @@ console.log(
   'PASS publish, private revision, update, and unpublish with draft retained',
 );
 console.log('LOCAL_TEST_ENTRY_ID=' + created.id);
+assert.equal(
+  (
+    await request('/api/journal/session', {
+      method: 'POST',
+      body: { action: 'signout' },
+    })
+  ).status,
+  200,
+);
+cookie = '';
+assert.equal((await request('/api/journal')).status, 401);
+console.log('PASS sign-out removes writing access');

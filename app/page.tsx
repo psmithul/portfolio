@@ -54,10 +54,7 @@ export default async function Home() {
             <p className="eyebrow">01 — Projects</p>
             <h2>Ongoing projects</h2>
           </div>
-          <p>
-            Current research and design work in robotics, mechanisms, and
-            vibration.
-          </p>
+          <p>The projects I’m working on now.</p>
         </div>
         <div className="flow-project-list">
           {featured.map((project) => {
@@ -95,7 +92,11 @@ export default async function Home() {
                     aria-hidden="true"
                   />
                 </div>
-                <figure className="flow-project-image">
+                <figure
+                  className="flow-project-image"
+                  data-image-kind={project.image?.kind}
+                  data-image-fit={project.image?.fit}
+                >
                   <div className="flow-cover-body">
                     {project.image && (
                       <Image
@@ -126,8 +127,7 @@ export default async function Home() {
             <h2>Mika’s Life</h2>
           </div>
           <p>
-            Personal essays on books, photographs, and things I notice outside
-            engineering.
+            Things I’m learning, things I’m trying, and a few notes from everyday life.
           </p>
         </div>
         <div className="flow-journal-entries">
@@ -154,8 +154,8 @@ export default async function Home() {
         <p className="eyebrow">Contact</p>
         <h2>Get in touch.</h2>
         <p className="flow-contact-note">
-          For research opportunities, project collaboration, or a conversation
-          about mechanical engineering and robotics.
+          Have a project in mind or a question about the work? I’d like to hear
+          from you.
         </p>
         <div>
           <a

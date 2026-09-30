@@ -7,7 +7,7 @@ if (!base) {
   process.exit(1);
 }
 const cases = [
-  ['/', 200, 'Mithul', 'Mechanical Engineering &amp; Robotics'],
+  ['/', 200, 'Mithul', 'Projects &amp; Notes'],
   ['/blog/the-small-blue-thing', 200, 'Most of the photograph', 'small blue'],
   ['/blog/a-walk-in-twenty-four-pictures', 200, 'Muybridge', 'A walk'],
   [
@@ -16,9 +16,33 @@ const cases = [
     'two kinds of satisfaction',
     'unfinished',
   ],
-  ['/write', 200, 'Sign in with ChatGPT', 'Writing desk'],
+  ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
   ['/blog', 200, 'Mika’s', 'Mika’s Life'],
+  [
+    '/blog/gpt-5-6-sol-and-what-i-want-to-build',
+    200,
+    '10 July 2026',
+    'GPT-5.6 Sol',
+  ],
+  [
+    '/blog/what-excites-me-about-gpt-6-astra',
+    200,
+    '4 September 2026',
+    'GPT-6 Astra',
+  ],
+  [
+    '/blog/gpt-6-and-the-question-of-efficiency',
+    200,
+    '23 September 2026',
+    'GPT-6',
+  ],
+  [
+    '/blog/pid-versus-neural-network-control',
+    200,
+    'PID',
+    'PID or a neural network',
+  ],
   [
     '/work/tensegrity-joint',
     200,
@@ -36,8 +60,8 @@ const cases = [
   [
     '/work/neoleg-knee-mechanism',
     200,
-    'Spring-position comparisons',
-    'Passive spring-assisted',
+    'passive spring-assisted',
+    'Actuated knee assistance',
   ],
   ['/work/off-road-leaf-robot', 200, 'bottom-up BOM', 'Off-road'],
   [
@@ -46,7 +70,7 @@ const cases = [
     'mechanical lock',
     'Adaptive suspension',
   ],
-  ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated brace'],
+  ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated knee assistance'],
   ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-bar'],
   ['/work/easy-access-wallet', 200, 'card access', 'Wallet'],
   ['/work/solar-smart-home', 200, 'photovoltaic', 'Arduino'],
@@ -67,7 +91,13 @@ for (const [path, status, content, title] of cases) {
       path + ': page-specific title',
     );
   }
-  assert.ok(body.includes('id="main"'), path + ': main content landmark');
+  // Next streams the custom 404 through its server-component payload.
+  // Its hydrated landmark is also checked in browser QA.
+  assert.ok(
+    body.includes('id="main"') ||
+      (status === 404 && body.includes('\\"id\\":\\"main\\"')),
+    path + ': main content landmark',
+  );
   console.log('PASS ' + status + ' ' + path);
 }
 for (const path of [

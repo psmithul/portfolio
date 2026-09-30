@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 import { projects } from '@/content/projects';
@@ -26,13 +26,16 @@ const studyViews: Record<
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const p = projects.find((p) => p.slug === slug);
+  const p = projects.find(
+    (p) => p.slug === (slug === 'neoleg-knee-mechanism' ? 'kneeassist' : slug),
+  );
   return p
     ? { title: p.shortTitle, description: p.summary }
     : { title: 'Project not found' };
 }
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
+  if (slug === 'neoleg-knee-mechanism') permanentRedirect('/work/kneeassist');
   const index = projects.findIndex((p) => p.slug === slug);
   if (index < 0) notFound();
   const project = projects[index];
@@ -69,7 +72,11 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
       {project.image && (
-        <figure className="project-documentation shell">
+        <figure
+          className="project-documentation shell"
+          data-image-kind={project.image.kind}
+          data-image-fit={project.image.fit}
+        >
           <Image
             src={project.image.src}
             alt={project.image.alt}
@@ -87,7 +94,20 @@ export default async function ProjectPage({ params }: Props) {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Reference paper
+                  {project.image.referenceLabel ?? 'Image source'}
+                </a>
+              </>
+            )}
+            {project.image.licenseUrl && (
+              <>
+                {' '}
+                ·{' '}
+                <a
+                  href={project.image.licenseUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  License
                 </a>
               </>
             )}

@@ -12,7 +12,7 @@ const accolades = [
     detail:
       'Our KneeAssist team was selected among the top five teams nationwide.',
     href: '/work/kneeassist',
-    link: 'KneeAssist project',
+    link: 'Knee assistance project',
   },
   {
     title: 'Global Case Competition at Harvard',
@@ -32,10 +32,8 @@ export function Accolades() {
       title="Accolades"
       eyebrow="04 — Recognition"
       description="Two team achievements from my résumé."
-      image="/images/work-folder.webp"
+      image="/images/archive/folder-open.svg"
       kind="folder"
-      count={accolades.length}
-      itemLabel="accolade"
     >
       {accolades.map(
         ({ title, result, period, scope, detail, href, link }, index) => (
@@ -45,10 +43,11 @@ export function Accolades() {
             data-archive-card
             style={
               {
-                '--fan-x': `${(index - 0.5) * 40}%`,
-                '--fan-y': '24px',
-                '--fan-angle': `${(index - 0.5) * 16}deg`,
+                '--fan-x': `${(index - 0.5) * 44}vw`,
+                '--fan-y': '16px',
+                '--fan-angle': `${(index - 0.5) * 5}deg`,
                 '--card-order': index + 2,
+                '--burst-delay': `${index * 65}ms`,
               } as CSSProperties
             }
           >

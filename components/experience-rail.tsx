@@ -11,7 +11,7 @@ const experience = [
     category: 'Engineering',
     highlights: [
       'Compared three flight-controller mounts in ANSYS.',
-      'Supported ground motor tests and analysed IMU logs in MATLAB.',
+      'Integrated the mounts, ran ground tests, and analysed IMU logs in MATLAB.',
     ],
     href: '/work/uav-vibration-integration',
     link: 'Internship case study',
@@ -65,10 +65,8 @@ export function ExperienceRail() {
       title="Experience"
       eyebrow="03 — Work & leadership"
       description="Internships and student leadership, from 2024 to the present."
-      image="/images/experience-toolbox.webp"
+      image="/images/archive/tool-case.svg"
       kind="toolbox"
-      count={experience.length}
-      itemLabel="experience"
     >
       {experience.map(
         (
@@ -81,10 +79,11 @@ export function ExperienceRail() {
             data-archive-card
             style={
               {
-                '--fan-x': `${(index - 2) * 17.5}%`,
-                '--fan-y': `${Math.abs(index - 2) * 32}px`,
-                '--fan-angle': `${(index - 2) * 6}deg`,
+                '--fan-x': `${(index - 2) * 17}vw`,
+                '--fan-y': `${Math.abs(index - 2) * 18}px`,
+                '--fan-angle': `${(index - 2) * 1.2}deg`,
                 '--card-order': 5 - Math.abs(index - 2),
+                '--burst-delay': `${Math.abs(index - 2) * 65}ms`,
               } as CSSProperties
             }
           >

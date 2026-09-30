@@ -99,23 +99,29 @@ export function publishedPost(draft: Draft, slug: string, date: string): Post {
   };
 }
 
-// The local identity is emitted only by the Sites dev plugin. It is never an
-// allowed production account; DEV is replaced with false in production builds.
 export function isJournalOwner(
   user: { email: string; userId: string } | null,
-  development = false,
 ): boolean {
   return (
     !!user &&
-    (user.email.toLowerCase() === 'miastromika@gmail.com' ||
-      (development &&
-        user.userId === 'local_seedy' &&
-        user.email === 'seedy@sites.test'))
+    user.userId === 'mika' &&
+    user.email.toLowerCase() === 'miastromika@gmail.com'
   );
 }
 
 export function assertSameOrigin(request: Request) {
-  if (request.headers.get('origin') !== new URL(request.url).origin)
+  const url = new URL(request.url);
+  const host = request.headers.get('host') ?? url.host;
+  const forwardedProtocol = process.env.VERCEL
+    ? request.headers.get('x-forwarded-proto')
+    : null;
+  const protocol =
+    forwardedProtocol === 'https' || forwardedProtocol === 'http'
+      ? forwardedProtocol
+      : url.protocol.slice(0, -1);
+  // Next may use an internal listener address in request.url. Host retains
+  // the origin the browser actually visited; Vercel supplies the HTTPS scheme.
+  if (request.headers.get('origin') !== `${protocol}://${host}`)
     throw new JournalError(
       'This action must come from the writing desk on this website.',
       403,

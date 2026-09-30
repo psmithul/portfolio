@@ -1,3 +1,4 @@
+import { projectImages } from '@/content/project-images';
 import type { ModelKind } from '@/lib/engineering-scene';
 export type Project = {
   slug: string;
@@ -17,7 +18,10 @@ export type Project = {
   scope: string;
   evidence: string[];
   image?: {
-    kind?: 'documentation' | 'illustration';
+    kind?: 'documentation' | 'illustration' | 'stock' | 'reference';
+    referenceLabel?: string;
+    licenseUrl?: string;
+    fit?: 'cover' | 'contain';
     src: string;
     alt: string;
     width: number;
@@ -34,17 +38,6 @@ export type Project = {
     | 'wallet';
   visualLabel: string;
 };
-const illustration = (
-  slug: string,
-  subject: string,
-): NonNullable<Project['image']> => ({
-  kind: 'illustration',
-  src: `/images/projects/illustration-${slug}.svg`,
-  width: 1200,
-  height: 800,
-  alt: `Concept illustration of ${subject}`,
-  caption: 'Concept illustration · project photographs to be added.',
-});
 export const projects: Project[] = [
   {
     slug: 'uav-vibration-integration',
@@ -57,20 +50,13 @@ export const projects: Project[] = [
     context: 'Product internship · Vayu Aerospace, Bengaluru',
     model: 'electronics',
     visualLabel: 'FLIGHT CONTROLLER / MOUNTING STUDY',
-    image: {
-      ...illustration(
-        'uav-vibration-integration',
-        'three flight-controller mounting architectures',
-      ),
-      caption:
-        'Rigid, elastomer-isolated, and suspended mounts · comparison schematic.',
-    },
+    image: projectImages['uav-vibration-integration'],
     tools: ['ANSYS Mechanical', 'MATLAB', 'IMU log analysis'],
     summary:
-      'Compared flight-controller mounts, supported ground motor-run testing, and used IMU logs to evaluate vibration isolation.',
+      'Modeled and integrated three flight-controller mounts, then used ground motor runs and IMU analysis to compare their vibration isolation.',
     question:
       'Which mounting arrangement keeps motor vibration away from the flight controller?',
-    role: 'As a Product Intern at Vayu Aerospace, I compared three company-proposed mounts and supported manufacturing, subsystem integration, and ground motor-run tests.',
+    role: 'As a Product Intern at Vayu Aerospace, I traced the vibration path, modeled three mounts, and integrated the shortlisted designs into hardware for ground motor-run tests.',
     approach: [
       {
         title: 'Compare three mounts',
@@ -78,7 +64,7 @@ export const projects: Project[] = [
       },
       {
         title: 'Support the hardware evaluation',
-        body: 'Work alongside the team on manufacturing, integration, and ground motor-run testing of the mounting arrangements.',
+        body: 'Check CAD fit, clearances, cable slack, fasteners, and controller orientation during integration. Test the assembled mounts through ground motor runs.',
       },
       {
         title: 'Compare the IMU logs',
@@ -86,9 +72,9 @@ export const projects: Project[] = [
       },
     ],
     outcome:
-      'The team selected the elastomer-isolated modular tray after simulation and hardware evaluation. My contribution covered mount comparison, test support, and IMU analysis.',
+      'The team selected the elastomer-isolated modular tray after simulation and hardware evaluation. My contribution covered mount modeling, hardware integration, ground tests, and IMU analysis.',
     scope:
-      'Internship work on company hardware. The cover is a subject illustration; company photographs and measured plots are not reproduced here.',
+      'Internship work covering vibration-path modeling, hardware integration, and ground motor-run testing.',
     evidence: [
       'Three mounting arrangements compared',
       'Two isolation concepts shortlisted for hardware evaluation',
@@ -106,10 +92,7 @@ export const projects: Project[] = [
     context: 'Research & staged hardware development',
     model: 'rover',
     visualLabel: 'SIX-WHEEL ROVER / CONCEPT STUDY',
-    image: illustration(
-      'adaptive-suspension-rover',
-      'a rover and adjustable suspension',
-    ),
+    image: projectImages['adaptive-suspension-rover'],
     tools: [
       'Variable-stiffness suspension',
       'IMU & encoders',
@@ -123,7 +106,7 @@ export const projects: Project[] = [
     approach: [
       {
         title: 'Start with one suspension unit',
-        body: 'Build and evaluate one adjustable unit before committing to the full rover. Vary spring leverage to get three stiffness settings, with a mechanical lock at each setting.',
+        body: 'Build and evaluate one adjustable unit before committing to the full rover. Vary spring leverage to get three stiffness settings, with a mechanical lock at each setting and a separate load path that keeps the rover supported if reconfiguration fails.',
       },
       {
         title: 'Measure, adjust, then measure again',
@@ -155,15 +138,7 @@ export const projects: Project[] = [
     context: 'Research project',
     model: 'tensegrity',
     visualLabel: 'TENSEGRITY JOINT / GEOMETRY & FORCE',
-    image: {
-      src: '/images/projects/tensegrity-joint-cad.webp',
-      width: 1200,
-      height: 1200,
-      alt: 'CAD reconstruction of a tensegrity knee joint, showing crossed tension members, connectors, and cable routing',
-      caption:
-        'CAD reconstruction for mechanism study, based on Mortensen et al. (2025).',
-      referenceUrl: 'https://arxiv.org/abs/2504.19685',
-    },
+    image: projectImages['tensegrity-joint'],
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
       'A MATLAB study of member forces and stiffness, alongside the design of a tensegrity joint.',
@@ -196,44 +171,49 @@ export const projects: Project[] = [
   },
   {
     slug: 'kneeassist',
-    number: '03',
-    title: 'KneeAssist',
-    shortTitle: 'Actuated brace for knee extension deficit',
+    number: '04',
+    title: 'Actuated knee assistance system',
+    shortTitle: 'Actuated knee assistance system',
     discipline: 'Assistive mechatronics',
-    period: 'Sep 2026',
+    period: 'Oct 2025 — Sep 2026',
     status: 'Completed',
-    context: 'Team project · Incubate X Prosthetic Challenge',
+    context: 'NeoLeg to KneeAssist · Team project',
     model: 'knee',
-    visualLabel: 'ACTUATED BRACE / CONCEPT ASSEMBLY',
-    image: illustration('kneeassist', 'a sensing and actuation brace'),
-    tools: ['CAD & integration', 'Angle sensing', 'Cable-and-spring drive'],
+    visualLabel: 'PASSIVE MECHANISM / ACTUATED ASSISTANCE',
+    image: projectImages['kneeassist'],
+    tools: ['SolidWorks', 'ANSYS', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'A knee-assistance brace concept with angle sensing, controlled actuation, and an independent manual release.',
+      'A spring-assisted knee mechanism developed into an actuated brace with angle sensing, controlled assistance, and a manual release.',
     question:
-      'How can a brace assist knee extension while allowing the patient to keep doing the work?',
-    role: 'I helped turn the team CAD into a buildable system: adjustable rails and cuffs, a motor drive, angle sensing, power protection, and an independent manual release.',
+      'How can a knee mechanism assist movement while the user continues to extend actively?',
+    role: 'I worked on the passive spring-assisted mechanism, refined the assembly in SolidWorks, and checked its motion in ANSYS. We then extended it into an actuated brace and defined a procurement-ready system with drive, sensing, power protection, and an independent manual release.',
     approach: [
       {
-        title: 'Sense before assisting',
-        body: 'Start with the knee angle and the patient’s active extension. Add controlled cable-and-spring assistance when needed.',
+        title: 'Start with passive assistance',
+        body: 'Study how spring placement and joint geometry change the assistance available through knee motion. Model and refine the assembly in SolidWorks, then use ANSYS and interference checks to compare workable layouts.',
       },
       {
-        title: 'Make the assembly buildable',
-        body: 'Integrate adjustable rails, cuffs, actuation, sensing, and power protection. Include an independent manual release.',
+        title: 'Add sensing and actuation',
+        body: 'Extend the passive concept into a brace that tracks knee angle and adds controlled cable-and-spring assistance while the user extends actively.',
+      },
+      {
+        title: 'Prepare the system for procurement',
+        body: 'Define the drive, sensing, power, adjustable rails, cuffs, and independent manual release as one integrated system.',
       },
       {
         title: 'Define the bench checks',
-        body: 'Plan tests for angle accuracy, spring force, assisted motion, jam release, faults, and cycle life.',
+        body: 'Plan checks for angle accuracy, spring force, assisted motion, jam release, faults, and cycle life before physical validation.',
       },
     ],
     outcome:
-      'Our team was selected in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge.',
+      'The design reached a procurement-ready system. Our team placed in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge.',
     scope:
-      'Team concept and integration work for the challenge. Bench verification remains to be carried out.',
+      'Completed design and system-definition work, from the passive concept to the actuated brace. Procurement and bench testing remain the next steps.',
     evidence: [
+      'Passive spring-assisted mechanism developed in SolidWorks and ANSYS',
+      'Angle sensing and controlled cable-and-spring assistance',
+      'Procurement-ready system definition',
       'Top 5 of 70 teams nationwide',
-      'Buildable system integration',
-      'Six categories of planned bench checks',
     ],
   },
   {
@@ -247,14 +227,7 @@ export const projects: Project[] = [
     context: 'FEM & machine-learning study',
     model: 'satellite',
     visualLabel: 'SATELLITE PANEL / VIBRATION PATH',
-    image: {
-      src: '/images/projects/reaction-wheel-reference-cad.webp',
-      width: 1500,
-      height: 1125,
-      alt: 'Project reference CAD showing a sectioned reaction wheel inside a satellite structure',
-      caption:
-        'Reference assembly from the project CAD. Surface finishes are illustrative.',
-    },
+    image: projectImages['reaction-wheel-microvibrations'],
     tools: ['ANSYS Mechanical', 'Modal & harmonic FEM', 'Regression'],
     summary:
       'Tracing reaction-wheel vibration from a satellite panel to a camera mount, using modal and harmonic analysis.',
@@ -296,14 +269,7 @@ export const projects: Project[] = [
     context: 'Robot design & subsystem architecture',
     model: 'collection',
     visualLabel: 'PICKUP / TRANSFER / TERRAIN FOLLOWING',
-    image: {
-      ...illustration(
-        'off-road-leaf-robot',
-        'leaf-collection robot subsystems',
-      ),
-      caption:
-        'Locomotion, pickup, transfer, storage, and terrain following · architecture schematic.',
-    },
+    image: projectImages['off-road-leaf-robot'],
     tools: [
       'Subsystem architecture',
       'Mechanism selection',
@@ -338,47 +304,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'neoleg-knee-mechanism',
-    number: '06',
-    title: 'NeoLeg: passive knee assistance',
-    shortTitle: 'Passive spring-assisted knee mechanism',
-    discipline: 'Mechanical design',
-    period: 'Dec 2025 — Mar 2026',
-    status: 'Completed',
-    context: 'Team mechanism-design project',
-    model: 'linkage',
-    visualLabel: 'PASSIVE KNEE / SPRING GEOMETRY',
-    image: illustration('neoleg-knee-mechanism', 'a spring-assisted mechanism'),
-    tools: ['SolidWorks', 'ANSYS', 'Interference checks'],
-    summary:
-      'A SolidWorks and ANSYS design study of a spring-assisted knee mechanism for squatting and lifting.',
-    question:
-      'Can a passive spring assist knee motion without making the mechanism bulky or restrictive?',
-    role: 'I helped build and refine the knee assembly in SolidWorks, and used ANSYS and interference checks to evaluate modeled flexion.',
-    approach: [
-      {
-        title: 'Build the assembly',
-        body: 'Develop the spring-assisted knee layout in SolidWorks and refine the relationships between the moving parts.',
-      },
-      {
-        title: 'Check the motion',
-        body: 'Use ANSYS and interference checks to assess whether the assembly can move through its modeled flexion range.',
-      },
-      {
-        title: 'Compare spring locations',
-        body: 'Study how spring positions and attachment geometry affect usable motion and the assist concept.',
-      },
-    ],
-    outcome:
-      'The completed design study compared spring layouts and evaluated the assembly’s modeled motion.',
-    scope: 'CAD and simulation study of the assembly and its range of motion.',
-    evidence: [
-      'SolidWorks assembly',
-      'ANSYS and interference checks',
-      'Spring-position comparisons',
-    ],
-  },
-  {
     slug: 'uncertainty-aware-navigation',
     number: '07',
     title: 'Robot navigation with A* & EKF',
@@ -389,10 +314,7 @@ export const projects: Project[] = [
     context: 'Differential-drive simulation project',
     model: 'navigation',
     visualLabel: 'PLANNING / LOCALIZATION / RECOVERY',
-    image: illustration(
-      'uncertainty-aware-navigation',
-      'robot path planning and localization',
-    ),
+    image: projectImages['uncertainty-aware-navigation'],
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
       'A differential-drive simulation combining A* planning, EKF localization, and recovery when the position estimate becomes uncertain.',
@@ -433,7 +355,7 @@ export const projects: Project[] = [
     context: 'Team build',
     model: 'linkage',
     visualLabel: 'LINK LENGTHS / PIVOTS / DOOR MOTION',
-    image: illustration('four-bar-door-mechanism', 'a four-bar door linkage'),
+    image: projectImages['four-bar-door-mechanism'],
     tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
     summary:
       'A team-built door-opening mechanism, developed through link-length and pivot-position studies.',
@@ -474,7 +396,7 @@ export const projects: Project[] = [
     context: 'Design project',
     model: 'wallet',
     visualLabel: 'USER PROBLEM / MECHANICAL RESPONSE',
-    image: illustration('easy-access-wallet', 'a card-access concept'),
+    image: projectImages['easy-access-wallet'],
     tools: ['Problem framing', 'Mechanical design', 'Layout development'],
     summary:
       'A compact card-holder concept designed to make cards easier to reach and remove.',
@@ -514,7 +436,7 @@ export const projects: Project[] = [
     context: 'Working electronic model',
     model: 'electronics',
     visualLabel: 'SENSORS / LOGIC / SOLAR POWER',
-    image: illustration('solar-smart-home', 'home sensors and solar power'),
+    image: projectImages['solar-smart-home'],
     tools: ['Arduino', 'Sensor integration', 'Circuit debugging'],
     summary:
       'An Arduino smart-home model with connected sensors, control logic, and a photovoltaic power option.',
@@ -555,10 +477,7 @@ export const projects: Project[] = [
     context: 'Two electronic model builds',
     model: 'electronics',
     visualLabel: 'LOGIC GATES / SIGNALS / SEQUENCING',
-    image: illustration(
-      'traffic-and-elevated-bus',
-      'traffic signals and an elevated bus',
-    ),
+    image: projectImages['traffic-and-elevated-bus'],
     tools: ['Logic gates', 'Circuit wiring', 'Fault tracing'],
     summary:
       'Hand-wired traffic-light and transit elevated-bus models, with repeatable control sequences built from logic gates.',

@@ -26,11 +26,17 @@ export default function About() {
             at NITK Surathkal. I expect to graduate in June 2027.
           </p>
           <p>
-            I work on mechanical design, robotics, and control. My current
-            projects include a rover with adjustable suspension and a tensegrity
-            joint with variable stiffness. I use CAD and simulation to develop
-            the designs, and I’m interested in the experiments that connect a
-            model to what happens in hardware.
+            I like understanding how something works, then trying to make it
+            work myself. My projects bring together mechanical design,
+            electronics, and software, so there’s usually something new to
+            learn.
+          </p>
+          <p>
+            Right now, I’m designing robots for uncertain terrain, including a
+            rover with adjustable suspension and a leaf-collection robot. I’m
+            also studying a tensegrity joint with variable stiffness. I like
+            hard problems where sensing, control, and the mechanism all affect
+            each other. Space is another interest I keep coming back to.
           </p>
         </div>
       </section>
@@ -63,9 +69,9 @@ export default function About() {
             Product Intern · UAV Vibration Analysis & Isolation
           </p>
           <p className="body-muted">
-            Bengaluru, India. I compared three company-proposed
-            flight-controller mounting architectures and helped move the
-            isolation concepts towards hardware evaluation.
+            Bengaluru, India. I traced vibration from the motors and airframe to
+            the flight-controller IMU, then compared and tested three mounting
+            arrangements.
           </p>
           <ul className="prose-list">
             <li>
@@ -75,8 +81,9 @@ export default function About() {
               evaluation.
             </li>
             <li>
-              Supported manufacturing, integration, and ground motor-run
-              testing.
+              Integrated the shortlisted mounts, checked fit, cable slack,
+              clearances, and fasteners, then tested them through ground motor
+              runs.
             </li>
             <li>
               Analyzed controller IMU logs in MATLAB using comparable steady
