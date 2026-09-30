@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import './globals.css';
 import './experience.css';
+import './flow.css';
 
 export const metadata: Metadata = {
   title: {
@@ -25,20 +26,17 @@ export default function RootLayout({
         </a>
         <header className="site-header shell">
           <Link href="/" className="wordmark" aria-label="Mithul Sourav home">
-            <span className="brand-mark" aria-hidden="true">
-              m<span>.</span>
-            </span>
-            <span>
+            <span className="wordmark-name">
               Mithul Sourav
-              <span className="wordmark-caption">MECHANICAL ENGINEERING</span>
+              <span className="wordmark-caption">
+                Mechanical engineering & robotics
+              </span>
             </span>
           </Link>
           <nav aria-label="Main navigation">
             <Link href="/#work">Work</Link>
             <Link href="/about">About</Link>
-            <Link href="/blog">
-              Journal <span className="nav-dot" />
-            </Link>
+            <Link href="/blog">Journal</Link>
             <a
               href="/Mithul-Sourav-CV.pdf"
               target="_blank"
@@ -53,7 +51,7 @@ export default function RootLayout({
         <footer className="site-footer shell">
           <div>
             <Link href="/" className="footer-name">
-              Mithul Sourav<span>.</span>
+              Mithul Sourav
             </Link>
             <p>Mechanical engineering & robotics · NITK Surathkal</p>
           </div>
