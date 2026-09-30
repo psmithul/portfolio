@@ -681,42 +681,107 @@ html {
 .flow-work-folder:hover {
   transform: rotate(0deg) translateY(-8px);
 }
-.flow-tools ul {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
+.tools-heading {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.tools-heading .eyebrow {
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+.tools-heading h2 {
+  font-size: clamp(80px, 10vw, 148px);
+  line-height: 1;
+}
+.tools-viewport {
+  width: 100%;
+  overflow: clip;
+}
+.tools-track {
+  --tools-start: clamp(100px, 12vw, 180px);
+  display: flex;
+  width: max-content;
+  animation: tools-glide 52s linear infinite;
+  will-change: transform;
+}
+.tools-group {
+  display: flex;
+  gap: 20px;
+  flex-shrink: 0;
   list-style: none;
-  padding: 0;
+  padding: 0 20px 0 0;
   margin: 0;
 }
-.flow-tools li {
-  height: 155px;
+.tool-card {
+  width: clamp(240px, 29vw, 420px);
+  height: clamp(230px, 20vw, 300px);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  background: var(--surface);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 28px;
+  background: var(--paper);
   border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 24px 18px;
-  transition: transform 0.3s;
+  border-radius: 18px;
+  padding: 32px;
+  transition: border-color 0.2s;
 }
-.flow-tools li:nth-child(2) {
-  background: color-mix(in srgb, var(--celadon) 15%, var(--surface));
+.tool-logo {
+  display: block;
+  width: 160px;
+  height: 96px;
+  object-fit: contain;
 }
-.flow-tools li:nth-child(4) {
-  background: color-mix(in srgb, var(--dusty-blue) 14%, var(--surface));
+.tool-card[data-tool='SolidWorks'] .tool-logo {
+  width: 260px;
 }
-.flow-tools li:hover {
-  transform: translateY(-5px);
+.tool-card > span {
+  font-size: 24px;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--muted);
 }
-.flow-tools li > span {
-  font-size: 12px;
-  line-height: 1.5;
+.tools-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  margin-top: 28px;
 }
-.flow-tools li > svg {
-  color: var(--accent);
+.tools-caption .flow-instrumentation {
+  margin: 0;
+  font-size: 13px;
+}
+.tools-motion-control {
+  min-width: 102px;
+  height: 44px;
+  padding: 0 16px;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--paper);
+  font-size: 14px;
+}
+.flow-tools[data-paused='true'] .tools-track {
+  animation-play-state: paused;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tools-viewport:hover .tools-track {
+    animation-play-state: paused;
+  }
+  .tool-card:hover {
+    border-color: var(--muted);
+  }
+}
+@keyframes tools-glide {
+  from {
+    transform: translateX(calc(-1 * var(--tools-start)));
+  }
+  to {
+    transform: translateX(calc(-50% - var(--tools-start)));
+  }
 }
 .flow-instrumentation {
   display: flex;
@@ -1357,11 +1422,8 @@ html[data-portfolio-cursor='active'] .flow-home a {
     grid-column: 2;
     max-width: 440px;
   }
-  .flow-tools ul {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .flow-tools li {
-    height: 145px;
+  .tools-heading {
+    margin-bottom: 48px;
   }
   .flow-journal-entries {
     gap: 30px;
@@ -1792,20 +1854,35 @@ html[data-portfolio-cursor='active'] .flow-home a {
   .flow-work-folder > span {
     font-size: 11px;
   }
-  .flow-tools ul {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  .tools-heading {
+    margin-bottom: 36px;
   }
-  .flow-tools li {
-    height: 135px;
-    padding: 18px;
+  .tools-group {
+    gap: 14px;
+    padding-right: 14px;
   }
-  .flow-tools li > span {
-    font-size: 13px;
+  .tool-card {
+    width: 220px;
+    height: 220px;
+    border-radius: 14px;
+    padding: 24px;
+    gap: 24px;
   }
-  .flow-tools li svg {
-    width: 36px;
-    height: 36px;
+  .tool-logo {
+    width: 132px;
+    height: 80px;
+  }
+  .tool-card > span {
+    font-size: 20px;
+  }
+  .tools-caption {
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 22px;
+  }
+  .tools-caption .flow-instrumentation {
+    font-size: 12px;
+    gap: 7px;
   }
   .flow-instrumentation {
     font-size: 10px;
@@ -1924,6 +2001,28 @@ html[data-portfolio-cursor='active'] .flow-home a {
     transition: none;
   }
   .portfolio-cursor {
+    display: none;
+  }
+  .tools-viewport {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 5vw;
+  }
+  .tools-track {
+    animation: none;
+    transform: none;
+    will-change: auto;
+  }
+  .tools-group {
+    padding-inline: 5vw;
+  }
+  .tools-group[aria-hidden='true'] {
+    display: none;
+  }
+  .tool-card {
+    scroll-snap-align: start;
+  }
+  .tools-motion-control {
     display: none;
   }
   .flow-home * {

@@ -1,20 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import {
-  Activity,
-  Box,
-  Braces,
-  ChartSpline,
-  Code2,
-  ArrowRight,
-  ArrowUpRight,
-} from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { PortraitStory } from '@/components/portrait-story';
 import { MotionDirector } from '@/components/motion-director';
 import { PortfolioCursor } from '@/components/portfolio-cursor';
 import { ExperienceRail } from '@/components/experience-rail';
 import { SideQuests } from '@/components/side-quests';
+import { ToolsCarousel } from '@/components/tools-carousel';
 import { projects } from '@/content/projects';
+import { portfolioTools } from '@/content/tools';
 import { getPublicPosts } from '@/lib/journal-store';
 
 export const dynamic = 'force-dynamic';
@@ -45,14 +39,6 @@ const covers: Record<string, { title: string[]; tags: string[] }> = {
     tags: ['Robotics', 'Mechanisms', 'Tensegrity'],
   },
 };
-const tools = [
-  { name: 'SolidWorks', icon: Box },
-  { name: 'ANSYS', icon: Activity },
-  { name: 'MATLAB', icon: ChartSpline },
-  { name: 'Python', icon: Braces },
-  { name: 'C / C++', icon: Code2 },
-  { name: 'Arduino', icon: Braces },
-];
 
 export default async function Home() {
   const posts = await getPublicPosts();
@@ -130,31 +116,7 @@ export default async function Home() {
       </section>
       <SideQuests projects={completedProjects} />
       <ExperienceRail />
-      <section className="flow-tools flow-section shell">
-        <div className="flow-section-heading">
-          <div>
-            <p className="eyebrow">04 — Technical skills</p>
-            <h2>Tools</h2>
-          </div>
-          <p>
-            Software and programming tools I use for design, analysis, and
-            control.
-          </p>
-        </div>
-        <ul>
-          {tools.map(({ name, icon: Icon }) => (
-            <li key={name}>
-              <Icon size={44} strokeWidth={1.25} aria-hidden="true" />
-              <span>{name}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="flow-instrumentation">
-          IMU <span>·</span> Multimeter <span>·</span> Vernier caliper{' '}
-          <span>·</span> Data acquisition <span>·</span> Prototyping{' '}
-          <span>·</span> Experimental testing
-        </p>
-      </section>
+      <ToolsCarousel tools={portfolioTools} />
       <section className="flow-journal flow-section shell">
         <div className="flow-section-heading">
           <div>
