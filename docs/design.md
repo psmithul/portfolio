@@ -15,18 +15,18 @@ Body text uses olive or an accessible olive/white mixture. Small accents use a d
 
 ## Portrait
 
-The hero uses `public/images/mithul-cutout.webp`, a transparent portrait edited from the supplied `Candid Courtyard Portrait in Black 2.PNG`. The courtyard and framing have been removed. The edit brief prioritizes the source likeness, glasses, hair, expression, pose, and black outfit. No anime reconstruction is used. Keep the RGBA transparency when changing formats. A short fade at the crop's lower edge avoids an abrupt clothing edge. See `docs/assets.md` for the exact edit prompt and source provenance.
+The opening uses two supplied portraits in an overlapping composition. The main subject is `public/images/mithul-cutout.webp`, edited from the courtyard photograph with its background removed. The secondary café image is a WebP encoding of the supplied PNG, with no face generation or retouching. Preserve the cutout's alpha channel. The short lower-edge fade avoids an abrupt clothing crop. See `docs/assets.md` for provenance.
 
 This is a photographic portrait with layered spatial motion, not a photogrammetric mesh or a rigged avatar.
 
 ## Motion
 
-The opening follows native vertical scrolling: centered headline, an isolated portrait with gentle depth movement, then a centered personal introduction. There is no surrounding card, background scene, scroll hijacking, custom cursor, particle decoration, autoplay character motion, or hero workbench toolbar. Updates run on a scheduled animation frame only when scrolling or resizing occurs. Reduced-motion preferences remove movement. Without JavaScript, the introduction and portrait remain readable.
+The opening follows native scrolling: a centered two-level headline, overlapping portraits moving at different rates, and a centered introduction. Work-history cards fan above a 3D folder as the section enters the viewport. Updates run on a scheduled animation frame only after scrolling or resizing. Reduced-motion preferences remove movement; content remains readable without JavaScript. The page does not intercept wheel events or pin the reader in a scene.
 
-The page flow follows the supplied https://nehayadav.framer.website/ reference: centered statement, personal portrait and introduction, full-width selected projects, smaller builds, a visual gallery, experience, tools, and a large contact ending. Mika’s Life remains between the tools and contact sections. Barlow Condensed provides the bold heading rhythm; Manrope carries reading text. The light Wada palette and engineering content remain the user's own.
+The page follows the supplied https://nehayadav.framer.website/ composition: quiet right-aligned navigation, a centered opening, a portrait transition and introduction, three project stories, one side-project feature, a wide visual gallery, work history, tool cards, and a large contact ending. Mika’s Life remains before contact. Earlier projects sit in a native disclosure under the side-project feature. Text sits under the main project images, with a narrow year column and compact tags. Tanker and Space Grotesk are the reference's actual typefaces; licensed copies are hosted locally. The light Wada palette and personal content are retained.
 
-The tensegrity and reaction-wheel projects use existing, verified CAD screenshots or renders with captions identifying their scope. Projects without verified assets use their title, contribution, and factual project details. The visual gallery uses four views from these same verified CAD packages. There are no substitute illustrations, stock robots, image placeholders, or generic interactive models on any project page.
+The tensegrity and reaction-wheel projects use existing, verified CAD screenshots or renders with captions identifying their scope. At the user’s request, the other nine projects now use temporary subject illustrations made from the Wada palette. They are marked as project illustrations in the visual and caption, rather than presented as actual CAD or hardware. Replace each `illustration(...)` entry in `content/projects.ts` with verified imagery when it is available. The visual gallery continues to use four views from the verified CAD packages. Generic interactive project models remain removed.
 
 ## Identity
 
-Use a plain name wordmark: Mithul Sourav, with a small mechanical engineering and robotics caption. The favicon is a single vector M with no font dependency or decorative dot. Keep the name visible on phones; navigation occupies a separate row when needed.
+There is no header logo or wordmark. The name appears in the introduction and footer. Navigation stays in one readable row on phones. The small favicon is retained; the journal's decorative m. symbol has been removed.

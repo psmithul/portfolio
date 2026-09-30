@@ -78,7 +78,7 @@ export default async function ProjectPage({ params }: Props) {
       )}
       <section className="project-question shell">
         <div>
-          <p className="eyebrow">THE ENGINEERING QUESTION</p>
+          <p className="eyebrow">THE PROBLEM</p>
           <h2>{project.question}</h2>
         </div>
         <div className="project-at-a-glance">
@@ -116,17 +116,12 @@ export default async function ProjectPage({ params }: Props) {
       </section>
       <section className="about-section shell">
         <div className="section-label">
-          <p className="eyebrow">03 / CURRENT OUTCOME</p>
+          <p className="eyebrow">03 / RESULTS & PROGRESS</p>
         </div>
         <div className="about-body">
           <p className="large-body">{project.outcome}</p>
-          <ul className="evidence-list">
-            {project.evidence.map((e) => (
-              <li key={e}>{e}</li>
-            ))}
-          </ul>
           <div className="scope-note">
-            <span className="eyebrow">SCOPE</span>
+            <span className="eyebrow">PROJECT STAGE</span>
             <p>{project.scope}</p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 # Portfolio asset provenance
 
-Only verified project-specific assets are shown. No generic robot illustration or fabricated hardware photograph is used. When a project has no verified image, omit its `image` object in `content/projects.ts`.
+Verified CAD views are used where available. At the user’s request, nine projects without imagery use temporary vector subject illustrations. These are explicitly identified as illustrations and do not depict the actual build, CAD, or measured results. No fabricated hardware photograph is used.
 
 ## Tensegrity joint
 
@@ -28,3 +28,35 @@ Exact edit prompt:
 
 - `public/images/projects/reaction-wheel-cutaway.webp` is a WebP encoding of `/Volumes/Mithul/Codex/reaction-wheel-fem-ml/deliverables/client_cad_images/04_reaction_wheel_cutaway.png`. It shares the verified STEP source and presentation-image receipts described above.
 - `public/images/projects/tensegrity-leg-cad.webp` is a WebP encoding of `/Users/mika/projectd/Major project/output/Tensegrity_Leg_SolidWorks_V11_Photo_Tilt_Print_Ready/Documentation/NATIVE_SOLIDWORKS_FRONT_VIEW.png`. It is the existing native SolidWorks view from the V11 package, a paper-based CAD reconstruction rather than tested hardware.
+
+## Temporary project illustrations
+
+Nine `public/images/projects/illustration-*.svg` files provide the requested temporary visuals for the rover, KneeAssist, leaf robot, NeoLeg, navigation simulation, four-bar linkage, Wallet Shield, smart-home model, and traffic/bus models. They are authored as simple vector subject illustrations and generated reproducibly with `node scripts/project-illustrations.mjs`. The colors are Wada combination 321, white, and an 8% yellow/white surface tint. Each visual says “PROJECT ILLUSTRATION”; the image captions and alt text also identify their scope. They are not source diagrams, CAD reconstructions, prototype photographs, or test plots. Replace the corresponding `illustration(...)` entry in `content/projects.ts` when real imagery becomes available.
+
+## Café portrait
+
+`public/images/mithul-cafe.webp` (1100 × 1375) is a resized WebP encoding of the user-supplied `/Users/mika/Downloads/ChatGPT Image Sep 6, 2026, 10_43_03 PM.PNG`. No semantic image edit, face generation, or retouching was applied. The website crops its display inside the secondary photo frame.
+
+## Work-history folder
+
+`public/images/work-folder.webp` (800 × 800, RGBA) is a generic decorative illustration for the experience section. It does not depict engineering work or a project prototype. Created with one built-in image generation call; the native 1254 × 1254 PNG is at `/Users/mika/.codex/generated_images/01a0f162-677f-7422-a41b-71c1c839f117/exec-9de4e389-1dbb-4eba-998d-93db568ab327.png`. The native alpha range is 0–255 and all corners are transparent. The WebP retains alpha.
+
+Exact prompt:
+
+```text
+Use case: stylized-concept
+Asset type: compact work-history section illustration for an engineering portfolio
+Primary request: One polished 3D open file folder, a generic folder illustration rather than an image of any engineering project.
+Scene/backdrop: Completely isolated with real alpha transparency; no visible backdrop or floor.
+Subject: An open folder with both front and back visible, rounded corners, and one top-left tab. Two plain paper sheets emerge from the folder: one Pale Yellow #f5f5b8 sheet and one off-white sheet. The folder is Sanzo Wada Blue #96bfe6, with subtle Olive #172713 edge shading.
+Style/medium: Polished restrained 3D render, satin material, softly rounded edges.
+Composition/framing: Straight-on view with a slight view from above. Compact centered square composition. The complete folder and paper sheets fit comfortably inside the frame with all edges visible.
+Lighting/mood: Soft studio lighting and a small natural contact shadow, preserved on the transparent canvas.
+Constraints: Real alpha transparency. No text, no logos, no symbols, no floating decorations, no people, no charts, no neon. Single asset only.
+```
+
+## Reference fonts and recording
+
+- Tanker regular comes directly from Fontshare's official API and CDN. Self-hosting is permitted in Section 01 of the included `public/fonts/Tanker-FFL.txt`; no font modification or conversion was performed.
+- Space Grotesk Latin comes from Google Fonts, with its license in `public/fonts/SpaceGrotesk-OFL.txt`.
+- The reference visit is recorded in `outputs/reference-visit/neha-reference-scroll.mp4`; browser screenshots and captured frames are in that same ignored output directory. Timing is adjusted for inspection. These reference captures are review artifacts and are not included in the portfolio or hosting archive.
