@@ -30,6 +30,8 @@ The homepage follows the résumé: three ongoing projects, then an eight-item Co
 
 Reduced motion disables the pinned rail, custom cursor, parallax, and reveals. Content remains readable without JavaScript through the native carousel fallback. The custom cursor is limited to fine pointers on the homepage and disappears on keyboard use, forms, pointer exit, and other routes. Project hover shows a light pill labelled “Understand more” with an SVG arrow, replacing the circular “View” marker. The pill stays within the viewport. Each whole project card is a single link and remains usable with a keyboard or touch.
 
+Tools follows the supplied logo-carousel screenshot: a large centred heading, broad rounded cards, and a continuous row with partial cards at both edges. The original six software marks keep their colours and proportions against the light paper background. Two equally sized groups form a seamless 52-second loop; the duplicate is hidden from assistive technology. Fine-pointer hover pauses the row, and a 44-pixel Pause/Resume button provides keyboard control. Reduced motion removes the animation and duplicate, leaving a native horizontal list with snap points. Vertical page scrolling remains native.
+
 ## Professional content
 
 All original eleven projects remain, with a twelfth case study for the verified Vayu Aerospace internship. Featured studies distinguish design-stage work, simulation, reference CAD, and hardware evaluation. ISTE NITK Secretary and NH66 Fund Manager details come from the supplied research CV. The writing desk, database, authorization, and published journal remain part of the same application.

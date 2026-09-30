@@ -1,0 +1,129 @@
+{
+  "date": "2026-09-30",
+  "status": "complete; six originals verified",
+  "assets": [
+    {
+      "tool": "SOLIDWORKS",
+      "file": "solidworks.svg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:SOLIDWORKS_Logo.svg",
+      "asset_url": "https://upload.wikimedia.org/wikipedia/commons/b/bf/SOLIDWORKS_Logo.svg",
+      "reuse_notes": "Existing Commons SVG, dated 2026-07-03 and attributed there to Dassault Systemes S.E. with source 3ds.com. Commons labels it PD-textlogo, with trademark restrictions remaining. Vendor branding charter limits authorized logo use; no blanket trademark license. Vendor-hosted PNG timed out repeatedly, so this verified existing SVG was selected.",
+      "policy_urls": [
+        "https://www.solidworks.com/partners/solution-partner-graphics-charter"
+      ],
+      "original_attribution_url": "https://www.3ds.com/",
+      "bytes": 5113,
+      "sha256": "afaab4165f023cad9cb8f5e33b46dada829f5a968e9600fc18b619c9effc235a",
+      "format": "svg",
+      "svg_dimensions": {
+        "width": "1804.0603",
+        "height": "206.12706",
+        "viewBox": "0 0 1804.0603 206.12706"
+      },
+      "validation": "SVG XML parsed; no script, foreignObject or event-handler attributes; Quick Look render succeeded",
+      "production_path": "public/images/tools/solidworks.svg"
+    },
+    {
+      "tool": "Ansys",
+      "file": "ansys.png",
+      "source_page": "https://github.com/ansys/ansys-sphinx-theme/blob/main/src/ansys_sphinx_theme/theme/ansys_sphinx_theme/static/logos/ansys_logo_transparent_black.png",
+      "asset_url": "https://raw.githubusercontent.com/ansys/ansys-sphinx-theme/main/src/ansys_sphinx_theme/theme/ansys_sphinx_theme/static/logos/ansys_logo_transparent_black.png",
+      "reuse_notes": "Ansys vendor-owned public repository; repository is Apache-2.0 (included). Current original includes part of Synopsys. Apache license does not grant trademark rights. Academic page describes limited unchanged-logo uses; general referential trademark policy is word marks only.",
+      "policy_urls": [
+        "https://sphinxdocs.ansys.com/version/stable/user-guide/configuration.html",
+        "https://ansys.synopsys.com/academic/terms-and-conditions",
+        "https://www.ansys.com/content/dam/legal/ansys-trademark-usage-guidelines.pdf"
+      ],
+      "license_file": "LICENSE.ansys-sphinx-theme.txt",
+      "bytes": 30861,
+      "sha256": "08821177cb1929bb5d31c506ddde3d2f3f5215da1238eee300c366e061e03c1e",
+      "format": "png",
+      "dimensions_px": [999, 512],
+      "mode": "RGBA",
+      "validation": "PNG signature and Pillow verify/full decode succeeded; visually reviewed",
+      "production_path": "public/images/tools/ansys.png"
+    },
+    {
+      "tool": "MATLAB",
+      "file": "matlab.svg",
+      "source_page": "https://github.com/devicons/devicon/blob/master/icons/matlab/matlab-original.svg",
+      "asset_url": "https://raw.githubusercontent.com/devicons/devicon/master/icons/matlab/matlab-original.svg",
+      "reuse_notes": "Existing MATLAB membrane SVG from Devicon; MIT library license (included), copyright 2015 konpa. MathWorks membrane remains a registered trademark; preserve proportions and do not imply affiliation. Vendor direct downloads blocked here.",
+      "policy_urls": [
+        "https://raw.githubusercontent.com/devicons/devicon/master/LICENSE",
+        "https://www.mathworks.com/brand.html"
+      ],
+      "license_file": "LICENSE.devicon.txt",
+      "bytes": 1878,
+      "sha256": "03f162fa2d349019b1fad920206b27246e5f5b48e6f7c15fb890fc3e8d3c82e0",
+      "format": "svg",
+      "svg_dimensions": {
+        "viewBox": "0 0 128 128"
+      },
+      "validation": "SVG XML parsed; no script, foreignObject or event-handler attributes; Quick Look render succeeded",
+      "production_path": "public/images/tools/matlab.svg"
+    },
+    {
+      "tool": "Python",
+      "file": "python.png",
+      "source_page": "https://www.python.org/community/logos/",
+      "asset_url": "https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/community/logos/python-logo-only.png",
+      "reuse_notes": "Official PSF two-snakes PNG, unmodified, including the original shadow. PSF permits use to identify Python and projects using Python, including the device alone; preserve logo shape and avoid implying affiliation. PNG selected because the official SVG lacks a viewBox and performed poorly in local rendering QA.",
+      "policy_urls": [
+        "https://www.python.org/psf/trademarks-faq/",
+        "https://www.python.org/psf/trademarks/"
+      ],
+      "bytes": 20637,
+      "sha256": "4008a934b415c152bfa513be3e9b05de4212ae41549a27f2c6c8d41b3a24a4da",
+      "format": "png",
+      "validation": "PNG signature and Pillow verify/full decode succeeded; visually reviewed",
+      "dimensions_px": [269, 326],
+      "mode": "RGBA",
+      "production_path": "public/images/tools/python.png"
+    },
+    {
+      "tool": "Arduino",
+      "file": "arduino.svg",
+      "source_page": "https://content.arduino.cc/brand/",
+      "asset_url": "https://content.arduino.cc/brand/arduino-color.svg",
+      "reuse_notes": "Official original teal Arduino logo. Registered trademark of Arduino SA; descriptive or explanatory use is an exception to the general authorization requirement. No blanket open license for this corporate logo.",
+      "policy_urls": [
+        "https://www.arduino.cc/en/trademark/guides/arduino-and-community-logos/"
+      ],
+      "bytes": 2166,
+      "sha256": "14ec86fc9891d4d70344976e9392c06b104dc88d583d23a52085b0df59998824",
+      "format": "svg",
+      "svg_dimensions": {
+        "viewBox": "0 0 342 254"
+      },
+      "validation": "SVG XML parsed; no script, foreignObject or event-handler attributes; Quick Look render succeeded",
+      "production_path": "public/images/tools/arduino.svg"
+    },
+    {
+      "tool": "C / C++",
+      "file": "cplusplus.svg",
+      "source_page": "https://github.com/isocpp/logos",
+      "asset_url": "https://raw.githubusercontent.com/isocpp/logos/master/cpp_logo.svg",
+      "reuse_notes": "Official Standard C++ Foundation mark, by Jeremy Kratz. Foundation terms permit unaltered use for standardized C++ related material without implying endorsement. Selected to represent the combined C / C++ card as requested.",
+      "policy_urls": ["https://isocpp.org/home/terms-of-use"],
+      "bytes": 1919,
+      "sha256": "7a16311bf5df3b6ec7e4f307d8a2ea339fbf8f03b68590a5372e4de72fc587c6",
+      "format": "svg",
+      "svg_dimensions": {
+        "width": "306px",
+        "height": "344.35px",
+        "viewBox": "0 0 306 344.35"
+      },
+      "validation": "SVG XML parsed; no script, foreignObject or event-handler attributes; Quick Look render succeeded",
+      "production_path": "public/images/tools/cplusplus.svg"
+    }
+  ],
+  "display": {
+    "desktop_box_px": [160, 96],
+    "mobile_box_px": [132, 80],
+    "solidworks_wordmark_width_px": 260,
+    "fit": "contain",
+    "preserve_original_colors": true
+  },
+  "original_files_unmodified": true
+}

@@ -72,3 +72,9 @@ The current opening pairs the original photographic cutout with the paper-based 
 The folder is now an unused historical asset. `public/images/experience-toolbox.webp` is an 800 × 800 RGBA encoding of one built-in ImageGen output, a generic open mechanic’s toolbox. It is decorative, not a photograph of Mithul’s equipment. The exact prompt, source path, and production path are in `experience-toolbox-asset.json`. Alpha 0–255 is preserved.
 
 The leaf-robot image now diagrams the five CV-defined subsystems. The UAV internship image compares the rigid baseline, elastomer tray, and suspended mount. These are authored schematics, not source CAD or hardware photographs. CAD and illustrations are displayed without multiply blending, and contain sizing preserves every edge. Cover annotations and image overlays were removed.
+
+## Tools carousel logos
+
+Six original logo assets are served locally from `public/images/tools/`. ANSYS comes from the vendor's Sphinx theme repository, Python from the Python Software Foundation, Arduino from its brand resources, and C++ from the Standard C++ Foundation. MATLAB uses the existing Devicon membrane SVG; SolidWorks uses the original Dassault Systèmes wordmark hosted on Wikimedia Commons. No logo was generated, redrawn, cropped, or recoloured. The C++ mark accompanies the résumé's combined C / C++ skill.
+
+The [asset manifest](tool-logo-assets.json) records exact source URLs, original hashes, dimensions, validation, and reuse notes. The ANSYS repository and Devicon license notices are retained alongside the assets. These marks identify software used by Mithul; they do not imply vendor affiliation or endorsement.
