@@ -6,6 +6,7 @@ import {
   Braces,
   ChartSpline,
   Code2,
+  ArrowRight,
   ArrowUpRight,
 } from 'lucide-react';
 import { PortraitStory } from '@/components/portrait-story';
@@ -81,6 +82,32 @@ export default async function Home() {
                 key={project.slug}
                 data-cursor="project"
               >
+                <div className="flow-project-details">
+                  <div className="flow-project-timeline">
+                    <span className="flow-project-year">
+                      {project.period.match(/\d{4}/)?.[0]}
+                    </span>
+                    <span
+                      className={`status-badge ${project.status.toLowerCase()}`}
+                    >
+                      {project.status}
+                    </span>
+                    <span className="flow-project-date">{project.period}</span>
+                  </div>
+                  <div className="flow-project-description">
+                    <h3>{cover.title.join(' ')}</h3>
+                    <div className="flow-tags">
+                      {cover.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+                    <p>{project.summary}</p>
+                  </div>
+                  <ArrowRight
+                    className="flow-project-arrow"
+                    aria-hidden="true"
+                  />
+                </div>
                 <figure className="flow-project-image">
                   <div className="flow-cover-body">
                     {project.image && (
@@ -96,33 +123,6 @@ export default async function Home() {
                   </div>
                   <figcaption>{project.image?.caption}</figcaption>
                 </figure>
-                <div className="flow-project-details">
-                  <div className="flow-project-timeline">
-                    <span
-                      className={`status-badge ${project.status.toLowerCase()}`}
-                    >
-                      {project.status}
-                    </span>
-                    <span className="flow-project-date">{project.period}</span>
-                  </div>
-                  <div className="flow-project-description">
-                    <h3>
-                      {cover.title[0]}
-                      <br />
-                      {cover.title[1]}
-                    </h3>
-                    <div className="flow-tags">
-                      {cover.tags.map((tag) => (
-                        <span key={tag}>{tag}</span>
-                      ))}
-                    </div>
-                    <p>{project.summary}</p>
-                    <span className="flow-read-project">
-                      Project details{' '}
-                      <ArrowUpRight className="link-arrow" aria-hidden="true" />
-                    </span>
-                  </div>
-                </div>
               </Link>
             );
           })}

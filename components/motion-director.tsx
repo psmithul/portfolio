@@ -18,7 +18,9 @@ export function MotionDirector() {
           cover.style.removeProperty('--cover-progress');
           return;
         }
-        const bounds = cover.getBoundingClientRect();
+        const bounds =
+          cover.querySelector('.flow-project-image')?.getBoundingClientRect() ??
+          cover.getBoundingClientRect();
         const progress = Math.max(
           0,
           Math.min(
