@@ -3,7 +3,7 @@ title: 'A walk, taken apart'
 date: '2026-09-08'
 description: 'A motion study makes an ordinary walk look strange. That strangeness is a good place to start asking questions.'
 tags: ['Movement', 'Observation', 'Art']
-draft: false
+draft: true
 ---
 
 A man walks across a page carrying a bag and a cane. He does it again, a fraction of a second further along. Then again. His journey is small enough to hold in your hands, but it takes several rows to complete.
