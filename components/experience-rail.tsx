@@ -79,9 +79,9 @@ export function ExperienceRail() {
             data-archive-card
             style={
               {
-                '--fan-x': `${(index - 2) * 17}vw`,
-                '--fan-y': '0px',
-                '--fan-angle': '0deg',
+                '--fan-x': `${(index - 2) * 17.8}vw`,
+                '--fan-y': `${(0.65 - Math.sqrt(0.65 ** 2 - ((index - 2) * 0.178) ** 2)) * 100}vw`,
+                '--fan-angle': `${(index - 2) * 1}deg`,
                 '--card-order': 5 - Math.abs(index - 2),
                 '--burst-delay': `${Math.abs(index - 2) * 65}ms`,
               } as CSSProperties

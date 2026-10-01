@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { HERO_ROVER_HEADING, HERO_ROVER_WHEEL_RADIUS } from '@/lib/hero-motion';
 
 export function HeroModels() {
   const host = useRef<HTMLDivElement>(null);
@@ -61,14 +62,48 @@ export function HeroModels() {
       fill.position.set(4, 1, -3);
       scene.add(fill);
       const models = buildHeroModels();
-      scene.add(...models);
+      const display = new THREE.Group();
+      display.add(...models);
+      scene.add(display);
+      const wheels: InstanceType<typeof THREE.Object3D>[] = [];
+      models[1].traverse((object) => {
+        if (object.name === 'rover-wheel') wheels.push(object);
+      });
+      const slot = element.parentElement!;
+      const statement = element.closest<HTMLElement>('.flow-statement')!;
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
       let visible = true;
       let frame = 0;
       let last = performance.now();
       let lastScroll = window.scrollY;
+      let elapsed = 0;
+      let progress = 0;
+      let roverX = 0;
+      let roverZ = 0;
+      let wheelAngle = 0;
+      const updateProgress = () => {
+        const bounds = statement.getBoundingClientRect();
+        progress = reduce.matches
+          ? 0
+          : Math.max(
+              0,
+              Math.min(1, -bounds.top / Math.max(320, bounds.height * 0.85)),
+            );
+        slot.dataset.scrollProgress = progress.toFixed(3);
+      };
       const sync = () => {
         physics.states().forEach(({ position, rotation }, i) => {
+          if (i === 1) {
+            const distance =
+              (position.x - roverX) * Math.cos(HERO_ROVER_HEADING) -
+              (position.z - roverZ) * Math.sin(HERO_ROVER_HEADING);
+            wheelAngle -= distance / HERO_ROVER_WHEEL_RADIUS;
+            wheels.forEach((wheel) => {
+              wheel.rotation.z = wheelAngle;
+            });
+            roverX = position.x;
+            roverZ = position.z;
+          }
           models[i].position.set(position.x, position.y, position.z);
           models[i].quaternion.set(
             rotation.x,
@@ -83,19 +118,33 @@ export function HeroModels() {
         renderer.render(scene, camera);
       };
       const resize = () => {
-        const { width, height } = element.getBoundingClientRect();
+        const bounds = element.getBoundingClientRect();
+        const { width, height } = bounds;
         if (!width || !height) return;
+        const area = slot.getBoundingClientRect();
+        const scale = Math.min(area.width / 11, area.height / 3.9);
+        if (!scale) return;
         renderer.setSize(width, height, false);
-        const halfHeight = Math.max(1.95, (5.5 * height) / width);
-        camera.top = halfHeight;
-        camera.bottom = -halfHeight;
+        camera.left = -width / scale / 2;
+        camera.right = width / scale / 2;
+        camera.top = height / scale / 2;
+        camera.bottom = -height / scale / 2;
+        display.position.set(
+          (area.left + area.width / 2 - bounds.left - width / 2) / scale,
+          -(area.top + area.height / 2 - bounds.top - height / 2) / scale,
+          0,
+        );
         camera.updateProjectionMatrix();
+        updateProgress();
         render();
       };
       const tick = (now: number) => {
         frame = 0;
         if (cancelled || !visible || document.hidden || reduce.matches) return;
-        physics.step((now - last) / 1000);
+        const delta = Math.min((now - last) / 1000, 0.1);
+        elapsed += delta;
+        physics.seek(progress, elapsed * 0.16);
+        physics.step(delta);
         last = now;
         render();
         frame = requestAnimationFrame(tick);
@@ -104,6 +153,7 @@ export function HeroModels() {
         cancelAnimationFrame(frame);
         frame = 0;
         last = performance.now();
+        updateProgress();
         render();
         if (visible && !document.hidden && !reduce.matches)
           frame = requestAnimationFrame(tick);
@@ -111,6 +161,7 @@ export function HeroModels() {
       const scroll = () => {
         const delta = window.scrollY - lastScroll;
         lastScroll = window.scrollY;
+        updateProgress();
         if (visible && !reduce.matches) physics.drive(delta / 90);
       };
       const observer = new IntersectionObserver(([entry]) => {
@@ -120,6 +171,7 @@ export function HeroModels() {
       observer.observe(element);
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(element);
+      resizeObserver.observe(slot);
       window.addEventListener('scroll', scroll, { passive: true });
       document.addEventListener('visibilitychange', resume);
       reduce.addEventListener('change', resume);

@@ -1,7 +1,8 @@
 import RAPIER from '@dimforge/rapier3d-compat';
+import { heroTargets, HERO_ANCHORS } from './hero-motion.ts';
+export { HERO_ANCHORS } from './hero-motion.ts';
 
 let initialization: Promise<void> | undefined;
-export const HERO_ANCHORS = [-3.5, 0, 3.5] as const;
 const SHAPES = [
   { half: [1.4, 0.8, 0.65], mass: 4 },
   { half: [1.4, 0.9, 0.8], mass: 8 },
@@ -31,8 +32,12 @@ export async function createHeroPhysics() {
   });
   let accumulator = 0;
   let drive = 0;
+  let targets = heroTargets(0);
 
   return {
+    seek(progress: number, phase = 0) {
+      targets = heroTargets(progress, phase);
+    },
     drive(value: number) {
       drive = Math.max(-1, Math.min(1, value));
     },
@@ -46,30 +51,38 @@ export async function createHeroPhysics() {
           const q = body.rotation();
           const w = body.angvel();
           const mass = body.mass();
-          const anchorY = i === 1 ? -0.12 : 0.08;
+          const target = targets[i];
+          const t = target.rotation;
+          // Relative target quaternion gives the shortest corrective torque.
+          const error = {
+            x: -t.w * q.x + t.x * q.w - t.y * q.z + t.z * q.y,
+            y: -t.w * q.y + t.x * q.z + t.y * q.w - t.z * q.x,
+            z: -t.w * q.z - t.x * q.y + t.y * q.x + t.z * q.w,
+            w: t.w * q.w + t.x * q.x + t.y * q.y + t.z * q.z,
+          };
           body.resetForces(false);
           body.resetTorques(false);
           body.addForce(
             {
-              x: mass * (-9 * (p.x - HERO_ANCHORS[i]) - 4 * v.x),
+              x: mass * (-9 * (p.x - target.position.x) - 4 * v.x),
               y:
                 mass *
-                (-9 * (p.y - anchorY) -
+                (-9 * (p.y - target.position.y) -
                   4 * v.y +
                   drive * (i === 1 ? -0.8 : 0.8)),
-              z: mass * (-9 * p.z - 4 * v.z),
+              z: mass * (-9 * (p.z - target.position.z) - 4 * v.z),
             },
             true,
           );
           // Quaternion shortest-arc torsional spring; no angle interpolation.
-          const sign = q.w < 0 ? -1 : 1;
+          const sign = error.w < 0 ? -1 : 1;
           body.addTorque(
             {
-              x: mass * (-1.8 * q.x * sign - 0.75 * w.x),
+              x: mass * (1.8 * error.x * sign - 0.75 * w.x),
               y:
                 mass *
-                (-1.8 * q.y * sign - 0.75 * w.y + drive * (i - 1) * 0.05),
-              z: mass * (-1.8 * q.z * sign - 0.75 * w.z + drive * 0.08),
+                (1.8 * error.y * sign - 0.75 * w.y + drive * (i - 1) * 0.05),
+              z: mass * (1.8 * error.z * sign - 0.75 * w.z + drive * 0.08),
             },
             true,
           );
