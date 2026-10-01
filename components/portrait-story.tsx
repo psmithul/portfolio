@@ -40,7 +40,6 @@ export function PortraitStory() {
   return (
     <section className="flow-opening" ref={story} aria-label="Meet Mithul">
       <div className="flow-statement shell">
-        <p className="flow-opening-note">Mithul Sourav · NITK Surathkal</p>
         <h1>
           <span>Hi, I’m Mithul.</span>
           <span>Building and learning along the way, </span>
