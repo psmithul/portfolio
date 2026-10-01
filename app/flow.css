@@ -100,14 +100,6 @@ html {
   padding-top: 54px;
   min-height: min(890px, calc(100svh - 82px));
 }
-.flow-opening-note {
-  font-size: 12px;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  position: relative;
-  z-index: 3;
-  margin-bottom: 30px;
-}
 .flow-statement h1 {
   font-size: clamp(80px, 8.5vw, 150px);
   line-height: 0.94;
@@ -1868,10 +1860,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
   .flow-statement {
     min-height: 690px;
   }
-  .flow-opening-note {
-    font-size: 10px;
-  }
-
   .flow-scroll-cue {
     font-size: 11px;
   }
@@ -2011,11 +1999,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
   .flow-statement {
     padding-top: 42px;
     min-height: 610px;
-  }
-  .flow-opening-note {
-    font-size: 10px;
-    letter-spacing: 0.055em;
-    margin-bottom: 26px;
   }
   .flow-statement h1 {
     font-size: clamp(54px, 15vw, 86px);
