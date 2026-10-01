@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
+import { SectionLink } from '@/components/section-link';
 
 import './globals.css';
 import './experience.css';
@@ -27,12 +28,12 @@ export default function RootLayout({
           Skip to content
         </a>
         <header className="site-header shell">
-          <Link href="/#top" className="header-name">
+          <SectionLink href="/#top" className="header-name">
             Mithul Sourav
-          </Link>
+          </SectionLink>
           <nav aria-label="Main navigation">
-            <Link href="/#top">Home</Link>
-            <Link href="/#work">Projects</Link>
+            <SectionLink href="/#top">Home</SectionLink>
+            <SectionLink href="/#work">Projects</SectionLink>
             <Link href="/about">About</Link>
             <Link href="/blog">Journal</Link>
             <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
