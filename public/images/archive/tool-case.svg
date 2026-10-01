@@ -1,20 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
-  <ellipse cx="400" cy="725" rx="268" ry="22" fill="#334E68" opacity=".08"/>
-  <path d="M313 145V113a25 25 0 0 1 25-25h124a25 25 0 0 1 25 25v32" stroke="#334E68" stroke-width="22"/>
-  <path d="M134 177a30 30 0 0 1 30-30h472a30 30 0 0 1 30 30v196H134V177Z" fill="#8296A5" stroke="#334E68" stroke-width="5"/>
-  <rect x="163" y="176" width="474" height="166" rx="12" fill="#334E68"/>
-  <path d="M193 208H607M193 243H607M193 278H607M193 313H607" stroke="#8296A5" stroke-opacity=".25" stroke-width="4"/>
-  <path d="M245 485V329a14 14 0 0 1 14-14h123a14 14 0 0 1 14 14v156" fill="#F4F0E6" stroke="#8296A5" stroke-width="4"/>
-  <path d="M270 350h98M270 373h98M270 396h62" stroke="#98A886" stroke-width="7"/>
-  <path d="m443 469-8-138a37 37 0 0 1 6-70l12 32 22-7-11-33a37 37 0 0 1 17 73l8 141" fill="#C59A4A" stroke="#334E68" stroke-width="4" stroke-linejoin="round"/>
-  <path d="m539 474 23-150" stroke="#334E68" stroke-width="18"/>
-  <path d="m551 392 17-69 25 4-6 77" fill="#98A886" stroke="#334E68" stroke-width="4"/>
-  <path d="M134 378h532l41 79H93l41-79Z" fill="#8296A5" stroke="#334E68" stroke-width="5"/>
-  <path d="M94 457h612v209a34 34 0 0 1-34 34H128a34 34 0 0 1-34-34V457Z" fill="#334E68"/>
-  <path d="M113 470h574v192a19 19 0 0 1-19 19H132a19 19 0 0 1-19-19V470Z" fill="#49637B"/>
-  <path d="M113 500h574" stroke="#8296A5" stroke-width="5"/>
-  <rect x="197" y="446" width="32" height="82" rx="7" fill="#C59A4A" stroke="#334E68" stroke-width="4"/>
-  <rect x="571" y="446" width="32" height="82" rx="7" fill="#C59A4A" stroke="#334E68" stroke-width="4"/>
-  <rect x="334" y="557" width="132" height="38" rx="9" fill="#334E68" stroke="#8296A5" stroke-width="4"/>
-  <path d="M135 642h70M595 642h70" stroke="#8296A5" stroke-width="4"/>
+  <defs>
+    <linearGradient id="shell" x1="180" y1="150" x2="620" y2="690" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8296A5"/><stop offset=".5" stop-color="#49637B"/><stop offset="1" stop-color="#334E68"/>
+    </linearGradient>
+    <linearGradient id="lining" x1="400" y1="189" x2="400" y2="417" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#334E68"/><stop offset="1" stop-color="#24231F"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="150" y1="400" x2="650" y2="518" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9E3D7"/><stop offset=".45" stop-color="#8296A5"/><stop offset="1" stop-color="#49637B"/>
+    </linearGradient>
+    <linearGradient id="face" x1="160" y1="510" x2="650" y2="710" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#49637B"/><stop offset="1" stop-color="#334E68"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F4F0E6"/><stop offset=".4" stop-color="#C2CBD0"/><stop offset=".7" stop-color="#8296A5"/><stop offset="1" stop-color="#E9E3D7"/>
+    </linearGradient>
+    <radialGradient id="shadow"><stop stop-color="#24231F" stop-opacity=".18"/><stop offset="1" stop-color="#24231F" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="400" cy="733" rx="325" ry="34" fill="url(#shadow)"/>
+  <!-- Hinged lid, recessed lining and a metal carrying handle. -->
+  <path d="M324 164v-39a22 22 0 0 1 22-22h108a22 22 0 0 1 22 22v39" stroke="#24231F" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M326 160v-35a18 18 0 0 1 18-18h112a18 18 0 0 1 18 18v35" stroke="#8296A5" stroke-width="5"/>
+  <path d="M151 188a29 29 0 0 1 29-27h440a29 29 0 0 1 29 27l22 241H129l22-241Z" fill="url(#shell)" stroke="#334E68" stroke-width="2"/>
+  <path d="M167 194a15 15 0 0 1 15-14h436a15 15 0 0 1 15 14l18 215H149l18-215Z" fill="url(#lining)" stroke="#8296A5" stroke-width="2"/>
+  <path d="M178 207h444M172 381h456" stroke="#E9E3D7" stroke-opacity=".12" stroke-width="2"/>
+  <path d="M180 238h438M177 275h444M174 312h450M171 349h456" stroke="#8296A5" stroke-opacity=".15" stroke-width="2"/>
+  <path d="M159 180h482" stroke="#F4F0E6" stroke-opacity=".4" stroke-width="2"/>
+  <rect x="211" y="418" width="77" height="9" rx="3" fill="url(#metal)"/>
+  <rect x="512" y="418" width="77" height="9" rx="3" fill="url(#metal)"/>
+  <!-- Papers sit inside the tray, behind the front of the case. -->
+  <path d="m261 419 6-64 225 8-3 56" fill="#E9E3D7" stroke="#8296A5" stroke-width="2"/>
+  <path d="m280 430-2-60 241-9 5 69" fill="#F4F0E6" stroke="#8296A5" stroke-width="2"/>
+  <path d="m303 385 187-7M303 399l148-6" stroke="#334E68" stroke-opacity=".3" stroke-width="2"/>
+  <path d="m130 429 540 0 38 76H92l38-76Z" fill="url(#rim)" stroke="#334E68" stroke-width="2"/>
+  <path d="m149 439 502 0 21 46H127l22-46Z" fill="#24231F"/>
+  <path d="m127 485 545 0-21-46" stroke="#8296A5" stroke-width="3"/>
+  <!-- Folded front panel with bevels, catches and corner protectors. -->
+  <path d="M92 505h616v171a35 35 0 0 1-35 35H127a35 35 0 0 1-35-35V505Z" fill="url(#shell)" stroke="#334E68" stroke-width="2"/>
+  <path d="M108 519h584v155a21 21 0 0 1-21 21H129a21 21 0 0 1-21-21V519Z" fill="url(#face)" stroke="#8296A5" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M108 519h584" stroke="#F4F0E6" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M139 553v106M661 553v106" stroke="#24231F" stroke-opacity=".22" stroke-width="6"/>
+  <rect x="207" y="491" width="43" height="72" rx="6" fill="#24231F" fill-opacity=".3"/>
+  <rect x="550" y="491" width="43" height="72" rx="6" fill="#24231F" fill-opacity=".3"/>
+  <rect x="211" y="488" width="35" height="67" rx="4" fill="url(#metal)" stroke="#334E68" stroke-width="2"/>
+  <rect x="554" y="488" width="35" height="67" rx="4" fill="url(#metal)" stroke="#334E68" stroke-width="2"/>
+  <path d="M219 534h19M562 534h19" stroke="#334E68" stroke-width="3"/>
+  <circle cx="228.5" cy="546" r="3" fill="#334E68"/><circle cx="571.5" cy="546" r="3" fill="#334E68"/>
+  <rect x="332" y="585" width="136" height="42" rx="4" fill="#334E68" stroke="#8296A5" stroke-width="2"/>
+  <path d="M349 599h102M349 611h64" stroke="#E9E3D7" stroke-opacity=".55" stroke-width="2"/>
+  <path d="M96 650v24a33 33 0 0 0 33 33h29M704 650v24a33 33 0 0 1-33 33h-29" stroke="#24231F" stroke-opacity=".4" stroke-width="12"/>
+  <circle cx="119" cy="681" r="4" fill="url(#metal)"/><circle cx="681" cy="681" r="4" fill="url(#metal)"/>
 </svg>
