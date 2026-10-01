@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
 import { posts as initialPosts } from './posts.generated';
 import {
@@ -102,7 +103,9 @@ function entryIn(journal: Journal, id: string, version?: number): Entry {
   return entry;
 }
 
-export async function getPublicPosts(): Promise<Post[]> {
+// Share one storage snapshot between metadata, the article and its next link.
+// React's cache lasts for this render; owner reads and writes stay uncached.
+export const getPublicPosts = cache(async (): Promise<Post[]> => {
   const { journal } = await readJournal();
   const today = new Date().toISOString().slice(0, 10);
   return journal.entries
@@ -114,7 +117,7 @@ export async function getPublicPosts(): Promise<Post[]> {
     .sort(
       (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
     );
-}
+});
 export async function getPublicPost(slug: string) {
   return (await getPublicPosts()).find((post) => post.slug === slug);
 }

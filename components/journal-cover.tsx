@@ -1,6 +1,6 @@
 /* oxlint-disable next/no-img-element -- Author-provided editorial images use a fixed thumbnail ratio. */
-import Link from 'next/link';
 import Markdown from 'react-markdown';
+import { JournalLink } from '@/components/journal-link';
 
 export function JournalCover({
   body,
@@ -25,7 +25,7 @@ export function JournalCover({
     <figure
       className={`journal-photo ${match[2].includes('muybridge') ? 'motion-photo' : ''}`}
     >
-      <Link href={`/blog/${slug}`} aria-label={`Read ${title}`}>
+      <JournalLink href={`/blog/${slug}`} aria-label={`Read ${title}`}>
         <img
           src={match[2]}
           alt={match[1]}
@@ -34,7 +34,7 @@ export function JournalCover({
           loading="lazy"
           decoding="async"
         />
-      </Link>
+      </JournalLink>
       {caption && (
         <figcaption>
           <Markdown skipHtml>{caption}</Markdown>
