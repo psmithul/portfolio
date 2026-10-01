@@ -30,7 +30,9 @@ export function ArchiveReveal({
     const cards = Array.from(
       element.querySelectorAll<HTMLElement>('[data-archive-card]'),
     );
-    const wide = window.matchMedia('(min-width: 1580px)');
+    const wide = window.matchMedia(
+      kind === 'toolbox' ? '(min-width: 1280px)' : '(min-width: 1580px)',
+    );
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
     let fan = false;
@@ -51,8 +53,17 @@ export function ArchiveReveal({
     };
     const configure = () => {
       observer?.disconnect();
-      fan = wide.matches && window.innerHeight >= 960 && !reduce.matches;
+      fan =
+        wide.matches &&
+        !reduce.matches &&
+        (kind === 'toolbox' || window.innerHeight >= 960);
       element.dataset.layout = fan ? 'fan' : 'stack';
+      const stage = element.querySelector<HTMLElement>('.archive-stage');
+      element.dataset.pinned = String(
+        fan &&
+          !!stage &&
+          stage.getBoundingClientRect().height <= window.innerHeight - 80,
+      );
       element.dataset.enhanced = String(!reduce.matches);
       element.dataset.focused = 'false';
       cards.forEach((card) => delete card.dataset.revealed);
@@ -106,12 +117,12 @@ export function ArchiveReveal({
       element.removeEventListener('focusout', schedule);
       wide.removeEventListener('change', configure);
       reduce.removeEventListener('change', configure);
-      ['layout', 'enhanced', 'open', 'focused'].forEach(
+      ['layout', 'enhanced', 'open', 'focused', 'pinned'].forEach(
         (key) => delete element.dataset[key],
       );
       cards.forEach((card) => delete card.dataset.revealed);
     };
-  }, []);
+  }, [kind]);
 
   return (
     <section

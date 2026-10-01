@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { HERO_ROVER_HEADING, HERO_ROVER_SCALE } from './hero-motion';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
@@ -212,6 +213,7 @@ function rover(): AnimatedModel {
       assembly.position.set(x, 0.51, side * 0.96);
       root.add(assembly);
       const wheel = new THREE.Group();
+      wheel.name = 'rover-wheel';
       assembly.add(wheel);
       const tire = cylinder(0.46, 0.29, rubber);
       tire.rotation.x = Math.PI / 2;
@@ -348,8 +350,8 @@ export function createHeroRover() {
     }
   });
   root.position.y = -1.15;
-  root.scale.setScalar(0.78);
-  root.rotation.set(0.18, -0.62, 0.02);
+  root.scale.setScalar(HERO_ROVER_SCALE);
+  root.rotation.set(0.18, HERO_ROVER_HEADING, 0.02);
   return root;
 }
 

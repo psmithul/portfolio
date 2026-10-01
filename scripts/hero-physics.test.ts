@@ -27,6 +27,40 @@ await test('hero physics stays consistent at 30 and 60 frames per second', async
   }
 });
 
+await test('scroll targets turn the satellite, roll the rover along its heading, and raise the rocket reversibly', async () => {
+  const physics = await createHeroPhysics();
+  try {
+    physics.seek(0.25);
+    for (let i = 0; i < 600; i++) physics.step(1 / 60);
+    const [satellite, rover, rocket] = physics.states();
+    assert.ok(
+      satellite.rotation.y > 0.6,
+      'Satellite turns through a quarter orbit',
+    );
+    assert.ok(
+      rover.position.x > 0.2 && rover.position.z > 0.1,
+      'Rover travels forwards along its chassis heading',
+    );
+    assert.ok(rocket.position.y > 0.24, 'Rocket rises with scrolling');
+    physics.seek(0);
+    for (let i = 0; i < 900; i++) physics.step(1 / 60);
+    physics.states().forEach((state, i) => {
+      assert.ok(Math.abs(state.position.x - HERO_ANCHORS[i]) < 0.0001);
+      assert.ok(Math.abs(state.position.z) < 0.0001);
+      assert.ok(Math.abs(state.position.y - (i === 1 ? -0.12 : 0.08)) < 0.0001);
+      const q = state.rotation;
+      const angularError =
+        2 * Math.asin(Math.min(1, Math.hypot(q.x, q.y, q.z)));
+      assert.ok(
+        angularError < Math.PI / 1800,
+        'Returns within 0.1 degree of its resting orientation',
+      );
+    });
+  } finally {
+    physics.dispose();
+  }
+});
+
 await test('sustained scrolling keeps models in separate slots and damping returns them to rest', async () => {
   const physics = await createHeroPhysics();
   try {

@@ -184,7 +184,8 @@ html {
   margin-top: 0;
 }
 .flow-hero-objects {
-  position: relative;
+  position: static;
+  z-index: 0;
   min-width: 0;
   height: 260px;
   pointer-events: none;
@@ -195,6 +196,8 @@ html {
   height: 100%;
 }
 .flow-hero-canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
@@ -929,6 +932,26 @@ html {
 }
 .archive-toolbox[data-layout='fan'] .archive-card {
   height: 460px;
+  width: clamp(210px, 16vw, 284px);
+}
+.archive-toolbox[data-layout='fan'] {
+  --archive-stage-height: max(880px, calc(100svh - 80px));
+}
+.archive-reveal[data-layout='fan'][data-pinned='false'] {
+  height: var(--archive-stage-height);
+}
+.archive-reveal[data-layout='fan'][data-pinned='false'] .archive-stage {
+  position: relative;
+  top: 0;
+}
+@media (max-width: 1499px) {
+  .archive-toolbox[data-layout='fan'] {
+    --archive-stage-height: max(940px, calc(100svh - 80px));
+  }
+  .archive-toolbox[data-layout='fan'] .archive-card {
+    height: 500px;
+    padding: 18px;
+  }
 }
 .archive-toolbox[data-layout='fan'] .archive-card h3 {
   min-height: 61px;
@@ -1432,15 +1455,15 @@ html {
   opacity: 1;
 }
 .portfolio-cursor[data-kind='project'] {
-  width: 200px;
-  height: 56px;
-  margin: -28px 0 0 -100px;
+  width: 132px;
+  height: 38px;
+  margin: -19px 0 0 -66px;
   border-radius: 999px;
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--line);
   box-shadow: 0 4px 18px #24231f14;
-  font: 22px var(--display);
+  font: 16px var(--display);
 }
 .portfolio-cursor[data-kind='link'] {
   width: 30px;
@@ -1569,11 +1592,11 @@ html[data-portfolio-cursor='active'] .flow-home a {
 .portfolio-cursor[data-kind='project'] span {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
 .portfolio-cursor .link-arrow {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
 }
 @media (max-width: 1100px) {
   .flow-experience-link {

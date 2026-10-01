@@ -24,8 +24,8 @@ export function PortfolioCursor() {
           ? 'link'
           : 'dot';
       const isProject = element.dataset.kind === 'project';
-      const insetX = isProject ? 112 : 20;
-      const insetY = isProject ? 40 : 20;
+      const insetX = isProject ? 78 : 20;
+      const insetY = isProject ? 28 : 20;
       const drawX = Math.max(
         insetX,
         Math.min(document.documentElement.clientWidth - insetX, x),
