@@ -58,19 +58,11 @@ html {
   backdrop-filter: blur(12px);
   transition: height 0.3s ease;
   gap: 30px;
+  justify-content: flex-end;
 }
 .site-header[data-compact='true'] {
   height: 66px;
   border-bottom: 1px solid var(--line);
-}
-.header-name {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
 }
 .site-header nav {
   gap: clamp(20px, 2.6vw, 42px);
@@ -1983,21 +1975,17 @@ html[data-portfolio-cursor='active'] .flow-home a {
 }
 @media (max-width: 640px) {
   .site-header.shell {
-    height: 104px;
-    min-height: 104px;
+    height: 72px;
+    min-height: 72px;
     flex-wrap: nowrap;
     padding: 6px 22px;
     gap: 0;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
   }
   .site-header[data-compact='true'] {
-    height: 104px;
-  }
-  .header-name {
-    font-size: 16px;
-    min-height: 44px;
+    height: 72px;
   }
   .site-header nav {
     font-size: 11px;
