@@ -8,6 +8,7 @@ import './experience.css';
 import './flow.css';
 import 'katex/dist/katex.min.css';
 import './reading.css';
+import './journal.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),

@@ -23,12 +23,8 @@ export function journalTopic(post: Post) {
 }
 
 export function nextJournalPost(posts: Post[], slug: string) {
-  const highlights = journalHighlights(posts);
-  const highlighted = new Set(highlights.map((post) => post.slug));
-  const order = [
-    ...highlights,
-    ...posts.filter((post) => !highlighted.has(post.slug)),
-  ];
+  // The index receives the same newest-first public snapshot, including owner posts.
+  const order = posts;
   const current = order.findIndex((post) => post.slug === slug);
   if (current < 0 || order.length < 2) return undefined;
   return order[(current + 1) % order.length];

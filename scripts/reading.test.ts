@@ -127,19 +127,14 @@ await test('all four requested learning notes are highlighted without repeating 
   );
 });
 
-await test('keep reading visits every visible journal entry before returning to the first', () => {
+await test('keep reading follows index order, including new owner entries, before returning to the first', () => {
   const posts = [
     'a-new-owner-entry',
     'the-small-blue-thing',
     ...journalTopics.map(({ slug }) => slug).reverse(),
     'leave-room-for-the-unfinished',
   ].map((slug) => ({ slug, tags: [] }) as unknown as Post);
-  const expected = [
-    ...journalTopics.map(({ slug }) => slug),
-    'a-new-owner-entry',
-    'the-small-blue-thing',
-    'leave-room-for-the-unfinished',
-  ];
+  const expected = posts.map(({ slug }) => slug);
   let current = expected[0];
   const visited: string[] = [];
   for (let step = 0; step < posts.length; step++) {

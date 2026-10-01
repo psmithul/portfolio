@@ -9,7 +9,7 @@ if (!base) {
 const cases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
-  ['/blog/a-walk-in-twenty-four-pictures', 200, 'Muybridge', 'A walk'],
+  ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   [
     '/blog/leave-room-for-the-unfinished',
     404,

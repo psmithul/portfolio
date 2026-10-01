@@ -8,11 +8,10 @@ import { ExperienceRail } from '@/components/experience-rail';
 import { Accolades } from '@/components/accolades';
 import { SideQuests } from '@/components/side-quests';
 import { ToolsCarousel } from '@/components/tools-carousel';
+import { JournalPreview } from '@/components/journal-preview';
 import { projects } from '@/content/projects';
 import { portfolioTools } from '@/content/tools';
 import { getPublicPosts } from '@/lib/journal-store';
-import { journalHighlights, journalTopic } from '@/lib/journal-highlights';
-import { dateLabel } from '@/lib/journal-model';
 
 export const dynamic = 'force-dynamic';
 const featuredOrder = [
@@ -118,36 +117,7 @@ export default async function Home() {
       <ExperienceRail />
       <Accolades />
       <ToolsCarousel tools={portfolioTools} />
-      <section className="flow-journal flow-section shell" id="journal">
-        <div className="flow-section-heading">
-          <div>
-            <p className="eyebrow">06 — Journal</p>
-            <h2>Mika’s Life</h2>
-          </div>
-          <p>
-            Notes on the models I’m following, control systems, and what I’m
-            learning along the way.
-          </p>
-        </div>
-        <div className="flow-journal-entries">
-          {journalHighlights(posts).map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.slug}>
-              <span className="eyebrow">{journalTopic(post)}</span>
-              <h3>{post.title}</h3>
-              <p>{post.description}</p>
-              <time dateTime={post.date}>{dateLabel(post.date)}</time>
-              <ArrowUpRight
-                className="flow-journal-arrow link-arrow"
-                aria-hidden="true"
-              />
-            </Link>
-          ))}
-        </div>
-        <Link href="/blog" className="flow-text-link">
-          Read the journal{' '}
-          <ArrowUpRight className="link-arrow" aria-hidden="true" />
-        </Link>
-      </section>
+      <JournalPreview posts={posts} />
       <section className="flow-contact shell">
         <p className="eyebrow">Contact</p>
         <h2>Get in touch.</h2>
