@@ -1,6 +1,6 @@
 # Mithul Sourav · Portfolio & Mika’s Life
 
-A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes seven original essays, including four student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
+A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes five published essays, including four student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
 
 Public website: [psmithul.com](https://psmithul.com/). Vercel fallback: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
 

@@ -3,7 +3,7 @@ title: 'The small blue thing in the corner'
 date: '2026-09-08'
 description: 'Earthrise is usually called a picture of Earth. Looking at it again, I’m less sure that’s what holds my attention.'
 tags: ['Attention', 'Space', 'Photography']
-draft: false
+draft: true
 ---
 
 Most of the photograph is somewhere we cannot live.
