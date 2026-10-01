@@ -28,9 +28,6 @@ export default function RootLayout({
           Skip to content
         </a>
         <header className="site-header shell">
-          <SectionLink href="/#top" className="header-name">
-            Mithul Sourav
-          </SectionLink>
           <nav aria-label="Main navigation">
             <SectionLink href="/#top">Home</SectionLink>
             <SectionLink href="/#work">Projects</SectionLink>
