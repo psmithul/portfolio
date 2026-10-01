@@ -43,8 +43,8 @@ export function PortraitStory() {
         <p className="flow-opening-note">Mithul Sourav · NITK Surathkal</p>
         <h1>
           <span>Hi, I’m Mithul.</span>
-          <span>I like understanding things deeply</span>
-          <span>and building with what I learn.</span>
+          <span>Building and learning along the way, </span>
+          <span>driven by an endless curiosity.</span>
         </h1>
         <div className="flow-hero-details">
           <div>
