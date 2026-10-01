@@ -12,7 +12,11 @@ import {
   readingRehypePlugins,
 } from '../lib/reading.ts';
 import { projectStudies } from '../content/project-studies.ts';
-import { journalHighlights, journalTopics } from '../lib/journal-highlights.ts';
+import {
+  journalHighlights,
+  journalTopics,
+  nextJournalPost,
+} from '../lib/journal-highlights.ts';
 import type { Post } from '../lib/post-types.ts';
 
 const render = (body: string) =>
@@ -120,5 +124,39 @@ await test('all four requested learning notes are highlighted without repeating 
       posts.filter((post) => post.slug !== journalTopics[0].slug),
     ).length,
     3,
+  );
+});
+
+await test('keep reading visits every visible journal entry before returning to the first', () => {
+  const posts = [
+    'a-new-owner-entry',
+    'the-small-blue-thing',
+    ...journalTopics.map(({ slug }) => slug).reverse(),
+    'leave-room-for-the-unfinished',
+  ].map((slug) => ({ slug, tags: [] }) as unknown as Post);
+  const expected = [
+    ...journalTopics.map(({ slug }) => slug),
+    'a-new-owner-entry',
+    'the-small-blue-thing',
+    'leave-room-for-the-unfinished',
+  ];
+  let current = expected[0];
+  const visited: string[] = [];
+  for (let step = 0; step < posts.length; step++) {
+    visited.push(current);
+    current = nextJournalPost(posts, current)!.slug;
+  }
+  assert.deepEqual(visited, expected);
+  assert.equal(current, expected[0]);
+  assert.equal(nextJournalPost(posts, 'not-a-post'), undefined);
+  assert.equal(nextJournalPost([posts[0]], posts[0].slug), undefined);
+  assert.equal(nextJournalPost([], 'not-a-post'), undefined);
+
+  const withoutHighlights = posts.filter(
+    (post) => !journalTopics.some(({ slug }) => slug === post.slug),
+  );
+  assert.equal(
+    nextJournalPost(withoutHighlights, withoutHighlights[0].slug)?.slug,
+    withoutHighlights[1].slug,
   );
 });

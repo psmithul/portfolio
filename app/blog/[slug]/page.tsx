@@ -4,8 +4,10 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
+import { JournalLink } from '@/components/journal-link';
 import { getPublicPost, getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
+import { nextJournalPost } from '@/lib/journal-highlights';
 
 type Props = { params: Promise<{ slug: string }> };
 export const dynamic = 'force-dynamic';
@@ -19,12 +21,12 @@ export default async function Article({ params }: Props) {
   const { slug } = await params;
   const post = await getPublicPost(slug);
   if (!post) notFound();
-  const next = (await getPublicPosts()).find((entry) => entry.slug !== slug);
+  const next = nextJournalPost(await getPublicPosts(), slug);
   return (
     <main id="main" className="article-page reading-page shell">
-      <Link href="/blog" className="back-link">
+      <JournalLink href="/blog" className="back-link">
         <ArrowLeft size={16} /> Mika’s Life
-      </Link>
+      </JournalLink>
       <header className="article-header">
         <p className="eyebrow">{post.tags.join(' / ')}</p>
         <h1>{post.title}</h1>
@@ -44,16 +46,16 @@ export default async function Article({ params }: Props) {
       <footer className="article-end">
         <p>Written by Mithul · Mika’s Life</p>
         {next && (
-          <Link href={`/blog/${next.slug}`} className="next-essay">
+          <JournalLink href={`/blog/${next.slug}`} className="next-essay">
             <span className="eyebrow">KEEP READING</span>
             <span>
               {next.title} <ArrowUpRight size={20} />
             </span>
-          </Link>
+          </JournalLink>
         )}
-        <Link href="/blog" className="text-link">
+        <JournalLink href="/blog" className="text-link">
           <ArrowLeft size={16} /> All entries
-        </Link>
+        </JournalLink>
       </footer>
     </main>
   );

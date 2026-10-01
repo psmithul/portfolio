@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { JournalCover } from '@/components/journal-cover';
+import { JournalLink } from '@/components/journal-link';
 import { getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
 import { journalHighlights, journalTopic } from '@/lib/journal-highlights';
@@ -63,7 +64,12 @@ export default async function Blog() {
             <article className="journal-note" key={post.slug}>
               <p className="eyebrow">{journalTopic(post)}</p>
               <h3>
-                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                <JournalLink
+                  href={`/blog/${post.slug}`}
+                  className="journal-entry-link"
+                >
+                  {post.title}
+                </JournalLink>
               </h3>
               <p className="journal-note-description">{post.description}</p>
               <div className="journal-note-footer">
@@ -71,12 +77,12 @@ export default async function Blog() {
                   <time dateTime={post.date}>{dateLabel(post.date)}</time> ·{' '}
                   {post.readingMinutes} min
                 </span>
-                <Link
+                <JournalLink
                   href={`/blog/${post.slug}`}
                   aria-label={`Read ${post.title}`}
                 >
                   Read <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
+                </JournalLink>
               </div>
             </article>
           ))}
@@ -97,7 +103,12 @@ export default async function Blog() {
               <div>
                 <p className="eyebrow">{post.tags.slice(0, 2).join(' / ')}</p>
                 <h3>
-                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  <JournalLink
+                    href={`/blog/${post.slug}`}
+                    className="journal-entry-link"
+                  >
+                    {post.title}
+                  </JournalLink>
                 </h3>
                 <p>{post.description}</p>
                 <div className="journal-note-footer">
@@ -105,12 +116,12 @@ export default async function Blog() {
                     <time dateTime={post.date}>{dateLabel(post.date)}</time> ·{' '}
                     {post.readingMinutes} min
                   </span>
-                  <Link
+                  <JournalLink
                     href={`/blog/${post.slug}`}
                     aria-label={`Read ${post.title}`}
                   >
                     Read <ArrowUpRight size={16} aria-hidden="true" />
-                  </Link>
+                  </JournalLink>
                 </div>
               </div>
               <JournalCover
