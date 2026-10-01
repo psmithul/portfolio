@@ -31,7 +31,7 @@ export function SideQuests({ projects }: { projects: Project[] }) {
                 </span>
                 <span className="flow-project-date">{project.period}</span>
               </div>
-              <h3>{project.shortTitle}</h3>
+              <h3>{project.title}</h3>
               <div className="flow-tags">
                 <span>{project.discipline}</span>
                 <span>{project.tools[0]}</span>

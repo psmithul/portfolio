@@ -11,6 +11,8 @@ import { ToolsCarousel } from '@/components/tools-carousel';
 import { projects } from '@/content/projects';
 import { portfolioTools } from '@/content/tools';
 import { getPublicPosts } from '@/lib/journal-store';
+import { journalHighlights, journalTopic } from '@/lib/journal-highlights';
+import { dateLabel } from '@/lib/journal-model';
 
 export const dynamic = 'force-dynamic';
 const featuredOrder = [
@@ -26,17 +28,14 @@ const completedProjects = projects.filter(
     project.status === 'Completed' &&
     project.slug !== 'uav-vibration-integration',
 );
-const covers: Record<string, { title: string[]; tags: string[] }> = {
+const covers: Record<string, { tags: string[] }> = {
   'adaptive-suspension-rover': {
-    title: ['Adaptive suspension', 'for rough terrain'],
     tags: ['Field robotics', 'Suspension', 'Vibrations'],
   },
   'off-road-leaf-robot': {
-    title: ['Off-road leaf-collection', 'robot'],
     tags: ['Field robotics', 'Mechanism design', 'Test planning'],
   },
   'tensegrity-joint': {
-    title: ['Tensegrity', 'variable-stiffness joint'],
     tags: ['Robotics', 'Mechanisms', 'Tensegrity'],
   },
 };
@@ -79,7 +78,7 @@ export default async function Home() {
                     <span className="flow-project-date">{project.period}</span>
                   </div>
                   <div className="flow-project-description">
-                    <h3>{cover.title.join(' ')}</h3>
+                    <h3>{project.title}</h3>
                     <div className="flow-tags">
                       {cover.tags.map((tag) => (
                         <span key={tag}>{tag}</span>
@@ -120,24 +119,24 @@ export default async function Home() {
       <ExperienceRail />
       <Accolades />
       <ToolsCarousel tools={portfolioTools} />
-      <section className="flow-journal flow-section shell">
+      <section className="flow-journal flow-section shell" id="journal">
         <div className="flow-section-heading">
           <div>
             <p className="eyebrow">06 — Journal</p>
             <h2>Mika’s Life</h2>
           </div>
           <p>
-            Things I’m learning, things I’m trying, and a few notes from everyday life.
+            Notes on the models I’m following, control systems, and what I’m
+            learning along the way.
           </p>
         </div>
         <div className="flow-journal-entries">
-          {posts.slice(0, 3).map((post) => (
+          {journalHighlights(posts).map((post) => (
             <Link href={`/blog/${post.slug}`} key={post.slug}>
-              <span className="eyebrow">
-                {post.tags.slice(0, 2).join(' / ')}
-              </span>
+              <span className="eyebrow">{journalTopic(post)}</span>
               <h3>{post.title}</h3>
               <p>{post.description}</p>
+              <time dateTime={post.date}>{dateLabel(post.date)}</time>
               <ArrowUpRight
                 className="flow-journal-arrow link-arrow"
                 aria-hidden="true"

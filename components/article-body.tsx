@@ -1,16 +1,17 @@
 /* oxlint-disable next/no-img-element -- Markdown images have author-defined dimensions. */
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- Wide tables need a keyboard-accessible scroll container. */
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { readingRemarkPlugins, readingRehypePlugins } from '@/lib/reading';
 
 export function ArticleBody({ body }: { body: string }) {
   return (
     <article className="article-prose">
       <Markdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={readingRemarkPlugins}
+        rehypePlugins={readingRehypePlugins}
         skipHtml
         components={{
-          h1: ({ children }) => <h2>{children}</h2>,
+          h1: ({ children, id }) => <h2 id={id}>{children}</h2>,
           img: ({ src, alt }) => (
             <img src={src} alt={alt || ''} loading="lazy" decoding="async" />
           ),

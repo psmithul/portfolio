@@ -4,7 +4,6 @@ export type Project = {
   slug: string;
   number: string;
   title: string;
-  shortTitle: string;
   discipline: string;
   period: string;
   status: 'Ongoing' | 'Completed';
@@ -42,8 +41,7 @@ export const projects: Project[] = [
   {
     slug: 'uav-vibration-integration',
     number: '12',
-    title: 'UAV vibration & hardware integration',
-    shortTitle: 'Flight-controller mounting & vibration isolation',
+    title: 'UAV Vibration Analysis & Isolation',
     discipline: 'UAV hardware',
     period: 'Jun — Jul 2026',
     status: 'Completed',
@@ -84,8 +82,8 @@ export const projects: Project[] = [
   {
     slug: 'adaptive-suspension-rover',
     number: '01',
-    title: 'Adaptive suspension rover',
-    shortTitle: 'Adaptive suspension & vibration-aware control',
+    title:
+      'Adaptive Suspension and Vibration-Aware Control for a Rough-Terrain Rover',
     discipline: 'Field robotics',
     period: 'Sep 2026 — Present',
     status: 'Ongoing',
@@ -130,8 +128,8 @@ export const projects: Project[] = [
   {
     slug: 'tensegrity-joint',
     number: '02',
-    title: 'Tensegrity variable-stiffness joint',
-    shortTitle: 'Tensegrity-based variable-stiffness joint',
+    title:
+      'Design and Development of a Tensegrity Based Variable Stiffness Joint',
     discipline: 'Compliant mechanisms',
     period: 'May 2026 — Present',
     status: 'Ongoing',
@@ -172,8 +170,7 @@ export const projects: Project[] = [
   {
     slug: 'kneeassist',
     number: '04',
-    title: 'Actuated knee assistance system',
-    shortTitle: 'Actuated knee assistance system',
+    title: 'Development of Actuated Knee Assistance System',
     discipline: 'Assistive mechatronics',
     period: 'Oct 2025 — Sep 2026',
     status: 'Completed',
@@ -219,8 +216,8 @@ export const projects: Project[] = [
   {
     slug: 'reaction-wheel-microvibrations',
     number: '04',
-    title: 'Reaction-wheel microvibrations',
-    shortTitle: 'Reaction-wheel microvibration prediction',
+    title:
+      'Reaction-Wheel Microvibration Prediction with FEM and Machine Learning',
     discipline: 'Structural dynamics',
     period: 'Aug — Oct 2026',
     status: 'Completed',
@@ -261,8 +258,7 @@ export const projects: Project[] = [
   {
     slug: 'off-road-leaf-robot',
     number: '05',
-    title: 'Off-road leaf-collection robot',
-    shortTitle: 'Off-road leaf-collection robot',
+    title: 'Off-Road Leaf-Collection Robot',
     discipline: 'Robot architecture',
     period: 'Jul 2026 — Present',
     status: 'Ongoing',
@@ -306,8 +302,7 @@ export const projects: Project[] = [
   {
     slug: 'uncertainty-aware-navigation',
     number: '07',
-    title: 'Robot navigation with A* & EKF',
-    shortTitle: 'Uncertainty-aware indoor robot navigation',
+    title: 'Uncertainty-Aware Navigation for an Indoor Mobile Robot',
     discipline: 'State estimation & autonomy',
     period: 'Sep — Dec 2025',
     status: 'Completed',
@@ -347,8 +342,7 @@ export const projects: Project[] = [
   {
     slug: 'four-bar-door-mechanism',
     number: '08',
-    title: 'Four-bar linkage',
-    shortTitle: 'Four-bar door-opening mechanism',
+    title: 'Four-Bar Linkage Door-Opening Mechanism',
     discipline: 'Kinematics & fabrication',
     period: 'Feb — Apr 2024',
     status: 'Completed',
@@ -388,8 +382,7 @@ export const projects: Project[] = [
   {
     slug: 'easy-access-wallet',
     number: '09',
-    title: 'Wallet for easier card access',
-    shortTitle: 'Wallet for easier card access',
+    title: 'Wallet for Easier Card Access',
     discipline: 'User-centred mechanical design',
     period: 'Sep — Nov 2023',
     status: 'Completed',
@@ -428,8 +421,7 @@ export const projects: Project[] = [
   {
     slug: 'solar-smart-home',
     number: '10',
-    title: 'Arduino smart home with solar power',
-    shortTitle: 'Arduino smart home with solar power',
+    title: 'Arduino-Based Smart Home with Solar Power',
     discipline: 'Electronics & sensing',
     period: 'Sep 2019 — Jan 2020',
     status: 'Completed',
@@ -469,8 +461,7 @@ export const projects: Project[] = [
   {
     slug: 'traffic-and-elevated-bus',
     number: '11',
-    title: 'Traffic signals & elevated-bus models',
-    shortTitle: 'Traffic lights & elevated-bus model',
+    title: 'Smart Traffic Light System and Transit Elevated Bus Model',
     discipline: 'Logic & working models',
     period: 'Sep 2018 — Jan 2019',
     status: 'Completed',

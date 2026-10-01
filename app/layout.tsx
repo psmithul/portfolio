@@ -6,6 +6,8 @@ import { SectionLink } from '@/components/section-link';
 import './globals.css';
 import './experience.css';
 import './flow.css';
+import 'katex/dist/katex.min.css';
+import './reading.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),

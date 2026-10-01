@@ -1,6 +1,6 @@
 # Portfolio asset provenance
 
-Verified CAD views are used where available. At the user’s request, ten case studies without imagery use temporary vector subject illustrations. These are explicitly identified as illustrations and do not depict the actual build, CAD, or measured results. No fabricated hardware photograph is used.
+Verified CAD views are used where available. Project covers otherwise use credited reference photographs of related subjects. The original temporary vector assets remain archived but are not active project covers. No fabricated hardware photograph is used.
 
 ## Tensegrity joint
 
@@ -94,3 +94,9 @@ The updated opening removes all four generated floating mechanical objects. It k
 ## Active 3D hero correction, 1 October 2026
 
 The satellite, rover, and rocket SVGs above are superseded. `lib/hero-models.ts` now constructs actual Three.js meshes, using the existing mechanically assembled six-wheel rover geometry from `engineering-scene.ts`. Satellite panels contain separate solar cells and mounting frames. The rocket uses a revolved ogive, cylindrical stages, four equally spaced fins, and an open engine bell. `lib/hero-physics.ts` uses the official Rapier engine for mass, inertia, forces, torques, and damping; movement is a suspended display, not a claim of orbital or vehicle simulation. Fixed-step tests cover frame-rate consistency, sustained scrolling, separation, and return to rest.
+
+## Actuated knee assistance system — 1 October 2026
+
+Published asset: `public/images/projects/knee-assistance-cad.png` (1718 × 1268). This is a byte-for-byte copy of the original CAD screenshot supplied by Mithul on 1 October 2026. It replaces the Science Museum knee-brace reference photograph. No image generation, retouching, or raster crop was applied. Its role is design documentation, not evidence of built or tested hardware.
+
+The tensegrity cover now uses the native joint CAD study described above. Its case study includes the native SolidWorks leg assembly as a captioned inline figure. The reaction-wheel case study includes the verified cutaway in its explanatory text. Generic reference photographs remain explicitly credited as related subjects.
