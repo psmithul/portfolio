@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
+import { DESKTOP_MOTION_QUERY } from '@/lib/portfolio-motion';
 
 type Props = {
   id: string;
@@ -47,7 +48,11 @@ export function ScrollRail({
       : 'smooth';
     if (element.dataset.mode === 'pinned') {
       window.scrollTo({
-        top: window.scrollY + element.getBoundingClientRect().top + offset,
+        top:
+          window.scrollY +
+          element.getBoundingClientRect().top +
+          Number(element.dataset.scrollLead ?? 0) +
+          offset,
         behavior,
       });
     } else {
@@ -59,9 +64,7 @@ export function ScrollRail({
       windowElement = viewport.current,
       rail = track.current;
     if (!element || !windowElement || !rail) return;
-    const desktop = window.matchMedia(
-      '(min-width: 980px) and (min-height: 760px) and (hover: hover) and (pointer: fine)',
-    );
+    const desktop = window.matchMedia(DESKTOP_MOTION_QUERY);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const cards = Array.from(
       rail.querySelectorAll<HTMLElement>('[data-rail-card]'),
@@ -70,11 +73,15 @@ export function ScrollRail({
       card.offsetLeft - (cards[0]?.offsetLeft ?? 0);
     let frame = 0,
       travel = 0,
+      lead = 0,
       pinned = false;
     const draw = () => {
       frame = 0;
       const offset = pinned
-        ? Math.max(0, Math.min(travel, -element.getBoundingClientRect().top))
+        ? Math.max(
+            0,
+            Math.min(travel, -element.getBoundingClientRect().top - lead),
+          )
         : windowElement.scrollLeft;
       const progress = travel > 0 ? offset / travel : 0;
       if (pinned) rail.style.transform = `translate3d(${-offset}px, 0, 0)`;
@@ -111,11 +118,20 @@ export function ScrollRail({
       pinned = desktop.matches && !reduce.matches;
       rail.style.removeProperty('transform');
       element.dataset.mode = pinned ? 'pinned' : 'native';
-      // Use the native rail when the pinned viewport cannot fit the card content.
-      if (pinned && rail.scrollHeight > windowElement.clientHeight + 1) {
-        pinned = false;
-        element.dataset.mode = 'native';
-      }
+      element.style.setProperty(
+        '--quest-stage-height',
+        `${window.innerHeight}px`,
+      );
+      // A short laptop scrolls into the full card before horizontal travel starts.
+      // It keeps the same scroll interaction instead of switching to phone swipe.
+      lead = pinned
+        ? Math.max(0, rail.scrollHeight - windowElement.clientHeight)
+        : 0;
+      element.style.setProperty(
+        '--quest-stage-height',
+        `${window.innerHeight + lead}px`,
+      );
+      element.dataset.scrollLead = String(lead);
       // The final card reaches the same inset as the first before the page releases.
       const last = cards.at(-1);
       travel =
@@ -134,13 +150,17 @@ export function ScrollRail({
       windowElement.scrollLeft = 0;
       const start = window.scrollY + element.getBoundingClientRect().top;
       window.scrollTo({
-        top: start + Math.min(travel, cardOffset(card)),
+        top: start + lead + Math.min(travel, cardOffset(card)),
         behavior: 'instant',
       });
     };
     configure();
     const size = new ResizeObserver(configure);
     size.observe(windowElement);
+    cards.forEach((card) => {
+      const copy = card.querySelector('.quest-copy');
+      if (copy) size.observe(copy);
+    });
     window.addEventListener('scroll', schedule, { passive: true });
     windowElement.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', configure);
@@ -159,6 +179,8 @@ export function ScrollRail({
       rail.style.removeProperty('transform');
       element.style.removeProperty('--quest-travel');
       element.style.removeProperty('--quest-progress');
+      element.style.removeProperty('--quest-stage-height');
+      delete element.dataset.scrollLead;
       delete element.dataset.mode;
     };
   }, []);

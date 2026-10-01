@@ -1,8 +1,10 @@
 'use client';
 import { useEffect } from 'react';
+import { DESKTOP_MOTION_QUERY } from '@/lib/portfolio-motion';
 export function MotionDirector() {
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = window.matchMedia(DESKTOP_MOTION_QUERY);
     const header = document.querySelector<HTMLElement>('.site-header');
     const reveals = document.querySelectorAll<HTMLElement>(
       '.flow-section-heading, .flow-intro',
@@ -35,6 +37,11 @@ export function MotionDirector() {
       if (!frame) frame = requestAnimationFrame(draw);
     };
     const configure = () => {
+      document.documentElement.dataset.motionProfile = preference.matches
+        ? 'reduced'
+        : desktop.matches
+          ? 'desktop'
+          : 'touch';
       observer?.disconnect();
       reveals.forEach((element) =>
         element.classList.remove('will-arrive', 'has-arrived'),
@@ -61,12 +68,15 @@ export function MotionDirector() {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     preference.addEventListener('change', configure);
+    desktop.addEventListener('change', configure);
     return () => {
       cancelAnimationFrame(frame);
       observer?.disconnect();
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       preference.removeEventListener('change', configure);
+      desktop.removeEventListener('change', configure);
+      delete document.documentElement.dataset.motionProfile;
       reveals.forEach((element) =>
         element.classList.remove('will-arrive', 'has-arrived'),
       );

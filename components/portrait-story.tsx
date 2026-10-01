@@ -4,12 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { HeroModels } from '@/components/hero-models';
+import { DESKTOP_MOTION_QUERY } from '@/lib/portfolio-motion';
 export function PortraitStory() {
   const story = useRef<HTMLElement>(null);
   useEffect(() => {
     const element = story.current;
     if (!element) return;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = window.matchMedia(DESKTOP_MOTION_QUERY);
     let frame = 0;
     const draw = () => {
       frame = 0;
@@ -17,8 +19,14 @@ export function PortraitStory() {
       const offset = preference.matches
         ? 0
         : Math.max(0, Math.min(900, -bounds.top));
-      element.style.setProperty('--portrait-drift', `${offset * 0.07}px`);
-      element.style.setProperty('--note-drift', `${offset * -0.045}px`);
+      element.style.setProperty(
+        '--portrait-drift',
+        `${offset * (desktop.matches ? 0.07 : 0.025)}px`,
+      );
+      element.style.setProperty(
+        '--note-drift',
+        `${offset * (desktop.matches ? -0.045 : -0.015)}px`,
+      );
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(draw);
@@ -27,11 +35,13 @@ export function PortraitStory() {
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule);
     preference.addEventListener('change', schedule);
+    desktop.addEventListener('change', schedule);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('scroll', schedule);
       window.removeEventListener('resize', schedule);
       preference.removeEventListener('change', schedule);
+      desktop.removeEventListener('change', schedule);
       ['--portrait-drift', '--note-drift'].forEach((property) =>
         element.style.removeProperty(property),
       );
