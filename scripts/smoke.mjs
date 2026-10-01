@@ -8,13 +8,13 @@ if (!base) {
 }
 const cases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
-  ['/blog/the-small-blue-thing', 200, 'Most of the photograph', 'small blue'],
+  ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 200, 'Muybridge', 'A walk'],
   [
     '/blog/leave-room-for-the-unfinished',
-    200,
-    'two kinds of satisfaction',
-    'unfinished',
+    404,
+    'here yet.',
+    '',
   ],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],

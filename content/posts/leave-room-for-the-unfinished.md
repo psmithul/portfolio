@@ -3,7 +3,7 @@ title: 'Leave room for the unfinished'
 date: '2026-09-08'
 description: 'On the relief of a clean answer, the usefulness of a rough page, and keeping a question alive for a little longer.'
 tags: ['Learning', 'Making', 'Notes']
-draft: false
+draft: true
 ---
 
 There are two kinds of satisfaction in a notebook. One comes from a page that explains something clearly. The other comes from a page that finally admits what is unclear.
