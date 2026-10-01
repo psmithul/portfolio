@@ -87,22 +87,21 @@ export function PortraitStory() {
         </h2>
         <div>
           <p>
-            I like understanding how something works, then trying to make it
-            work myself. That’s what draws me to hard problems: there’s always
-            something I haven’t figured out yet.
+            I’m a final-year mechanical engineering student at NITK Surathkal. I
+            like learning new things and using what I learn to build something.
+            When an idea interests me, I want to understand how it works and how
+            people came up with it.
           </p>
           <p>
-            Right now, I’m designing robots for uncertain terrain: a rover with
-            adjustable suspension and a robot for collecting leaves on uneven
-            ground. I’m also studying a tensegrity joint and how its stiffness
-            can be changed.
+            Right now, I’m working on a rover and a robot for collecting leaves,
+            both meant to move over rough ground. I’m also exploring ways to
+            make a mechanical joint more or less flexible.
           </p>
           <p>
-            These projects bring together mechanical design, electronics, and
-            software. I like going deep: where an idea came from, why it works,
-            and how people figured it out in the first place. Building gives me
-            a way to test what I’ve understood. I also spend a lot of time
-            reading about space and how we explore it.
+            I like working on hard problems, even when I don’t know where to
+            start. Building things helps me see what I’ve understood and what I
+            still need to learn. I also love space and spend a lot of time
+            reading about how we explore it.
           </p>
           <Link href="/about" className="flow-text-link">
             Background & experience{' '}
