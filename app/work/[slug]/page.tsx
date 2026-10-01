@@ -3,190 +3,118 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
-
+import { ArticleBody } from '@/components/article-body';
+import { ReadingContents } from '@/components/reading-contents';
 import { projects } from '@/content/projects';
+import { projectStudies } from '@/content/project-studies';
 
 type Props = { params: Promise<{ slug: string }> };
-const studyViews: Record<
-  string,
-  { src: string; title: string; caption: string }
-> = {
-  'tensegrity-joint': {
-    src: '/images/projects/tensegrity-leg-cad.webp',
-    title: 'The joint in context',
-    caption:
-      'Full leg assembly from the paper-based CAD reconstruction. This is a mechanism study, not a photograph of built hardware.',
-  },
-  'reaction-wheel-microvibrations': {
-    src: '/images/projects/reaction-wheel-cutaway.webp',
-    title: 'Inside the reference assembly',
-    caption:
-      'Section view of the reaction-wheel reference assembly, showing the wheel and surrounding structure. Surface finishes are illustrative.',
-  },
-};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const p = projects.find(
-    (p) => p.slug === (slug === 'neoleg-knee-mechanism' ? 'kneeassist' : slug),
+  const project = projects.find(
+    (item) =>
+      item.slug === (slug === 'neoleg-knee-mechanism' ? 'kneeassist' : slug),
   );
-  return p
-    ? { title: p.shortTitle, description: p.summary }
+  return project
+    ? { title: project.title, description: project.summary }
     : { title: 'Project not found' };
 }
+
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   if (slug === 'neoleg-knee-mechanism') permanentRedirect('/work/kneeassist');
-  const index = projects.findIndex((p) => p.slug === slug);
+  const index = projects.findIndex((project) => project.slug === slug);
   if (index < 0) notFound();
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
+  const body = projectStudies[slug];
+  if (!body) throw new Error(`The project write-up is missing for ${slug}.`);
   return (
-    <main id="main">
-      <section className="project-hero shell">
-        <Link href="/#work" className="back-link">
-          <ArrowLeft className="link-arrow" aria-hidden="true" /> All projects
-        </Link>
-        <div className="project-kicker">
-          <p className="eyebrow">
-            PROJECT {project.number} / {project.discipline}
-          </p>
+    <main id="main" className="case-page shell">
+      <Link href="/#work" className="back-link">
+        <ArrowLeft className="link-arrow" aria-hidden="true" /> All projects
+      </Link>
+      <header className="case-header">
+        <div className="case-kicker">
+          <p className="eyebrow">{project.discipline}</p>
           <span className={`status-badge ${project.status.toLowerCase()}`}>
             {project.status}
           </span>
         </div>
-        <h1>{project.shortTitle}</h1>
-        <p className="project-deck">{project.summary}</p>
-        <div className="project-meta">
+        <h1>{project.title}</h1>
+        <p className="case-description">{project.summary}</p>
+        <dl className="case-meta">
           <div>
-            <span className="eyebrow">TIMELINE</span>
-            <p>{project.period}</p>
+            <dt>Timeline</dt>
+            <dd>{project.period}</dd>
           </div>
           <div>
-            <span className="eyebrow">CONTEXT</span>
-            <p>{project.context}</p>
+            <dt>Context</dt>
+            <dd>{project.context}</dd>
           </div>
           <div>
-            <span className="eyebrow">TOOLS & METHODS</span>
-            <p>{project.tools.join(' · ')}</p>
+            <dt>Tools & methods</dt>
+            <dd>{project.tools.join(' · ')}</dd>
           </div>
-        </div>
-      </section>
-      {project.image && (
-        <figure
-          className="project-documentation shell"
-          data-image-kind={project.image.kind}
-          data-image-fit={project.image.fit}
-        >
-          <Image
-            src={project.image.src}
-            alt={project.image.alt}
-            width={project.image.width}
-            height={project.image.height}
-            unoptimized
-          />
-          <figcaption>
-            {project.image.caption}
-            {project.image.referenceUrl && (
-              <>
-                {' '}
-                <a
-                  href={project.image.referenceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {project.image.referenceLabel ?? 'Image source'}
-                </a>
-              </>
-            )}
-            {project.image.licenseUrl && (
-              <>
-                {' '}
-                ·{' '}
-                <a
-                  href={project.image.licenseUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  License
-                </a>
-              </>
-            )}
-          </figcaption>
-        </figure>
-      )}
-      <section className="project-question shell">
-        <div>
-          <p className="eyebrow">THE PROBLEM</p>
-          <h2>{project.question}</h2>
-        </div>
-        <div className="project-at-a-glance">
-          <p className="eyebrow">PROJECT DETAILS</p>
-          <ul>
-            {project.evidence.map((detail) => (
-              <li key={detail}>{detail}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-      <section className="about-section shell">
-        <div className="section-label">
-          <p className="eyebrow">01 / MY CONTRIBUTION</p>
-        </div>
-        <div className="about-body">
-          <p className="large-body">{project.role}</p>
-        </div>
-      </section>
-      {studyViews[slug] && (
-        <section className="project-study-gallery shell">
-          <p className="eyebrow">A closer look / CAD study</p>
-          <h2>{studyViews[slug].title}</h2>
-          <figure>
-            <Image
-              src={studyViews[slug].src}
-              alt={studyViews[slug].caption}
-              width={1200}
-              height={1200}
-              unoptimized
-            />
-            <figcaption>{studyViews[slug].caption}</figcaption>
-          </figure>
-        </section>
-      )}
-      <section className="about-section shell">
-        <div className="section-label">
-          <p className="eyebrow">02 / APPROACH</p>
-        </div>
-        <div className="about-body approach-steps">
-          {project.approach.map((s, i) => (
-            <div key={s.title}>
-              <span className="step-index">0{i + 1}</span>
-              <div>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-      <section className="about-section shell">
-        <div className="section-label">
-          <p className="eyebrow">03 / RESULTS & PROGRESS</p>
-        </div>
-        <div className="about-body">
-          <p className="large-body">{project.outcome}</p>
-          <div className="scope-note">
-            <span className="eyebrow">PROJECT STAGE</span>
+        </dl>
+      </header>
+      <div className="reading-layout case-layout">
+        <ReadingContents body={body} />
+        <div className="case-reader">
+          {project.image && (
+            <figure className="case-cover" data-image-kind={project.image.kind}>
+              <Image
+                src={project.image.src}
+                alt={project.image.alt}
+                width={project.image.width}
+                height={project.image.height}
+                unoptimized
+              />
+              <figcaption>
+                {project.image.caption}
+                {project.image.referenceUrl && (
+                  <>
+                    {' '}
+                    <a
+                      href={project.image.referenceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {project.image.referenceLabel ?? 'Image source'}
+                    </a>
+                  </>
+                )}
+                {project.image.licenseUrl && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <a
+                      href={project.image.licenseUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      License
+                    </a>
+                  </>
+                )}
+              </figcaption>
+            </figure>
+          )}
+          <ArticleBody body={body} />
+          <aside className="case-status">
+            <p className="eyebrow">Project stage</p>
             <p>{project.scope}</p>
-          </div>
+          </aside>
         </div>
-      </section>
-      <section className="next-project shell">
-        <p className="eyebrow">NEXT PROJECT / {next.number}</p>
+      </div>
+      <div className="case-next">
+        <p className="eyebrow">Next project</p>
         <Link href={`/work/${next.slug}`}>
-          <h2>{next.title}</h2>
+          <span>{next.title}</span>
           <ArrowUpRight className="link-arrow" aria-hidden="true" />
         </Link>
-      </section>
+      </div>
     </main>
   );
 }

@@ -1,100 +1,136 @@
-import { JournalCover } from '@/components/journal-cover';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import { JournalCover } from '@/components/journal-cover';
 import { getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
+import { journalHighlights, journalTopic } from '@/lib/journal-highlights';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
-  title: 'Mika’s Life — A personal journal',
+  title: 'Mika’s Life — Notes on learning and building',
   description:
-    'Essays on science, attention, books, and making things. A personal journal by Mika, also known as Mithul Sourav.',
+    'A personal journal by Mithul. Notes on AI, control systems, space, and the things he is learning as a mechanical engineering student.',
 };
 
 export default async function Blog() {
   const posts = await getPublicPosts();
+  const highlights = journalHighlights(posts);
+  const selected = new Set(highlights.map(({ slug }) => slug));
+  const others = posts.filter(({ slug }) => !selected.has(slug));
   return (
-    <main id="main" className="journal-page">
-      <header className="journal-masthead shell">
-        <div className="journal-edition">
-          <span>A PERSONAL JOURNAL</span>
-          <span>BY MIKA / MITHUL SOURAV</span>
+    <main id="main" className="journal-index shell">
+      <header className="journal-index-head">
+        <div>
+          <p className="eyebrow">A personal journal · By Mithul</p>
+          <h1>
+            Mika’s <em>Life.</em>
+          </h1>
         </div>
-        <h1>
-          Mika’s <em>Life.</em>
-        </h1>
-        <p>Science, books, and the occasional engineering detour.</p>
-        <div className="journal-rule">
-          <span>ESSAYS & OCCASIONAL NOTES</span>
-          <span>
-            {String(posts.length).padStart(2, '0')}{' '}
-            {posts.length === 1 ? 'ENTRY' : 'ENTRIES'}
-          </span>
+        <div className="journal-index-intro">
+          <p>
+            I write about what I’m learning, what I’d like to try, and the
+            questions I haven’t answered yet.
+          </p>
+          <span>AI, control systems, space, and a few things in between.</span>
         </div>
       </header>
-      <div className="journal-layout shell">
-        <aside className="journal-sidebar">
-          <h2>
-            Thinking
-            <br />
-            out loud.
-          </h2>
-          <p>
-            I’m Mithul, also Mika. I study mechanical engineering and write here
-            about science, books, and whatever catches my attention.
+      <div className="journal-index-rule">
+        <div>
+          <a href="#notes">AI & control notes</a>
+          {others.length > 0 && <a href="#more-writing">More writing</a>}
+        </div>
+        <span>
+          {posts.length} {posts.length === 1 ? 'entry' : 'entries'}
+        </span>
+      </div>
+      <section
+        id="notes"
+        className="journal-notes"
+        aria-labelledby="journal-notes-heading"
+      >
+        <div className="journal-section-label">
+          <h2 id="journal-notes-heading">AI & control notes</h2>
+          <p>The models I’m following and the ideas I’m working through.</p>
+        </div>
+        {highlights.length === 0 && (
+          <p className="journal-empty-note">
+            There are no published entries yet.
           </p>
-          <p>
-            Some entries connect to my engineering work. Others are simply
-            things I wanted to spend more time with.
-          </p>
-          <div className="journal-subjects">
-            <h3>In these pages</h3>
-            <span>Science & observation</span>
-            <span>Art & attention</span>
-            <span>Learning & making</span>
-          </div>
-          <Link href="/about" className="text-link">
-            A little about me <ArrowUpRight size={16} />
-          </Link>
-        </aside>
-        <section className="journal-entries" aria-label="Journal entries">
-          {posts.length === 0 && (
-            <div className="journal-empty">
-              <h2>More writing soon.</h2>
-              <p>There are no published entries at the moment.</p>
-            </div>
-          )}
-          {posts.map((post, i) => (
-            <article
-              key={post.slug}
-              className={
-                i === 0 ? 'journal-entry featured-entry' : 'journal-entry'
-              }
-            >
-              <div className="entry-meta">
-                <time dateTime={post.date}>{dateLabel(post.date)}</time>
-                <span>{post.readingMinutes} MIN READ</span>
-              </div>
-              <h2>
+        )}
+        <div className="journal-note-grid">
+          {highlights.map((post) => (
+            <article className="journal-note" key={post.slug}>
+              <p className="eyebrow">{journalTopic(post)}</p>
+              <h3>
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              </h2>
-              <p>{post.description}</p>
+              </h3>
+              <p className="journal-note-description">{post.description}</p>
+              <div className="journal-note-footer">
+                <span>
+                  <time dateTime={post.date}>{dateLabel(post.date)}</time> ·{' '}
+                  {post.readingMinutes} min
+                </span>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  aria-label={`Read ${post.title}`}
+                >
+                  Read <ArrowUpRight size={16} aria-hidden="true" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      {others.length > 0 && (
+        <section
+          id="more-writing"
+          className="journal-more"
+          aria-labelledby="journal-more-heading"
+        >
+          <div className="journal-section-label">
+            <h2 id="journal-more-heading">More from the journal</h2>
+            <p>Space, observation, and everyday learning.</p>
+          </div>
+          {others.map((post) => (
+            <article className="journal-archive-entry" key={post.slug}>
+              <div>
+                <p className="eyebrow">{post.tags.slice(0, 2).join(' / ')}</p>
+                <h3>
+                  <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                </h3>
+                <p>{post.description}</p>
+                <div className="journal-note-footer">
+                  <span>
+                    <time dateTime={post.date}>{dateLabel(post.date)}</time> ·{' '}
+                    {post.readingMinutes} min
+                  </span>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    aria-label={`Read ${post.title}`}
+                  >
+                    Read <ArrowUpRight size={16} aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
               <JournalCover
                 body={post.body}
                 slug={post.slug}
                 title={post.title}
               />
-              <div className="entry-footer">
-                <span>{post.tags.join(' · ')}</span>
-                <Link className="text-link" href={`/blog/${post.slug}`}>
-                  Read the essay <ArrowUpRight size={16} />
-                </Link>
-              </div>
             </article>
           ))}
         </section>
-      </div>
+      )}
+      <aside className="journal-colophon">
+        <p>
+          I’m a final-year mechanical engineering student at NITK Surathkal.
+          Writing here helps me slow down and make sense of what I’m learning.
+        </p>
+        <Link href="/about">
+          A little about me <ArrowUpRight size={16} aria-hidden="true" />
+        </Link>
+      </aside>
     </main>
   );
 }

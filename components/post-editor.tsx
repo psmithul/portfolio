@@ -13,6 +13,7 @@ import {
   List,
   Quote,
   Save,
+  Sigma,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -452,7 +453,15 @@ export function PostEditor({ initialEntry }: { initialEntry: Entry }) {
             >
               <ImagePlus size={18} />
             </Button>
-            <span>Markdown supported</span>
+            <Button
+              className="format-button"
+              title="Add an equation"
+              aria-label="Add an equation"
+              onClick={() => format('\n\n$$\n', '\n$$\n\n', 'F = ma')}
+            >
+              <Sigma size={18} />
+            </Button>
+            <span>Markdown & equations</span>
           </fieldset>
           {insert && (
             <form className="insert-panel" onSubmit={insertMedia}>

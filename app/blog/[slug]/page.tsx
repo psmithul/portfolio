@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { ArticleBody } from '@/components/article-body';
+import { ReadingContents } from '@/components/reading-contents';
 import { getPublicPost, getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
 
@@ -20,7 +21,7 @@ export default async function Article({ params }: Props) {
   if (!post) notFound();
   const next = (await getPublicPosts()).find((entry) => entry.slug !== slug);
   return (
-    <main id="main" className="article-page shell">
+    <main id="main" className="article-page reading-page shell">
       <Link href="/blog" className="back-link">
         <ArrowLeft size={16} /> Mika’s Life
       </Link>
@@ -36,10 +37,12 @@ export default async function Article({ params }: Props) {
           <span>{post.readingMinutes} min read</span>
         </div>
       </header>
-      <ArticleBody body={post.body} />
+      <div className="reading-layout">
+        <ReadingContents body={post.body} />
+        <ArticleBody body={post.body} />
+      </div>
       <footer className="article-end">
-        <span aria-hidden="true">∴</span>
-        <p>From Mika’s Life.</p>
+        <p>Written by Mithul · Mika’s Life</p>
         {next && (
           <Link href={`/blog/${next.slug}`} className="next-essay">
             <span className="eyebrow">KEEP READING</span>
