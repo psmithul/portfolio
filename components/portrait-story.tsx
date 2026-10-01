@@ -69,7 +69,6 @@ export function PortraitStory() {
             priority
             unoptimized
           />
-          <figcaption>P S Mithul Sourav</figcaption>
         </figure>
         <aside className="flow-quote-note" aria-label="A favourite quote">
           <p className="eyebrow">A favourite quote</p>

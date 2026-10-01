@@ -213,12 +213,6 @@ html {
   display: block;
   filter: drop-shadow(9px 15px 9px #24231f18);
 }
-.flow-person figcaption {
-  font-size: 11px;
-  text-align: center;
-  margin-top: 14px;
-  color: var(--muted);
-}
 .flow-quote-note {
   position: absolute;
   right: 14%;
@@ -371,12 +365,6 @@ html {
   inset: 9% 4% 9%;
   width: 92%;
   height: 82%;
-}
-.flow-project-image figcaption {
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--muted);
-  margin-top: 12px;
 }
 .flow-project-details {
   display: grid;
@@ -1792,13 +1780,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
     gap: 10px;
   }
 }
-.quest-image-caption {
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--muted);
-  margin-top: 10px;
-  max-width: 600px;
-}
 .next-project .link-arrow {
   width: 32px;
   height: 32px;
@@ -1807,9 +1788,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
 @media (max-width: 640px) {
   html {
     scroll-padding-top: 116px;
-  }
-  .quest-image-caption {
-    font-size: 12px;
   }
 }
 @media (min-width: 1600px) {
@@ -2057,10 +2035,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
   .flow-person img {
     height: 320px;
   }
-  .flow-person figcaption {
-    font-size: 11px;
-    margin-top: 8px;
-  }
   .flow-quote-note {
     position: relative;
     right: auto;
@@ -2132,11 +2106,6 @@ html[data-portfolio-cursor='active'] .flow-home a {
     inset: 13% 0 14%;
     width: 100%;
     height: 73%;
-  }
-  .flow-project-image figcaption {
-    font-size: 12px;
-    line-height: 1.65;
-    margin-top: 10px;
   }
   .flow-project-details,
   .flow-project-card:nth-child(even) .flow-project-details {
@@ -2437,7 +2406,7 @@ html[data-portfolio-cursor='active'] .flow-home a {
   }
 }
 
-/* Photographs retain their source colours; captions identify reference subjects. */
+/* Photographs retain their source colours and fill their cover frames. */
 .flow-project-image[data-image-kind='reference'] .flow-cover-main {
   inset: 0;
   width: 100%;

@@ -108,7 +108,6 @@ export default async function Home() {
                       />
                     )}
                   </div>
-                  <figcaption>{project.image?.caption}</figcaption>
                 </figure>
               </Link>
             );

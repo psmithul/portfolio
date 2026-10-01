@@ -55,7 +55,6 @@ export function SideQuests({ projects }: { projects: Project[] }) {
               />
             )}
           </figure>
-          <span className="quest-image-caption">{project.image?.caption}</span>
         </Link>
       ))}
     </ScrollRail>
