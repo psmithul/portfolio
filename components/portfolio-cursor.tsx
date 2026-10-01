@@ -1,14 +1,13 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { DESKTOP_MOTION_QUERY } from '@/lib/portfolio-motion';
 export function PortfolioCursor() {
   const cursor = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const element = cursor.current;
     if (!element) return;
-    const desktop = window.matchMedia(
-      '(min-width: 980px) and (hover: hover) and (pointer: fine)',
-    );
+    const desktop = window.matchMedia(DESKTOP_MOTION_QUERY);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0,
       x = -100,
