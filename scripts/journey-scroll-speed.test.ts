@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   journeyScrollStep,
+  journeyMotionLimits,
   type ScrollPose,
 } from '../lib/journey-scroll-speed.ts';
 import { journeyPosition } from '../lib/journey-timeline.ts';
@@ -16,11 +17,28 @@ const sample = (y: number) => {
 };
 
 function assertSpeed(a: ScrollPose, b: ScrollPose, dt: number) {
-  assert.ok(Math.abs(a.trainX - b.trainX) <= 8 * dt + 1e-8, 'train speed');
-  assert.ok(distance(a.rocket, b.rocket) <= 13 * dt + 1e-8, 'rocket speed');
-  assert.ok(distance(a.focus, b.focus) <= 13 * dt + 1e-8, 'camera speed');
+  const limits = journeyMotionLimits(Math.min(a.transit, b.transit));
+  assert.ok(
+    Math.abs(a.trainX - b.trainX) <= limits.train * dt + 1e-8,
+    'train speed',
+  );
+  assert.ok(
+    distance(a.rocket, b.rocket) <= limits.rocket * dt + 1e-8,
+    'rocket speed',
+  );
+  assert.ok(
+    distance(a.focus, b.focus) <= limits.focus * dt + 1e-8,
+    'camera speed',
+  );
+  assert.ok(
+    distance(a.rover, b.rover) <= limits.rover * dt + 1e-8,
+    'rover speed',
+  );
   if (a.avatarVisible && b.avatarVisible && (a.walking || b.walking))
-    assert.ok(distance(a.avatar, b.avatar) <= 2.2 * dt + 1e-8, 'walking speed');
+    assert.ok(
+      distance(a.avatar, b.avatar) <= limits.walking * dt + 1e-8,
+      'walking speed',
+    );
 }
 
 void test('a large wheel input or navigation jump respects world speeds in both directions', () => {
@@ -36,7 +54,10 @@ void test('a large wheel input or navigation jump respects world speeds in both 
         );
         assertSpeed(sample(y), sample(next), 1 / fps);
         assert.ok(direction * (next - y) >= 0);
-        assert.ok(Math.abs(next - y) <= 240 / fps + 1e-8);
+        assert.ok(
+          Math.abs(next - y) <=
+            (240 * journeyMotionLimits(sample(y).transit).pixels) / fps + 1e-8,
+        );
       }
 });
 
@@ -50,7 +71,7 @@ void test('scroll traverses the entire continuous route and reverses without get
     elapsed += 1 / 60;
   }
   assert.equal(y, 11500);
-  assert.ok(elapsed > 60, 'a full route cannot be rushed');
+  assert.ok(elapsed > 30, 'a full route cannot be rushed');
   const reverse = journeyScrollStep(y, 0, 1 / 60, 900, sample);
   assert.ok(reverse < y);
   assertSpeed(sample(y), sample(reverse), 1 / 60);
@@ -60,8 +81,34 @@ void test('frame stalls, small targets, and phone viewports cannot bypass the sp
   const y = 3820;
   const stalled = journeyScrollStep(y, 10000, 30, 390, sample);
   assertSpeed(sample(y), sample(stalled), 0.05);
-  assert.ok(stalled - y <= 390 * 0.28 * 0.05);
+  assert.ok(
+    stalled - y <=
+      390 * 0.28 * journeyMotionLimits(sample(y).transit).pixels * 0.05,
+  );
   assert.equal(journeyScrollStep(y, y, 1, 900, sample), y);
   assert.equal(journeyScrollStep(y, y + 20, 0, 900, sample), y);
   assert.equal(journeyScrollStep(0, 0.1, 1 / 60, 900, sample), 0.1);
+});
+
+void test('travel accelerates after content while reading retains its original pace', () => {
+  assert.equal(sample(2115 + 1125 * 0.1).transit, 0);
+  assert.equal(sample(2115 + 1125 * 0.85).transit, 1);
+  const free = (transit: number) => ({
+    trainX: 0,
+    avatar: [0, 0, 0],
+    rocket: [0, 0, 0],
+    rover: [0, 0, 0],
+    focus: [0, 0, 0],
+    walking: false,
+    avatarVisible: false,
+    transit,
+  });
+  const reading = journeyScrollStep(0, 1e6, 1 / 60, 900, () => free(0));
+  const travel = journeyScrollStep(0, 1e6, 1 / 60, 900, () => free(1));
+  assert.ok(travel > reading * 2.5);
+  for (let t = 0; t < 6.999; t += 0.0002) {
+    const a = journeyPose(t),
+      b = journeyPose(t + 0.0002);
+    assert.ok(Math.abs(a.transit - b.transit) < 0.05, `pace snap at ${t}`);
+  }
 });

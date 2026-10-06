@@ -32,11 +32,18 @@ function walkPath(points: Point[], amount: number): Point {
   return points[points.length - 1];
 }
 export const libraryX = (count: number) => (count - 1) * PLANET_SPACING + 36;
+/** Level outposts connect through a shallow, continuous lunar ramp. */
+export function lunarFloor(x: number, count = 5) {
+  return (
+    3.5 *
+    (1 - easeBetween((count - 1) * PLANET_SPACING + 10, libraryX(count) - 8, x))
+  );
+}
 export function dock(x: number, moon = false): Point {
   return [
     ORBIT_ORIGIN[0] + x + 9,
     ORBIT_ORIGIN[1] + (moon ? 0 : 3.5) - ROCKET_FOOT,
-    ORBIT_ORIGIN[2] + 3,
+    ORBIT_ORIGIN[2] - 3,
   ];
 }
 
@@ -52,12 +59,20 @@ export function journeyPose(timeline: number, count = 5) {
   let avatar = cab,
     avatarVisible = true;
   let rocket: Point = [112, 0.9 - ROCKET_FOOT, 6];
+  let rover: Point = [
+    ORBIT_ORIGIN[0] + 6,
+    ORBIT_ORIGIN[1] + 3.5,
+    ORBIT_ORIGIN[2] + 4.5,
+  ];
+  let seated = false;
   let focus: Point = [trainX, 0, 0];
   let flight = 0,
     pitch = 0,
     board = stop,
+    boardPhase = phase,
     walking = false,
     inspecting = false,
+    transit = 0,
     trainDoor = 0;
   let display: Point = [stop * 34 - 5, 6.3, 8];
   const gallery = exhibitTravel(
@@ -67,6 +82,7 @@ export function journeyPose(timeline: number, count = 5) {
   if (chapter < 4) {
     focus[0] += gallery.offset;
     display[0] += gallery.offset;
+    transit = chapter === 0 ? easeBetween(0.28, 0.45, phase) : gallery.transit;
   }
   const platformPath: Point[] = [
     cab,
@@ -103,21 +119,24 @@ export function journeyPose(timeline: number, count = 5) {
       easeBetween(3.4, 3.68, t),
     );
     focus[2] = mix(focus[2], -12, launch);
-    focus[1] = rocket[1] * launch - (3.5 - ROCKET_FOOT) * launch;
+    focus[1] =
+      rocket[1] -
+      (0.9 - ROCKET_FOOT) * (1 - launch) -
+      (3.5 - ROCKET_FOOT) * launch;
   }
   if (t >= 4) {
     let local = (t - 4) * count;
+    // Decimal stop coordinates such as 4.6 must resolve to the new workplace.
+    if (Math.abs(local - Math.round(local)) < 1e-9) local = Math.round(local);
     let index = Math.min(count - 1, Math.floor(local));
     let fraction = local - index;
     let fromX = index * PLANET_SPACING,
       toX = fromX + PLANET_SPACING;
-    let moonFrom = false,
-      moonTo = false;
+    let moonFrom = false;
     if (chapter === 4) {
       board = 4 + index;
       if (index === count - 1) {
         toX = libraryX(count);
-        moonTo = true;
       }
     } else {
       index = chapter === 5 ? count : count + 1;
@@ -125,35 +144,61 @@ export function journeyPose(timeline: number, count = 5) {
       fraction = phase;
       fromX = libraryX(count) + (chapter === 6 ? 32 : 0);
       toX = fromX + (chapter === 6 ? 0 : 32);
-      moonFrom = moonTo = true;
+      moonFrom = true;
       board = 4 + index;
     }
     const travel = easeBetween(0.72, 1, fraction);
-    rocket = blend(dock(fromX, moonFrom), dock(toX, moonTo), travel);
-    rocket[1] += Math.sin(Math.PI * travel) * 14;
-    flight = Math.sin(Math.PI * travel);
-    pitch = -Math.sin(Math.PI * travel) * 0.24;
-    const walk =
-      easeBetween(0, chapter === 5 ? 0.1 : 0.2, fraction) *
-      (1 - easeBetween(0.5, 0.7, fraction));
+    boardPhase = fraction;
+    transit =
+      chapter === 5
+        ? gallery.transit
+        : chapter === 6
+          ? 0
+          : easeBetween(0.5, 0.7, fraction);
+    transit *= 1 - easeBetween(0.92, 1, fraction);
+    rocket = dock(0);
+    const roverX = mix(fromX, toX, travel) + 6;
+    rover = [
+      ORBIT_ORIGIN[0] + roverX,
+      ORBIT_ORIGIN[1] + lunarFloor(roverX, count),
+      ORBIT_ORIGIN[2] + 4.5,
+    ];
     const baseX = ORBIT_ORIGIN[0] + fromX,
       baseY = ORBIT_ORIGIN[1] + (moonFrom ? 0 : 3.5),
       baseZ = ORBIT_ORIGIN[2];
-    const hatch: Point = [rocket[0], rocket[1] + 1, rocket[2] + 1.45];
+    const seat: Point = [rover[0], rover[1] + 0.9, rover[2]];
+    const firstLanding = chapter === 4 && index === 0;
+    const hatch: Point = firstLanding
+      ? [rocket[0], rocket[1] + 1, rocket[2] + 1.45]
+      : seat;
+    const goal: Point = [baseX + 1 + gallery.offset, baseY, baseZ + 7];
+    const arrival = easeBetween(0, chapter === 5 ? 0.1 : 0.2, fraction);
+    const leaving = easeBetween(chapter === 5 ? 0.56 : 0.5, 0.7, fraction);
     avatar = walkPath(
       [
         hatch,
-        [baseX + 8, baseY, baseZ + 3.6],
-        [baseX + 5, baseY, baseZ + 3.6],
+        [baseX + 6, baseY, baseZ + 4.5],
         [baseX + 2 + gallery.offset, baseY, baseZ + 5],
-        [baseX + 1 + gallery.offset, baseY, baseZ + 7],
+        goal,
       ],
-      walk,
+      arrival,
     );
-    avatarVisible = fraction < 0.705 && fraction > 0.015;
+    if (leaving > 0)
+      avatar = walkPath(
+        [
+          goal,
+          [baseX + 2 + gallery.offset, baseY, baseZ + 5],
+          [baseX + 6, baseY, baseZ + 4.5],
+          seat,
+        ],
+        leaving,
+      );
+    avatarVisible = !firstLanding || fraction > 0.015;
+    seated = leaving >= 1 || (!firstLanding && arrival <= 0);
     walking =
-      fraction < 0.2 || (fraction > 0.5 && fraction < 0.705) || gallery.moving;
-    inspecting = walk > 0.99 && !gallery.moving;
+      !seated &&
+      (fraction < 0.2 || (leaving > 0 && leaving < 1) || gallery.moving);
+    inspecting = arrival > 0.99 && leaving < 0.01 && !gallery.moving;
     display = [baseX - 5 + gallery.offset, baseY + 5.4, baseZ + 8];
     focus = [
       ORBIT_ORIGIN[0] + mix(fromX, toX, travel) + gallery.offset,
@@ -161,6 +206,7 @@ export function journeyPose(timeline: number, count = 5) {
       ORBIT_ORIGIN[2],
     ];
   }
+  if (chapter < 4) transit *= 1 - easeBetween(0.94, 1, phase);
   return {
     trainX,
     avatar,
@@ -170,16 +216,21 @@ export function journeyPose(timeline: number, count = 5) {
     display,
     trainDoor,
     rocket,
+    rover,
+    seated,
     focus,
     flight,
     pitch,
     board,
+    boardPhase,
     exhibitOffset: gallery.offset,
+    transit,
     space: easeBetween(3.72, 3.96, t),
   };
 }
 
 /** Exact exponential response is independent of the display's refresh rate. */
 export function smoothTimeline(current: number, target: number, dt: number) {
+  if (Math.abs(target - current) < 1e-7) return target;
   return current + (target - current) * (1 - Math.exp(-Math.max(0, dt) / 0.22));
 }
