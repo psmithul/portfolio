@@ -6,6 +6,7 @@ import { ArrowUpRight, TrainFront } from 'lucide-react';
 
 export function WorldHeader() {
   const home = usePathname() === '/';
+  if (home) return null;
   return (
     <header className={`world-header ${home ? 'world-header-home' : ''}`}>
       <Link className="world-brand" href="/" aria-label="Mithul Sourav — home">

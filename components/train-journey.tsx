@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {
   ArrowDown,
@@ -34,7 +35,9 @@ import {
   stations,
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
+import { exhibitReadingPhases } from '@/lib/journey-exhibits';
 import { journeyPosition } from '@/lib/journey-timeline';
+import { createJourneyScroll, type JourneyScroll } from '@/lib/journey-scroll';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import type { VoxelWorld, WorldOptions, WorldAction } from '@/lib/voxel-world';
 
@@ -64,19 +67,24 @@ export function TrainJourney({
   const host = useRef<HTMLDivElement>(null);
   const orientationDialog = useRef<HTMLDialogElement>(null);
   const engine = useRef<VoxelWorld | null>(null);
+  const scroll = useRef<JourneyScroll | null>(null);
+  const restored = useRef(false);
   const world = useRef<WorldOptions>({
+    timeline: 0,
     progress: 0,
     phase: 0,
     stop: 0,
     experience: 0,
     onboard: false,
+    reading: null,
+    mobile: false,
     reducedMotion: false,
     night: false,
   });
   const planetRefs = useRef<(HTMLElement | null)[]>([]);
   const sceneAction = useRef<(action: WorldAction) => void>(() => {});
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const sound = useRef<AudioContext | null>(null);
+  const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [cinemaScale, setCinemaScale] = useState(0.54);
   const [landscape, setLandscape] = useState(false);
@@ -86,6 +94,7 @@ export function TrainJourney({
   const [ready, setReady] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [onboard, setOnboard] = useState(false);
+  const [reading, setReading] = useState<boolean | null>(null);
   const [night, setNight] = useState(false);
   const [muted, setMuted] = useState(true);
   const [routeOpen, setRouteOpen] = useState(false);
@@ -111,13 +120,18 @@ export function TrainJourney({
     media.addEventListener('change', motion);
     let disposed = false;
     import('@/lib/voxel-world')
-      .then(({ createVoxelWorld }) => {
+      .then(async ({ createVoxelWorld }) => {
+        await document.fonts.ready;
         if (disposed || !host.current) return;
         try {
           engine.current = createVoxelWorld(
             host.current,
             () => world.current,
-            () => setUnavailable(true),
+            () => {
+              engine.current?.dispose();
+              engine.current = null;
+              setUnavailable(true);
+            },
             (action) => sceneAction.current(action),
           );
           setReady(true);
@@ -148,6 +162,7 @@ export function TrainJourney({
         window.innerHeight,
         journeyExperience.length,
       );
+      world.current.timeline = position.stop + position.phase;
       world.current.progress = position.progress;
       world.current.phase = position.phase;
       world.current.stop = position.stop;
@@ -173,12 +188,51 @@ export function TrainJourney({
   }, []);
 
   useEffect(() => {
+    if (!ready || restored.current) return;
+    restored.current = true;
+    if (mobile) return;
+    const index = stations.findIndex(
+      (station) => '#' + station.id === window.location.hash,
+    );
+    if (index >= 0)
+      sectionRefs.current[index]?.scrollIntoView({
+        behavior: 'instant',
+        block: 'start',
+      });
+  }, [ready, mobile]);
+
+  useEffect(() => {
+    if (!ready || unavailable) return;
+    scroll.current = createJourneyScroll(
+      () => sectionRefs.current.map((el) => el?.offsetTop ?? 0),
+      journeyExperience.length,
+    );
+    return () => {
+      scroll.current?.dispose();
+      scroll.current = null;
+    };
+  }, [ready, unavailable]);
+
+  function travelTo(element: HTMLElement | null | undefined) {
+    if (!element) return;
+    const y = element.getBoundingClientRect().top + window.scrollY;
+    if (scroll.current) scroll.current.to(y);
+    else window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  useEffect(() => {
     world.current.onboard = onboard;
     world.current.night = night;
-  }, [onboard, night]);
+    world.current.reading = reading;
+    world.current.mobile = mobile;
+  }, [onboard, night, reading, mobile]);
   useEffect(
     () => () => {
-      void sound.current?.close();
+      if (sound.current) {
+        sound.current.pause();
+        sound.current.removeAttribute('src');
+        sound.current.load();
+      }
     },
     [],
   );
@@ -241,42 +295,49 @@ export function TrainJourney({
   useEffect(() => {
     if (!mobile || !landscape || !started || !playing || lab || routeOpen)
       return;
-    // Read at each stop, then travel. Each experience planet gets its own pause.
-    const readTimes = [
-      10000,
-      16000,
-      20000,
-      22000,
-      ...journeyExperience.map(() => 16000),
-      18000,
-      0,
-    ];
+    // Pause at every reading bay, including the portrait and all project pages.
     let frame = 0,
       previous = 0,
       lastStop = -1,
-      hold = 0,
-      scrollPosition = window.scrollY;
+      hold = 0;
     function advance(now: number) {
       frame = requestAnimationFrame(advance);
       const dt = previous ? Math.min(now - previous, 80) : 0;
       previous = now;
       if (document.hidden) return;
-      const waypoints = [
-        sectionRefs.current[0],
-        sectionRefs.current[1],
-        sectionRefs.current[2],
-        sectionRefs.current[3],
-        ...planetRefs.current,
-        sectionRefs.current[5],
-        sectionRefs.current[6],
-      ].map((el) => (el ? el.getBoundingClientRect().top + window.scrollY : 0));
+      const entries = [
+        ...sectionRefs.current
+          .slice(0, 4)
+          .map((element, board) => ({ element, board })),
+        ...planetRefs.current.map((element, i) => ({ element, board: 4 + i })),
+        { element: sectionRefs.current[5], board: 9 },
+        { element: sectionRefs.current[6], board: 10 },
+      ].flatMap(({ element, board }) => {
+        const start = element
+          ? element.getBoundingClientRect().top + window.scrollY
+          : 0;
+        return exhibitReadingPhases(board).map((phase) => ({
+          y: start + (element?.offsetHeight ?? 0) * phase,
+          pause:
+            board === 0
+              ? 10000
+              : board === 2
+                ? 20000
+                : board === 3
+                  ? 14000
+                  : board === 10
+                    ? 0
+                    : 16000,
+        }));
+      });
+      const waypoints = entries.map((entry) => entry.y);
       const y = window.scrollY;
       let index = 0;
       for (let i = 0; i < waypoints.length; i++)
         if (y + 2 >= waypoints[i]) index = i;
       if (index !== lastStop) {
         lastStop = index;
-        hold = Math.abs(y - waypoints[index]) < 3 ? readTimes[index] : 0;
+        hold = Math.abs(y - waypoints[index]) < 3 ? entries[index].pause : 0;
       }
       if (index === waypoints.length - 1) {
         setPlaying(false);
@@ -286,17 +347,7 @@ export function TrainJourney({
         hold -= dt;
         return;
       }
-      const distance = waypoints[index + 1] - waypoints[index];
-      const speed = distance / (reducedMotion ? 12000 : 9000);
-      if (Math.abs(y - scrollPosition) > 3) scrollPosition = y;
-      scrollPosition = Math.min(
-        waypoints[index + 1],
-        scrollPosition + speed * dt,
-      );
-      window.scrollTo({
-        top: scrollPosition,
-        behavior: 'instant',
-      });
+      scroll.current?.to(waypoints[index + 1]);
     }
     frame = requestAnimationFrame(advance);
     const pause = () => setPlaying(false);
@@ -310,12 +361,13 @@ export function TrainJourney({
   }, [mobile, landscape, started, playing, lab, routeOpen, reducedMotion]);
 
   function startJourney() {
-    window.history.replaceState(null, '', '/');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    setReading(null);
     setStarted(true);
     setPlaying(true);
   }
   function nextChapter() {
+    setPlaying(false);
+    setReading(null);
     const waypoints = [
       sectionRefs.current[0],
       sectionRefs.current[1],
@@ -328,16 +380,14 @@ export function TrainJourney({
     const next = waypoints.find(
       (el) => el && el.getBoundingClientRect().top > 3,
     );
-    next?.scrollIntoView({
-      behavior: mobile || reducedMotion ? 'instant' : 'smooth',
-    });
+    travelTo(next);
   }
 
   function go(index: number) {
-    sectionRefs.current[index]?.scrollIntoView({
-      behavior: mobile || reducedMotion ? 'instant' : 'smooth',
-      block: 'start',
-    });
+    setPlaying(false);
+    setReading(null);
+    setOnboard(false);
+    travelTo(sectionRefs.current[index]);
     window.history.replaceState(
       null,
       '',
@@ -348,39 +398,18 @@ export function TrainJourney({
   useEffect(() => {
     sceneAction.current = (action) => {
       if (action.kind === 'project') setLab(action.slug);
-      else if (action.kind === 'planet')
-        planetRefs.current[action.index]?.scrollIntoView({
-          behavior: mobile || reducedMotion ? 'instant' : 'smooth',
-        });
-      else window.location.assign('/blog');
+      else if (action.kind === 'planet') {
+        setPlaying(false);
+        travelTo(planetRefs.current[action.index]);
+      } else window.location.assign('/blog');
     };
   }, [mobile, reducedMotion]);
   async function toggleSound() {
-    if (!sound.current) {
-      const context = new AudioContext();
-      const buffer = context.createBuffer(
-        1,
-        context.sampleRate * 4,
-        context.sampleRate,
-      );
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < data.length; i++)
-        data[i] = (Math.random() * 2 - 1) * 0.4;
-      const source = context.createBufferSource();
-      source.buffer = buffer;
-      source.loop = true;
-      const filter = context.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 230;
-      const gain = context.createGain();
-      gain.gain.value = 0.15;
-      source.connect(filter).connect(gain).connect(context.destination);
-      source.start();
-      sound.current = context;
-    }
+    if (!sound.current) return;
+    sound.current.volume = 0.34;
     try {
-      if (muted) await sound.current.resume();
-      else await sound.current.suspend();
+      if (muted) await sound.current.play();
+      else sound.current.pause();
       setMuted(!muted);
     } catch {
       setMuted(true);
@@ -407,6 +436,7 @@ export function TrainJourney({
       className={
         'train-journey' +
         (active >= 4 ? ' in-space' : '') +
+        (ready && !unavailable ? ' world-integrated' : '') +
         (mobile && landscape ? ' mobile-cinema' : '') +
         (night ? ' world-night' : '') +
         (unavailable ? ' world-unavailable' : '')
@@ -446,7 +476,11 @@ export function TrainJourney({
       {mobile && landscape && started && (
         <div className="cinema-player" aria-label="Journey playback">
           <button
-            onClick={() => setPlaying(!playing)}
+            onClick={() => {
+              if (!playing) setReading(null);
+              if (playing) scroll.current?.stop();
+              setPlaying(!playing);
+            }}
             aria-label={playing ? 'Pause journey' : 'Play journey'}
           >
             {playing ? <Pause size={14} /> : <Play size={14} />}
@@ -457,6 +491,14 @@ export function TrainJourney({
           </button>
         </div>
       )}
+      {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- Original instrumental music contains no speech. */}
+      <audio
+        ref={sound}
+        src="/audio/railway-theme.wav"
+        loop
+        preload="none"
+        aria-hidden="true"
+      />
       <div className="voxel-canvas" ref={host} />
       <div className="world-atmosphere" aria-hidden="true" />
       {!ready && !unavailable && (
@@ -471,7 +513,25 @@ export function TrainJourney({
       )}
       <div className="scene-controls">
         <button
-          onClick={() => setOnboard(!onboard)}
+          onClick={() => {
+            setReading(reading !== true);
+            setOnboard(false);
+            setPlaying(false);
+          }}
+          disabled={!ready || unavailable}
+          aria-pressed={Boolean(reading)}
+          aria-label={
+            reading ? 'Return to the world' : 'Read this station up close'
+          }
+          title={reading ? 'Return to the world' : 'Read this station up close'}
+        >
+          <BookOpen size={16} />
+        </button>
+        <button
+          onClick={() => {
+            setOnboard(!onboard);
+            setReading(false);
+          }}
           disabled={!ready || unavailable}
           aria-pressed={onboard}
           title="Change camera"
@@ -490,6 +550,7 @@ export function TrainJourney({
           onClick={() => {
             engine.current?.resetView();
             setOnboard(false);
+            setReading(null);
           }}
           aria-label="Reset camera view"
           disabled={!ready || unavailable}
@@ -504,7 +565,7 @@ export function TrainJourney({
         </button>
         <button
           onClick={() => void toggleSound()}
-          aria-label={muted ? 'Enable ambient sound' : 'Mute ambient sound'}
+          aria-label={muted ? 'Play the railway tune' : 'Mute the railway tune'}
         >
           {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
         </button>
@@ -518,7 +579,7 @@ export function TrainJourney({
         }}
         aria-labelledby="home-title"
       >
-        <div className="hero-copy">
+        <div className="hero-copy" data-world-board="0">
           <p className="world-eyebrow">
             MECHANICAL ENGINEERING · NITK SURATHKAL
           </p>
@@ -534,6 +595,12 @@ export function TrainJourney({
           <button className="pixel-button" onClick={() => go(1)}>
             About me <ArrowRight size={16} />
           </button>
+          <p className="world-board-hint">
+            <Mouse size={16} />{' '}
+            {mobile
+              ? 'Automatic journey · pause to explore'
+              : 'Scroll to travel · drag to look around'}
+          </p>
         </div>
         <div className="hero-scroll">
           <Mouse size={15} />
@@ -550,32 +617,53 @@ export function TrainJourney({
         }}
         aria-labelledby="about-title"
       >
-        <article className="station-panel about-panel">
-          <p className="world-eyebrow">ABOUT</p>
-          <h2 id="about-title">A little about me.</h2>
-          <p>
-            I’m a final-year mechanical engineering student at NITK Surathkal. I
-            like learning new things and using what I learn to build something.
-            When an idea interests me, I want to understand how it works and how
-            people came up with it.
-          </p>
-          <p>
-            Right now, I’m working on a rover and a robot for collecting leaves,
-            both meant to move over rough ground. I’m also exploring ways to
-            make a mechanical joint more or less flexible.
-          </p>
-          <p>
-            I like working on hard problems, even when I don’t know where to
-            start. Building things helps me see what I’ve understood and what I
-            still need to learn. I also love space and spend a lot of time
-            reading about how we explore it.
-          </p>
-          <div className="inventory">
-            <span>SolidWorks · ANSYS · MATLAB · Python · C / C++</span>
+        <article className="station-panel about-panel" data-world-board="1">
+          <div data-world-leaf>
+            <p className="world-eyebrow">ABOUT · 01 / 03</p>
+            <h2 id="about-title">A little about me.</h2>
+            <div className="journey-portrait">
+              <Image
+                src="/images/mithul-cutout.webp"
+                alt="Mithul, wearing glasses and a black shirt, looking to his right"
+                width={1024}
+                height={1536}
+                unoptimized
+              />
+              <blockquote>
+                Satisfaction of one&apos;s curiosity is one of the greatest
+                sources of happiness in life
+              </blockquote>
+            </div>
           </div>
-          <Link className="station-text-link" href="/about">
-            Background & experience <ArrowUpRight size={15} />
-          </Link>
+          <div data-world-leaf>
+            <p className="world-eyebrow">ABOUT · 02 / 03</p>
+            <p>
+              I’m a final-year mechanical engineering student at NITK Surathkal.
+              I like learning new things and using what I learn to build
+              something. When an idea interests me, I want to understand how it
+              works and how people came up with it.
+            </p>
+            <p>
+              Right now, I’m working on a rover and a robot for collecting
+              leaves, both meant to move over rough ground. I’m also exploring
+              ways to make a mechanical joint more or less flexible.
+            </p>
+          </div>
+          <div data-world-leaf>
+            <p className="world-eyebrow">ABOUT · 03 / 03</p>
+            <p>
+              I like working on hard problems, even when I don’t know where to
+              start. Building things helps me see what I’ve understood and what
+              I still need to learn. I also love space and spend a lot of time
+              reading about how we explore it.
+            </p>
+            <div className="inventory">
+              <span>SolidWorks · ANSYS · MATLAB · Python · C / C++</span>
+            </div>
+            <Link className="station-text-link" href="/about">
+              Background & experience <ArrowUpRight size={15} />
+            </Link>
+          </div>
         </article>
       </section>
 
@@ -587,13 +675,17 @@ export function TrainJourney({
         }}
         aria-labelledby="work-title"
       >
-        <article className="station-panel project-panel">
-          <p className="world-eyebrow">PROJECTS</p>
-          <h2 id="work-title">Ongoing projects</h2>
-          <p>The projects I’m working on now.</p>
-          <div className="current-projects">
-            {featured.map((project, index) => (
-              <div className="voxel-project-card" key={project.slug}>
+        <article className="station-panel project-panel" data-world-board="2">
+          {featured.map((project, index) => (
+            <div data-world-leaf key={project.slug}>
+              <p className="world-eyebrow">PROJECTS · 0{index + 1} / 03</p>
+              {index === 0 && (
+                <>
+                  <h2 id="work-title">Ongoing projects</h2>
+                  <p>The projects I’m working on now.</p>
+                </>
+              )}
+              <div className="voxel-project-card">
                 <span className="project-number">0{index + 1}</span>
                 <div>
                   <span className="project-discipline">
@@ -619,12 +711,14 @@ export function TrainJourney({
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-          <p className="station-footnote">
-            You can also click the models in the workshop. These are interactive
-            concept models.
-          </p>
+              {index === 2 && (
+                <p className="station-footnote">
+                  You can also click the models in the workshop. These are
+                  interactive concept models.
+                </p>
+              )}
+            </div>
+          ))}
         </article>
       </section>
 
@@ -636,29 +730,40 @@ export function TrainJourney({
         }}
         aria-labelledby="archive-title"
       >
-        <article className="station-panel archive-panel">
-          <p className="world-eyebrow">SELECTED WORK</p>
-          <h2 id="archive-title">Past projects</h2>
-          <p>Some things I’ve built and explored.</p>
-          <div className="journey-archive">
-            {archive.map((project, index) => (
-              <Link href={'/work/' + project.slug} key={project.slug}>
-                <span className="archive-index">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3>{project.title}</h3>
-                  <span>
-                    {project.discipline} · {project.period}
-                  </span>
-                </div>
-                <ArrowUpRight size={15} />
-              </Link>
-            ))}
-          </div>
-          <p className="departure-note">
-            Keep scrolling to launch into experience. <ArrowDown size={13} />
-          </p>
+        <article className="station-panel archive-panel" data-world-board="3">
+          {[0, 1, 2].map((page) => (
+            <div data-world-leaf key={page}>
+              <p className="world-eyebrow">SELECTED WORK · 0{page + 1} / 03</p>
+              {page === 0 && (
+                <>
+                  <h2 id="archive-title">Past projects</h2>
+                  <p>Some things I’ve built and explored.</p>
+                </>
+              )}
+              <div className="journey-archive">
+                {archive.slice(page * 3, page * 3 + 3).map((project, index) => (
+                  <Link href={'/work/' + project.slug} key={project.slug}>
+                    <span className="archive-index">
+                      {String(page * 3 + index + 1).padStart(2, '0')}
+                    </span>
+                    <div>
+                      <h3>{project.title}</h3>
+                      <span>
+                        {project.discipline} · {project.period}
+                      </span>
+                    </div>
+                    <ArrowUpRight size={15} />
+                  </Link>
+                ))}
+              </div>
+              {page === 2 && (
+                <p className="departure-note">
+                  Keep scrolling to launch into experience.{' '}
+                  <ArrowDown size={13} />
+                </p>
+              )}
+            </div>
+          ))}
         </article>
       </section>
 
@@ -679,7 +784,10 @@ export function TrainJourney({
             }}
             aria-labelledby={'planet-title-' + index}
           >
-            <div className="station-panel experience-panel">
+            <div
+              className="station-panel experience-panel"
+              data-world-board={4 + index}
+            >
               <p className="world-eyebrow">
                 EXPERIENCE · {String(index + 1).padStart(2, '0')} /{' '}
                 {String(journeyExperience.length).padStart(2, '0')}
@@ -699,12 +807,10 @@ export function TrainJourney({
                 {journeyExperience.map((p, i) => (
                   <button
                     key={p.company}
-                    onClick={() =>
-                      planetRefs.current[i]?.scrollIntoView({
-                        behavior:
-                          mobile || reducedMotion ? 'instant' : 'smooth',
-                      })
-                    }
+                    onClick={() => {
+                      setPlaying(false);
+                      travelTo(planetRefs.current[i]);
+                    }}
                     aria-current={i === index ? 'step' : undefined}
                   >
                     {p.company}
@@ -729,29 +835,40 @@ export function TrainJourney({
         }}
         aria-labelledby="journal-title"
       >
-        <article className="station-panel journal-station">
-          <p className="world-eyebrow">JOURNAL</p>
-          <h2 id="journal-title">Mika’s Life.</h2>
-          <p>
-            Things I’ve been reading about, trying out, and still figuring out.
-          </p>
-          <div className="station-posts">
-            {posts.slice(0, 3).map((post) => (
-              <Link key={post.slug} href={'/blog/' + post.slug}>
-                <div>
-                  <span>
-                    {post.category} · {post.readingMinutes} min
-                  </span>
-                  <h3>{post.title}</h3>
-                </div>
-                <ArrowUpRight size={16} />
-              </Link>
-            ))}
-          </div>
-          <Link href="/blog" className="station-text-link">
-            All my notes <BookOpen size={16} />
-            <ArrowRight size={15} />
-          </Link>
+        <article className="station-panel journal-station" data-world-board="9">
+          {[0, 1].map((page) => (
+            <div data-world-leaf key={page}>
+              <p className="world-eyebrow">JOURNAL · 0{page + 1} / 02</p>
+              {page === 0 && (
+                <>
+                  <h2 id="journal-title">Mika’s Life.</h2>
+                  <p>
+                    Things I’ve been reading about, trying out, and still
+                    figuring out.
+                  </p>
+                </>
+              )}
+              <div className="station-posts">
+                {posts.slice(page * 2, page * 2 + 2).map((post) => (
+                  <Link key={post.slug} href={'/blog/' + post.slug}>
+                    <div>
+                      <span>
+                        {post.category} · {post.readingMinutes} min
+                      </span>
+                      <h3>{post.title}</h3>
+                    </div>
+                    <ArrowUpRight size={16} />
+                  </Link>
+                ))}
+              </div>
+              {page === 1 && (
+                <Link href="/blog" className="station-text-link">
+                  All my notes <BookOpen size={16} />
+                  <ArrowRight size={15} />
+                </Link>
+              )}
+            </div>
+          ))}
         </article>
       </section>
 
@@ -763,7 +880,7 @@ export function TrainJourney({
         }}
         aria-labelledby="contact-title"
       >
-        <article className="station-panel contact-panel">
+        <article className="station-panel contact-panel" data-world-board="10">
           <p className="world-eyebrow">CONTACT</p>
           <h2 id="contact-title">Get in touch.</h2>
           <p>
