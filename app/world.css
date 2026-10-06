@@ -1237,29 +1237,31 @@ a:focus-visible {
     min-height: 110svh;
     padding-top: 90px;
   }
-  .mobile-cinema .hero-copy,
-  .mobile-cinema .station-panel {
+  .mobile-cinema:not(.world-integrated) .hero-copy,
+  .mobile-cinema:not(.world-integrated) .station-panel {
     width: 375px;
     max-width: none;
     transform: scale(var(--cinema-scale, 0.62));
     transform-origin: top left;
   }
-  .mobile-cinema .hero-copy h1 {
+  .mobile-cinema:not(.world-integrated) .hero-copy h1 {
     font-size: 52px;
     line-height: 1.04;
   }
-  .mobile-cinema .hero-copy .hero-statement {
+  .mobile-cinema:not(.world-integrated) .hero-copy .hero-statement {
     font-size: 17px;
     line-height: 1.5;
     max-width: 360px;
   }
-  .mobile-cinema .hero-copy > p:not(.world-eyebrow):not(.hero-statement),
-  .mobile-cinema .station-panel > p {
+  .mobile-cinema:not(.world-integrated)
+    .hero-copy
+    > p:not(.world-eyebrow):not(.hero-statement),
+  .mobile-cinema:not(.world-integrated) .station-panel > p {
     font-size: 12px;
     line-height: 1.8;
     max-width: 375px;
   }
-  .mobile-cinema .station-panel h2 {
+  .mobile-cinema:not(.world-integrated) .station-panel h2 {
     font-size: 46px;
     max-width: 375px;
   }
@@ -1384,8 +1386,8 @@ a:focus-visible {
   }
 }
 @media (orientation: landscape) and (max-height: 450px) {
-  .mobile-cinema .hero-copy,
-  .mobile-cinema .station-panel {
+  .mobile-cinema:not(.world-integrated) .hero-copy,
+  .mobile-cinema:not(.world-integrated) .station-panel {
     transform: scale(var(--cinema-scale, 0.54));
   }
   .mobile-cinema .hero-stop {
@@ -1422,4 +1424,283 @@ a:focus-visible {
 }
 .mobile-cinema .station-footnote {
   display: none;
+}
+
+/* Small reading alcoves live in the Three.js scene and share the page scroll. */
+.world-lettering {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.world-integrated .world-atmosphere {
+  display: none;
+}
+.world-integrated .hero-scroll {
+  display: none;
+}
+.train-journey .in-world-board {
+  box-sizing: border-box;
+  width: 680px !important;
+  max-width: none !important;
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding: 26px 30px 24px !important;
+  margin: 0;
+  color: #352b20;
+  background: #e8e5d7;
+  border: 0;
+  box-shadow: none;
+  text-shadow: none;
+  transform-origin: center !important;
+  user-select: text;
+}
+.train-journey .in-world-board h1,
+.train-journey .in-world-board h2 {
+  color: #352b20;
+  font-family: var(--pixel);
+  font-size: 56px;
+  line-height: 1;
+  max-width: none;
+  letter-spacing: -0.02em;
+  margin: 12px 0 24px;
+}
+.train-journey .in-world-board p {
+  color: #4b3d29;
+  font-size: 24px;
+  line-height: 1.45;
+  margin: 0 0 18px;
+}
+.train-journey .in-world-board .world-eyebrow {
+  color: #786344;
+  font: 15px/1.4 monospace;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+.train-journey .in-world-board .hero-statement,
+.train-journey .in-world-board .experience-role {
+  font-size: 25px;
+  color: #3f382a;
+}
+.train-journey .in-world-board .pixel-button {
+  font-size: 20px;
+  min-height: 56px;
+  padding: 8px 16px;
+  background: #426c58;
+  border-color: #799575;
+  border-bottom-color: #263f30;
+  color: #fff1d4;
+}
+.train-journey .in-world-board .pixel-button:hover {
+  background: #315c49;
+}
+.train-journey .in-world-board .station-text-link {
+  color: #2d6253;
+  font-size: 19px;
+  line-height: 1.4;
+  gap: 8px;
+}
+.train-journey .in-world-board .inventory {
+  font-size: 18px;
+  color: #796042;
+  margin: 18px 0 8px;
+}
+.train-journey .in-world-board .current-projects {
+  margin-top: 22px;
+}
+.train-journey .in-world-board .voxel-project-card {
+  gap: 15px;
+  padding: 16px 0;
+  border-color: #7d674646;
+}
+.train-journey .in-world-board .project-number {
+  font-size: 17px;
+  color: #976a39;
+}
+.train-journey .in-world-board .project-discipline {
+  font: 16px/1.5 monospace;
+  color: #796449;
+}
+.train-journey .in-world-board .voxel-project-card h3 {
+  color: #3f3427;
+  font-size: 36px;
+  margin: 5px 0 8px;
+}
+.train-journey .in-world-board .voxel-project-card p {
+  font-size: 24px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.train-journey .in-world-board .project-actions {
+  gap: 20px;
+}
+.train-journey .in-world-board .project-actions a,
+.train-journey .in-world-board .project-actions button {
+  color: #2d6253;
+  font-size: 19px;
+  padding: 5px 0;
+}
+.train-journey .in-world-board .station-footnote {
+  display: block;
+  color: #7d674b;
+  font-size: 14px;
+  margin: 14px 0 0;
+}
+.train-journey .in-world-board .journey-archive {
+  margin: 22px 0 16px;
+}
+.train-journey .in-world-board .journey-archive > a {
+  color: #453828;
+  border-color: #7d674646;
+  padding: 11px 0;
+}
+.train-journey .in-world-board .journey-archive h3 {
+  font-size: 20px;
+}
+.train-journey .in-world-board .journey-archive > a > div > span {
+  font-size: 14px;
+  color: #806b4d;
+}
+.train-journey .in-world-board .archive-index {
+  font-size: 15px;
+  color: #886d4c;
+}
+.train-journey .in-world-board .departure-note {
+  font-size: 15px;
+  margin: 12px 0 0;
+}
+.train-journey .in-world-board .planet-selector {
+  margin: 20px 0 12px;
+  gap: 6px;
+}
+.train-journey .in-world-board .planet-selector button {
+  font-size: 14px;
+  padding: 7px 9px;
+  color: #506754;
+  border-color: #6e785155;
+  background: #c2b38b33;
+}
+.train-journey .in-world-board .planet-selector button[aria-current] {
+  color: #fff1d4;
+  background: #476f5b;
+}
+.train-journey .in-world-board .station-posts > a {
+  color: #453828;
+  border-color: #7d674646;
+  padding: 16px 0;
+}
+.train-journey .in-world-board .station-posts h3 {
+  color: #453828;
+  font-size: 24px;
+}
+.train-journey .in-world-board .station-posts span {
+  color: #806b4d;
+  font-size: 15px;
+}
+.train-journey .in-world-board .contact-email {
+  font-size: 18px;
+  color: #7c6544;
+  margin: 18px 0;
+}
+.train-journey .in-world-board .contact-email button {
+  color: #5b6d51;
+}
+.train-journey .in-world-board .contact-socials {
+  gap: 22px;
+  margin: 14px 0;
+}
+.train-journey .in-world-board .contact-socials a {
+  font-size: 19px;
+  color: #2d6253;
+}
+.train-journey .in-world-board .world-board-hint {
+  font: 14px/1.5 monospace;
+  color: #8b7755;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 22px 0 0;
+}
+.train-journey .in-world-board a:hover,
+.train-journey .in-world-board button:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.train-journey .in-world-board :focus-visible {
+  outline: 3px solid #315c49;
+  outline-offset: 4px;
+}
+.world-integrated .scene-controls > button,
+.world-integrated .cinema-player {
+  background: #302a22e8;
+  border-color: #a68b5b;
+  box-shadow: 0 3px 0 #181611;
+}
+.world-integrated .scene-controls > button span {
+  display: none;
+}
+.world-integrated .journey-stop,
+.world-integrated .planet-chapter {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .in-world-board {
+    scroll-behavior: auto;
+  }
+}
+
+.mobile-cinema .in-world-board {
+  max-height: none;
+}
+.world-board-hint {
+  display: none;
+}
+
+/* Reserve the route before CSS3D mounts so hash links and scroll restoration keep their coordinates. */
+.train-journey {
+  overflow-anchor: none;
+}
+.train-journey:not(.world-unavailable) .journey-stop {
+  height: 125svh;
+  min-height: 125svh;
+}
+.train-journey:not(.world-unavailable) .hero-stop {
+  height: 110svh;
+  min-height: 110svh;
+}
+.train-journey:not(.world-unavailable) .archive-stop {
+  height: 175svh;
+  min-height: 175svh;
+}
+.train-journey:not(.world-unavailable) .experience-stop {
+  height: auto;
+  min-height: 0;
+}
+.train-journey:not(.world-unavailable) .planet-chapter {
+  height: 120svh;
+  min-height: 120svh;
+}
+
+.journey-portrait {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  align-items: center;
+  gap: 28px;
+}
+.journey-portrait img {
+  width: 220px;
+  height: 330px;
+  object-fit: contain;
+  image-rendering: auto;
+  background: #b4c0ab;
+}
+.journey-portrait blockquote {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 27px;
+  line-height: 1.35;
+  color: #4c5849;
+}
+.train-journey:not(.world-integrated) [data-world-leaf] + [data-world-leaf] {
+  margin-top: 28px;
 }
