@@ -16,12 +16,8 @@ import {
   Map,
   Moon,
   Mouse,
-  Pause,
-  Play,
-  Smartphone,
-  SkipForward,
   RotateCcw,
-  Rocket,
+  Truck,
   Sun,
   TrainFront,
   Volume2,
@@ -35,7 +31,6 @@ import {
   stations,
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
-import { exhibitReadingPhases } from '@/lib/journey-exhibits';
 import { journeyPosition } from '@/lib/journey-timeline';
 import { createJourneyScroll, type JourneyScroll } from '@/lib/journey-scroll';
 import type { JournalSummary } from '@/lib/journal-editorial';
@@ -65,7 +60,6 @@ export function TrainJourney({
   posts: JournalSummary[];
 }) {
   const host = useRef<HTMLDivElement>(null);
-  const orientationDialog = useRef<HTMLDialogElement>(null);
   const engine = useRef<VoxelWorld | null>(null);
   const scroll = useRef<JourneyScroll | null>(null);
   const restored = useRef(false);
@@ -87,9 +81,6 @@ export function TrainJourney({
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [cinemaScale, setCinemaScale] = useState(0.54);
-  const [landscape, setLandscape] = useState(false);
-  const [started, setStarted] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
@@ -154,7 +145,7 @@ export function TrainJourney({
     let queued = 0;
     function update() {
       queued = 0;
-      const y = window.scrollY;
+      const y = scroll.current?.position() ?? window.scrollY;
       const offsets = sectionRefs.current.map((el) => el?.offsetTop ?? 0);
       const position = journeyPosition(
         y,
@@ -190,7 +181,6 @@ export function TrainJourney({
   useEffect(() => {
     if (!ready || restored.current) return;
     restored.current = true;
-    if (mobile) return;
     const index = stations.findIndex(
       (station) => '#' + station.id === window.location.hash,
     );
@@ -199,7 +189,7 @@ export function TrainJourney({
         behavior: 'instant',
         block: 'start',
       });
-  }, [ready, mobile]);
+  }, [ready]);
 
   useEffect(() => {
     if (!ready || unavailable) return;
@@ -267,9 +257,7 @@ export function TrainJourney({
       const phone =
         Math.min(width, height) <= 800 && Math.max(width, height) <= 1200;
       setMobile(phone);
-      setLandscape(width > height);
       setCinemaScale(Math.min(0.68, Math.max(0.32, (height - 110) / 540)));
-      if (width <= height) setPlaying(false);
     }
     orientation();
     window.addEventListener('resize', orientation);
@@ -280,111 +268,7 @@ export function TrainJourney({
     };
   }, []);
 
-  const rotationGate = mobile && (!landscape || !started);
-  useEffect(() => {
-    if (!rotationGate) return;
-    if (!orientationDialog.current?.open)
-      orientationDialog.current?.showModal();
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [rotationGate]);
-
-  useEffect(() => {
-    if (!mobile || !landscape || !started || !playing || lab || routeOpen)
-      return;
-    // Pause at every reading bay, including the portrait and all project pages.
-    let frame = 0,
-      previous = 0,
-      lastStop = -1,
-      hold = 0;
-    function advance(now: number) {
-      frame = requestAnimationFrame(advance);
-      const dt = previous ? Math.min(now - previous, 80) : 0;
-      previous = now;
-      if (document.hidden) return;
-      const entries = [
-        ...sectionRefs.current
-          .slice(0, 4)
-          .map((element, board) => ({ element, board })),
-        ...planetRefs.current.map((element, i) => ({ element, board: 4 + i })),
-        { element: sectionRefs.current[5], board: 9 },
-        { element: sectionRefs.current[6], board: 10 },
-      ].flatMap(({ element, board }) => {
-        const start = element
-          ? element.getBoundingClientRect().top + window.scrollY
-          : 0;
-        return exhibitReadingPhases(board).map((phase) => ({
-          y: start + (element?.offsetHeight ?? 0) * phase,
-          pause:
-            board === 0
-              ? 10000
-              : board === 2
-                ? 20000
-                : board === 3
-                  ? 14000
-                  : board === 10
-                    ? 0
-                    : 16000,
-        }));
-      });
-      const waypoints = entries.map((entry) => entry.y);
-      const y = window.scrollY;
-      let index = 0;
-      for (let i = 0; i < waypoints.length; i++)
-        if (y + 2 >= waypoints[i]) index = i;
-      if (index !== lastStop) {
-        lastStop = index;
-        hold = Math.abs(y - waypoints[index]) < 3 ? entries[index].pause : 0;
-      }
-      if (index === waypoints.length - 1) {
-        setPlaying(false);
-        return;
-      }
-      if (hold > 0) {
-        hold -= dt;
-        return;
-      }
-      scroll.current?.to(waypoints[index + 1]);
-    }
-    frame = requestAnimationFrame(advance);
-    const pause = () => setPlaying(false);
-    window.addEventListener('wheel', pause, { passive: true });
-    window.addEventListener('touchmove', pause, { passive: true });
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('wheel', pause);
-      window.removeEventListener('touchmove', pause);
-    };
-  }, [mobile, landscape, started, playing, lab, routeOpen, reducedMotion]);
-
-  function startJourney() {
-    setReading(null);
-    setStarted(true);
-    setPlaying(true);
-  }
-  function nextChapter() {
-    setPlaying(false);
-    setReading(null);
-    const waypoints = [
-      sectionRefs.current[0],
-      sectionRefs.current[1],
-      sectionRefs.current[2],
-      sectionRefs.current[3],
-      ...planetRefs.current,
-      sectionRefs.current[5],
-      sectionRefs.current[6],
-    ];
-    const next = waypoints.find(
-      (el) => el && el.getBoundingClientRect().top > 3,
-    );
-    travelTo(next);
-  }
-
   function go(index: number) {
-    setPlaying(false);
     setReading(null);
     setOnboard(false);
     travelTo(sectionRefs.current[index]);
@@ -399,7 +283,6 @@ export function TrainJourney({
     sceneAction.current = (action) => {
       if (action.kind === 'project') setLab(action.slug);
       else if (action.kind === 'planet') {
-        setPlaying(false);
         travelTo(planetRefs.current[action.index]);
       } else window.location.assign('/blog');
     };
@@ -429,7 +312,7 @@ export function TrainJourney({
     <main
       id="main"
       style={
-        mobile && landscape
+        mobile
           ? ({ '--cinema-scale': cinemaScale } as CSSProperties)
           : undefined
       }
@@ -437,60 +320,11 @@ export function TrainJourney({
         'train-journey' +
         (active >= 4 ? ' in-space' : '') +
         (ready && !unavailable ? ' world-integrated' : '') +
-        (mobile && landscape ? ' mobile-cinema' : '') +
+        (mobile ? ' mobile-journey' : '') +
         (night ? ' world-night' : '') +
         (unavailable ? ' world-unavailable' : '')
       }
     >
-      {rotationGate && (
-        <dialog
-          ref={orientationDialog}
-          className="orientation-gate"
-          onCancel={(event) => event.preventDefault()}
-          aria-labelledby="orientation-title"
-        >
-          <div className="orientation-device">
-            <Smartphone size={48} strokeWidth={1.3} />
-            <span>↻</span>
-          </div>
-          <p className="world-eyebrow">MITHUL SOURAV · THE JOURNEY</p>
-          <h2 id="orientation-title">
-            {landscape ? 'Ready to travel.' : 'Turn your phone.'}
-          </h2>
-          <p>
-            {landscape
-              ? 'The railway, workshop, and experience planets will move automatically. Pause whenever you want to explore.'
-              : 'This journey plays in landscape. Rotate your phone to see the whole scene, then start the journey.'}
-          </p>
-          {landscape ? (
-            <button className="pixel-button" onClick={startJourney}>
-              <Play size={15} /> Start the journey <ArrowRight size={15} />
-            </button>
-          ) : (
-            <span className="rotation-instruction">
-              Rotate to landscape to begin
-            </span>
-          )}
-        </dialog>
-      )}
-      {mobile && landscape && started && (
-        <div className="cinema-player" aria-label="Journey playback">
-          <button
-            onClick={() => {
-              if (!playing) setReading(null);
-              if (playing) scroll.current?.stop();
-              setPlaying(!playing);
-            }}
-            aria-label={playing ? 'Pause journey' : 'Play journey'}
-          >
-            {playing ? <Pause size={14} /> : <Play size={14} />}
-            <span>{playing ? 'Pause' : 'Play'}</span>
-          </button>
-          <button onClick={nextChapter} aria-label="Next chapter">
-            <SkipForward size={14} />
-          </button>
-        </div>
-      )}
       {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- Original instrumental music contains no speech. */}
       <audio
         ref={sound}
@@ -516,7 +350,6 @@ export function TrainJourney({
           onClick={() => {
             setReading(reading !== true);
             setOnboard(false);
-            setPlaying(false);
           }}
           disabled={!ready || unavailable}
           aria-pressed={Boolean(reading)}
@@ -537,13 +370,13 @@ export function TrainJourney({
           title="Change camera"
           aria-label={
             onboard
-              ? 'Return to landscape view'
+              ? 'Return to world view'
               : active >= 4
-                ? 'Look from the rocket'
+                ? 'Look from the rover'
                 : 'Look from the train'
           }
         >
-          {active >= 4 ? <Rocket size={16} /> : <TrainFront size={16} />}
+          {active >= 4 ? <Truck size={16} /> : <TrainFront size={16} />}
           <span>{onboard ? 'On board' : 'Ride'}</span>
         </button>
         <button
@@ -598,13 +431,13 @@ export function TrainJourney({
           <p className="world-board-hint">
             <Mouse size={16} />{' '}
             {mobile
-              ? 'Automatic journey · pause to explore'
+              ? 'Swipe up or left to travel · tap to explore'
               : 'Scroll to travel · drag to look around'}
           </p>
         </div>
         <div className="hero-scroll">
           <Mouse size={15} />
-          <span>{mobile ? 'Automatic journey' : 'Scroll to travel'}</span>
+          <span>{mobile ? 'Swipe to travel' : 'Scroll to travel'}</span>
           <ArrowDown size={13} />
         </div>
       </section>
@@ -808,7 +641,6 @@ export function TrainJourney({
                   <button
                     key={p.company}
                     onClick={() => {
-                      setPlaying(false);
                       travelTo(planetRefs.current[i]);
                     }}
                     aria-current={i === index ? 'step' : undefined}

@@ -3,12 +3,26 @@ export type ScrollPose = {
   trainX: number;
   avatar: Point;
   rocket: Point;
+  rover: Point;
   focus: Point;
   walking: boolean;
   avatarVisible: boolean;
+  transit: number;
 };
 const distance = (a: Point, b: Point) =>
   Math.hypot(...a.map((n, i) => n - b[i]));
+/** Accelerate only after reading; ease back down before the next page. */
+export function journeyMotionLimits(transit: number) {
+  const pace = Math.max(0, Math.min(1, transit));
+  return {
+    pixels: 1 + 1.6 * pace,
+    train: 8 + 12 * pace,
+    rocket: 13 + 15 * pace,
+    rover: 8 + 12 * pace,
+    focus: 13 + 15 * pace,
+    walking: 2.2 + 1.6 * pace,
+  };
+}
 /** Bound the actual world motion, not just the input device's arbitrary wheel delta. */
 export function journeyScrollStep(
   current: number,
@@ -23,18 +37,21 @@ export function journeyScrollStep(
   const dt = Math.min(0.05, Math.max(0, seconds));
   if (!dt) return current;
   const a = sample(current);
+  const limits = journeyMotionLimits(a.transit);
   const maximum = Math.min(
     Math.abs(remaining),
-    Math.min(240, Math.max(90, viewport * 0.28)) * dt,
+    Math.min(240, Math.max(90, viewport * 0.28)) * limits.pixels * dt,
   );
   function allowed(step: number) {
     const b = sample(current + direction * step);
+    const bound = journeyMotionLimits(Math.min(a.transit, b.transit));
     return (
-      Math.abs(a.trainX - b.trainX) <= 8 * dt &&
-      distance(a.rocket, b.rocket) <= 13 * dt &&
-      distance(a.focus, b.focus) <= 13 * dt &&
+      Math.abs(a.trainX - b.trainX) <= bound.train * dt &&
+      distance(a.rocket, b.rocket) <= bound.rocket * dt &&
+      distance(a.rover, b.rover) <= bound.rover * dt &&
+      distance(a.focus, b.focus) <= bound.focus * dt &&
       (!(a.avatarVisible && b.avatarVisible && (a.walking || b.walking)) ||
-        distance(a.avatar, b.avatar) <= 2.2 * dt)
+        distance(a.avatar, b.avatar) <= bound.walking * dt)
     );
   }
   if (allowed(maximum)) return current + direction * maximum;

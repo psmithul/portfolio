@@ -3,6 +3,7 @@ import { journeyPose } from '@/lib/journey-choreography';
 import { journeyScrollStep } from '@/lib/journey-scroll-speed';
 
 export type JourneyScroll = {
+  position: () => number;
   to: (y: number) => void;
   stop: () => void;
   dispose: () => void;
@@ -16,7 +17,9 @@ export function createJourneyScroll(
     last = 0,
     frame = 0,
     writing = false;
-  let touchY = 0;
+  let touchY = 0,
+    touchX = 0,
+    touchAxis: 'x' | 'y' | null = null;
   let previousOffsets = offsets(),
     previousViewport = window.innerHeight;
   const maximum = () =>
@@ -42,18 +45,26 @@ export function createJourneyScroll(
     if (e.ctrlKey || exempt(e.target)) return;
     e.preventDefault();
     const delta =
-      e.deltaY *
+      (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) *
       (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     nudge(Math.max(-110, Math.min(110, delta)) * 0.6);
   };
   const startTouch = (e: TouchEvent) => {
     touchY = e.touches[0]?.clientY ?? 0;
+    touchX = e.touches[0]?.clientX ?? 0;
+    touchAxis = null;
   };
   const touch = (e: TouchEvent) => {
     const y = e.touches[0]?.clientY ?? touchY,
-      delta = touchY - y;
+      x = e.touches[0]?.clientX ?? touchX,
+      dy = touchY - y,
+      dx = touchX - x;
     touchY = y;
-    if (exempt(e.target)) return;
+    touchX = x;
+    if (e.touches.length !== 1 || exempt(e.target)) return;
+    if (!touchAxis && Math.max(Math.abs(dx), Math.abs(dy)) > 3)
+      touchAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    const delta = touchAxis === 'x' ? dx : dy;
     e.preventDefault();
     nudge(Math.max(-80, Math.min(80, delta)) * 0.75);
   };
@@ -66,9 +77,9 @@ export function createJourneyScroll(
     )
       return;
     const delta =
-      e.key === 'ArrowDown'
+      e.key === 'ArrowDown' || e.key === 'ArrowRight'
         ? 65
-        : e.key === 'ArrowUp'
+        : e.key === 'ArrowUp' || e.key === 'ArrowLeft'
           ? -65
           : e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)
             ? window.innerHeight * 0.6
@@ -91,6 +102,16 @@ export function createJourneyScroll(
     window.scrollTo({ top: current, behavior: 'instant' });
     writing = false;
   };
+  const hash = () => {
+    let id: string;
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return;
+    }
+    const element = document.getElementById(id);
+    if (element?.matches('.journey-stop, #main')) to(element.offsetTop);
+  };
   function resize() {
     const points = offsets();
     const rebase = (y: number) => {
@@ -110,6 +131,9 @@ export function createJourneyScroll(
     const dt = last ? (now - last) / 1000 : 0;
     last = now;
     if (document.hidden || document.querySelector('dialog[open]')) return;
+    // A browser anchor or scrollbar move can precede its coalesced scroll event.
+    // Capture it before our next frame writes the controlled position back.
+    nativeScroll();
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
     const points = offsets();
@@ -133,12 +157,14 @@ export function createJourneyScroll(
   window.addEventListener('touchmove', touch, { passive: false });
   window.addEventListener('keydown', key);
   window.addEventListener('resize', resize);
+  window.addEventListener('hashchange', hash);
   window.addEventListener('scroll', nativeScroll, {
     passive: true,
     capture: true,
   });
   frame = requestAnimationFrame(animate);
   return {
+    position: () => current,
     to,
     stop() {
       target = current;
@@ -150,6 +176,7 @@ export function createJourneyScroll(
       window.removeEventListener('touchmove', touch);
       window.removeEventListener('keydown', key);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('hashchange', hash);
       window.removeEventListener('scroll', nativeScroll, true);
     },
   };
