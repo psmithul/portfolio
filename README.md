@@ -90,28 +90,28 @@ After a push, check that the Vercel deployment is Ready, its commit matches the 
 
 The homepage is a scroll-driven Three.js voxel world with seven stops: Welcome, About, Current Projects, Past Projects, Experience, Blog, and Contact. A Create-inspired copper-and-oxidized locomotive follows curved rails through pixel-textured terrain and timber stations. Its flywheels and coupling rods move with the train. A block character exits through an opening cab door, follows the inclined gangway onto the near-side visitor platform, and faces the current display. Walking routes follow connected floor surfaces instead of cutting across platform corners. At the archive, the character walks to the launch pad, boards through a sliding hatch, and scrolling launches the same rocket and camera into space. Vayu Aerospace, Thinkify Labs, ILO Consulting, ISTE NITK, and NH66 Fund each have an individual orbital workplace: a hangar, product lab, finance hall, campus stage, and fund observatory; the final chapters visit a lunar library and landing platform. Small navigation dots and a route menu select destinations, with travel through the intervening scenery.
 
-Wheel input, touch swipes, keyboard scrolling, scrollbar drags, navigation and mobile autoplay share a speed limit. Page motion stays below 240 pixels per second and slows further to keep walking below 2.2 world units per second, the train below 8, and rocket/camera travel below 13. Large wheel deltas are reduced and queued manual input is bounded to three quarters of a screen. Reversing direction cancels pending forward travel. There is one scroll surface for the entire journey. Long content is divided into small reading alcoves that the camera and guide visit in order; there are no nested text scrollbars. Open dialogs pause travel.
+Wheel input, vertical or horizontal touch swipes, keyboard scrolling, scrollbar drags and navigation share one bounded, manual scroll. Reading keeps the original slow pace; after content ends, travel ramps up to 2.6 times the page speed, with separate limits for walking, train, rover, rocket and camera movement. Arrivals ease back to reading speed. Large wheel deltas are reduced and queued manual input is bounded to three quarters of a screen. Reversing direction cancels pending forward travel. Long content is divided into reading alcoves that the camera and guide visit in order; there are no nested text scrollbars. Open dialogs pause travel.
 
-Visitors can drag the desktop canvas to look around, choose an onboard view, reset the camera, switch between daylight and moonlight, open a close-up reading view, and opt into an original instrumental tune. Sound starts only after a click. On mobile, a rotation screen requires landscape before Start. The scene auto-scrolls between chapters, with a reading pause and camera close-up at each stop and orbital workplace. Autoplay pauses at every reading alcove, including the portrait and each project. Play/pause, next chapter, and route navigation remain available. Touch scrolling pauses playback; turning back to portrait pauses it and restores the rotation screen. Reduced-motion preferences remove decorative motion and camera easing; the complete HTML content remains readable when 3D is unavailable.
+Visitors can drag the desktop canvas to look around, choose an onboard view, reset the camera, switch between daylight and moonlight, open a close-up reading view, and opt into an original instrumental tune. Sound starts only after a click. Mobile works directly in portrait, with narrower in-world pages, a fitted camera and 44-pixel controls outside the reading area. Landscape remains supported; rotation preserves the journey position. There is no autoplay, start screen or rotation requirement. The rocket makes one launch to a lunar campus; a six-wheel rover connects the experience workplaces, library and contact station on a continuous road. Axle heights follow the lunar ramp, wheels turn with distance, and the guide walks between the parked vehicle and each alcove. Pages turn into view before chapter boundaries, and camera framing blends continuously. The sky includes stepped clouds and a square sun; space uses fixed stars and a subtle galactic ribbon. Rocket exhaust streams from the nozzle with a fading lifetime and throttle-linked light. Reduced-motion preferences remove decorative motion and camera easing; the complete HTML content remains readable when 3D is unavailable.
 
 Current Projects has the adaptive suspension rover, tensegrity joint, and leaf-collection robot. Each has a clickable mechanical exhibit in the Three.js workshop: the rover responds to a cam-driven bump through a fixed-step spring–damper, the tensegrity assembly shows connected tension and compression members, and the leaf robot uses a closed four-bar linkage, an interactive workbench, and its existing case-study URL. Every project page also includes a 3D laboratory with orbit, animation, assembly separation, and model-specific controls. The rover and flight-controller isolation models use a fixed-step base-excited spring–mass–damper response; the four-bar model solves its closed geometry with circle intersections. These are illustrative concept models, not original CAD, measured results, or numerical validation of the projects.
 
 The Blog station opens the existing two-dimensional journal and article pages. Bundled posts, published owner entries, private writing-desk routes, resume downloads, and project URLs retain their existing sources and behavior.
 
-| Change | Location |
-| --- | --- |
-| Station order, names, and experience | `content/journey.ts` |
-| Journey content and navigation | `components/train-journey.tsx` |
-| Voxel terrain, train, station buildings, camera | `lib/voxel-world.ts` |
-| Original procedural 16 × 16 block textures | `lib/voxel-textures.ts` |
-| Continuous actor/camera choreography and tests | `lib/journey-choreography.ts`, `scripts/journey-choreography.test.ts` |
-| Reading alcove order and autoplay pauses | `lib/journey-exhibits.ts` |
-| Native scroll mapping | `lib/journey-timeline.ts`, `scripts/journey-timeline.test.ts` |
-| Input control and world speed limits | `lib/journey-scroll.ts`, `lib/journey-scroll-speed.ts`, `scripts/journey-scroll-speed.test.ts` |
-| Original 53-second instrumental and reproducible source | `public/audio/railway-theme.wav`, `scripts/compose-journey.py` |
-| World typography, colors, responsive layouts | `app/world.css` |
-| Interactive engineering models | `lib/engineering-scene.ts` |
-| Spring response and tests | `lib/suspension-physics.ts`, `scripts/suspension-physics.test.ts` |
+| Change                                                  | Location                                                                                       |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Station order, names, and experience                    | `content/journey.ts`                                                                           |
+| Journey content and navigation                          | `components/train-journey.tsx`                                                                 |
+| Voxel terrain, train, station buildings, camera         | `lib/voxel-world.ts`                                                                           |
+| Original procedural 16 × 16 block textures              | `lib/voxel-textures.ts`                                                                        |
+| Continuous actor/camera choreography and tests          | `lib/journey-choreography.ts`, `scripts/journey-choreography.test.ts`                          |
+| Reading alcove order and continuous page turns          | `lib/journey-exhibits.ts`                                                                      |
+| Native scroll mapping                                   | `lib/journey-timeline.ts`, `scripts/journey-timeline.test.ts`                                  |
+| Input control and world speed limits                    | `lib/journey-scroll.ts`, `lib/journey-scroll-speed.ts`, `scripts/journey-scroll-speed.test.ts` |
+| Original 53-second instrumental and reproducible source | `public/audio/railway-theme.wav`, `scripts/compose-journey.py`                                 |
+| World typography, colors, responsive layouts            | `app/world.css`                                                                                |
+| Interactive engineering models                          | `lib/engineering-scene.ts`                                                                     |
+| Spring response and tests                               | `lib/suspension-physics.ts`, `scripts/suspension-physics.test.ts`                              |
 
 On systems with restrictive file-watcher limits, use `WATCHPACK_POLLING=true npm run dev -- --webpack`. The production build uses the standard `npm run build` command.
 
@@ -124,7 +124,6 @@ Portfolio text remains selectable semantic HTML, projected with Three.js CSS3DRe
 The original 16-bar tune uses synthesized piano, soft sustained chords, and circular echo tails. It is bundled locally, loops, starts only when the visitor enables it, and can be muted at any time. The composition can be regenerated with `python3 scripts/compose-journey.py`; no external recordings are used.
 
 The world and all its block geometry are generated locally in Three.js; no game textures or external 3D assets are required. The design uses pixel grass, timber, copper, blue daylight, and a starfield, and locally hosted Pixelify Sans for pixel display typography. The journal retains its reading typography and image credits. Font licenses are in `public/fonts/`, including the Pixelify Sans SIL Open Font License. The previous project photography remains credited in its case studies and in `docs/project-photo-assets.json`.
-
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).

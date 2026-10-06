@@ -12,6 +12,8 @@
 }
 html:has(.train-journey) {
   scroll-padding-top: 0;
+  scroll-behavior: auto;
+  overscroll-behavior-x: none;
 }
 body {
   background: var(--world-paper);
@@ -689,6 +691,10 @@ body {
   background: #f4f3e9;
 }
 .workshop-dialog-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #f4f3e9;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1134,6 +1140,20 @@ a:focus-visible {
     left: 5%;
   }
 }
+@media (max-width: 370px) and (orientation: portrait) {
+  .mobile-journey .in-world-board {
+    width: 440px !important;
+    padding: 22px 24px !important;
+  }
+  .mobile-journey
+    .in-world-board
+    p:not(.world-eyebrow):not(.station-footnote):not(.world-board-hint),
+  .mobile-journey
+    .hero-copy.in-world-board
+    > p:not(.world-eyebrow):not(.hero-statement):not(.world-board-hint) {
+    font-size: 26px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1153,153 +1173,78 @@ a:focus-visible {
   padding-bottom: 14px;
 }
 
-.orientation-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: #08191ced;
-  backdrop-filter: blur(8px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 32px;
-  color: #fff;
-  text-shadow: none;
-  overflow: auto;
-}
-.orientation-gate h2 {
-  font-family: var(--pixel);
-  font-size: 38px;
-  font-weight: 700;
-  line-height: 1.1;
-  margin: 7px 0 18px;
-  color: #fff;
-}
-.orientation-gate > p:not(.world-eyebrow) {
-  font-size: 12px;
-  line-height: 1.8;
-  max-width: 340px;
-  color: #cbd8d2;
-  margin: 0 0 22px;
-}
-.orientation-device {
-  position: relative;
-  margin-bottom: 25px;
-  color: #dbb47d;
-  transform: rotate(90deg);
-}
-.orientation-device > span {
-  position: absolute;
-  right: -21px;
-  top: -13px;
-  font-size: 34px;
-  transform: rotate(-90deg);
-}
-.rotation-instruction {
-  font: 9px monospace;
-  color: #c69d6c;
-  padding: 13px 18px;
-  border: 1px solid #c69d6c55;
-  letter-spacing: 0.05em;
-}
-.cinema-player {
-  position: fixed;
-  bottom: 17px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-  display: flex;
-  gap: 4px;
-  text-shadow: none;
-}
-.cinema-player button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 29px;
-  height: 28px;
-  padding: 0 8px;
-  background: #14242dc9;
-  border: 1px solid #ffffff30;
-  color: #fff;
-  font: 9px monospace;
-  cursor: pointer;
-}
 @media (orientation: landscape) and (max-width: 1200px) and (max-height: 800px) {
-  .mobile-cinema .journey-stop {
+  .mobile-journey .journey-stop {
     min-height: 110svh;
     padding: 65px 4.5% 60px;
   }
-  .mobile-cinema .hero-stop {
+  .mobile-journey .hero-stop {
     min-height: 110svh;
     padding-top: 90px;
   }
-  .mobile-cinema:not(.world-integrated) .hero-copy,
-  .mobile-cinema:not(.world-integrated) .station-panel {
+  .mobile-journey:not(.world-integrated) .hero-copy,
+  .mobile-journey:not(.world-integrated) .station-panel {
     width: 375px;
     max-width: none;
     transform: scale(var(--cinema-scale, 0.62));
     transform-origin: top left;
   }
-  .mobile-cinema:not(.world-integrated) .hero-copy h1 {
+  .mobile-journey:not(.world-integrated) .hero-copy h1 {
     font-size: 52px;
     line-height: 1.04;
   }
-  .mobile-cinema:not(.world-integrated) .hero-copy .hero-statement {
+  .mobile-journey:not(.world-integrated) .hero-copy .hero-statement {
     font-size: 17px;
     line-height: 1.5;
     max-width: 360px;
   }
-  .mobile-cinema:not(.world-integrated)
+  .mobile-journey:not(.world-integrated)
     .hero-copy
     > p:not(.world-eyebrow):not(.hero-statement),
-  .mobile-cinema:not(.world-integrated) .station-panel > p {
+  .mobile-journey:not(.world-integrated) .station-panel > p {
     font-size: 12px;
     line-height: 1.8;
     max-width: 375px;
   }
-  .mobile-cinema:not(.world-integrated) .station-panel h2 {
+  .mobile-journey:not(.world-integrated) .station-panel h2 {
     font-size: 46px;
     max-width: 375px;
   }
-  .mobile-cinema .project-panel h2 {
+  .mobile-journey .project-panel h2 {
     font-size: 36px;
   }
-  .mobile-cinema .current-projects {
+  .mobile-journey .current-projects {
     margin-top: 20px;
   }
-  .mobile-cinema .voxel-project-card h3 {
+  .mobile-journey .voxel-project-card h3 {
     font-size: 17px;
   }
-  .mobile-cinema .voxel-project-card p {
+  .mobile-journey .voxel-project-card p {
     font-size: 11px;
     line-height: 1.65;
   }
-  .mobile-cinema .project-discipline {
+  .mobile-journey .project-discipline {
     font-size: 8px;
   }
-  .mobile-cinema .project-actions button,
-  .mobile-cinema .project-actions a {
+  .mobile-journey .project-actions button,
+  .mobile-journey .project-actions a {
     font-size: 11px;
   }
-  .mobile-cinema .journey-archive h3 {
+  .mobile-journey .journey-archive h3 {
     font-size: 13px;
   }
-  .mobile-cinema .journey-archive > a > div > span {
+  .mobile-journey .journey-archive > a > div > span {
     font-size: 8px;
   }
-  .mobile-cinema .experience-stop {
+  .mobile-journey .experience-stop {
     padding: 0;
     min-height: 0;
   }
-  .mobile-cinema .planet-chapter {
+  .mobile-journey .planet-chapter {
     min-height: 110svh;
     padding: 65px 4.5% 60px;
   }
-  .mobile-cinema .world-atmosphere {
+  .mobile-journey .world-atmosphere {
     background: linear-gradient(
       90deg,
       #102521a8 0%,
@@ -1308,7 +1253,7 @@ a:focus-visible {
       transparent 54%
     );
   }
-  .mobile-cinema.in-space .world-atmosphere {
+  .mobile-journey.in-space .world-atmosphere {
     background: linear-gradient(
       90deg,
       #060a22ed,
@@ -1316,88 +1261,73 @@ a:focus-visible {
       transparent 54%
     );
   }
-  .mobile-cinema .hero-scroll {
+  .mobile-journey .hero-scroll {
     top: calc(100svh - 75px);
     left: 4.5%;
     font-size: 8px;
   }
-  .mobile-cinema .route-toggle {
+  .mobile-journey .route-toggle {
     bottom: 17px;
     left: 4.5%;
     height: 28px;
     min-height: 28px;
     font-size: 8px;
   }
-  .mobile-cinema .scene-controls {
+  .mobile-journey .scene-controls {
     bottom: 17px;
     right: 4.5%;
   }
-  .mobile-cinema .scene-controls button {
+  .mobile-journey .scene-controls button {
     height: 28px;
     min-width: 28px;
     font-size: 8px;
     padding: 0 6px;
   }
-  .mobile-cinema .scene-controls button:first-child span {
+  .mobile-journey .scene-controls button:first-child span {
     display: none;
   }
-  .mobile-cinema .journey-navigation {
+  .mobile-journey .journey-navigation {
     right: 6px;
   }
-  .mobile-cinema .journey-navigation > button {
+  .mobile-journey .journey-navigation > button {
     width: 20px;
     height: 20px;
   }
-  .mobile-cinema .route-menu {
+  .mobile-journey .route-menu {
     left: 4.5%;
     bottom: 60px;
   }
-  body:has(.mobile-cinema) .world-header {
+  body:has(.mobile-journey) .world-header {
     padding: 15px 4.5%;
   }
-  body:has(.mobile-cinema) .world-brand strong {
+  body:has(.mobile-journey) .world-brand strong {
     font-size: 9px;
   }
-  body:has(.mobile-cinema) .world-brand small {
+  body:has(.mobile-journey) .world-brand small {
     display: none;
   }
-  body:has(.mobile-cinema) .world-header nav {
+  body:has(.mobile-journey) .world-header nav {
     font-size: 9px;
     gap: 17px;
   }
-  body:has(.mobile-cinema) .world-header .brand-block {
+  body:has(.mobile-journey) .world-header .brand-block {
     width: 27px;
     height: 27px;
   }
-  .orientation-gate .orientation-device {
-    display: none;
-  }
-  .orientation-gate h2 {
-    font-size: 35px;
-    margin-bottom: 13px;
-  }
-  .orientation-gate > p:not(.world-eyebrow) {
-    max-width: 470px;
-    font-size: 11px;
-    margin-bottom: 18px;
-  }
-  .orientation-gate .world-eyebrow {
-    margin-bottom: 3px;
-  }
 }
 @media (orientation: landscape) and (max-height: 450px) {
-  .mobile-cinema:not(.world-integrated) .hero-copy,
-  .mobile-cinema:not(.world-integrated) .station-panel {
+  .mobile-journey:not(.world-integrated) .hero-copy,
+  .mobile-journey:not(.world-integrated) .station-panel {
     transform: scale(var(--cinema-scale, 0.54));
   }
-  .mobile-cinema .hero-stop {
+  .mobile-journey .hero-stop {
     padding-top: 77px;
   }
-  .mobile-cinema .journey-stop:not(.hero-stop):not(.experience-stop),
-  .mobile-cinema .planet-chapter {
+  .mobile-journey .journey-stop:not(.hero-stop):not(.experience-stop),
+  .mobile-journey .planet-chapter {
     padding-top: 55px;
   }
-  .mobile-cinema .experience-stop {
+  .mobile-journey .experience-stop {
     padding: 0;
   }
 }
@@ -1405,24 +1335,11 @@ a:focus-visible {
 .train-journey .hero-copy {
   animation: none;
 }
-.orientation-gate {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  border: 0;
-  margin: 0;
-}
-.orientation-gate::backdrop {
-  background: #071317aa;
-}
-
-.mobile-cinema .route-toggle,
-.mobile-cinema .scene-controls,
-.cinema-player {
+.mobile-journey .route-toggle,
+.mobile-journey .scene-controls {
   bottom: 10px;
 }
-.mobile-cinema .station-footnote {
+.mobile-journey .station-footnote {
   display: none;
 }
 
@@ -1470,6 +1387,13 @@ a:focus-visible {
   font-size: 24px;
   line-height: 1.45;
   margin: 0 0 18px;
+  max-width: none;
+}
+.train-journey
+  .hero-copy.in-world-board
+  > p:not(.world-eyebrow):not(.hero-statement):not(.world-board-hint) {
+  font-size: 24px;
+  line-height: 1.45;
 }
 .train-journey .in-world-board .world-eyebrow {
   color: #786344;
@@ -1630,8 +1554,7 @@ a:focus-visible {
   outline: 3px solid #315c49;
   outline-offset: 4px;
 }
-.world-integrated .scene-controls > button,
-.world-integrated .cinema-player {
+.world-integrated .scene-controls > button {
   background: #302a22e8;
   border-color: #a68b5b;
   box-shadow: 0 3px 0 #181611;
@@ -1649,7 +1572,7 @@ a:focus-visible {
   }
 }
 
-.mobile-cinema .in-world-board {
+.mobile-journey .in-world-board {
   max-height: none;
 }
 .world-board-hint {
@@ -1703,4 +1626,125 @@ a:focus-visible {
 }
 .train-journey:not(.world-integrated) [data-world-leaf] + [data-world-leaf] {
   margin-top: 28px;
+}
+
+/* Portrait uses narrower in-world pages, with controls outside the reading area. */
+@media (max-width: 800px) and (orientation: portrait) {
+  .mobile-journey .in-world-board {
+    width: 480px !important;
+    padding: 24px 28px !important;
+  }
+  .mobile-journey .in-world-board h1,
+  .mobile-journey .in-world-board h2 {
+    font-size: 42px;
+    margin: 10px 0 20px;
+  }
+  .mobile-journey .in-world-board .voxel-project-card h3 {
+    font-size: 32px;
+  }
+  .mobile-journey .in-world-board .world-eyebrow {
+    font-size: 17px;
+  }
+  .mobile-journey .journey-portrait {
+    grid-template-columns: 180px 1fr;
+    gap: 20px;
+  }
+  .mobile-journey .journey-portrait img {
+    width: 180px;
+    height: 270px;
+  }
+  .mobile-journey .journey-portrait blockquote {
+    font-size: 25px;
+  }
+  .mobile-journey .in-world-board .project-actions {
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+  .mobile-journey .in-world-board .project-actions a,
+  .mobile-journey .in-world-board .project-actions button,
+  .mobile-journey .in-world-board .station-text-link {
+    min-height: 52px;
+    font-size: 22px;
+  }
+  .mobile-journey .in-world-board .planet-selector button {
+    font-size: 18px;
+    min-height: 52px;
+  }
+  .mobile-journey .scene-controls {
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    justify-content: center;
+    gap: 8px;
+  }
+  .mobile-journey .scene-controls button {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+  }
+  .mobile-journey .route-toggle {
+    left: 12px;
+    top: max(12px, env(safe-area-inset-top));
+    bottom: auto;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 11px;
+  }
+  .mobile-journey .route-menu {
+    left: 12px;
+    top: calc(max(12px, env(safe-area-inset-top)) + 54px);
+    bottom: auto;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100svh - 136px);
+    overflow-y: auto;
+  }
+  .mobile-journey .journey-navigation {
+    right: 0;
+  }
+  .mobile-journey .journey-navigation > button {
+    width: 28px;
+    height: 32px;
+  }
+  .mobile-journey .world-loading,
+  .mobile-journey .world-fallback {
+    top: 76px;
+  }
+}
+
+@media (max-width: 600px) {
+  .workbench-controls {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .workshop-dialog .workbench-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .workshop-dialog .terrain-control {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) 52px;
+  }
+  .workshop-dialog .terrain-control input {
+    width: 100%;
+  }
+  .workshop-dialog .stiffness-buttons button {
+    min-height: 44px;
+  }
+  .workshop-dialog .stage-toolbar {
+    left: 12px;
+    right: 12px;
+    justify-content: center;
+  }
+  .workshop-dialog .stage-toolbar button {
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: 10px;
+  }
+}
+@media (max-width: 370px) {
+  .workshop-dialog .stage-toolbar button span {
+    display: none;
+  }
 }

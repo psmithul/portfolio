@@ -16,7 +16,9 @@ export function createJourneyScroll(
     last = 0,
     frame = 0,
     writing = false;
-  let touchY = 0;
+  let touchY = 0,
+    touchX = 0,
+    touchAxis: 'x' | 'y' | null = null;
   let previousOffsets = offsets(),
     previousViewport = window.innerHeight;
   const maximum = () =>
@@ -42,18 +44,26 @@ export function createJourneyScroll(
     if (e.ctrlKey || exempt(e.target)) return;
     e.preventDefault();
     const delta =
-      e.deltaY *
+      (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) *
       (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
     nudge(Math.max(-110, Math.min(110, delta)) * 0.6);
   };
   const startTouch = (e: TouchEvent) => {
     touchY = e.touches[0]?.clientY ?? 0;
+    touchX = e.touches[0]?.clientX ?? 0;
+    touchAxis = null;
   };
   const touch = (e: TouchEvent) => {
     const y = e.touches[0]?.clientY ?? touchY,
-      delta = touchY - y;
+      x = e.touches[0]?.clientX ?? touchX,
+      dy = touchY - y,
+      dx = touchX - x;
     touchY = y;
-    if (exempt(e.target)) return;
+    touchX = x;
+    if (e.touches.length !== 1 || exempt(e.target)) return;
+    if (!touchAxis && Math.max(Math.abs(dx), Math.abs(dy)) > 3)
+      touchAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    const delta = touchAxis === 'x' ? dx : dy;
     e.preventDefault();
     nudge(Math.max(-80, Math.min(80, delta)) * 0.75);
   };
@@ -66,9 +76,9 @@ export function createJourneyScroll(
     )
       return;
     const delta =
-      e.key === 'ArrowDown'
+      e.key === 'ArrowDown' || e.key === 'ArrowRight'
         ? 65
-        : e.key === 'ArrowUp'
+        : e.key === 'ArrowUp' || e.key === 'ArrowLeft'
           ? -65
           : e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)
             ? window.innerHeight * 0.6

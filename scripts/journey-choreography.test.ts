@@ -5,11 +5,13 @@ import {
   exhibitTravel,
   exhibitReadingPhases,
   EXHIBIT_SPACING,
+  exhibitPresentation,
 } from '../lib/journey-exhibits.ts';
 import {
   journeyPose,
   smoothTimeline,
   dock,
+  lunarFloor,
   type Point,
 } from '../lib/journey-choreography.ts';
 const distance = (a: Point, b: Point) =>
@@ -34,26 +36,47 @@ void test('camera, train and rocket remain continuous through every chapter and 
     );
   }
 });
-void test('landing ends at the same docking position at which the next flight starts', () => {
+void test('the rocket docks once and the rover connects the orbital workplaces', () => {
   for (let i = 0; i < 5; i++) {
     const pose = journeyPose(4 + i / 5);
-    assert.ok(distance(pose.rocket, dock(i * 32)) < 1e-6);
-    assert.ok(pose.flight < 1e-6);
-    assert.ok(Math.abs(pose.pitch) < 1e-6);
+    assert.ok(distance(pose.rocket, dock(0)) < 1e-6);
+    assert.equal(pose.flight, 0);
+    assert.equal(pose.pitch, 0);
+    assert.ok(Math.abs(pose.rover[0] - 112 - i * 32 - 6) < 1e-8);
+    assert.ok(
+      Math.abs(pose.rocket[2] - pose.rover[2]) > 6,
+      'landing bay is separate from the rover road',
+    );
+  }
+  for (let t = 4; t < 6.99; t += 0.001) {
+    const pose = journeyPose(t);
+    assert.ok(
+      Math.abs(pose.rover[1] - 80 - lunarFloor(pose.rover[0] - 112)) < 1e-8,
+    );
+    assert.equal(pose.rover[2], -7.5);
+    if (pose.seated)
+      assert.ok(
+        distance(pose.avatar, [
+          pose.rover[0],
+          pose.rover[1] + 0.9,
+          pose.rover[2],
+        ]) < 1e-8,
+      );
   }
 });
 void test('visible walking has no jumps and the character boards before launch', () => {
-  let previous = journeyPose(0);
   for (let t = 0.001; t < 6.9; t += 0.001) {
     const pose = journeyPose(t);
-    if (previous.avatarVisible && pose.avatarVisible)
-      assert.ok(distance(previous.avatar, pose.avatar) < 1, `walk at ${t}`);
+    if (pose.avatarVisible && journeyPose(t + 1e-6).avatarVisible)
+      assert.ok(
+        distance(pose.avatar, journeyPose(t + 1e-6).avatar) < 0.005,
+        `walk at ${t}`,
+      );
     assert.ok(
       [...pose.avatar, ...pose.rocket, ...pose.focus, pose.pitch].every(
         Number.isFinite,
       ),
     );
-    previous = pose;
   }
   assert.equal(journeyPose(3.65).avatarVisible, false);
   assert.equal(journeyPose(3.65).flight, 0);
@@ -69,6 +92,20 @@ void test('motion response is identical at 30, 60 and 144 Hz and is reversible',
   let x = 6;
   for (let n = 0; n < 300; n++) x = smoothTimeline(x, 0, 1 / 60);
   assert.ok(x < 1e-8);
+});
+
+void test('navigation settles at the new workplace rather than remaining just before its boundary', () => {
+  for (const fps of [30, 60, 144])
+    for (let i = 0; i < 5; i++) {
+      const target = 4 + i / 5;
+      let timeline = target - 0.15;
+      for (let frame = 0; frame < fps * 6; frame++)
+        timeline = smoothTimeline(timeline, target, 1 / fps);
+      assert.equal(timeline, target);
+      const pose = journeyPose(timeline);
+      assert.equal(pose.board, 4 + i);
+      assert.ok(pose.boardPhase < 1e-8);
+    }
 });
 
 void test('the guide uses the visitor side, stands on its floor, and visits the current display', () => {
@@ -96,7 +133,11 @@ void test('orbital walks stay on the docking gantry, workplace floor, or connect
       const x = pose.avatar[0] - 112 - i * 32,
         z = pose.avatar[2] + 12;
       const floor = Math.abs(x) <= 6.5 && Math.abs(z) <= 5.5;
-      const gantry = x >= 5.5 && x <= 10.5 && z >= 1.5 && z <= 4.5;
+      const gantry =
+        x >= 5.5 &&
+        x <= (i === 0 ? 11.5 : 10.5) &&
+        z >= (i === 0 ? -5.5 : 1.5) &&
+        z <= (i === 0 ? 5.5 : 4.5);
       const visitor = x >= -10.5 && x <= 3.5 && z >= 4 && z <= 9.5;
       assert.ok(
         floor || gantry || visitor,
@@ -155,7 +196,26 @@ void test('phone rotation preserves the same actor and camera pose', () => {
       );
       const a = journeyPose(before.stop + before.phase),
         b = journeyPose(after.stop + after.phase);
-      for (const key of ['avatar', 'rocket', 'focus'] as const)
+      for (const key of ['avatar', 'rocket', 'rover', 'focus'] as const)
         assert.ok(distance(a[key], b[key]) < 1e-8);
     }
+});
+
+void test('pages turn into view continuously before chapter and planet boundaries', () => {
+  for (let board = 0; board <= 10; board++) {
+    const start =
+      board < 4 ? board : board < 9 ? 4 + (board - 4) / 5 : board - 4;
+    if (board)
+      assert.ok(exhibitPresentation(board, 0, start - 0.00001).fold < 0.001);
+    for (let t = 0; t < 7; t += 0.0005) {
+      for (let leaf = 0; leaf < 3; leaf++) {
+        const a = exhibitPresentation(board, leaf, t),
+          b = exhibitPresentation(board, leaf, t + 0.0005);
+        assert.ok(
+          Math.abs(a.angle - b.angle) < 0.12,
+          `page rotation snap at ${board}/${leaf}/${t}`,
+        );
+      }
+    }
+  }
 });
