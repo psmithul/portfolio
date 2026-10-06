@@ -8,6 +8,19 @@ const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
 const ease = (value: number) => value * value * (3 - 2 * value);
 
+export function journeyOffset(
+  position: Pick<JourneyPosition, 'stop' | 'phase'>,
+  offsets: readonly number[],
+  viewport: number,
+) {
+  const start = offsets[position.stop] ?? 0;
+  const length =
+    position.stop < 6
+      ? (offsets[position.stop + 1] ?? start + viewport) - start
+      : viewport;
+  return start + position.phase * length;
+}
+
 /** Native scroll remains the single source of truth for rail, launch and orbit. */
 export function journeyPosition(
   y: number,
