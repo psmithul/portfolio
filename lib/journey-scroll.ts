@@ -3,6 +3,7 @@ import { journeyPose } from '@/lib/journey-choreography';
 import { journeyScrollStep } from '@/lib/journey-scroll-speed';
 
 export type JourneyScroll = {
+  position: () => number;
   to: (y: number) => void;
   stop: () => void;
   dispose: () => void;
@@ -101,6 +102,16 @@ export function createJourneyScroll(
     window.scrollTo({ top: current, behavior: 'instant' });
     writing = false;
   };
+  const hash = () => {
+    let id: string;
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return;
+    }
+    const element = document.getElementById(id);
+    if (element?.matches('.journey-stop, #main')) to(element.offsetTop);
+  };
   function resize() {
     const points = offsets();
     const rebase = (y: number) => {
@@ -120,6 +131,9 @@ export function createJourneyScroll(
     const dt = last ? (now - last) / 1000 : 0;
     last = now;
     if (document.hidden || document.querySelector('dialog[open]')) return;
+    // A browser anchor or scrollbar move can precede its coalesced scroll event.
+    // Capture it before our next frame writes the controlled position back.
+    nativeScroll();
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
     const points = offsets();
@@ -143,12 +157,14 @@ export function createJourneyScroll(
   window.addEventListener('touchmove', touch, { passive: false });
   window.addEventListener('keydown', key);
   window.addEventListener('resize', resize);
+  window.addEventListener('hashchange', hash);
   window.addEventListener('scroll', nativeScroll, {
     passive: true,
     capture: true,
   });
   frame = requestAnimationFrame(animate);
   return {
+    position: () => current,
     to,
     stop() {
       target = current;
@@ -160,6 +176,7 @@ export function createJourneyScroll(
       window.removeEventListener('touchmove', touch);
       window.removeEventListener('keydown', key);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('hashchange', hash);
       window.removeEventListener('scroll', nativeScroll, true);
     },
   };

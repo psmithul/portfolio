@@ -145,7 +145,7 @@ export function TrainJourney({
     let queued = 0;
     function update() {
       queued = 0;
-      const y = window.scrollY;
+      const y = scroll.current?.position() ?? window.scrollY;
       const offsets = sectionRefs.current.map((el) => el?.offsetTop ?? 0);
       const position = journeyPosition(
         y,

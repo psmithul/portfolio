@@ -1352,6 +1352,10 @@ a:focus-visible {
 .world-integrated .world-atmosphere {
   display: none;
 }
+.train-journey:not(.world-integrated):not(.world-unavailable)
+  [data-world-board] {
+  visibility: hidden;
+}
 .world-integrated .hero-scroll {
   display: none;
 }
