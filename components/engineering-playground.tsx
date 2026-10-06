@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { Box, Pause, Play, RotateCcw, Scan, Layers3, Hand } from 'lucide-react';
 import type {
   ModelKind,
@@ -25,6 +26,48 @@ const models: {
     name: 'Tensegrity',
     subtitle: 'Held together by tension.',
     note: 'Variable-stiffness joint · geometry & member forces',
+  },
+  {
+    id: 'collection',
+    name: 'Leaf collector',
+    subtitle: 'Leaves in. Soil stays out.',
+    note: 'Pickup drum, transfer belt, and collection hopper · conceptual architecture',
+  },
+  {
+    id: 'linkage',
+    name: 'Four-bar linkage',
+    subtitle: 'Four links. One connected motion.',
+    note: 'Circle-intersection kinematics keep the crank, coupler, and rocker connected.',
+  },
+  {
+    id: 'electronics',
+    name: 'Isolation mount',
+    subtitle: 'A softer path for vibration.',
+    note: 'Base-excited spring–mass–damper concept · illustrative normalized units',
+  },
+  {
+    id: 'navigation',
+    name: 'Mobile robot',
+    subtitle: 'Finding a way through.',
+    note: 'Mobile robot and obstacle layout · conceptual motion, not the project simulator',
+  },
+  {
+    id: 'solar',
+    name: 'Solar smart home',
+    subtitle: 'A little light. A connected home.',
+    note: 'Solar panel, sensor board, and household lights · illustrative power response',
+  },
+  {
+    id: 'transit',
+    name: 'Elevated transit',
+    subtitle: 'Room for a different way through.',
+    note: 'Elevated bus and sequenced signals · illustrative model, not the original circuit',
+  },
+  {
+    id: 'wallet',
+    name: 'Sliding mechanism',
+    subtitle: 'Small geometry. Easier access.',
+    note: 'Card translation and layered assembly · conceptual mechanism',
   },
   {
     id: 'knee',
@@ -158,19 +201,7 @@ export function EngineeringPlayground({
             <Box size={38} />
             <p>3D is unavailable in this browser.</p>
             <span>{error}</span>
-            <a
-              href={
-                model === 'rover'
-                  ? '/work/adaptive-suspension-rover'
-                  : model === 'knee'
-                    ? '/work/kneeassist'
-                    : model === 'tensegrity'
-                      ? '/work/tensegrity-joint'
-                      : '/work/reaction-wheel-microvibrations'
-              }
-            >
-              Read the project
-            </a>
+            <Link href="/#work">Read the project</Link>
           </output>
         )}
         <div className="stage-orientation" aria-hidden="true">
@@ -224,13 +255,22 @@ export function EngineeringPlayground({
       <div className="workbench-controls">
         <div>
           <span className="eyebrow">
-            {model === 'rover'
+            {model === 'rover' || model === 'electronics'
               ? 'SUSPENSION'
-              : model === 'tensegrity'
-                ? 'JOINT GEOMETRY'
-                : model === 'knee'
-                  ? 'ASSISTANCE'
-                  : 'WHEEL SPEED'}
+              : model === 'collection' ||
+                  model === 'transit' ||
+                  model === 'linkage' ||
+                  model === 'navigation'
+                ? 'DRIVE SPEED'
+                : model === 'wallet'
+                  ? 'ASSEMBLY'
+                  : model === 'solar'
+                    ? 'SUNLIGHT'
+                    : model === 'tensegrity'
+                      ? 'JOINT GEOMETRY'
+                      : model === 'knee'
+                        ? 'ASSISTANCE'
+                        : 'WHEEL SPEED'}
           </span>
           <div className="stiffness-buttons">
             {['Soft', 'Medium', 'Stiff'].map((label, index) => (
@@ -241,18 +281,25 @@ export function EngineeringPlayground({
                 aria-pressed={stiffness === index}
                 onClick={() => setStiffness(index)}
               >
-                {model === 'satellite'
+                {model === 'satellite' || model === 'solar'
                   ? ['Low', 'Mid', 'High'][index]
-                  : model === 'knee'
-                    ? ['Gentle', 'Medium', 'Firm'][index]
-                    : model === 'tensegrity'
-                      ? ['Open', 'Mid', 'Twisted'][index]
-                      : label}
+                  : model === 'wallet'
+                    ? ['Stacked', 'Offset', 'Fanned'][index]
+                    : model === 'collection' ||
+                        model === 'linkage' ||
+                        model === 'navigation' ||
+                        model === 'transit'
+                      ? ['Slow', 'Medium', 'Fast'][index]
+                      : model === 'knee'
+                        ? ['Gentle', 'Medium', 'Firm'][index]
+                        : model === 'tensegrity'
+                          ? ['Open', 'Mid', 'Twisted'][index]
+                          : label}
               </button>
             ))}
           </div>
         </div>
-        {model === 'rover' ? (
+        {model === 'rover' || model === 'collection' ? (
           <label className="terrain-control">
             <span className="eyebrow">TERRAIN</span>
             <input

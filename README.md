@@ -1,6 +1,6 @@
 # Mithul Sourav · Portfolio & Mika’s Life
 
-A mechanical engineering and robotics portfolio with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
+A Minecraft-inspired 3D train journey through a mechanical engineering and robotics portfolio, with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
 
 Public website: [psmithul.com](https://psmithul.com/). Vercel fallback: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
 
@@ -86,23 +86,35 @@ Vercel supplies `BLOB_READ_WRITE_TOKEN`, `JOURNAL_PASSWORD_HASH`, and `JOURNAL_S
 
 After a push, check that the Vercel deployment is Ready, its commit matches the pushed revision, and the public URL returns the current site without authentication. A successful Git push alone is not a successful deployment.
 
-## Scroll experience and project imagery
+## The train journey
 
-The homepage retains the supplied [Neha Yadav flow reference](https://nehayadav.framer.website/) with a personal introduction, a portrait and favourite-quote transition, three Ongoing projects, seven Completed projects, five experience and leadership cards, two team accolades, tools, Mika’s Life, and contact. Compact project headers place the date, title, rounded tags, description, and right-facing arrow above the image, as in the supplied screenshots. Hovering any project shows an “Understand more” cursor pill. Dates and statuses follow the résumé. Vayu Aerospace has its own internship case study linked from experience. Extra CAD views stay inside their project pages.
+The homepage is a scroll-driven Three.js voxel world with seven stops: Welcome, About, Current Projects, Past Projects, Experience, Blog, and Contact. A Create-inspired copper-and-oxidized locomotive follows curved rails through pixel-textured terrain and timber stations. Its flywheels and coupling rods move with the train. A block character steps out to explore the village and workshop. At the archive, a rocket descends, the character boards, and scrolling launches the camera into space. Vayu Aerospace, Thinkify Labs, ILO Consulting, ISTE NITK, and NH66 Fund each have an individual voxel planet; the final chapters visit a lunar library and landing platform. Small navigation dots and a route menu allow direct jumps.
 
-Completed projects retain the measured desktop scroll rail. Experience and accolades are scroll-triggered popouts, with no horizontal track, carousel controls, or swipe hint. Wide screens show a staggered burst from the toolbox and folder, a small overshoot, and a settled fan before releasing to page scrolling. On narrow or short screens, cards pop into a vertical grid as they enter the viewport. Reduced motion and no JavaScript show the complete static grid. Native SVG toolbox and folder illustrations use the portfolio palette, with no generated bitmap artwork. The cards report verified résumé facts, rather than reproducing issued certificates. The mobile header stays in two rows during scrolling. See [design notes](docs/design.md).
+Visitors can drag the desktop canvas to look around, choose an onboard view, reset the camera, switch between daylight and moonlight, and opt into quiet ambient sound. Sound starts only after a click. On mobile, a rotation screen requires landscape before Start. The scaled scene auto-scrolls between chapters, with a reading pause at each stop and each experience planet. Play/pause, next chapter, and route navigation remain available. Touch scrolling pauses playback; turning back to portrait pauses it and restores the rotation screen. Reduced-motion preferences remove decorative motion and camera easing; the complete HTML content remains readable when 3D is unavailable.
 
-Tools uses a continuous horizontal carousel with the original SolidWorks, ANSYS, MATLAB, Python, C++, and Arduino logos. It pauses on pointer hover or through the Pause button. Reduced-motion settings show a still, horizontally scrollable list. Logo sources and licenses are recorded in [the tools asset manifest](docs/tool-logo-assets.json).
+Current Projects has the adaptive suspension rover, tensegrity joint, and leaf-collection robot. Each has a clickable animated exhibit in the Three.js workshop, an interactive workbench, and its existing case-study URL. Every project page also includes a 3D laboratory with orbit, animation, assembly separation, and model-specific controls. The rover and flight-controller isolation models use a fixed-step base-excited spring–mass–damper response; the four-bar model solves its closed geometry with circle intersections. These are illustrative concept models, not original CAD, measured results, or numerical validation of the projects.
 
-The supplied courtyard portrait remains the only personal image in the opening, paired with a paper note bearing the exact favourite quote supplied by Mithul. The tensegrity CAD remains in its project cover and case study. Project covers now use ten credited reference photographs and one verified native reaction-wheel CAD view. Photographs keep their source colours, with full-bleed cover sizing inside consistent image frames. Credits identify external subjects as references; they are not presented as Mithul-built hardware. Source pages, licenses, original and production hashes are in [the photographic asset manifest](docs/project-photo-assets.json). Replace an image through `content/projects.ts` when verified photographs or CAD become available. Historical decorative image prompts are in [the mechanical asset manifest](docs/mechanical-hero-assets.json) and [the toolbox manifest](docs/experience-toolbox-asset.json).
+The Blog station opens the existing two-dimensional journal and article pages. Bundled posts, published owner entries, private writing-desk routes, resume downloads, and project URLs retain their existing sources and behavior.
 
-Project and experience facts were refreshed from `Mithul_Sourav_MIT_SM_Research_CV (2).pdf` on 30 September 2026. The reaction-wheel study retains the supplied completed classification and August–October 2026 period. Vayu Aerospace's case study documents the three mounts, ANSYS comparison, hardware test support, and MATLAB IMU analysis. ISTE NITK and NH66 Fund are now included in homepage experience.
+| Change | Location |
+| --- | --- |
+| Station order, names, and experience | `content/journey.ts` |
+| Journey content and navigation | `components/train-journey.tsx` |
+| Voxel terrain, train, station buildings, camera | `lib/voxel-world.ts` |
+| Original procedural 16 × 16 block textures | `lib/voxel-textures.ts` |
+| Scroll choreography and tests | `lib/journey-timeline.ts`, `scripts/journey-timeline.test.ts` |
+| World typography, colors, responsive layouts | `app/world.css` |
+| Interactive engineering models | `lib/engineering-scene.ts` |
+| Spring response and tests | `lib/suspension-physics.ts`, `scripts/suspension-physics.test.ts` |
 
-The current palette follows the explicit warm ivory, charcoal, muted indigo, vermilion, celadon, ochre, and dusty-blue choices in the latest brief. It draws on Sanzo Wada's colour-harmony approach; it no longer claims to reproduce combination 321 exactly.
+On systems with restrictive file-watcher limits, use `WATCHPACK_POLLING=true npm run dev -- --webpack`. The production build uses the standard `npm run build` command.
 
 ## Design and credits
 
-The portfolio uses Space Grotesk for body copy and Tanker for display headings, matching the reference’s typography. Fraunces remains the journal’s reading font; Space Mono handles code and selected metadata. Fonts are hosted locally with their licenses in `public/fonts/`, including Fontshare’s FFL for Tanker and the SIL Open Font Licenses for the other families. The journal draws on the unhurried editorial reading experience of [The Marginalian](https://www.themarginalian.org/), with its own name, essays, and layout. No articles or images were copied from that site.
+Visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). Geometry, pixel textures, and choreography here are original.
+
+The world and all its block geometry are generated locally in Three.js; no game textures or external 3D assets are required. The design uses pixel grass, timber, copper, blue daylight, and a starfield, and locally hosted Pixelify Sans for pixel display typography. The journal retains its reading typography and image credits. Font licenses are in `public/fonts/`, including the Pixelify Sans SIL Open Font License. The previous project photography remains credited in its case studies and in `docs/project-photo-assets.json`.
+
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).

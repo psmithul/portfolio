@@ -7,6 +7,7 @@ import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
 import { projects } from '@/content/projects';
 import { projectStudies } from '@/content/project-studies';
+import { ProjectLaboratory } from '@/components/project-laboratory';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -59,6 +60,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         </dl>
       </header>
+      <ProjectLaboratory model={project.model} />
       <div className="reading-layout case-layout">
         <ReadingContents body={body} />
         <div className="case-reader">

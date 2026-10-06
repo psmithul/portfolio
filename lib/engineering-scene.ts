@@ -3,8 +3,20 @@ import { HERO_ROVER_HEADING, HERO_ROVER_SCALE } from './hero-motion';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { createSuspensionResponse } from './suspension-physics';
 
-export type ModelKind = 'rover' | 'tensegrity' | 'knee' | 'satellite';
+export type ModelKind =
+  | 'rover'
+  | 'tensegrity'
+  | 'knee'
+  | 'satellite'
+  | 'collection'
+  | 'linkage'
+  | 'electronics'
+  | 'navigation'
+  | 'wallet'
+  | 'solar'
+  | 'transit';
 export type SceneOptions = {
   model: ModelKind;
   running: boolean;
@@ -291,6 +303,7 @@ function rover(): AnimatedModel {
   const baseYs = wheelStations.map((station) => station.assembly.position.y);
   let explosion = 0;
   let distance = 0;
+  const suspension = createSuspensionResponse();
   return {
     root,
     animate(time, options, dt) {
@@ -301,22 +314,25 @@ function rover(): AnimatedModel {
         dt,
       );
       if (options.running) distance += dt * (1 + options.stiffness * 0.25);
-      chassis.position.y = explosion * 0.63;
+      const ground = options.running
+        ? Math.sin(distance * 2.8) * options.terrain * 0.14
+        : 0;
+      const response = suspension.step(dt, ground, options.stiffness);
+      chassis.position.y = explosion * 0.63 + response;
       chassis.rotation.z = options.running
         ? (Math.sin(distance * 2.2) * options.terrain * 0.045) /
           (1 + options.stiffness)
         : 0;
       wheelStations.forEach((station, i) => {
         const travel = options.running
-          ? (Math.sin(distance * 2.8 + station.x * 1.8 + station.side * 0.6) *
-              options.terrain *
-              0.16) /
-            (1 + options.stiffness * 0.5)
+          ? Math.sin(distance * 2.8 + station.x * 1.8 + station.side * 0.6) *
+            options.terrain *
+            0.16
           : 0;
         station.assembly.position.y = baseYs[i] + travel;
         station.assembly.position.z = station.side * (0.96 + explosion * 0.56);
         station.wheel.rotation.z = -distance * 2;
-        station.coil.scale.y = 1 - travel * 0.8 + explosion * 0.5;
+        station.coil.scale.y = 1 - (travel - response) * 0.8 + explosion * 0.5;
         station.coil.position.y = 0.84 + travel * 0.4 + explosion * 0.2;
         station.coil.position.z = station.side * (0.79 + explosion * 0.25);
         station.arm.position.z = station.side * explosion * 0.28;
@@ -627,11 +643,340 @@ function satellite(): AnimatedModel {
   };
 }
 
+function collection(): AnimatedModel {
+  const base = rover();
+  const collector = new THREE.Group(),
+    hopper = new THREE.Group();
+  const green = material('#729264', 0.2, 0.65),
+    brass = material('#bfa56c', 0.5),
+    dark = material('#354c36');
+  base.root.add(collector, hopper);
+  hopper.add(
+    box([1.6, 0.8, 0.08], green, [-0.2, 1.95, -0.52]),
+    box([1.6, 0.8, 0.08], green, [-0.2, 1.95, 0.52]),
+    box([0.08, 0.8, 1.1], green, [-0.95, 1.95, 0]),
+    box([1.55, 0.06, 1.05], dark, [-0.2, 1.55, 0]),
+  );
+  collector.position.set(1.65, 0.65, 0);
+  const drum = cylinder(0.35, 1.2, brass);
+  drum.rotation.x = Math.PI / 2;
+  collector.add(drum);
+  for (let i = 0; i < 8; i++) {
+    const angle = (i * Math.PI) / 4;
+    const tine = box([0.12, 0.12, 1.35], dark, [
+      Math.cos(angle) * 0.34,
+      Math.sin(angle) * 0.34,
+      0,
+    ]);
+    tine.rotation.z = angle;
+    collector.add(tine);
+  }
+  const belt = box([0.14, 1.3, 1], dark, [1.22, 1.22, 0]);
+  belt.rotation.z = -0.65;
+  base.root.add(belt);
+  const leaves = Array.from({ length: 9 }, (_, i) => {
+    const leaf = box(
+      [0.16, 0.025, 0.11],
+      material(i % 2 ? '#cda86a' : '#94a460'),
+      [0, 0, 0],
+    );
+    base.root.add(leaf);
+    return leaf;
+  });
+  let phase = 0;
+  return {
+    root: base.root,
+    animate(time, options, dt) {
+      base.animate(time, options, dt);
+      if (options.running) phase += dt * (0.45 + options.stiffness * 0.2);
+      collector.rotation.z = -phase * 6;
+      hopper.position.y = options.exploded ? 0.65 : 0;
+      leaves.forEach((leaf, i) => {
+        const p = (phase + i / leaves.length) % 1;
+        leaf.position.set(
+          2.05 - p * 2.5,
+          0.5 + Math.sin(p * Math.PI) * 1.5,
+          ((i % 3) - 1) * 0.28,
+        );
+        leaf.rotation.y = p * 5;
+        leaf.visible = options.running;
+      });
+    },
+  };
+}
+
+function linkage(): AnimatedModel {
+  const root = new THREE.Group(),
+    bars: THREE.Mesh[] = [],
+    pivots: THREE.Mesh[] = [];
+  const metal = material('#8f9f83', 0.55),
+    gold = material('#c7a872', 0.65),
+    dark = material('#354c36');
+  root.add(box([3.4, 0.18, 1.2], dark, [0, 0.2, 0]));
+  for (let i = 0; i < 3; i++) {
+    bars.push(box([1, 0.13, 0.15], i === 1 ? gold : metal));
+    root.add(bars[i]);
+  }
+  for (let i = 0; i < 4; i++) {
+    const p = cylinder(0.11, 0.25, gold);
+    p.rotation.x = Math.PI / 2;
+    root.add(p);
+    pivots.push(p);
+  }
+  let phase = 0.7;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt * (0.3 + options.stiffness * 0.3);
+      // Circle intersection solves the coupler and rocker closure exactly.
+      const a = new THREE.Vector3(-1.2, 0.6, 0),
+        d = new THREE.Vector3(1.2, 0.6, 0);
+      const b = a
+        .clone()
+        .add(
+          new THREE.Vector3(Math.cos(phase) * 0.55, Math.sin(phase) * 0.55, 0),
+        );
+      const delta = d.clone().sub(b),
+        distance = delta.length(),
+        along = (1.8 ** 2 - 1.4 ** 2 + distance ** 2) / (2 * distance);
+      const height = Math.sqrt(Math.max(0, 1.8 ** 2 - along ** 2)),
+        unit = delta.clone().normalize();
+      const c = b
+        .clone()
+        .add(unit.clone().multiplyScalar(along))
+        .add(new THREE.Vector3(-unit.y, unit.x, 0).multiplyScalar(height));
+      const points = [a, b, c, d];
+      for (let i = 0; i < 3; i++) {
+        const vector = points[i + 1].clone().sub(points[i]);
+        bars[i].position
+          .copy(points[i])
+          .add(points[i + 1])
+          .multiplyScalar(0.5);
+        bars[i].scale.x = vector.length();
+        bars[i].rotation.z = Math.atan2(vector.y, vector.x);
+        bars[i].position.z = options.exploded ? i * 0.4 : 0;
+      }
+      pivots.forEach((p, i) => p.position.copy(points[i]));
+    },
+  };
+}
+
+function electronics(): AnimatedModel {
+  const root = new THREE.Group(),
+    tray = new THREE.Group(),
+    response = createSuspensionResponse();
+  const dark = material('#354c36'),
+    green = material('#77946b'),
+    gold = material('#c9a970'),
+    alloy = material('#aeb8a2', 0.7);
+  const base = box([2.6, 0.2, 1.8], dark, [0, 0.25, 0]);
+  root.add(base, tray);
+  tray.add(
+    box([1.9, 0.16, 1.3], alloy, [0, 1.05, 0]),
+    box([1.4, 0.1, 0.9], green, [0, 1.2, 0]),
+    box([0.4, 0.14, 0.4], dark, [0, 1.31, 0]),
+  );
+  for (let i = 0; i < 8; i++)
+    tray.add(box([0.08, 0.13, 0.18], gold, [-0.58 + i * 0.16, 1.31, -0.32]));
+  const springs = [-1, 1].flatMap((x) =>
+    [-1, 1].map((z) => {
+      const s = spring(0.11, 0.62, 6, gold);
+      s.position.set(x * 0.8, 0.64, z * 0.5);
+      root.add(s);
+      return s;
+    }),
+  );
+  let phase = 0;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt * 6;
+      const input = options.running ? Math.sin(phase) * 0.15 : 0;
+      const y = response.step(dt, input, options.stiffness);
+      base.position.y = 0.25 + input;
+      tray.position.y = y + (options.exploded ? 0.8 : 0);
+      springs.forEach((s) => {
+        s.scale.y = 1 + (y - input) * 1.5;
+        s.position.y = 0.64 + (y + input) * 0.5;
+      });
+    },
+  };
+}
+
+function navigation(): AnimatedModel {
+  const root = new THREE.Group(),
+    robot = new THREE.Group();
+  const base = material('#cad4b9'),
+    green = material('#627f51'),
+    dark = material('#354c36');
+  root.add(box([3.6, 0.12, 3.6], base, [0, 0.05, 0]), robot);
+  [
+    [-1, -0.5],
+    [0.6, 0.7],
+    [1.1, -1],
+  ].forEach(([x, z]) => root.add(box([0.5, 0.45, 0.65], green, [x, 0.33, z])));
+  robot.add(
+    box([0.45, 0.22, 0.35], dark, [0, 0.25, 0]),
+    cylinder(0.12, 0.14, green, [0, 0.42, 0]),
+  );
+  let phase = 0;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt * (0.22 + options.stiffness * 0.12);
+      robot.position.set(
+        Math.cos(phase) * 1.3,
+        options.exploded ? 0.8 : 0,
+        Math.sin(phase) * 1.3,
+      );
+      robot.rotation.y = -phase;
+    },
+  };
+}
+
+function wallet(): AnimatedModel {
+  const root = new THREE.Group(),
+    cards = new THREE.Group();
+  const leather = material('#997854', 0, 0.9),
+    gold = material('#c5b486'),
+    green = material('#738a66');
+  root.add(box([1.8, 0.28, 1.2], leather, [0, 0.6, 0]), cards);
+  for (let i = 0; i < 4; i++)
+    cards.add(
+      box([1.55, 0.03, 1], i % 2 ? gold : green, [0, 0.77 + i * 0.04, 0]),
+    );
+  let phase = 0;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt;
+      cards.children.forEach((card, i) => {
+        card.rotation.y = options.stiffness * i * 0.1;
+        card.position.x =
+          options.stiffness * i * 0.08 +
+          (options.exploded ? 0.35 * i : 0) +
+          (options.running ? (1 + Math.sin(phase)) * 0.12 * i : 0);
+        card.position.y = 0.77 + i * (options.exploded ? 0.25 : 0.04);
+      });
+    },
+  };
+}
+
+function solar(): AnimatedModel {
+  const root = new THREE.Group(),
+    roof = new THREE.Group();
+  const dark = material('#354c36'),
+    cream = material('#e4dbc0'),
+    blue = material('#526f87', 0.3),
+    green = material('#72905f');
+  root.add(
+    box([3.1, 0.15, 2.3], green, [0, 0.15, 0]),
+    box([1.6, 1.1, 1.5], cream, [-0.5, 0.78, 0]),
+    roof,
+  );
+  roof.position.set(-0.5, 1.5, 0);
+  roof.rotation.z = -0.22;
+  roof.add(box([1.9, 0.12, 1.8], dark));
+  for (let x = 0; x < 4; x++)
+    for (let z = 0; z < 3; z++)
+      roof.add(
+        box(
+          [0.39, 0.025, 0.51],
+          blue,
+          [-0.65 + x * 0.43, 0.075, -0.55 + z * 0.55],
+          0.005,
+        ),
+      );
+  root.add(
+    box([0.55, 0.13, 0.82], dark, [1, 0.4, 0]),
+    box([0.5, 0.025, 0.75], green, [1, 0.49, 0]),
+  );
+  const lamp = new THREE.MeshStandardMaterial({
+    color: '#eed993',
+    emissive: '#eaca75',
+    emissiveIntensity: 0.3,
+  });
+  root.add(
+    box([0.3, 0.43, 0.05], lamp, [-0.75, 0.87, 0.78]),
+    box([0.3, 0.43, 0.05], lamp, [-0.2, 0.87, 0.78]),
+  );
+  let phase = 0;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt;
+      const power =
+        ((options.stiffness + 1) / 3) *
+        (options.running ? 0.5 + Math.sin(phase) * 0.5 : 1);
+      lamp.emissiveIntensity = power * 2;
+      roof.position.y = 1.5 + (options.exploded ? 0.8 : 0);
+    },
+  };
+}
+
+function transit(): AnimatedModel {
+  const root = new THREE.Group(),
+    bus = new THREE.Group(),
+    car = new THREE.Group();
+  const road = material('#6b7567'),
+    green = material('#76906b'),
+    dark = material('#354c36'),
+    glass = material('#b6c8bc'),
+    cream = material('#ddd5b6');
+  root.add(box([3.8, 0.1, 2.6], road, [0, 0.1, 0]), bus, car);
+  bus.add(box([2.4, 0.6, 1.65], green, [0, 1.65, 0]));
+  for (const side of [-1, 1]) {
+    bus.add(box([2.4, 0.7, 0.16], dark, [0, 1.1, side * 0.77]));
+    for (let i = 0; i < 4; i++)
+      bus.add(
+        box([0.43, 0.3, 0.025], glass, [-0.85 + i * 0.57, 1.72, side * 0.84]),
+      );
+  }
+  car.add(
+    box([0.7, 0.3, 0.4], cream, [0, 0.38, 0]),
+    box([0.35, 0.25, 0.36], glass, [0, 0.63, 0]),
+  );
+  root.add(
+    box([0.09, 1.4, 0.09], dark, [1.6, 0.8, -1]),
+    box([0.28, 0.85, 0.2], dark, [1.6, 1.65, -1]),
+  );
+  const lights = ['#c47462', '#e2c575', '#7ca166'].map((color, i) => {
+    const m = new THREE.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: i === 2 ? 1.6 : 0.05,
+    });
+    root.add(box([0.14, 0.15, 0.04], m, [1.6, 1.95 - i * 0.27, -0.88]));
+    return m;
+  });
+  let phase = 0;
+  return {
+    root,
+    animate(_time, options, dt) {
+      if (options.running) phase += dt * (0.3 + options.stiffness * 0.25);
+      const signal = Math.floor(phase) % 3;
+      lights.forEach((m, i) => {
+        m.emissiveIntensity = i === signal ? 2 : 0.05;
+      });
+      car.position.x =
+        options.running && signal === 2 ? Math.sin(phase * 2) * 1.5 : -0.8;
+      bus.position.y = options.exploded ? 0.7 : 0;
+    },
+  };
+}
+
 const factories: Record<ModelKind, () => AnimatedModel> = {
   rover,
   tensegrity,
   knee,
   satellite,
+  collection,
+  linkage,
+  electronics,
+  navigation,
+  wallet,
+  solar,
+  transit,
 };
 export function createEngineeringScene(
   host: HTMLElement,
