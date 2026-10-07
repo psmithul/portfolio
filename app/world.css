@@ -101,6 +101,7 @@ body {
 .voxel-canvas {
   position: fixed;
   inset: 0;
+  overflow: clip;
   z-index: -3;
   touch-action: pan-y;
   background: #83b8ed;
@@ -1374,6 +1375,7 @@ a:focus-visible {
   box-shadow: none;
   text-shadow: none;
   transform-origin: center !important;
+  backface-visibility: hidden;
   user-select: text;
 }
 .train-journey .in-world-board h1,
@@ -1604,8 +1606,8 @@ a:focus-visible {
   min-height: 0;
 }
 .train-journey:not(.world-unavailable) .planet-chapter {
-  height: 120svh;
-  min-height: 120svh;
+  height: 70svh;
+  min-height: 70svh;
 }
 
 .journey-portrait {

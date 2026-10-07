@@ -8,7 +8,7 @@ import {
 import { journeyPosition } from '../lib/journey-timeline.ts';
 import { journeyPose } from '../lib/journey-choreography.ts';
 
-const offsets = [0, 990, 2115, 3240, 4815, 10215, 11340];
+const offsets = [0, 990, 2115, 3240, 4815, 7965, 9090];
 const distance = (a: readonly number[], b: readonly number[]) =>
   Math.hypot(...a.map((n, i) => n - b[i]));
 const sample = (y: number) => {
@@ -64,17 +64,31 @@ void test('a large wheel input or navigation jump respects world speeds in both 
 void test('scroll traverses the entire continuous route and reverses without getting stuck', () => {
   let y = 0,
     elapsed = 0;
-  while (y < 11500 && elapsed < 240) {
-    const next = journeyScrollStep(y, 11500, 1 / 60, 900, sample);
+  while (y < 9500 && elapsed < 240) {
+    const next = journeyScrollStep(y, 9500, 1 / 60, 900, sample);
     assert.ok(next > y, `stalled at ${y}`);
     y = next;
     elapsed += 1 / 60;
   }
-  assert.equal(y, 11500);
+  assert.equal(y, 9500);
   assert.ok(elapsed > 30, 'a full route cannot be rushed');
   const reverse = journeyScrollStep(y, 0, 1 / 60, 900, sample);
   assert.ok(reverse < y);
   assertSpeed(sample(y), sample(reverse), 1 / 60);
+});
+
+void test('the compact experience trail has time to read every role without repeated walking delays', () => {
+  let y = offsets[4],
+    elapsed = 0;
+  const visited = new Set<number>();
+  while (y < offsets[5] && elapsed < 60) {
+    const pose = sample(y);
+    if (pose.board < 9 && pose.boardPhase < 0.52) visited.add(pose.board);
+    y = journeyScrollStep(y, offsets[5], 1 / 60, 900, sample);
+    elapsed += 1 / 60;
+  }
+  assert.deepEqual([...visited], [4, 5, 6, 7, 8]);
+  assert.ok(elapsed >= 12 && elapsed < 22, `experience took ${elapsed}s`);
 });
 
 void test('frame stalls, small targets, and phone viewports cannot bypass the speed limit', () => {
