@@ -1,3 +1,5 @@
+import { annotationOpacity } from '@/lib/journey-annotations';
+import { createJourneyClearance } from '@/lib/journey-clearance';
 import * as THREE from 'three';
 import {
   CSS3DObject,
@@ -20,10 +22,7 @@ import {
   railAngle,
 } from '@/lib/journey-choreography';
 import { EXHIBIT_SPACING } from '@/lib/journey-exhibits';
-import {
-  stationCameraFov,
-  stationCameraDistance,
-} from '@/lib/journey-station-camera';
+import { stationCameraDistance } from '@/lib/journey-station-camera';
 import { createSuspensionResponse } from '@/lib/suspension-physics';
 import { journeyExperience } from '@/content/journey';
 import { createBlockMaterials, type Block } from '@/lib/voxel-textures';
@@ -99,6 +98,9 @@ export function createVoxelWorld(
     string,
     { parent: THREE.Group; type: string; items: BatchItem[] }
   >();
+  const clearance = createJourneyClearance();
+  let clearedBlocks = 0;
+  const staticParts: THREE.Mesh[] = [];
   const targets: THREE.Object3D[] = [];
   const ownedTextures: THREE.Texture[] = [];
   let seed = 120226;
@@ -136,59 +138,10 @@ export function createVoxelWorld(
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     parent.add(mesh);
+    let root: THREE.Object3D | null = parent;
+    while (root && root !== land && root !== orbit) root = root.parent;
+    if (root) staticParts.push(mesh);
     return mesh;
-  }
-  function label(
-    parent: THREE.Group,
-    x: number,
-    y: number,
-    z: number,
-    text: string,
-    sub = '',
-    action?: WorldAction,
-    width = 4.5,
-  ) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 160;
-    const ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = '#2c2119';
-    ctx.fillRect(0, 0, 512, 160);
-    ctx.fillStyle = '#a77a48';
-    ctx.fillRect(4, 4, 504, 152);
-    ctx.fillStyle = '#bc915b';
-    ctx.fillRect(10, 10, 492, 140);
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#211b17';
-    ctx.font = 'bold 30px monospace';
-    ctx.fillText(text, 256, sub ? 68 : 92);
-    if (sub) {
-      ctx.font = '18px monospace';
-      ctx.fillText(sub, 256, 111);
-    }
-    const map = new THREE.CanvasTexture(canvas);
-    map.colorSpace = THREE.SRGBColorSpace;
-    map.magFilter = THREE.NearestFilter;
-    ownedTextures.push(map);
-    const board = new THREE.Mesh(
-      new THREE.BoxGeometry(width, width * 0.31, 0.15),
-      [
-        mats.get('plank') as THREE.Material,
-        mats.get('plank') as THREE.Material,
-        mats.get('plank') as THREE.Material,
-        mats.get('plank') as THREE.Material,
-        new THREE.MeshBasicMaterial({ map }),
-        mats.get('plank') as THREE.Material,
-      ],
-    );
-    board.position.set(x, y, z);
-    parent.add(board);
-    if (action) {
-      board.userData.action = action;
-      targets.push(board);
-    }
-    block(parent, x, y - 1.05, z, 'log', 0.22, 2.1, 0.22);
-    return board;
   }
   const hemi = new THREE.HemisphereLight('#eaf4ff', '#687456', 1.05);
   scene.add(hemi);
@@ -395,66 +348,31 @@ export function createVoxelWorld(
       block(land, x + a, 3.25, z + hd + 1, 'gold', 0.36, 0.48, 0.36);
     }
   }
-  for (let s = 0; s < 4; s++) {
-    const x = s * SPACING;
-    // A continuous visitor platform is on the same side as the cab door and reading display.
-    for (let a = -12; a <= (s === 0 ? 12 : 20); a++)
-      for (let z = 4; z <= 11; z++)
-        block(land, x + a, 0.45, z, s === 2 ? 'cobble' : 'plank', 1, 0.9, 1);
-    house(
-      x + 5,
-      routeZ(x) - 14,
-      s === 0 ? 'brick' : s === 1 ? 'oxidized' : s === 2 ? 'dark' : 'copper',
-      s === 2 ? 13 : 9,
-    );
-    // A Create-style inclined gangway joins the exact cab and platform floor heights.
-    const boardingX = s === 3 ? ARCHIVE_TRAIN_X : x;
-    const startZ = routeZ(boardingX) + 1.7,
-      endZ = 4.15,
-      length = Math.hypot(endZ - startZ, 0.58);
-    const gangway = part(
-      land,
-      trainCab(boardingX)[0],
-      1.19 - 0.07,
-      (startZ + endZ) / 2,
-      'plank',
-      1.25,
-      0.14,
-      length,
-    );
-    gangway.rotation.x = Math.atan2(0.58, endZ - startZ);
-    for (const side of [-1, 1]) {
-      const rail = part(
-        land,
-        trainCab(boardingX)[0] + side * 0.67,
-        1.75,
-        (startZ + endZ) / 2,
-        'iron',
-        0.08,
-        0.08,
-        length,
-      );
-      rail.rotation.x = gangway.rotation.x;
-    }
-    for (const a of [-10, 10]) {
-      block(land, x + a, 2.4, 10, 'log', 0.25, 3, 0.25);
-      block(land, x + a + 0.35, 3.8, 10, 'dark', 0.9, 0.12, 0.12);
-      block(land, x + a + 0.7, 3.4, 10, 'dark', 0.4, 0.15, 0.4);
-      block(land, x + a + 0.7, 3.15, 10, 'gold', 0.3, 0.35, 0.3);
-    }
-    if (s < 3) {
-      block(land, x + 8, 1.65, 9.5, 'plank', 3, 0.2, 0.9);
-      block(land, x + 8, 2.1, 9.85, 'plank', 3, 0.8, 0.16);
-      for (const a of [-1, 1])
-        block(land, x + 8 + a, 1.2, 9.5, 'log', 0.22, 0.6, 0.6);
-    }
-    for (const a of [-12, s === 0 ? 12 : 20])
-      for (let z = 5; z <= 11; z += 2) {
-        block(land, x + a, 1.5, z, 'log', 0.25, 1.2, 0.25);
-        if (z < 11) block(land, x + a, 1.8, z + 1, 'plank', 0.15, 0.15, 2);
-      }
-  }
-  // A village garden beside the About station.
+  // The railway runs through a landscape, rather than seven repeated platforms.
+  house(-8, -17, 'brick', 7);
+  house(39, -18, 'oxidized', 7);
+  house(84, -19, 'dark', 11);
+  // One boarding ramp, only where the guide changes vehicles at the launch field.
+  const boardingX = ARCHIVE_TRAIN_X;
+  const startZ = routeZ(boardingX) + 1.7,
+    endZ = 4.15;
+  const gangway = part(
+    land,
+    trainCab(boardingX)[0],
+    1.16,
+    (startZ + endZ) / 2,
+    'plank',
+    1.8,
+    0.14,
+    Math.hypot(endZ - startZ, 0.66),
+  );
+  gangway.userData.walkable = true;
+  gangway.rotation.x = Math.atan2(0.66, endZ - startZ);
+  for (let x = 114; x <= 126; x++)
+    for (let z = 4; z <= 10; z++) block(land, x, 0.45, z, 'iron', 1, 0.9, 1);
+  // Orchard trees, a small kitchen garden and a wind-driven workshop silhouette.
+  for (const x of [28, 35, 43, 51]) tree(x, -10, true);
+  // A garden along the About stretch.
   for (let a = 0; a < 6; a++)
     for (let b = 0; b < 4; b++) {
       block(land, 28 + a, 0.1, -18 - b, 'dirt', 1, 0.2, 1);
@@ -675,25 +593,15 @@ export function createVoxelWorld(
         targets.push(o);
       }
     });
-    label(
-      stage,
-      0,
-      1.55,
-      2.2,
-      ['SPRING · DAMPER', 'TENSION · COMPRESSION', 'CRANK · LINKAGE'][i],
-      'CLICK TO EXPLORE',
-      { kind: 'project', slug: projectSlugs[i] },
-      3.2,
-    );
   }
   // Crates, crafting table and archive chests.
   for (let i = 0; i < 4; i++) {
     const x = 96 + i * 2.1;
-    block(land, x, 1.5, -5, 'plank', 1.7, 1.2, 1.3);
-    block(land, x, 2.17, -5, 'log', 1.8, 0.2, 1.4);
-    block(land, x, 1.6, -4.3, 'gold', 0.2, 0.35, 0.08);
+    block(land, x, 0.6, -5, 'plank', 1.7, 1.2, 1.3);
+    block(land, x, 1.27, -5, 'log', 1.8, 0.2, 1.4);
+    block(land, x, 0.7, -4.3, 'gold', 0.2, 0.35, 0.08);
   }
-  for (let i = 0; i < 3; i++) block(land, 75 + i, 1.5, -12, 'copper');
+  for (let i = 0; i < 3; i++) block(land, 75 + i, 0.5, -12, 'copper');
   // Blocky locomotive: stepped copper boiler, redstone flywheels, open cab and gantry.
   const train = new THREE.Group();
   land.add(train);
@@ -708,14 +616,8 @@ export function createVoxelWorld(
     part(car, 0, 1.2, 0, 'dark', 7.3, 0.45, 2.6);
     for (const side of [-1, 1])
       for (const x of [-2.3, 2.3]) {
-        const wheel = new THREE.Group();
-        wheel.position.set(x, 0.75, side * 1.35);
-        car.add(wheel);
+        const wheel = gearWheel(car, 0.575, x, 0.975, side * 1.35);
         wheelGroups.push(wheel);
-        part(wheel, 0, 0, 0, 'dark', 1.15, 0.75, 0.25);
-        part(wheel, 0, 0, 0, 'dark', 0.75, 1.15, 0.25);
-        part(wheel, 0, 0, side * 0.15, 'copper', 0.65, 0.65, 0.12);
-        part(wheel, 0, 0, side * 0.22, 'iron', 0.22, 0.22, 0.12);
         part(wheel, 0.22, 0, side * 0.26, 'gold', 0.15, 0.15, 0.15);
       }
     part(car, -3.8, 1.2, 0, 'iron', 0.7, 0.18, 0.18);
@@ -729,7 +631,7 @@ export function createVoxelWorld(
         part(car, 0, 1.93, side * 1, 'redstone', 0.65, 0.55, 0.13);
         part(
           car,
-          side < 0 ? -1.9 : -1.25,
+          side < 0 ? -1.9 : -1.1,
           1.8,
           side * 1.1,
           'oxidized',
@@ -737,7 +639,7 @@ export function createVoxelWorld(
           0.65,
           0.23,
         );
-        for (const x of [-2.8, -1])
+        for (const x of [-3, -1])
           part(car, x, 2.8, side * 1.1, 'oxidized', 0.2, 2.1, 0.2);
         part(
           car,
@@ -756,8 +658,8 @@ export function createVoxelWorld(
       car.add(cabDoor);
       part(cabDoor, 0, -0.45, 0, 'oxidized', 0.8, 1.2, 0.12);
       part(cabDoor, 0, 0.55, 0, 'glass', 0.8, 0.8, 0.12);
-      part(car, -1.9, 3.9, 0, 'dark', 2.6, 0.3, 2.8);
-      part(car, -1.9, 4.12, 0, 'oxidized', 2.2, 0.2, 2.4);
+      part(car, -1.9, 4.02, 0, 'dark', 2.6, 0.3, 2.8);
+      part(car, -1.9, 4.24, 0, 'oxidized', 2.2, 0.2, 2.4);
       part(car, 1.35, 3.75, 0, 'dark', 0.6, 1.2, 0.6);
       part(car, 1.35, 4.42, 0, 'iron', 0.95, 0.23, 0.95);
       for (let a = 0; a < 3; a++)
@@ -772,9 +674,8 @@ export function createVoxelWorld(
           2.5 - a * 0.6,
         );
       part(car, -1.9, 1.48, 0, 'plank', 2, 0.16, 2);
-      // Ladder and externally visible power cells.
-      for (let y = 0; y < 3; y++)
-        part(car, -2.6, 0.9 + y * 0.36, 1.52, 'iron', 0.7, 0.1, 0.18);
+      // The open cab connects to the boarding gangway without a ladder or gap.
+      part(car, -2.2, 1.48, 1.3, 'plank', 1.6, 0.16, 0.7);
       part(car, -3.15, 2.1, 0, 'redstone', 0.3, 0.7, 1.3);
     } else {
       part(car, 0, 1.48, 0, 'plank', 6.7, 0.15, 2.4);
@@ -841,12 +742,12 @@ export function createVoxelWorld(
     pistonUpdates.push((angle) => {
       const pin = new THREE.Vector3(
         2.3 + Math.cos(angle) * 0.22,
-        0.75 + Math.sin(angle) * 0.22,
+        0.975 + Math.sin(angle) * 0.22,
         side * 1.61,
       );
       const slider = new THREE.Vector3(
-        pin.x + Math.sqrt(1.1 ** 2 - (pin.y - 0.75) ** 2),
-        0.75,
+        pin.x + Math.sqrt(1.1 ** 2 - (pin.y - 0.975) ** 2),
+        0.975,
         pin.z,
       );
       piston.position.x = slider.x;
@@ -941,7 +842,7 @@ export function createVoxelWorld(
   }
   const guide = character(scene);
   // Launch pad and an approaching rocket with a lower boarding hatch.
-  const padX = 112,
+  const padX = 122,
     padZ = 6;
   for (let a = -4; a <= 4; a++)
     for (let b = -4; b <= 4; b++)
@@ -966,7 +867,20 @@ export function createVoxelWorld(
     const group = new THREE.Group();
     parent.add(group);
     for (let y = 1; y < 7; y++) {
-      part(group, 0, y, 0, y === 2 ? 'copper' : 'white', 2, 1, 2);
+      if (y <= 3) {
+        for (const side of [-1, 1])
+          part(
+            group,
+            side * 0.85,
+            y,
+            0,
+            y === 2 ? 'copper' : 'white',
+            0.3,
+            1,
+            2,
+          );
+        part(group, 0, y, -0.85, 'white', 1.4, 1, 0.3);
+      } else part(group, 0, y, 0, 'white', 2, 1, 2);
       if (y > 2 && y < 6)
         for (const side of [-1, 1])
           part(group, side * 1.02, y, 0, 'oxidized', 0.12, 1, 1.5);
@@ -974,7 +888,21 @@ export function createVoxelWorld(
     part(group, 0, 7, 0, 'copper', 1.5, 1, 1.5);
     part(group, 0, 7.8, 0, 'copper', 1, 0.6, 1);
     part(group, 0, 8.3, 0, 'copper', 0.5, 0.4, 0.5);
-    part(group, 0, 1.9, 1.03, 'dark', 0.85, 2.4, 0.1);
+    for (const side of [-1, 1])
+      part(group, side * 0.7, 1.9, 1.03, 'dark', 0.12, 2.4, 0.1);
+    part(group, 0, 3.17, 1.03, 'dark', 1.5, 0.14, 0.1);
+    part(group, 0, 0.655, 1.22, 'iron', 1.4, 0.14, 1);
+    const threshold = part(
+      group,
+      0,
+      0.565,
+      1.775,
+      'iron',
+      1.4,
+      0.1,
+      Math.hypot(0.25, 0.25),
+    );
+    threshold.rotation.x = Math.PI / 4;
     const hatchPanel = part(group, 0, 1.9, 1.13, 'oxidized', 0.82, 2.35, 0.12);
     hatchPanels.push(hatchPanel);
     const handle = new THREE.Mesh(cube, mats.get('gold'));
@@ -983,16 +911,50 @@ export function createVoxelWorld(
     hatchPanel.add(handle);
     part(group, 0, 5, 1.03, 'dark', 1.12, 1.28, 0.1);
     part(group, 0, 5, 1.1, 'glass', 0.8, 0.92, 0.1);
-    part(group, 0, 1, 0, 'dark', 1.4, 0.5, 1.4);
+    part(group, 0, 0.6, 0, 'dark', 1.4, 0.25, 1.4);
     for (const side of [-1, 1]) {
       part(group, side * 1.5, 1.7, 0, 'oxidized', 1, 2, 1.2);
       part(group, side * 1.8, 0.65, 0, 'dark', 0.6, 0.35, 1.7);
-      part(group, 0, 1.7, side * 1.5, 'oxidized', 1.2, 2, 1);
+      if (side < 0) part(group, 0, 1.7, side * 1.5, 'oxidized', 1.2, 2, 1);
     }
     return group;
   }
   const launchRocket = rocket(scene);
   launchRocket.position.set(padX, 0.65, padZ);
+  // Reaction-control jets supply the lateral acceleration and braking burn.
+  const lateralJets = [-1, 1].flatMap((side) =>
+    ['x', 'z'].map((axis) => {
+      const jet = new THREE.Group();
+      jet.position.set(
+        axis === 'x' ? side * 1.1 : 0,
+        6.2,
+        axis === 'z' ? side * 1.1 : 0,
+      );
+      launchRocket.add(jet);
+      part(
+        launchRocket,
+        jet.position.x,
+        6.2,
+        jet.position.z,
+        'iron',
+        0.3,
+        0.25,
+        0.3,
+      );
+      for (let i = 0; i < 3; i++)
+        part(
+          jet,
+          axis === 'x' ? side * (0.2 + i * 0.2) : 0,
+          0,
+          axis === 'z' ? side * (0.2 + i * 0.2) : 0,
+          ['#fff0ad', '#ffb655', '#e97435'][i],
+          0.2 - i * 0.04,
+          0.2 - i * 0.04,
+          0.2 - i * 0.04,
+        );
+      return { jet, side };
+    }),
+  );
   const flames = new THREE.Group();
   launchRocket.add(flames);
   part(launchRocket, 0, 0.75, 0, 'dark', 1.1, 0.35, 1.1);
@@ -1021,19 +983,28 @@ export function createVoxelWorld(
   part(roverBody, 0, 1.45, 0, 'dark', 0.8, 0.4, 0.9);
   part(roverBody, -0.45, 2, 0, 'dark', 0.2, 1.2, 0.9);
   for (const side of [-1, 1]) {
-    part(roverBody, 1.4, 2.8, side * 0.94, 'iron', 0.12, 1.8, 0.12);
-    part(roverBody, -1.6, 2.8, side * 0.94, 'iron', 0.12, 1.8, 0.12);
+    part(roverBody, 1.4, 2.66, side * 0.94, 'iron', 0.12, 2.2, 0.12);
+    part(roverBody, -1.6, 2.66, side * 0.94, 'iron', 0.12, 2.2, 0.12);
     part(roverBody, 2.62, 1.9, side * 0.7, '#fff0b0', 0.08, 0.3, 0.3);
   }
   part(roverBody, -0.1, 3.75, 0, 'dark', 3.6, 0.15, 2.3);
   for (let a = -3; a <= 3; a++)
     part(roverBody, a * 0.4, 3.85, 0, 'glass', 0.3, 0.06, 1.8);
-  // Both parking bays have the same raised side step, outside the tyre envelope.
+  // Both parking bays use the same continuous incline, outside the tyres.
   for (const x of [6, 18]) {
-    part(orbit, x, 4, 6.95, 'iron', 1.2, 0.16, 0.5);
-    part(orbit, x, 4.67, 6.35, 'iron', 1.2, 0.16, 0.7);
-    for (const side of [-1, 1])
-      part(orbit, x + side * 0.5, 4.06, 6.35, 'iron', 0.1, 1.1, 0.1);
+    const ramp = part(
+      orbit,
+      x,
+      4.125 - 0.07,
+      7.5,
+      'iron',
+      1.8,
+      0.14,
+      Math.hypot(1.8, 1.25),
+    );
+    ramp.userData.walkable = true;
+    ramp.rotation.x = Math.atan2(1.25, 1.8);
+    part(orbit, x, 4.68, 6.1, 'iron', 1.8, 0.14, 1).userData.walkable = true;
   }
   // Rocket and rover have separate pads, joined by a real sloped landing ramp.
   for (let x = 4; x <= 8; x++)
@@ -1042,17 +1013,6 @@ export function createVoxelWorld(
     for (let z = 7; z <= 8; z++) {
       block(orbit, x, 3.25, z, 'moon', 1, 0.5, 1);
     }
-  const landingRamp = part(
-    orbit,
-    6,
-    (4.025 + 3.5) / 2 - 0.07,
-    12.525,
-    'iron',
-    1.25,
-    0.14,
-    Math.hypot(1.85, 0.525),
-  );
-  landingRamp.rotation.x = -Math.atan2(0.525, 1.85);
   const roverWheels = [-1, 1].flatMap((side) =>
     [-2, 0, 2].map((axle) => ({
       axle,
@@ -1091,9 +1051,8 @@ export function createVoxelWorld(
     }
   }
 
-  // One block-built orbital station: a shared floor, five radial exhibit bays,
-  // an open entrance and a roof with a central skylight. The visitor makes one
-  // circular tour while the rover stays in its parking bay outside.
+  // An open lunar research camp. Five working exhibits sit around a clear
+  // walking ring; the Earth and stars remain visible throughout the visit.
   const orbitalUpdates: ((time: number) => void)[] = [];
   const station = new THREE.Group();
   station.position.set(STATION_CENTER[0], 0, STATION_CENTER[2]);
@@ -1108,22 +1067,6 @@ export function createVoxelWorld(
       block(station, x, 1.65, z, 'stone', 1, 1.7, 1);
       if (track && (x + z + 30) % 3 === 0)
         block(station, x, 3.515, z, 'gold', 0.28, 0.025, 0.28);
-      if (edge) {
-        const doorway = z > 10 && Math.abs(x) <= 2;
-        if (!doorway) {
-          for (let y = 4; y <= 10; y++)
-            block(
-              station,
-              x,
-              y,
-              z,
-              y === 4 || y === 10 || (x + z + 30) % 4 === 0
-                ? 'oxidized'
-                : 'glass',
-            );
-        } else block(station, x, 10, z, 'copper');
-      }
-      if (radius > 4.8) block(station, x, 11, z, edge ? 'copper' : 'dark');
     }
   // Low guide lights mark the uninterrupted ring, leaving the walking lane clear.
   for (let i = 0; i < 24; i++) {
@@ -1139,39 +1082,34 @@ export function createVoxelWorld(
       0.2,
     );
   }
-  for (const x of [-3.2, 3.2]) {
-    block(station, x, 6, 12, 'iron', 0.45, 5, 0.7);
-    block(station, x, 8.35, 12, 'gold', 0.6, 0.25, 0.8);
-  }
-  block(station, 0, 8.5, 12, 'oxidized', 6.8, 0.4, 0.8);
-  // Fill the half-block threshold between the circular foundation and road.
-  part(orbit, 12, 3.25, 2.75, 'iron', 5, 0.5, 0.5);
-  // A suspended flywheel powers the station, high above people and cameras.
-  const stationGear = gearWheel(station, 1.35, 0, 11.25, 0);
+  // A low orrery sits inside the empty centre, clear of the walking ring.
+  const stationGear = gearWheel(station, 1.35, 0, 4.35, 0);
   stationGear.rotation.x = Math.PI / 2;
-  for (const x of [-1, 1])
-    block(station, x * 1.9, 11.3, 0, 'iron', 0.25, 0.3, 4.8);
   orbitalUpdates.push((time) => {
     stationGear.rotation.z = time * 0.24;
   });
-  // Small physical exhibits tell each role's story beside its inset terminal.
+  part(orbit, 12, 3.25, 2.75, 'iron', 5, 0.5, 0.5);
+  // Each role has a working object beneath its floating annotation.
   for (let index = 0; index < journeyExperience.length; index++) {
     const bay = experienceBay(index, journeyExperience.length);
     const group = new THREE.Group();
     group.position.set(
-      bay.position[0] - ORBIT_ORIGIN[0],
+      bay.instrument[0] - ORBIT_ORIGIN[0],
       3.5,
-      bay.position[2] - ORBIT_ORIGIN[2],
+      bay.instrument[2] - ORBIT_ORIGIN[2],
     );
     group.rotation.y = bay.yaw;
     orbit.add(group);
-    part(group, 4.2, 0.55, 0.25, 'oxidized', 2, 1.1, 1.8);
-    part(group, 4.2, 1.15, 0.25, 'dark', 2.2, 0.12, 2);
+    const instruments = new THREE.Group();
+    instruments.position.x = -4.2;
+    group.add(instruments);
+    part(instruments, 4.2, 0.55, 0.25, 'oxidized', 2, 1.1, 1.8);
+    part(instruments, 4.2, 1.15, 0.25, 'dark', 2.2, 0.12, 2);
     if (index === 0) {
       const aircraft = new THREE.Group();
-      part(group, 4.2, 1.405, 0.3, 'iron', 0.18, 0.39, 0.18);
+      part(instruments, 4.2, 1.405, 0.3, 'iron', 0.18, 0.39, 0.18);
       aircraft.position.set(4.2, 1.75, 0.3);
-      group.add(aircraft);
+      instruments.add(aircraft);
       part(aircraft, 0, 0, 0, 'white', 2.3, 0.3, 0.35);
       part(aircraft, -0.15, 0.15, 0, 'oxidized', 0.5, 0.16, 1.7);
       part(aircraft, -0.85, 0.3, 0, 'copper', 0.4, 0.5, 0.15);
@@ -1186,7 +1124,7 @@ export function createVoxelWorld(
     } else if (index === 1) {
       for (let i = 0; i < 3; i++) {
         part(
-          group,
+          instruments,
           3.55 + i * 0.65,
           1.71 + i * 0.2,
           0.25,
@@ -1196,7 +1134,7 @@ export function createVoxelWorld(
           0.5,
         );
         part(
-          group,
+          instruments,
           3.55 + i * 0.65,
           2.285 + i * 0.4,
           0.25,
@@ -1209,7 +1147,7 @@ export function createVoxelWorld(
     } else if (index === 2) {
       for (let i = 0; i < 4; i++) {
         part(
-          group,
+          instruments,
           3.45 + i * 0.48,
           1.36 + i * 0.18,
           0.25,
@@ -1219,7 +1157,7 @@ export function createVoxelWorld(
           0.8,
         );
         part(
-          group,
+          instruments,
           3.45 + i * 0.48,
           1.57 + i * 0.36,
           -0.35,
@@ -1230,14 +1168,14 @@ export function createVoxelWorld(
         );
       }
     } else if (index === 3) {
-      part(group, 4.2, 1.81, 0.25, 'iron', 0.15, 1.2, 0.15);
-      part(group, 4.2, 2.4, 0.25, 'dark', 0.4, 0.35, 0.4);
+      part(instruments, 4.2, 1.81, 0.25, 'iron', 0.15, 1.2, 0.15);
+      part(instruments, 4.2, 2.4, 0.25, 'dark', 0.4, 0.35, 0.4);
       for (const side of [-1, 1])
-        part(group, 4.2 + side * 0.65, 1.7, 0.25, 'dark', 0.35, 1, 0.5);
+        part(instruments, 4.2 + side * 0.65, 1.7, 0.25, 'dark', 0.35, 1, 0.5);
     } else {
       for (let i = 0; i < 3; i++)
         part(
-          group,
+          instruments,
           3.6 + i * 0.55,
           1.42,
           0.25,
@@ -1246,10 +1184,10 @@ export function createVoxelWorld(
           0.5,
           0.9,
         );
-      part(group, 4.2, 1.75, 0.25, 'iron', 0.12, 0.2, 0.12);
+      part(instruments, 4.2, 1.75, 0.25, 'iron', 0.12, 0.2, 0.12);
       const globe = new THREE.Group();
       globe.position.set(4.2, 2.15, 0.25);
-      group.add(globe);
+      instruments.add(globe);
       for (let x = -1; x <= 1; x++)
         for (let y = -1; y <= 1; y++)
           for (let z = -1; z <= 1; z++)
@@ -1279,44 +1217,41 @@ export function createVoxelWorld(
       block(moon, a, -0.5, b, 'moon');
       block(moon, a, -2, b, 'stone', 1, 2, 1);
     }
-  for (let a = -4; a <= 4; a++)
-    for (let b = -3; b <= 3; b++) {
-      block(moon, a, 0.5, b, 'plank');
-      for (let y = 1; y < 5; y++)
-        if (Math.abs(a) === 4 || b === -3)
-          block(moon, a, y + 0.5, b, Math.abs(a) === 4 ? 'glass' : 'purple');
-    }
-  for (let level = 0; level < 4; level++)
-    for (let a = -5 + level; a <= 5 - level; a++)
-      for (let b = -4 + level; b <= 4 - level; b++)
-        block(moon, a, 5 + level * 0.6, b, 'oxidized', 1, 0.6, 1);
-  for (let a = -3; a <= 3; a++)
-    for (let y = 1; y <= 3; y++) {
-      block(moon, a, y + 0.5, -2.4, 'plank', 1, 1, 0.6);
-      for (let j = 0; j < 3; j++)
-        block(
-          moon,
-          a - 0.28 + j * 0.28,
-          y + 0.5,
-          -2,
-          ['redstone', 'gold', 'purple'][(a + j + y + 6) % 3],
-          0.18,
-          0.65,
-          0.16,
-        );
-    }
-  block(moon, 0, 1.5, 1, 'log', 2, 0.3, 1);
-  block(moon, 0, 1.75, 1, 'white', 1, 0.12, 0.7);
-  label(
-    moon,
-    1,
-    3.2,
-    4,
-    'MIKA’S LIFE',
-    'CLICK TO READ',
-    { kind: 'journal' },
-    5,
-  );
+  // A giant open book: stepped paper, coloured bindings and pixel ink lines.
+  for (const side of [-1, 1]) {
+    const page = new THREE.Group();
+    page.position.set(-5 + side * 2.1, 1.1, -0.5);
+    page.rotation.z = side * 0.16;
+    moon.add(page);
+    part(page, 0, -0.12, 0, 'purple', 4.4, 0.24, 5.5);
+    for (let sheet = 0; sheet < 4; sheet++)
+      part(page, 0, sheet * 0.08, 0, 'white', 4.1, 0.07, 5.2);
+    for (let line = 0; line < 8; line++)
+      part(
+        page,
+        0,
+        0.29,
+        -1.9 + line * 0.5,
+        'dark',
+        2.8 - (line % 3) * 0.3,
+        0.015,
+        0.055,
+      );
+  }
+  part(moon, -5, 0.075, -0.5, 'dark', 1.4, 0.15, 5.7);
+  part(moon, -5, 0.45, -0.5, 'gold', 0.25, 0.6, 5.7);
+  for (let i = 0; i < 5; i++) {
+    part(
+      moon,
+      3 + i * 0.42,
+      0.7 + i * 0.04,
+      -2,
+      ['purple', 'copper', 'oxidized'][i % 3],
+      0.35,
+      1.4 + i * 0.08,
+      1.2,
+    );
+  }
   // Contact beacon and landing platform, beyond the library.
   const finalMoon = new THREE.Group();
   finalMoon.position.set(CONTACT_X, 0, 0);
@@ -1339,16 +1274,19 @@ export function createVoxelWorld(
       );
   for (let y = 0; y < 5; y++) block(finalMoon, -4, y + 0.5, -2, 'dark');
   block(finalMoon, -4, 5, -2, 'glass', 1.2, 1.2, 1.2);
-  label(
-    finalMoon,
-    0,
-    2.7,
-    3,
-    'GET IN TOUCH',
-    'PSMITHUL@GMAIL.COM',
-    undefined,
-    6,
-  );
+  // A rotating communications dish is the final invitation to connect.
+  const dish = new THREE.Group();
+  dish.position.set(-4, 5.8, -2);
+  part(finalMoon, -4, 5.65, -2, 'iron', 0.12, 0.3, 0.12);
+  finalMoon.add(dish);
+  part(dish, 0, 0, 0, 'white', 3.6, 0.22, 2.8);
+  for (const side of [-1, 1])
+    part(dish, side * 1.7, 0.3, 0, 'white', 0.35, 0.7, 2.8);
+  part(dish, 0, 0.8, 0, 'iron', 0.12, 1.4, 0.12);
+  part(dish, 0, 1.5, 0, 'gold', 0.3, 0.2, 0.3);
+  orbitalUpdates.push((time) => {
+    dish.rotation.y = Math.sin(time * 0.12) * 0.4;
+  });
   for (const dockParent of [moon, finalMoon])
     for (let a = 5; a <= 10; a++)
       for (let c = 2; c <= 4; c++)
@@ -1358,9 +1296,18 @@ export function createVoxelWorld(
     starColors = new Float32Array(2400 * 3);
   const starColor = new THREE.Color();
   for (let i = 0; i < 2400; i++) {
-    starPositions[i * 3] = -220 + random() * 660;
-    starPositions[i * 3 + 1] = -50 + random() * 260;
-    starPositions[i * 3 + 2] = -220 + random() * 150;
+    const angle = random() * Math.PI * 2,
+      vertical = random() * 2 - 1;
+    const radius = 220 + random() * 55,
+      horizontal = Math.sqrt(1 - vertical * vertical) * radius;
+    starPositions.set(
+      [
+        50 + Math.cos(angle) * horizontal,
+        30 + vertical * radius,
+        Math.sin(angle) * horizontal,
+      ],
+      i * 3,
+    );
     starColor.set(['#daeaff', '#fff0d2', '#a8bcf4', '#ead6ff'][i % 4]);
     starColor.toArray(starColors, i * 3);
   }
@@ -1386,7 +1333,11 @@ export function createVoxelWorld(
     const x = -160 + random() * 560,
       spread = (random() + random() + random() - 1.5) * 20;
     nebulaPositions.set(
-      [x, 45 + Math.sin(x * 0.008) * 20 + spread, -185 + random() * 35],
+      [
+        50 + Math.cos(x * 0.014) * 255,
+        35 + Math.sin(x * 0.014) * 35 + spread,
+        Math.sin(x * 0.014) * 255,
+      ],
       i * 3,
     );
     starColor
@@ -1413,7 +1364,7 @@ export function createVoxelWorld(
   orbit.add(new THREE.Points(nebulaGeometry, nebulaMaterial));
   const earth = new THREE.Group();
   orbit.add(earth);
-  earth.position.set(-30, -15, -70);
+  earth.position.set(35, 44, 90);
   for (let a = -10; a <= 10; a++)
     for (let b = -10; b <= 10; b++)
       for (let c = -10; c <= 10; c++)
@@ -1431,7 +1382,7 @@ export function createVoxelWorld(
   for (let i = 0; i < 10; i++) {
     const cloud = new THREE.Group();
     const x = -45 + i * 22;
-    cloud.position.set(x, 14 + (i % 3) * 1.5, -82 - (i % 4) * 18);
+    cloud.position.set(x, 28 + (i % 3) * 2, -55 - (i % 4) * 12);
     cloud.userData.sky = true;
     land.add(cloud);
     clouds.push({ group: cloud, x });
@@ -1449,6 +1400,7 @@ export function createVoxelWorld(
   scene.add(skyBody);
   const sunMaterial = new THREE.MeshBasicMaterial({
     color: '#ffe6a0',
+    transparent: true,
     fog: false,
   });
   const sunDisc = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), sunMaterial);
@@ -1487,145 +1439,38 @@ export function createVoxelWorld(
         : ORBIT_ORIGIN[0] + (index === 9 ? LIBRARY_X : CONTACT_X);
     const y = index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0);
     const z = index < 4 ? 10 : ORBIT_ORIGIN[2] + 8;
-    if (index >= 9) {
-      const deck = new THREE.Group();
-      deck.position.set(baseX - 4, y, z - 1);
-      scene.add(deck);
-      for (let a = -6; a <= 7 + (elements.length - 1) * EXHIBIT_SPACING; a++)
-        // Road and curb already fill the front edge; duplicate floors flicker.
-        for (let b = 0; b <= 2; b++)
-          block(deck, a, -0.25, b, 'plank', 1, 0.5, 1);
-      for (let a = -6; a <= 7 + (elements.length - 1) * EXHIBIT_SPACING; a += 2)
-        block(deck, a, -0.8, 0, 'log', 0.6, 1, 5.5);
-    }
     return elements.map((element, leaf) => {
       const parent = element.parentNode!,
         next = element.nextSibling,
         oldStyle = element.getAttribute('style');
       element.classList.add('in-world-board');
+      element.dataset.chapter = String(index);
+      element.dataset.leaf = String(leaf);
       const terminal = index >= 4 && index < 9;
       const bay = terminal
         ? experienceBay(index - 4, journeyExperience.length)
         : null;
-      const scale = 0.011;
+      let scale = 0.011;
       const position = bay
         ? new THREE.Vector3(...bay.position)
         : new THREE.Vector3(baseX - 5 + leaf * EXHIBIT_SPACING, y + 5.4, z);
       const yaw = bay?.yaw ?? 0;
-      const frameGroup = new THREE.Group();
-      frameGroup.position.copy(position);
-      frameGroup.rotation.y = yaw;
-      scene.add(frameGroup);
-      const w = element.offsetWidth * scale;
-      const plate = part(
-        frameGroup,
-        0,
-        0,
-        -0.05,
-        terminal ? '#142a31' : '#e8e5d7',
-        w,
-        1,
-        0.06,
-      );
-      // An open stone-and-copper alcove: masonry below, a small canopy above,
-      // with the text inset in its wall instead of a freestanding giant board.
-      const wall = part(
-        frameGroup,
-        0,
-        0,
-        -0.2,
-        terminal ? 'dark' : 'iron',
-        w + 0.3,
-        1,
-        0.3,
-      );
-      const base = part(
-        frameGroup,
-        0,
-        0,
-        -0.75,
-        terminal ? 'oxidized' : 'cobble',
-        w + 0.5,
-        1,
-        terminal ? 1 : 1.5,
-      );
-      const canopy = part(
-        frameGroup,
-        0,
-        0,
-        0,
-        terminal ? 'copper' : index < 4 ? 'oxidized' : 'dark',
-        w + 0.9,
-        0.22,
-        2.5,
-      );
-      const sill = part(frameGroup, 0, 0, 0, 'copper', w + 0.5, 0.16, 0.6);
-      const columns = [-1, 1].map((side) =>
-        part(
-          frameGroup,
-          side * (w / 2 + 0.24),
-          0,
-          -0.25,
-          index < 4 ? 'log' : 'iron',
-          0.22,
-          1,
-          0.22,
-        ),
-      );
-      if (terminal) {
-        part(frameGroup, 0, -2.75, 0.35, 'oxidized', 3.2, 0.3, 1.2);
-        for (let key = -3; key <= 3; key++)
-          part(
-            frameGroup,
-            key * 0.28,
-            -2.55,
-            0.7,
-            key === 3 ? 'gold' : 'iron',
-            0.2,
-            0.08,
-            0.3,
-          );
-      }
       let measured = 0,
         measuredWidth = 0;
       const resizeFrame = () => {
         const height = element.offsetHeight,
           width = element.offsetWidth;
-        if (
-          !height ||
-          !width ||
-          (measured === height && measuredWidth === width)
-        )
-          return;
+        if (!height || !width) return;
+        scale =
+          terminal && read().mobile && host.clientWidth < host.clientHeight
+            ? 0.016
+            : 0.011;
         measured = height;
         measuredWidth = width;
-        const h = height * scale;
-        const w = width * scale;
-        wall.scale.y = h + 0.16;
-        wall.scale.x = w + 0.3;
-        plate.scale.y = h;
-        plate.scale.x = w;
-        base.scale.y = 0.65;
-        base.scale.x = w + 0.5;
-        base.position.y = -(terminal ? 4 : 5.4) + 0.325;
-        canopy.position.y = h / 2 + 0.18;
-        canopy.scale.x = w + 0.9;
-        canopy.scale.z = terminal
-          ? 0.6
-          : index === 2 && camera.aspect < 1
-            ? 5
-            : 2.5;
-        sill.position.y = -h / 2 - 0.04;
-        sill.scale.x = w + 0.5;
-        columns.forEach((column, i) => {
-          column.position.x = (i ? 1 : -1) * (w / 2 + 0.24);
-          const floor = terminal ? 4 : 5.4;
-          column.scale.y = floor + h / 2;
-          column.position.y = (h / 2 - floor) / 2;
-        });
       };
       resizeFrame();
       const object = new CSS3DObject(element);
+      position.y = y + 4.6 + (measured * scale) / 2;
       object.position.copy(position);
       object.rotation.y = yaw;
       object.scale.setScalar(scale);
@@ -1633,7 +1478,6 @@ export function createVoxelWorld(
       return {
         element,
         object,
-        frameGroup,
         parent,
         next,
         oldStyle,
@@ -1656,7 +1500,44 @@ export function createVoxelWorld(
   // Batch static voxels by parent and texture, leaving articulated objects separate.
   const dummy = new THREE.Object3D();
   const cloudMaterials: THREE.MeshBasicMaterial[] = [];
+  scene.updateMatrixWorld(true);
+  const worldBounds = new THREE.Box3();
+  for (const mesh of staticParts) {
+    if (mesh.userData.walkable) continue;
+    worldBounds.setFromObject(mesh);
+    if (
+      clearance.obstruction({
+        min: worldBounds.min.toArray() as [number, number, number],
+        max: worldBounds.max.toArray() as [number, number, number],
+      })
+    ) {
+      mesh.removeFromParent();
+      mesh.visible = false;
+      clearedBlocks++;
+    }
+  }
+  let auditedBlocks = 0;
   batches.forEach(({ parent, type, items }) => {
+    if (!parent.userData.sky) {
+      parent.updateWorldMatrix(true, false);
+      for (let i = items.length - 1; i >= 0; i--) {
+        const v = items[i];
+        worldBounds.min.set(v.x - v.w / 2, v.y - v.h / 2, v.z - v.d / 2);
+        worldBounds.max.set(v.x + v.w / 2, v.y + v.h / 2, v.z + v.d / 2);
+        worldBounds.applyMatrix4(parent.matrixWorld);
+        auditedBlocks++;
+        if (
+          clearance.obstruction({
+            min: worldBounds.min.toArray() as [number, number, number],
+            max: worldBounds.max.toArray() as [number, number, number],
+          })
+        ) {
+          items.splice(i, 1);
+          clearedBlocks++;
+        }
+      }
+    }
+    if (!items.length) return;
     const material = parent.userData.sky
       ? new THREE.MeshBasicMaterial({
           color: type,
@@ -1681,6 +1562,11 @@ export function createVoxelWorld(
     mesh.receiveShadow = true;
     mesh.computeBoundingSphere();
     parent.add(mesh);
+  });
+  host.dataset.clearance = JSON.stringify({
+    samples: clearance.samples,
+    auditedBlocks,
+    clearedBlocks,
   });
   const smokeMaterial = new THREE.MeshLambertMaterial({
     color: '#d9dfdf',
@@ -1840,10 +1726,15 @@ export function createVoxelWorld(
     // Measure the new responsive layout before fitting the camera, including
     // temporarily hidden pages, so a newly visible leaf cannot cause a zoom snap.
     if (layoutDirty)
-      boards.forEach(({ element, resizeFrame }) => {
+      boards.forEach(({ element, object, index, resizeFrame, readHeight }) => {
         const display = element.style.display;
         element.style.display = '';
         resizeFrame();
+        object.scale.setScalar(readHeight() / element.offsetHeight);
+        object.position.y =
+          (index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0)) +
+          4.6 +
+          readHeight() / 2;
         element.style.display = display;
       });
     layoutDirty = false;
@@ -1852,6 +1743,7 @@ export function createVoxelWorld(
     // buffer made the camera and reading frames trail behind each gesture.
     timeline = opts.timeline;
     const pose = journeyPose(timeline, journeyExperience.length);
+    host.dataset.timeline = timeline.toFixed(5);
     const portrait = opts.mobile && camera.aspect < 1;
     const terminalWidth = Math.max(
       ...roleBoards.map((page) => page.readWidth()),
@@ -1859,12 +1751,7 @@ export function createVoxelWorld(
     const terminalHeight = Math.max(
       ...roleBoards.map((page) => page.readHeight()),
     );
-    const roomFov = stationCameraFov(
-      camera.aspect,
-      terminalWidth,
-      terminalHeight,
-      portrait,
-    );
+    const roomFov = portrait ? 50 : 43;
     const targetFov = 43 + (roomFov - 43) * pose.stationView;
     if (camera.fov !== targetFov) {
       camera.fov = targetFov;
@@ -1874,11 +1761,7 @@ export function createVoxelWorld(
       const page = boards.find(
         (board) => board.index === 2 && board.leaf === i,
       )!;
-      stage.position.set(
-        portrait ? page.object.position.x : 70 + i * EXHIBIT_SPACING,
-        portrait ? page.object.position.y + page.readHeight() / 2 + 0.3 : 0,
-        portrait ? 9.5 : -5,
-      );
+      stage.position.set(page.object.position.x, 0, 10);
     });
     const trainX = pose.trainX,
       trainZ = routeZ(trainX),
@@ -1888,7 +1771,9 @@ export function createVoxelWorld(
     // Each carriage follows the track tangent rather than cutting across the bend.
     cars.forEach((car, i) => {
       const behind = trainX - i * 8;
-      car.position.z = routeZ(behind) - trainZ;
+      car.position
+        .set(behind - trainX, 0, routeZ(behind) - trainZ)
+        .applyAxisAngle(yAxis, -train.rotation.y);
       car.rotation.y = routeAngle(behind) - train.rotation.y;
     });
     if (cabDoor) cabDoor.position.x = -2.2 - pose.trainDoor * 0.85;
@@ -1901,7 +1786,7 @@ export function createVoxelWorld(
     pistonUpdates.forEach((update) => update(rotation));
     couplingRods.forEach((rod) => {
       rod.position.x = Math.cos(rotation) * 0.22;
-      rod.position.y = 0.75 + Math.sin(rotation) * 0.22;
+      rod.position.y = 0.975 + Math.sin(rotation) * 0.22;
     });
     smoke.forEach((p, i) => {
       const age = (time * 0.26 + i / 9) % 1;
@@ -2002,6 +1887,7 @@ export function createVoxelWorld(
     });
     launchRocket.position.set(...pose.rocket);
     launchRocket.rotation.z = pose.pitch;
+    launchRocket.rotation.y = pose.rocketYaw;
     const opening =
       timeline < 4
         ? easeBetween(3.3, 3.48, timeline) *
@@ -2011,7 +1897,14 @@ export function createVoxelWorld(
             (1 - easeBetween(4.08, 4.1, timeline))
           : 0;
     hatchPanels.forEach((hatch) => {
-      hatch.position.x = opening * 0.82;
+      hatch.position.x = opening * 1.3;
+    });
+    const cruise = (timeline - 3.8) / 0.11;
+    const acceleration = Math.sin(cruise * Math.PI * 2);
+    lateralJets.forEach(({ jet, side }) => {
+      jet.visible =
+        cruise > 0 && cruise < 1 && Math.sign(acceleration) === side;
+      jet.scale.setScalar(Math.sqrt(Math.abs(acceleration)));
     });
     flames.visible = pose.flight > 0.001;
     exhaust.forEach(({ mesh, angle, phase }) => {
@@ -2083,8 +1976,7 @@ export function createVoxelWorld(
         undefined,
       );
     const localPhase = pose.boardPhase;
-    const fittedReading =
-      opts.mobile && !opts.onboard && (timeline < 4 || timeline >= 4.9);
+    const fittedReading = !opts.onboard && (timeline < 4 || timeline >= 4.9);
     const desiredReadMode =
       opts.reading === null ? Number(fittedReading) : Number(opts.reading);
     readMode = direct
@@ -2113,7 +2005,7 @@ export function createVoxelWorld(
       // Follow the continuous world anchor rather than jumping to the next DOM page.
       const center = focus
         .clone()
-        .add(new THREE.Vector3(-5, floorOffset + 5.4, 10 - pose.space * 2));
+        .add(new THREE.Vector3(-5, floorOffset + 4.6, 10 - pose.space * 2));
       const page = approachingJournal
         ? 0
         : pose.exhibitOffset / EXHIBIT_SPACING;
@@ -2146,14 +2038,9 @@ export function createVoxelWorld(
         width = THREE.MathUtils.lerp(width, upcoming.readWidth(), blend);
       }
       const modelRoom =
-        portrait && host.clientHeight >= 700 && opts.reading !== true
-          ? pose.board === 2
-            ? 5.6 * (1 - easeBetween(0.56, 0.76, localPhase))
-            : pose.board === 1
-              ? 5.6 * easeBetween(0.72, 1, localPhase)
-              : 0
-          : 0;
-      center.y += modelRoom / 2;
+        opts.reading === true ? 1 : pose.board === 2 ? 4.6 : 3.2;
+      // Type occupies the upper part; the train or working mechanism occupies below.
+      center.y += height / 2 - modelRoom / 2;
       const fit = portrait ? 1.35 : 1.25;
       const distance = Math.max(
         ((height + modelRoom) /
@@ -2185,49 +2072,40 @@ export function createVoxelWorld(
       const radial = new THREE.Vector3(Math.sin(angle), 0, Math.cos(angle));
       const center = new THREE.Vector3(
         ORBIT_ORIGIN[0] + STATION_CENTER[0],
-        ORBIT_ORIGIN[1] + 7.5,
+        ORBIT_ORIGIN[1] + 3.5 + 4.6,
         ORBIT_ORIGIN[2] + STATION_CENTER[2],
       );
-      const interiorPosition = center
-        .clone()
-        .addScaledVector(radial, DISPLAY_RADIUS - distance);
-      interiorPosition.y += elevation * 0.08;
       const interiorLook = center
         .clone()
         .addScaledVector(radial, DISPLAY_RADIUS);
+      const interiorPosition = interiorLook
+        .clone()
+        .addScaledVector(
+          radial,
+          -Math.max(
+            22,
+            distance,
+            ((terminalHeight + 4.2) /
+              (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))) *
+              1.15,
+          ),
+        );
+      interiorPosition.y += 1.5 + elevation * 0.08;
       const phase = timeline - 4;
-      const approach = new THREE.Vector3(
-        ORBIT_ORIGIN[0] + 12,
-        ORBIT_ORIGIN[1] + 7.5,
-        ORBIT_ORIGIN[2] + 12,
-      );
-      const doorway = new THREE.Vector3(
-        ORBIT_ORIGIN[0] + 12,
-        ORBIT_ORIGIN[1] + 7.5,
-        ORBIT_ORIGIN[2] - 1,
-      );
-      const doorwayLook = center.clone();
-      if (phase < GALLERY_START) {
-        approach.lerp(doorway, easeBetween(0.16, 0.22, phase));
-        approach.lerp(
+      const approach = destination
+        .clone()
+        .lerp(
           interiorPosition,
-          easeBetween(0.22, GALLERY_START, phase),
+          easeBetween(0.16, GALLERY_START, phase) *
+            (1 - easeBetween(GALLERY_END, 0.9, phase)),
         );
-        doorwayLook.lerp(interiorLook, easeBetween(0.22, GALLERY_START, phase));
-      } else if (phase > GALLERY_END) {
-        approach.lerp(doorway, 1 - easeBetween(0.83, 0.9, phase));
-        approach.lerp(
-          interiorPosition,
-          1 - easeBetween(GALLERY_END, 0.83, phase),
-        );
-        doorwayLook.lerp(
+      const doorwayLook = look
+        .clone()
+        .lerp(
           interiorLook,
-          1 - easeBetween(GALLERY_END, 0.83, phase),
+          easeBetween(0.16, GALLERY_START, phase) *
+            (1 - easeBetween(GALLERY_END, 0.9, phase)),
         );
-      } else {
-        approach.copy(interiorPosition);
-        doorwayLook.copy(interiorLook);
-      }
       destination.lerp(approach, pose.stationView);
       look.lerp(doorwayLook, pose.stationView);
     }
@@ -2269,6 +2147,10 @@ export function createVoxelWorld(
     );
     destination.x += parallax.x * 0.28;
     destination.y -= parallax.y * 0.16;
+    const drift =
+      Math.sin(localPhase * Math.PI * 2) * 0.32 * (1 - pose.stationView);
+    destination.x += drift;
+    look.x += drift;
     camera.position.copy(destination);
     cameraRig.position.copy(camera.position);
     cameraRig.lookAt(look);
@@ -2301,17 +2183,18 @@ export function createVoxelWorld(
     sun.position.copy(focus).add(new THREE.Vector3(-24, 36, -80));
     sun.target.position.copy(focus);
     sun.target.updateMatrixWorld();
-    skyBody.position.copy(focus).add(new THREE.Vector3(-16, 15.5, -125));
+    skyBody.position.copy(focus).add(new THREE.Vector3(12, 34, -95));
     skyBody.quaternion.copy(camera.quaternion);
     sunMaterial.color.lerp(
       new THREE.Color(opts.night ? '#d8e4ed' : '#ffe6a0'),
       1 - Math.exp(-4 * dt),
     );
-    haloMaterial.opacity = (opts.night ? 0.035 : 0.08) * (1 - pose.space * 0.4);
+    sunMaterial.opacity = 1 - easeBetween(0.2, 0.95, pose.space);
+    haloMaterial.opacity = (opts.night ? 0.035 : 0.08) * (1 - pose.space);
     starMaterial.opacity = pose.space;
     nebulaMaterial.opacity = pose.space * 0.18;
-    // Fixed alcove walls scroll past the camera. Cull only outside its view so
-    // cards never swing, fade through their masonry, or disappear mid-frame.
+    // Only neighbouring annotations share the view; distant text cannot ghost
+    // through another chapter. Their physical props remain part of the world.
     camera.updateMatrixWorld();
     readingFrustum.setFromProjectionMatrix(
       viewProjection.multiplyMatrices(
@@ -2332,6 +2215,7 @@ export function createVoxelWorld(
           new THREE.Vector3(1, 1, 1),
         );
         pageBounds.applyMatrix4(pageMatrix);
+        const opacity = annotationOpacity(index, leaf, timeline, pose);
         const near =
           index === pose.board &&
           Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) < 2.5 &&
@@ -2344,12 +2228,11 @@ export function createVoxelWorld(
           camera.position.clone().sub(object.position).dot(normal) > 0 &&
           readingFrustum.intersectsBox(pageBounds) &&
           cameraMode < 0.9995 &&
-          (!(index >= 4 && index < 9) ||
-            (pose.stationView > 0.99 && timeline > 4.22 && timeline < 4.84));
-        const interactive = near && object.visible;
+          opacity > 0.002;
+        const interactive = near && object.visible && opacity > 0.2;
         element.inert = !interactive;
         element.setAttribute('aria-hidden', String(!interactive));
-        element.style.opacity = '1';
+        element.style.opacity = String(opacity);
         element.style.pointerEvents = interactive ? 'auto' : 'none';
         element.dataset.active = String(index === pose.board && interactive);
       },

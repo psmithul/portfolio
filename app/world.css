@@ -1949,3 +1949,216 @@ a:focus-visible {
     min-height: 56px;
   }
 }
+
+/* Chapters are typography in the landscape, rather than framed boards. */
+.train-journey .in-world-board {
+  padding: 12px 22px !important;
+  background: transparent;
+  color: #fff8df;
+  border: 0;
+  box-shadow: none;
+  text-shadow:
+    0 2px 2px #172d2ccc,
+    0 0 14px #172d2c99;
+}
+.train-journey .in-world-board h1,
+.train-journey .in-world-board h2 {
+  color: #fff9df;
+  font-size: 58px;
+  line-height: 1.06;
+  margin: 12px 0 22px;
+  text-shadow: 3px 4px 0 #223f38;
+}
+.train-journey .hero-copy.in-world-board h1 {
+  font-size: 76px;
+}
+.train-journey .in-world-board p,
+.train-journey
+  .hero-copy.in-world-board
+  > p:not(.world-eyebrow):not(.hero-statement):not(.world-board-hint) {
+  color: #f8f5e7;
+  font-size: 25px;
+  line-height: 1.46;
+}
+.train-journey .in-world-board .world-eyebrow {
+  color: #ffe3a6;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  border-left: 4px solid #edc57c;
+  padding-left: 12px;
+}
+.train-journey .in-world-board .hero-statement,
+.train-journey .in-world-board .experience-role {
+  color: #fff3cd;
+  font-size: 27px;
+}
+.train-journey .in-world-board .station-text-link,
+.train-journey .in-world-board .project-discipline,
+.train-journey .in-world-board .station-footnote,
+.train-journey .in-world-board .departure-note {
+  color: #fff4d6;
+}
+.train-journey .in-world-board .voxel-project-card {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  gap: 16px;
+}
+.train-journey .in-world-board .project-number {
+  color: #ffdd9b;
+  background: transparent;
+  font-size: 52px;
+  border: 0;
+  text-shadow: 2px 3px 0 #223f38;
+}
+.train-journey .in-world-board .voxel-project-card h3 {
+  color: #fff5d6;
+  font-size: 40px;
+}
+.train-journey .in-world-board .voxel-project-card p {
+  color: #f8f5e7;
+  font-size: 25px;
+}
+.train-journey .in-world-board .project-actions a,
+.train-journey .in-world-board .project-actions button {
+  color: #253f35;
+  background: #f4e7be;
+  border: 0;
+  padding: 12px 16px;
+  min-height: 48px;
+  text-shadow: none;
+}
+.train-journey .in-world-board .inventory {
+  color: #fff5dc;
+  background: #213e36cc;
+  border: 1px solid #c9d4b966;
+  padding: 12px 16px;
+}
+.train-journey .journey-portrait img {
+  background: transparent;
+  filter: drop-shadow(8px 9px 0 #263c3844);
+}
+.train-journey .journey-portrait blockquote {
+  color: #fff9de;
+  font-size: 29px;
+}
+.train-journey .in-world-board .journey-archive > a {
+  color: #fff5dc;
+  border: 0;
+  border-left: 3px solid #e9c08a;
+  background: #273e35bf;
+  padding: 18px;
+  margin-bottom: 10px;
+  text-shadow: none;
+}
+.train-journey .in-world-board .journey-archive h3 {
+  color: #fff6dd;
+}
+.train-journey .in-world-board .journey-archive > a > div > span,
+.train-journey .in-world-board .archive-index {
+  color: #dbcbaa;
+}
+.train-journey .experience-panel.in-world-board {
+  width: 560px !important;
+  padding: 12px 22px !important;
+  background: transparent;
+  border-left: 2px solid #95dbc266;
+  text-shadow: 0 2px 5px #07172be6;
+}
+.train-journey .experience-panel.in-world-board h2 {
+  color: #fff1c5;
+  font-size: 47px;
+}
+.train-journey .experience-panel.in-world-board p {
+  color: #eff9f3;
+  font-size: 25px;
+}
+.train-journey .experience-panel.in-world-board .world-eyebrow {
+  color: #aee5d1;
+  border-color: #aee5d1;
+}
+.train-journey .experience-panel.in-world-board .experience-role {
+  color: #efcd91;
+}
+.train-journey .experience-panel.in-world-board .project-discipline {
+  color: #b4d4cd;
+}
+.train-journey .experience-panel.in-world-board .planet-selector button {
+  background: #15343ccc;
+  border: 1px solid #88b3ac;
+  text-shadow: none;
+}
+.train-journey .in-world-board .station-posts > a {
+  color: #fff5d7;
+  background: #201e40a6;
+  border: 0;
+  border-left: 3px solid #d3bfed;
+  padding: 16px;
+  margin-bottom: 10px;
+}
+.train-journey .in-world-board .station-posts h3,
+.train-journey .in-world-board .station-posts span,
+.train-journey .in-world-board .contact-email,
+.train-journey .in-world-board .contact-socials a {
+  color: #fff4da;
+}
+.journey-thread {
+  --journey-progress: 0;
+  position: fixed;
+  z-index: 42;
+  left: 4.5%;
+  right: 4.5%;
+  bottom: 22px;
+  height: 2px;
+  background: #f6f1dc40;
+  pointer-events: none;
+}
+.journey-thread-fill {
+  position: absolute;
+  inset: 0;
+  background: #f3d497;
+  transform: scaleX(var(--journey-progress));
+  transform-origin: left;
+}
+.journey-thread-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #fff1c6;
+  top: -3px;
+  left: calc(var(--journey-progress) * 100%);
+  box-shadow: 0 0 14px #eec683;
+}
+.world-unavailable .journey-thread {
+  display: none;
+}
+@media (max-width: 800px) and (orientation: portrait) {
+  .train-journey .in-world-board {
+    width: 480px !important;
+    padding: 12px 22px !important;
+  }
+  .train-journey .hero-copy.in-world-board h1 {
+    font-size: 62px;
+  }
+  .train-journey .in-world-board h2 {
+    font-size: 46px;
+  }
+  .train-journey .experience-panel.in-world-board {
+    width: 480px !important;
+  }
+  .train-journey .experience-panel.in-world-board h2 {
+    font-size: 42px;
+  }
+  .journey-thread {
+    bottom: 76px;
+    left: 18px;
+    right: 18px;
+  }
+}
+@media (max-width: 800px) and (orientation: portrait) {
+  .train-journey .experience-panel.in-world-board .planet-selector button {
+    min-width: 74px;
+    min-height: 74px;
+    padding: 8px;
+  }
+}

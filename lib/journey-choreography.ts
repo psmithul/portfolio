@@ -26,6 +26,15 @@ export function experienceBay(index: number, count = 5) {
       ORBIT_ORIGIN[1] + STATION_CENTER[1] + 4,
       ORBIT_ORIGIN[2] + STATION_CENTER[2] + Math.cos(angle) * DISPLAY_RADIUS,
     ] as Point,
+    instrument: [
+      ORBIT_ORIGIN[0] +
+        STATION_CENTER[0] +
+        Math.sin(angle) * (DISPLAY_RADIUS - 1),
+      ORBIT_ORIGIN[1] + STATION_CENTER[1],
+      ORBIT_ORIGIN[2] +
+        STATION_CENTER[2] +
+        Math.cos(angle) * (DISPLAY_RADIUS - 1),
+    ] as Point,
     yaw: angle + Math.PI,
   };
 }
@@ -38,7 +47,7 @@ export function trainCab(x: number): Point {
   const angle = railAngle(x);
   return [
     x - 2.2 * Math.cos(angle) + 0.4 * Math.sin(angle),
-    1.48,
+    1.56,
     railZ(x) + 2.2 * Math.sin(angle) + 0.4 * Math.cos(angle),
   ];
 }
@@ -100,14 +109,12 @@ export function stationEntryPath(): Point[] {
   return [
     orbitPoint(18, 4.4, 4.5),
     orbitPoint(18, 4.75, 4.5),
-    orbitPoint(18, 4.75, 6.5),
-    orbitPoint(18, 4.75, 6.95),
-    orbitPoint(18, 4.08, 6.95),
-    orbitPoint(18, 3.5, 6.95),
-    orbitPoint(14.5, 3.5, 6.95),
-    orbitPoint(14.5, 3.5, 3.4),
-    orbitPoint(12, 3.5, 3.4),
-    orbitPoint(12, 3.5, -3),
+    orbitPoint(18, 4.75, 6.6),
+    orbitPoint(18, 3.5, 8.4),
+    orbitPoint(14.5, 3.5, 8.4),
+    orbitPoint(14.5, 3.5, 0.5),
+    orbitPoint(19.5, 3.5, 0.5),
+    orbitPoint(19.5, 3.5, -4.5),
     circlePoint(GALLERY_ANGLE),
   ];
 }
@@ -128,7 +135,7 @@ export function journeyPose(timeline: number, count = 5) {
   const cab = trainCab(trainX);
   let avatar = cab,
     avatarVisible = true;
-  let rocket: Point = [112, 0.9 - ROCKET_FOOT, 6];
+  let rocket: Point = [122, 0.9 - ROCKET_FOOT, 6];
   let rover: Point = [
     ORBIT_ORIGIN[0] + 6,
     ORBIT_ORIGIN[1] + 3.5,
@@ -141,6 +148,7 @@ export function journeyPose(timeline: number, count = 5) {
   let focus: Point = [trainX, 0, 0];
   let flight = 0,
     pitch = 0,
+    rocketYaw = 0,
     board = stop,
     boardPhase = phase,
     walking = false,
@@ -153,15 +161,16 @@ export function journeyPose(timeline: number, count = 5) {
     transit = chapter === 0 ? easeBetween(0.28, 0.45, phase) : gallery.transit;
   }
   if (t >= 3 && t < 4) {
-    const hatch: Point = [112, 0.9, 7.45];
+    const hatch: Point = [122, 0.9, 7.9];
     // Only leave after the last archive card, on the gangway beside the launch pad.
     avatar = walkPath(
       [
         cab,
-        [cab[0], 1.48, railZ(trainX) + 1.7],
+        [cab[0], 1.56, railZ(trainX) + 1.7],
         [cab[0], 0.9, 4.15],
         hatch,
-        [112, 1.15, 6.55],
+        [122, 1.15, 7.65],
+        [122, 1.15, 6.55],
       ],
       easeBetween(3.32, 3.64, t),
     );
@@ -169,11 +178,20 @@ export function journeyPose(timeline: number, count = 5) {
     walking = t > 3.32 && t < 3.64;
     trainDoor = easeBetween(3.3, 3.32, t) * (1 - easeBetween(3.5, 3.56, t));
     const launch = easeBetween(3.68, 4, t);
-    rocket = blend(rocket, dock(0), launch);
-    rocket[1] += Math.sin(Math.PI * launch) * 18;
+    // Rise vertically above the complete lunar foundation before translating.
+    // Separate burns also make reverse scrolling follow the same clear corridor.
+    const high: Point = [122, 118, 6];
+    const overhead: Point = [dock()[0], 118, dock()[2]];
+    rocket =
+      t < 3.8
+        ? blend(rocket, high, easeBetween(3.68, 3.8, t))
+        : t < 3.91
+          ? blend(high, overhead, easeBetween(3.8, 3.91, t))
+          : blend(overhead, dock(), easeBetween(3.91, 4, t));
     flight = Math.sin(Math.PI * launch);
-    pitch = -Math.sin(Math.PI * launch) * 0.16;
-    focus = blend([trainX, 0, 0], [112, 0, 6], easeBetween(3.4, 3.68, t));
+    pitch = 0;
+    rocketYaw = Math.PI * easeBetween(3.91, 3.965, t);
+    focus = blend([trainX, 0, 0], [122, 0, 6], easeBetween(3.4, 3.68, t));
     focus[0] = mix(focus[0], ORBIT_ORIGIN[0], launch);
     focus[2] = mix(focus[2], ORBIT_ORIGIN[2], launch);
     focus[1] =
@@ -183,6 +201,7 @@ export function journeyPose(timeline: number, count = 5) {
   }
   if (t >= 4) {
     rocket = dock();
+    rocketYaw = Math.PI;
     if (chapter === 4) {
       const local =
         clamp((phase - GALLERY_START) / (GALLERY_END - GALLERY_START)) * count;
@@ -199,12 +218,11 @@ export function journeyPose(timeline: number, count = 5) {
       rover = orbitPoint(roverX, lunarFloor(roverX), 4.5);
       const seat = roverSeat(rover);
       const landingPath: Point[] = [
-        [rocket[0], rocket[1] + 1, rocket[2] + 1.45],
-        orbitPoint(6, 3.5, 11.6),
-        orbitPoint(6, 3.5, 6.95),
-        orbitPoint(6, 4.08, 6.95),
-        orbitPoint(6, 4.75, 6.95),
-        orbitPoint(6, 4.75, 6.5),
+        [rocket[0], rocket[1] + 0.725, rocket[2] - 1.45],
+        [rocket[0], rocket[1] + 0.725, rocket[2] - 1.65],
+        [rocket[0], rocket[1] + 0.475, rocket[2] - 1.9],
+        orbitPoint(6, 3.5, 8.4),
+        orbitPoint(6, 4.75, 6.6),
         orbitPoint(6, 4.75, 4.5),
         orbitPoint(6, 4.4, 4.5),
       ];
@@ -291,6 +309,7 @@ export function journeyPose(timeline: number, count = 5) {
     focus,
     flight,
     pitch,
+    rocketYaw,
     board,
     boardPhase,
     exhibitOffset: gallery.offset,

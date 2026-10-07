@@ -56,3 +56,12 @@ export function createJourneyTour(experienceCount: number) {
     },
   };
 }
+
+/** Navigation lands at the first readable composition, never in its arrival sequence. */
+export function chapterEntryTimeline(chapter: number, count = 5) {
+  return (
+    journeyTourStops(count).find(
+      (stop) => Math.floor(stop.timeline) === chapter,
+    )?.timeline ?? chapter
+  );
+}

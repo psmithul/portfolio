@@ -1,5 +1,7 @@
 'use client';
 
+import { chapterEntryTimeline } from '@/lib/journey-tour';
+
 // Document navigation ends the scene's scroll controller before opening a
 // reading page, so the journey position cannot overwrite its initial scroll.
 /* oxlint-disable next/no-html-link-for-pages */
@@ -38,7 +40,7 @@ import {
   stations,
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
-import { journeyPosition } from '@/lib/journey-timeline';
+import { journeyPosition, journeyOffset } from '@/lib/journey-timeline';
 import { experienceReadingPhase } from '@/lib/journey-choreography';
 import { createJourneyScroll, type JourneyScroll } from '@/lib/journey-scroll';
 import type { JournalSummary } from '@/lib/journal-editorial';
@@ -90,6 +92,7 @@ export function TrainJourney({
   const planetRefs = useRef<(HTMLElement | null)[]>([]);
   const sceneAction = useRef<(action: WorldAction) => void>(() => {});
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const progressLine = useRef<HTMLDivElement | null>(null);
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [tourPlaying, setTourPlaying] = useState(false);
@@ -171,6 +174,10 @@ export function TrainJourney({
       world.current.stop = position.stop;
       world.current.experience = position.experience;
       setActive(position.stop);
+      progressLine.current?.style.setProperty(
+        '--journey-progress',
+        String(Math.min(1, (position.stop + position.phase) / 6)),
+      );
     }
     publishPosition.current = update;
     function measure() {
@@ -220,8 +227,12 @@ export function TrainJourney({
       );
       scroll.current.jump(
         index >= 0
-          ? (sectionRefs.current[index]?.offsetTop ?? 0)
-          : window.scrollY,
+          ? journeyOffset(
+              { stop: index, phase: chapterEntryTimeline(index) - index },
+              sectionRefs.current.map((el) => el?.offsetTop ?? 0),
+              host.current?.clientHeight || window.innerHeight,
+            )
+          : 0,
       );
     }
     return () => {
@@ -245,7 +256,15 @@ export function TrainJourney({
 
   function travelTo(element: HTMLElement | null | undefined) {
     if (!element) return;
-    const y = element.getBoundingClientRect().top + window.scrollY;
+    const chapter = sectionRefs.current.indexOf(element);
+    const y =
+      chapter >= 0
+        ? journeyOffset(
+            { stop: chapter, phase: chapterEntryTimeline(chapter) - chapter },
+            sectionRefs.current.map((el) => el?.offsetTop ?? 0),
+            host.current?.clientHeight || window.innerHeight,
+          )
+        : element.getBoundingClientRect().top + window.scrollY;
     if (scroll.current) scroll.current.jump(y);
     else window.scrollTo({ top: y, behavior: 'smooth' });
   }
@@ -404,6 +423,10 @@ export function TrainJourney({
       />
       <div className="voxel-canvas" ref={host} />
       <div className="world-atmosphere" aria-hidden="true" />
+      <div className="journey-thread" ref={progressLine} aria-hidden="true">
+        <span className="journey-thread-fill" />
+        <span className="journey-thread-marker" />
+      </div>
       {!ready && !unavailable && (
         <div className="world-loading">
           <TrainFront size={16} /> Loading the railway…
@@ -428,7 +451,7 @@ export function TrainJourney({
           <TrainFront size={28} aria-hidden="true" />
           <h2 id="journey-start-title">How would you like to travel?</h2>
           <p id="journey-start-copy">
-            Swipe or scroll between stops, or let the train take you there
+            Scroll through the journey at your own pace, or let it unfold
             automatically.
           </p>
           <button
@@ -436,12 +459,12 @@ export function TrainJourney({
             onClick={() => chooseTour(false)}
             className="journey-start-manual"
           >
-            Snap scroll <ChevronRight size={18} />
+            Explore the journey <ChevronRight size={18} />
             <small>You set the pace · default</small>
           </button>
           <button data-tour-control="" onClick={() => chooseTour(true)}>
             <Play size={16} /> Automatic tour
-            <small>Pauses at every reading stop</small>
+            <small>Time to read every chapter</small>
           </button>
         </dialog>
       )}
@@ -452,7 +475,7 @@ export function TrainJourney({
               data-tour-control=""
               onClick={() => scroll.current?.skip(-1)}
               disabled={!ready || unavailable || active === 0}
-              aria-label="Previous reading stop"
+              aria-label="Previous page"
             >
               <ChevronLeft size={18} />
             </button>
@@ -475,7 +498,7 @@ export function TrainJourney({
               data-tour-control=""
               onClick={() => scroll.current?.skip(1)}
               disabled={!ready || unavailable || active === 6}
-              aria-label="Next reading stop"
+              aria-label="Next page"
             >
               <ChevronRight size={18} />
             </button>
@@ -504,10 +527,10 @@ export function TrainJourney({
               disabled={!ready || unavailable}
               aria-pressed={Boolean(reading)}
               aria-label={
-                reading ? 'Return to the world' : 'Read this station up close'
+                reading ? 'Return to the world' : 'Read this chapter up close'
               }
               title={
-                reading ? 'Return to the world' : 'Read this station up close'
+                reading ? 'Return to the world' : 'Read this chapter up close'
               }
             >
               <BookOpen size={16} />
@@ -589,7 +612,7 @@ export function TrainJourney({
             {mobile
               ? tourPlaying
                 ? 'Auto tour · swipe to pause · tap to explore'
-                : 'Swipe between stops · Play for an automatic tour'
+                : 'Swipe to travel · Play for an automatic tour'
               : 'Scroll to travel · drag to look around'}
           </p>
         </div>
@@ -794,7 +817,7 @@ export function TrainJourney({
                   Internship case study <ArrowUpRight size={15} />
                 </a>
               )}
-              <nav className="planet-selector" aria-label="Experience stops">
+              <nav className="planet-selector" aria-label="Experience chapters">
                 {journeyExperience.map((p, i) => (
                   <button
                     key={p.company}
@@ -921,13 +944,13 @@ export function TrainJourney({
         </article>
       </section>
 
-      <nav className="journey-navigation" aria-label="Seven stops">
+      <nav className="journey-navigation" aria-label="Journey chapters">
         {stations.map((stop, index) => (
           <button
             key={stop.id}
             onClick={() => go(index)}
             aria-current={active === index ? 'step' : undefined}
-            aria-label={'Stop ' + (index + 1) + ': ' + stop.name}
+            aria-label={'Chapter ' + (index + 1) + ': ' + stop.name}
             title={stop.name}
           >
             <span />
