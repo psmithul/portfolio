@@ -1,7 +1,10 @@
 'use client';
 
+// Document navigation ends the scene's scroll controller before opening a
+// reading page, so the journey position cannot overwrite its initial scroll.
+/* oxlint-disable next/no-html-link-for-pages */
+
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {
@@ -510,9 +513,9 @@ export function TrainJourney({
             <div className="inventory">
               <span>SolidWorks · ANSYS · MATLAB · Python · C / C++</span>
             </div>
-            <Link className="station-text-link" href="/about">
+            <a className="station-text-link" href="/about">
               Background & experience <ArrowUpRight size={15} />
-            </Link>
+            </a>
           </div>
         </article>
       </section>
@@ -552,12 +555,12 @@ export function TrainJourney({
                     >
                       Explore model <Box size={13} />
                     </button>
-                    <Link
+                    <a
                       href={'/work/' + project.slug}
                       aria-label={'Read ' + project.title}
                     >
                       Case study <ArrowUpRight size={13} />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -592,7 +595,7 @@ export function TrainJourney({
               )}
               <div className="journey-archive">
                 {archive.slice(page * 3, page * 3 + 3).map((project, index) => (
-                  <Link href={'/work/' + project.slug} key={project.slug}>
+                  <a href={'/work/' + project.slug} key={project.slug}>
                     <span className="archive-index">
                       {String(page * 3 + index + 1).padStart(2, '0')}
                     </span>
@@ -603,7 +606,7 @@ export function TrainJourney({
                       </span>
                     </div>
                     <ArrowUpRight size={15} />
-                  </Link>
+                  </a>
                 ))}
               </div>
               {page === 2 && (
@@ -649,9 +652,9 @@ export function TrainJourney({
               </span>
               <p>{item.description}</p>
               {'href' in item && (
-                <Link className="station-text-link" href={item.href}>
+                <a className="station-text-link" href={item.href}>
                   Internship case study <ArrowUpRight size={15} />
-                </Link>
+                </a>
               )}
               <nav className="planet-selector" aria-label="Experience stops">
                 {journeyExperience.map((p, i) => (
@@ -669,9 +672,9 @@ export function TrainJourney({
                 ))}
               </nav>
               {index === journeyExperience.length - 1 && (
-                <Link className="station-text-link" href="/about">
+                <a className="station-text-link" href="/about">
                   Full background & leadership <ArrowUpRight size={15} />
-                </Link>
+                </a>
               )}
             </div>
           </article>
@@ -701,7 +704,7 @@ export function TrainJourney({
               )}
               <div className="station-posts">
                 {posts.slice(page * 2, page * 2 + 2).map((post) => (
-                  <Link key={post.slug} href={'/blog/' + post.slug}>
+                  <a key={post.slug} href={'/blog/' + post.slug}>
                     <div>
                       <span>
                         {post.category} · {post.readingMinutes} min
@@ -709,14 +712,14 @@ export function TrainJourney({
                       <h3>{post.title}</h3>
                     </div>
                     <ArrowUpRight size={16} />
-                  </Link>
+                  </a>
                 ))}
               </div>
               {page === 1 && (
-                <Link href="/blog" className="station-text-link">
+                <a href="/blog" className="station-text-link">
                   All my notes <BookOpen size={16} />
                   <ArrowRight size={15} />
-                </Link>
+                </a>
               )}
             </div>
           ))}
@@ -774,9 +777,9 @@ export function TrainJourney({
           <button className="station-text-link" onClick={() => go(0)}>
             Back to the railway <RotateCcw size={15} />
           </button>
-          <Link className="writing-desk-link" href="/write">
+          <a className="writing-desk-link" href="/write">
             Writing desk
-          </Link>
+          </a>
         </article>
       </section>
 
@@ -858,9 +861,9 @@ export function TrainJourney({
             />
             <div className="workshop-dialog-foot">
               <p>{selectedProject.question}</p>
-              <Link href={'/work/' + selectedProject.slug}>
+              <a href={'/work/' + selectedProject.slug}>
                 Read the case study <ArrowUpRight size={16} />
-              </Link>
+              </a>
             </div>
           </section>
         </dialog>
