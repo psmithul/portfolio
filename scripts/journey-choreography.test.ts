@@ -12,7 +12,13 @@ import {
   dock,
   lunarFloor,
   type Point,
-  PLANET_SPACING,
+  STATION_CENTER,
+  GALLERY_RADIUS,
+  GALLERY_START,
+  GALLERY_END,
+  experienceReadingPhase,
+  experienceBay,
+  LIBRARY_X,
   ARCHIVE_TRAIN_X,
   trainCab,
   roverSeat,
@@ -39,27 +45,21 @@ void test('camera, train and rocket remain continuous through every chapter and 
     );
   }
 });
-void test('the rocket docks once and the rover connects the orbital workplaces', () => {
-  for (let i = 0; i < 5; i++) {
-    const pose = journeyPose(4 + i / 5);
-    assert.ok(distance(pose.rocket, dock(0)) < 1e-6);
-    assert.equal(pose.flight, 0);
-    assert.equal(pose.pitch, 0);
-    assert.ok(Math.abs(pose.rover[0] - 112 - i * PLANET_SPACING - 6) < 1e-8);
-    assert.ok(
-      Math.abs(pose.rocket[2] - pose.rover[2]) > 6,
-      'landing bay is separate from the rover road',
-    );
-  }
+void test('the rocket docks outside once and the rover follows a continuous road', () => {
   for (let t = 4; t < 6.99; t += 0.001) {
     const pose = journeyPose(t);
+    assert.ok(distance(pose.rocket, dock()) < 1e-6);
+    assert.equal(pose.flight, 0);
+    assert.equal(pose.pitch, 0);
     assert.ok(
       Math.abs(pose.rover[1] - 80 - lunarFloor(pose.rover[0] - 112)) < 1e-8,
     );
     assert.equal(pose.rover[2], -7.5);
+    assert.ok(Math.abs(pose.rocket[2] - pose.rover[2]) > 6);
     if (pose.seated)
       assert.ok(distance(pose.avatar, roverSeat(pose.rover)) < 1e-8);
   }
+  assert.equal(journeyPose(5).rover[0], 112 + LIBRARY_X + 6);
 });
 void test('visible walking has no jumps and the character boards before launch', () => {
   for (let t = 0.001; t < 6.9; t += 0.001) {
@@ -91,17 +91,18 @@ void test('motion response is identical at 30, 60 and 144 Hz and is reversible',
   assert.ok(x < 1e-8);
 });
 
-void test('navigation settles at the new workplace rather than remaining just before its boundary', () => {
+void test('role navigation settles at the matching gallery bay at every refresh rate', () => {
   for (const fps of [30, 60, 144])
     for (let i = 0; i < 5; i++) {
-      const target = 4 + i / 5;
+      const target = 4 + experienceReadingPhase(i);
       let timeline = target - 0.15;
       for (let frame = 0; frame < fps * 6; frame++)
         timeline = smoothTimeline(timeline, target, 1 / fps);
       assert.equal(timeline, target);
       const pose = journeyPose(timeline);
       assert.equal(pose.board, 4 + i);
-      assert.ok(pose.boardPhase < 1e-8);
+      assert.ok(Math.abs(pose.boardPhase - 0.3) < 1e-8);
+      assert.ok(distance(pose.display, experienceBay(i).position) < 1e-8);
     }
 });
 
@@ -130,47 +131,90 @@ void test('the rocket transfer uses the final gangway and never crosses the arch
   assert.ok(walked < 12, 'a single short boarding walk');
 });
 
-void test('one landing transfer clears the rover wheels; all later roles are viewed from its seat', () => {
-  for (let t = 4.005; t < 4.048; t += 0.0001) {
+void test('boarding, entry and exit clear the rover tyres and cabin roof', () => {
+  for (let t = 4.012; t < 5; t += 0.0001) {
     const pose = journeyPose(t);
-    const z = pose.avatar[2] - pose.rover[2];
-    assert.ok(pose.avatar[1] >= 83.5);
-    if (
-      Math.abs(pose.avatar[0] - pose.rover[0]) < 0.5 &&
-      z > 0.7 &&
-      z < 1.93 &&
-      !pose.seated
-    )
+    if (pose.seated) continue;
+    const x = Math.abs(pose.avatar[0] - pose.rover[0]);
+    const z = Math.abs(pose.avatar[2] - pose.rover[2]);
+    if (x < 0.6 && z < 1.93 && z > 0.7)
       assert.ok(
         pose.avatar[1] - pose.rover[1] > 1.15,
-        'entry passes above the tyre',
+        'entry is above the tyres',
       );
-    assert.ok(
-      pose.avatar[1] - pose.rover[1] + 2.25 < 3.675,
-      'head clears the cabin roof',
-    );
-  }
-  for (let t = 4.05; t < 6.999; t += 0.001) {
-    const pose = journeyPose(t);
-    assert.equal(pose.walking, false);
-    assert.equal(pose.seated, true);
-    assert.ok(distance(pose.avatar, roverSeat(pose.rover)) < 1e-8);
-    assert.ok(
-      pose.avatar[2] + 0.5 < pose.display[2] - 0.35,
-      'passenger clears the alcove wall',
-    );
+    if (x < 1 && z < 1)
+      assert.ok(
+        pose.avatar[1] - pose.rover[1] + 2.25 < 3.675,
+        'head clears roof',
+      );
+    if (
+      pose.avatar[1] < pose.rover[1] + 1.15 &&
+      !(x < 0.6 && z < 0.5 && pose.seating > 0)
+    )
+      assert.ok(
+        x > 3.1 || z > 2.1,
+        'standing visitor is outside the vehicle envelope',
+      );
   }
 });
 
-void test('experience travel is compact and includes no repeat disembarking or boarding', () => {
-  assert.ok(PLANET_SPACING <= 20);
+void test('the rover parks for a single circular visit with every role in its own bay', () => {
+  for (let phase = 0.16; phase < 0.9; phase += 0.0001) {
+    const pose = journeyPose(4 + phase);
+    assert.equal(pose.rover[0], 130);
+    assert.equal(pose.rover[1], 83.5);
+  }
   for (let role = 0; role < 5; role++) {
-    const reading = journeyPose(4 + (role + 0.3) / 5);
+    const reading = journeyPose(4 + experienceReadingPhase(role));
     assert.equal(reading.board, 4 + role);
-    assert.equal(reading.seated, true);
-    const departing = journeyPose(4 + (role + 0.7) / 5);
-    assert.ok(departing.rover[0] > reading.rover[0]);
-    assert.equal(departing.walking, false);
+    assert.equal(reading.inspecting, true);
+    assert.equal(reading.seated, false);
+    assert.equal(reading.avatar[1], 83.5);
+    assert.ok(
+      Math.abs(
+        Math.hypot(
+          reading.avatar[0] - 112 - STATION_CENTER[0],
+          reading.avatar[2] + 12 - STATION_CENTER[2],
+        ) - GALLERY_RADIUS,
+      ) < 1e-8,
+    );
+    assert.ok(
+      distance(reading.avatar, reading.display) > 5,
+      'visitor clears the terminal',
+    );
+  }
+  const first = journeyPose(4 + GALLERY_START);
+  const end = journeyPose(4 + GALLERY_END);
+  assert.ok(
+    distance(first.avatar, end.avatar) < 1e-8,
+    'one complete circle joins the exit path',
+  );
+  assert.equal(journeyPose(4.9).seated, true, 'boards before rover departs');
+});
+
+void test('all station phase and role boundaries are continuous for actors and camera', () => {
+  const boundaries = [
+    4.007,
+    4.1,
+    4.16,
+    4.25,
+    4.79,
+    4.83,
+    4.9,
+    5,
+    ...Array.from(
+      { length: 4 },
+      (_, i) =>
+        4 + GALLERY_START + ((i + 1) * (GALLERY_END - GALLERY_START)) / 5,
+    ),
+  ];
+  for (const t of boundaries) {
+    const a = journeyPose(t - 1e-7),
+      b = journeyPose(t + 1e-7);
+    for (const key of ['avatar', 'focus', 'rocket', 'rover'] as const)
+      assert.ok(distance(a[key], b[key]) < 0.001, `${key} at ${t}`);
+    assert.ok(Math.abs(a.galleryAngle - b.galleryAngle) < 0.001 || t === 5);
+    assert.ok(Math.abs(a.stationView - b.stationView) < 0.001);
   }
 });
 
