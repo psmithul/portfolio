@@ -74,11 +74,14 @@ export function createVoxelWorld(
     spaceColor = new THREE.Color('#070b21');
   scene.background = sky.clone();
   scene.fog = new THREE.Fog(sky, 90, 205);
+  const phone =
+    Math.min(window.innerWidth, window.innerHeight) <= 800 &&
+    Math.max(window.innerWidth, window.innerHeight) <= 1200;
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
     powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(phone ? 1 : Math.min(window.devicePixelRatio, 1.5));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -191,7 +194,7 @@ export function createVoxelWorld(
   scene.add(hemi);
   const sun = new THREE.DirectionalLight('#fff0ce', 1.45);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.mapSize.set(phone ? 1024 : 2048, phone ? 1024 : 2048);
   Object.assign(sun.shadow.camera, {
     left: -32,
     right: 32,
@@ -1711,7 +1714,7 @@ export function createVoxelWorld(
     sampleFrames = 0,
     sampleTime = 0,
     layoutDirty = true,
-    layoutWidth = 0;
+    layoutMobile = read().mobile;
   const lastAvatar = new THREE.Vector3(),
     avatarVelocity = new THREE.Vector3();
   const destination = new THREE.Vector3(),
@@ -1738,6 +1741,13 @@ export function createVoxelWorld(
   };
   const observer = new ResizeObserver(resize);
   observer.observe(host);
+  const pageObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.contentRect.width || !entry.contentRect.height) continue;
+      boards.find((board) => board.element === entry.target)?.resizeFrame();
+    }
+  });
+  boards.forEach(({ element }) => pageObserver.observe(element));
   resize();
   function pick(e: PointerEvent) {
     const rect = renderer.domElement.getBoundingClientRect();
@@ -1760,7 +1770,7 @@ export function createVoxelWorld(
   let pointerType = 'mouse';
   const down = (e: PointerEvent) => {
     pointerType = e.pointerType;
-    dragging = e.pointerType === 'mouse';
+    dragging = e.pointerType === 'mouse' && !read().mobile;
     dragDistance = 0;
     px = e.clientX;
     py = e.clientY;
@@ -1768,7 +1778,7 @@ export function createVoxelWorld(
   };
   const move = (e: PointerEvent) => {
     if (!dragging) {
-      if (pointerType !== 'mouse') {
+      if (pointerType !== 'mouse' || read().mobile) {
         dragDistance += Math.abs(e.clientX - px) + Math.abs(e.clientY - py);
         px = e.clientX;
         py = e.clientY;
@@ -1806,7 +1816,7 @@ export function createVoxelWorld(
   renderer.domElement.addEventListener('webglcontextlost', lost);
   document.addEventListener('visibilitychange', visibility);
   const pointerParallax = (e: PointerEvent) => {
-    if (e.pointerType !== 'mouse') return;
+    if (e.pointerType !== 'mouse' || read().mobile) return;
     mouse.set(
       (e.clientX / window.innerWidth - 0.5) * 2,
       (e.clientY / window.innerHeight - 0.5) * 2,
@@ -1825,17 +1835,17 @@ export function createVoxelWorld(
       sampleFrames = sampleTime = 0;
     }
     const opts = read();
-    const pageWidth = parseFloat(getComputedStyle(boards[0].element).width);
-    if (pageWidth !== layoutWidth) layoutDirty = true;
-    layoutWidth = pageWidth;
+    if (layoutMobile !== opts.mobile) layoutDirty = true;
+    layoutMobile = opts.mobile;
     // Measure the new responsive layout before fitting the camera, including
     // temporarily hidden pages, so a newly visible leaf cannot cause a zoom snap.
-    boards.forEach(({ element, resizeFrame }) => {
-      const display = element.style.display;
-      if (layoutDirty) element.style.display = '';
-      resizeFrame();
-      if (layoutDirty) element.style.display = display;
-    });
+    if (layoutDirty)
+      boards.forEach(({ element, resizeFrame }) => {
+        const display = element.style.display;
+        element.style.display = '';
+        resizeFrame();
+        element.style.display = display;
+      });
     layoutDirty = false;
     if (!opts.reducedMotion) time += dt;
     timeline = opts.reducedMotion
@@ -2028,7 +2038,7 @@ export function createVoxelWorld(
     });
     engineLight.intensity = pose.flight * 12;
     const focus = new THREE.Vector3(...pose.focus);
-    const smallScreen = window.innerHeight < 550;
+    const smallScreen = host.clientHeight < 550;
     // Narrow landscape screens get a wider view; both renderers share this projection.
     const spread =
       22 /
@@ -2073,16 +2083,7 @@ export function createVoxelWorld(
       );
     const localPhase = pose.boardPhase;
     const fittedReading =
-      opts.mobile &&
-      !opts.onboard &&
-      (timeline < 0.45
-        ? 1 - easeBetween(0.28, 0.45, timeline)
-        : timeline >= 3.3 && timeline < 5
-          ? easeBetween(4.9, 5, timeline)
-          : Math.max(
-              1 - easeBetween(0.55, 0.72, localPhase),
-              easeBetween(0.92, 1, localPhase),
-            ));
+      opts.mobile && !opts.onboard && (timeline < 4 || timeline >= 4.9);
     readMode = THREE.MathUtils.damp(
       readMode,
       opts.reading === null ? Number(fittedReading) : Number(opts.reading),
@@ -2145,11 +2146,12 @@ export function createVoxelWorld(
         width = THREE.MathUtils.lerp(width, upcoming.readWidth(), blend);
       }
       const modelRoom =
-        portrait &&
-        pose.board === 2 &&
-        window.innerHeight >= 700 &&
-        opts.reading !== true
-          ? 5.6 * (1 - easeBetween(0.56, 0.76, localPhase))
+        portrait && host.clientHeight >= 700 && opts.reading !== true
+          ? pose.board === 2
+            ? 5.6 * (1 - easeBetween(0.56, 0.76, localPhase))
+            : pose.board === 1
+              ? 5.6 * easeBetween(0.72, 1, localPhase)
+              : 0
           : 0;
       center.y += modelRoom / 2;
       const fit = portrait ? 1.35 : 1.25;
@@ -2260,7 +2262,7 @@ export function createVoxelWorld(
       look.lerp(rideLook, cameraMode);
     }
     parallax.lerp(
-      opts.reducedMotion ? new THREE.Vector2() : mouse,
+      opts.reducedMotion || opts.mobile ? new THREE.Vector2() : mouse,
       1 - Math.exp(-5 * dt),
     );
     destination.x += parallax.x * 0.28;
@@ -2365,6 +2367,7 @@ export function createVoxelWorld(
     dispose() {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      pageObserver.disconnect();
       document.removeEventListener('visibilitychange', visibility);
       window.removeEventListener('pointermove', pointerParallax);
       boards.forEach(({ element, parent, next, oldStyle }) => {

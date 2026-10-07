@@ -1,43 +1,75 @@
-import { journeyPosition, journeyOffset } from '@/lib/journey-timeline';
-import { journeyPose } from '@/lib/journey-choreography';
-import { journeyScrollStep } from '@/lib/journey-scroll-speed';
+import { journeyPosition, journeyOffset } from './journey-timeline.ts';
+import { journeyPose } from './journey-choreography.ts';
+import { journeyScrollStep } from './journey-scroll-speed.ts';
+import { createJourneyTour } from './journey-tour.ts';
+import { createJourneyGesture } from './journey-gesture.ts';
 
 export type JourneyScroll = {
   position: () => number;
   to: (y: number) => void;
   stop: () => void;
+  play: () => void;
+  pause: () => void;
+  skip: (direction: -1 | 1) => void;
   dispose: () => void;
 };
 export function createJourneyScroll(
   offsets: () => number[],
   count: number,
+  options: {
+    viewport?: () => number;
+    onPlayingChange?: (playing: boolean) => void;
+  } = {},
 ): JourneyScroll {
   let current = window.scrollY,
     target = current,
     last = 0,
     frame = 0,
     writing = false;
-  let touchY = 0,
-    touchX = 0,
-    touchAxis: 'x' | 'y' | null = null;
+  const viewport = options.viewport ?? (() => window.innerHeight);
+  const gesture = createJourneyGesture();
+  const tour = createJourneyTour(count);
   let previousOffsets = offsets(),
-    previousViewport = window.innerHeight;
+    previousViewport = viewport();
   const maximum = () =>
     Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  const to = (y: number) => {
+  const setTarget = (y: number) => {
     target = Math.max(0, Math.min(maximum(), y));
+  };
+  const pause = () => {
+    if (tour.playing()) {
+      tour.pause();
+      options.onPlayingChange?.(false);
+    }
+    target = current;
+  };
+  const to = (y: number) => {
+    pause();
+    setTarget(y);
+  };
+  const timeline = () => {
+    const p = journeyPosition(current, offsets(), viewport(), count);
+    return p.stop + p.phase;
+  };
+  const tourDestination = () => {
+    const t = tour.target(),
+      stop = Math.floor(t);
+    return journeyOffset({ stop, phase: t - stop }, offsets(), viewport());
   };
   const exempt = (node: EventTarget | null) =>
     node instanceof Element &&
     Boolean(
-      node.closest('dialog, input, textarea, select, [contenteditable="true"]'),
+      node.closest(
+        'dialog, .route-menu, .scene-controls, input, textarea, select, [contenteditable="true"]',
+      ),
     );
   function nudge(delta: number) {
+    if (tour.playing()) pause();
     if (Math.sign(delta) !== Math.sign(target - current)) target = current;
-    to(
+    setTarget(
       Math.max(
-        current - window.innerHeight * 0.75,
-        Math.min(current + window.innerHeight * 0.75, target + delta),
+        current - viewport() * 0.75,
+        Math.min(current + viewport() * 0.75, target + delta),
       ),
     );
   }
@@ -50,24 +82,23 @@ export function createJourneyScroll(
     nudge(Math.max(-110, Math.min(110, delta)) * 0.6);
   };
   const startTouch = (e: TouchEvent) => {
-    touchY = e.touches[0]?.clientY ?? 0;
-    touchX = e.touches[0]?.clientX ?? 0;
-    touchAxis = null;
+    if (e.touches.length !== 1 || exempt(e.target)) {
+      gesture.cancel();
+      if (e.touches.length > 1) pause();
+      return;
+    }
+    gesture.start(e.touches[0].clientX, e.touches[0].clientY);
   };
   const touch = (e: TouchEvent) => {
-    const y = e.touches[0]?.clientY ?? touchY,
-      x = e.touches[0]?.clientX ?? touchX,
-      dy = touchY - y,
-      dx = touchX - x;
-    touchY = y;
-    touchX = x;
-    if (e.touches.length !== 1 || exempt(e.target)) return;
-    if (!touchAxis && Math.max(Math.abs(dx), Math.abs(dy)) > 3)
-      touchAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-    const delta = touchAxis === 'x' ? dx : dy;
+    if (e.touches.length !== 1 || exempt(e.target) || !e.cancelable) {
+      gesture.cancel();
+      return;
+    }
     e.preventDefault();
-    nudge(Math.max(-80, Math.min(80, delta)) * 0.75);
+    const delta = gesture.move(e.touches[0].clientX, e.touches[0].clientY);
+    if (delta) nudge(delta);
   };
+  const endTouch = () => gesture.cancel();
   const key = (e: KeyboardEvent) => {
     if (exempt(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
     if (
@@ -82,9 +113,9 @@ export function createJourneyScroll(
         : e.key === 'ArrowUp' || e.key === 'ArrowLeft'
           ? -65
           : e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)
-            ? window.innerHeight * 0.6
+            ? viewport() * 0.6
             : e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)
-              ? -window.innerHeight * 0.6
+              ? -viewport() * 0.6
               : 0;
     if (delta) {
       e.preventDefault();
@@ -114,14 +145,20 @@ export function createJourneyScroll(
   };
   function resize() {
     const points = offsets();
+    const height = viewport();
+    if (
+      height === previousViewport &&
+      points.every((point, i) => point === previousOffsets[i])
+    )
+      return;
     const rebase = (y: number) => {
       const p = journeyPosition(y, previousOffsets, previousViewport, count);
-      return Math.min(maximum(), journeyOffset(p, points, window.innerHeight));
+      return Math.min(maximum(), journeyOffset(p, points, height));
     };
     current = rebase(current);
     target = rebase(target);
     previousOffsets = points;
-    previousViewport = window.innerHeight;
+    previousViewport = height;
     writing = true;
     window.scrollTo({ top: current, behavior: 'instant' });
     writing = false;
@@ -134,20 +171,23 @@ export function createJourneyScroll(
     // A browser anchor or scrollbar move can precede its coalesced scroll event.
     // Capture it before our next frame writes the controlled position back.
     nativeScroll();
+    if (tour.playing()) {
+      setTarget(tourDestination());
+      tour.step(Math.abs(current - target) < 0.5, dt);
+      if (tour.playing()) setTarget(tourDestination());
+      else {
+        target = current;
+        options.onPlayingChange?.(false);
+      }
+    }
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
     const points = offsets();
     const sample = (y: number) => {
-      const p = journeyPosition(y, points, window.innerHeight, count);
+      const p = journeyPosition(y, points, viewport(), count);
       return journeyPose(p.stop + p.phase, count);
     };
-    current = journeyScrollStep(
-      current,
-      target,
-      dt,
-      window.innerHeight,
-      sample,
-    );
+    current = journeyScrollStep(current, target, dt, viewport(), sample);
     writing = true;
     window.scrollTo({ top: current, behavior: 'instant' });
     writing = false;
@@ -155,6 +195,8 @@ export function createJourneyScroll(
   window.addEventListener('wheel', wheel, { passive: false });
   window.addEventListener('touchstart', startTouch, { passive: true });
   window.addEventListener('touchmove', touch, { passive: false });
+  window.addEventListener('touchend', endTouch);
+  window.addEventListener('touchcancel', endTouch);
   window.addEventListener('keydown', key);
   window.addEventListener('resize', resize);
   window.addEventListener('hashchange', hash);
@@ -166,14 +208,24 @@ export function createJourneyScroll(
   return {
     position: () => current,
     to,
-    stop() {
-      target = current;
+    stop: pause,
+    pause,
+    play() {
+      tour.play(timeline());
+      setTarget(tourDestination());
+      options.onPlayingChange?.(true);
+    },
+    skip(direction) {
+      tour.skip(timeline(), direction);
+      setTarget(tourDestination());
     },
     dispose() {
       cancelAnimationFrame(frame);
       window.removeEventListener('wheel', wheel);
       window.removeEventListener('touchstart', startTouch);
       window.removeEventListener('touchmove', touch);
+      window.removeEventListener('touchend', endTouch);
+      window.removeEventListener('touchcancel', endTouch);
       window.removeEventListener('keydown', key);
       window.removeEventListener('resize', resize);
       window.removeEventListener('hashchange', hash);
