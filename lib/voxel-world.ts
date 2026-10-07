@@ -7,7 +7,6 @@ import {
   journeyPose,
   ORBIT_ORIGIN,
   easeBetween,
-  smoothTimeline,
   lunarFloor,
   LIBRARY_X,
   STATION_CENTER,
@@ -40,6 +39,7 @@ export type WorldOptions = {
   mobile: boolean;
   reducedMotion: boolean;
   night: boolean;
+  navigationRevision: number;
 };
 export type WorldAction =
   | { kind: 'project'; slug: string }
@@ -855,92 +855,88 @@ export function createVoxelWorld(
     part(cars[0], 1.9, 1.65, side * 1.12, 'dark', 0.85, 0.55, 0.45);
     part(cars[0], -2.9, 2.8, side * 1.1, 'gold', 0.16, 1.15, 0.16);
   }
-  // Four independently pivoting limbs give the guide a Minecraft walk cycle.
+  // Technoblade's original 64×64 skin, including the crown/jacket overlays.
+  const skin = new THREE.TextureLoader().load('/skins/technoblade.png');
+  skin.colorSpace = THREE.SRGBColorSpace;
+  skin.magFilter = skin.minFilter = THREE.NearestFilter;
+  skin.generateMipmaps = false;
+  ownedTextures.push(skin);
+  const skinMaterial = new THREE.MeshLambertMaterial({
+    map: skin,
+    alphaTest: 0.5,
+  });
+  const pixel = 0.07;
+  function skinBox(
+    parent: THREE.Group,
+    w: number,
+    h: number,
+    d: number,
+    u: number,
+    v: number,
+    y: number,
+    outer = false,
+  ) {
+    const geometry = new THREE.BoxGeometry(w * pixel, h * pixel, d * pixel);
+    // +X, -X, +Y, -Y, +Z, -Z in Minecraft's unfolded skin atlas.
+    const faces = [
+      [u, v + d, d, h],
+      [u + d + w, v + d, d, h],
+      [u + d, v, w, d],
+      [u + d + w, v, w, d],
+      [u + d, v + d, w, h],
+      [u + d + w + d, v + d, w, h],
+    ];
+    const uv = geometry.getAttribute('uv');
+    faces.forEach(([x, y, width, height], face) => {
+      for (let i = face * 4; i < face * 4 + 4; i++)
+        uv.setXY(
+          i,
+          (x + uv.getX(i) * width) / 64,
+          1 - (y + height - uv.getY(i) * height) / 64,
+        );
+    });
+    const mesh = new THREE.Mesh(geometry, skinMaterial);
+    mesh.position.y = y;
+    if (outer) mesh.scale.setScalar(1.065);
+    mesh.castShadow = mesh.receiveShadow = true;
+    parent.add(mesh);
+  }
   function character(parent: THREE.Object3D) {
     const avatar = new THREE.Group();
     parent.add(avatar);
-    part(avatar, 0, 1.15, 0, '#242832', 0.6, 0.72, 0.32);
-    part(avatar, 0, 1.82, 0, '#a97954', 0.53, 0.53, 0.53);
-    part(avatar, 0, 2.08, -0.015, '#202027', 0.58, 0.18, 0.58);
-    part(avatar, 0, 1.88, -0.265, '#202027', 0.53, 0.34, 0.065);
-    // Block curls, squared spectacles, a short beard and the portrait's dark shirt.
-    for (let a = -1; a <= 1; a++)
-      for (let b = -1; b <= 1; b++)
-        part(
-          avatar,
-          a * 0.19,
-          2.14 + ((a + b) % 2 ? 0.04 : 0),
-          b * 0.19,
-          (a + b) % 2 ? '#30313a' : '#22232b',
-          0.2,
-          0.15,
-          0.2,
-        );
-    part(avatar, 0, 1.64, 0.268, '#302a27', 0.42, 0.12, 0.035);
-    part(avatar, 0, 1.71, 0.285, '#493a30', 0.24, 0.045, 0.04);
-    part(avatar, 0, 1.77, 0.294, '#b58763', 0.07, 0.09, 0.06);
-    for (let y = 0; y < 3; y++)
-      part(avatar, 0, 1.03 + y * 0.15, 0.168, '#8b8c88', 0.035, 0.035, 0.018);
-    part(avatar, 0, 0.79, 0.01, '#1b1d22', 0.61, 0.08, 0.34);
-    part(avatar, 0, 0.79, 0.188, '#a4a6a3', 0.09, 0.065, 0.035);
-    for (const side of [-1, 1]) {
-      part(avatar, side * 0.12, 1.85, 0.279, '#24242a', 0.055, 0.045, 0.015);
-      for (const edge of [-1, 1]) {
-        part(
-          avatar,
-          side * 0.13,
-          1.86 + edge * 0.07,
-          0.3,
-          '#24242a',
-          0.22,
-          0.018,
-          0.025,
-        );
-        part(
-          avatar,
-          side * 0.13 + edge * 0.1,
-          1.86,
-          0.3,
-          '#24242a',
-          0.018,
-          0.14,
-          0.025,
-        );
-      }
-      part(avatar, side * 0.24, 1.68, 0.269, '#302a27', 0.035, 0.14, 0.035);
-    }
-    part(avatar, 0, 1.85, 0.281, '#172125', 0.12, 0.035, 0.018);
+    skinBox(avatar, 8, 12, 4, 16, 16, 18 * pixel);
+    skinBox(avatar, 8, 12, 4, 16, 32, 18 * pixel, true);
+    skinBox(avatar, 8, 8, 8, 0, 0, 28 * pixel);
+    skinBox(avatar, 8, 8, 8, 32, 0, 28 * pixel, true);
     const limbs: THREE.Group[] = [];
     for (let i = 0; i < 4; i++) {
       const arm = i < 2,
-        side = i % 2 ? 1 : -1,
-        pivot = new THREE.Group();
-      pivot.position.set(side * (arm ? 0.42 : 0.16), arm ? 1.45 : 0.82, 0);
+        left = i % 2 === 1;
+      const pivot = new THREE.Group();
+      pivot.position.set(
+        (left ? 1 : -1) * (arm ? 6 : 2) * pixel,
+        (arm ? 24 : 12) * pixel,
+        0,
+      );
       avatar.add(pivot);
-      part(
-        pivot,
-        0,
-        arm ? -0.23 : -0.36,
-        0,
-        arm ? '#242832' : '#30323c',
-        arm ? 0.22 : 0.26,
-        arm ? 0.48 : 0.73,
-        0.28,
-      );
-      part(
-        pivot,
-        0,
-        arm ? -0.5 : -0.73,
-        arm ? 0 : 0.035,
-        arm ? '#a97954' : '#22252b',
-        arm ? 0.22 : 0.27,
-        arm ? 0.2 : 0.16,
-        arm ? 0.26 : 0.36,
-      );
+      const [u, v] = arm
+        ? left
+          ? [32, 48]
+          : [40, 16]
+        : left
+          ? [16, 48]
+          : [0, 16];
+      const [ou, ov] = arm
+        ? left
+          ? [48, 48]
+          : [40, 32]
+        : left
+          ? [0, 48]
+          : [0, 32];
+      skinBox(pivot, 4, 12, 4, u, v, -6 * pixel);
+      skinBox(pivot, 4, 12, 4, ou, ov, -6 * pixel, true);
       limbs.push(pivot);
     }
-    part(limbs[1], 0, -0.49, 0.145, 'iron', 0.16, 0.12, 0.035);
-    part(limbs[1], 0, -0.49, 0.17, '#e2d9c9', 0.09, 0.09, 0.02);
     return { avatar, limbs };
   }
   const guide = character(scene);
@@ -1708,6 +1704,7 @@ export function createVoxelWorld(
     px = 0,
     py = 0;
   let cameraInitialized = false,
+    navigationRevision = -1,
     cameraMode = 0,
     readMode = 0,
     walkDistance = 0,
@@ -1826,15 +1823,18 @@ export function createVoxelWorld(
   function animate(now: number) {
     frame = requestAnimationFrame(animate);
     if (!visible) return;
-    const dt = last ? Math.min((now - last) / 1000, 0.05) : 1 / 60;
+    const elapsed = last ? (now - last) / 1000 : 1 / 60;
+    const dt = Math.min(elapsed, 0.05);
     last = now;
     sampleFrames++;
-    sampleTime += dt;
+    sampleTime += elapsed;
     if (sampleTime >= 1) {
       host.dataset.fps = String(Math.round(sampleFrames / sampleTime));
       sampleFrames = sampleTime = 0;
     }
     const opts = read();
+    const direct = navigationRevision !== opts.navigationRevision;
+    navigationRevision = opts.navigationRevision;
     if (layoutMobile !== opts.mobile) layoutDirty = true;
     layoutMobile = opts.mobile;
     // Measure the new responsive layout before fitting the camera, including
@@ -1848,9 +1848,9 @@ export function createVoxelWorld(
       });
     layoutDirty = false;
     if (!opts.reducedMotion) time += dt;
-    timeline = opts.reducedMotion
-      ? opts.timeline
-      : smoothTimeline(timeline, opts.timeline, dt);
+    // The scroll controller already eases and bounds motion. A second timeline
+    // buffer made the camera and reading frames trail behind each gesture.
+    timeline = opts.timeline;
     const pose = journeyPose(timeline, journeyExperience.length);
     const portrait = opts.mobile && camera.aspect < 1;
     const terminalWidth = Math.max(
@@ -1945,7 +1945,8 @@ export function createVoxelWorld(
       const facing = new THREE.Quaternion().setFromEuler(
         new THREE.Euler(0, heading, 0),
       );
-      guide.avatar.quaternion.slerp(facing, 1 - Math.exp(-10 * dt));
+      if (direct) guide.avatar.quaternion.copy(facing);
+      else guide.avatar.quaternion.slerp(facing, 1 - Math.exp(-10 * dt));
       guide.limbs.forEach((limb, i) => {
         limb.rotation.x =
           Math.sin(
@@ -2084,12 +2085,11 @@ export function createVoxelWorld(
     const localPhase = pose.boardPhase;
     const fittedReading =
       opts.mobile && !opts.onboard && (timeline < 4 || timeline >= 4.9);
-    readMode = THREE.MathUtils.damp(
-      readMode,
-      opts.reading === null ? Number(fittedReading) : Number(opts.reading),
-      5,
-      dt,
-    );
+    const desiredReadMode =
+      opts.reading === null ? Number(fittedReading) : Number(opts.reading);
+    readMode = direct
+      ? desiredReadMode
+      : THREE.MathUtils.damp(readMode, desiredReadMode, 5, dt);
     const approachingJournal = timeline >= 4.9 && timeline < 5;
     const readingBoard = approachingJournal
       ? boards.find((board) => board.index === 9 && board.leaf === 0)
@@ -2231,7 +2231,9 @@ export function createVoxelWorld(
       destination.lerp(approach, pose.stationView);
       look.lerp(doorwayLook, pose.stationView);
     }
-    cameraMode = THREE.MathUtils.damp(cameraMode, opts.onboard ? 1 : 0, 4, dt);
+    cameraMode = direct
+      ? Number(opts.onboard)
+      : THREE.MathUtils.damp(cameraMode, opts.onboard ? 1 : 0, 4, dt);
     if (cameraMode > 0.001) {
       const boarding = easeBetween(3.3, 3.68, timeline);
       const landing = easeBetween(4, 4.04, timeline);
@@ -2267,20 +2269,18 @@ export function createVoxelWorld(
     );
     destination.x += parallax.x * 0.28;
     destination.y -= parallax.y * 0.16;
-    if (!cameraInitialized || opts.reducedMotion)
-      camera.position.copy(destination);
-    else camera.position.lerp(destination, 1 - Math.exp(-12 * dt));
+    camera.position.copy(destination);
     cameraRig.position.copy(camera.position);
     cameraRig.lookAt(look);
-    // Camera orientation has its own quaternion buffer, as in the supplied reference.
-    if (!cameraInitialized || opts.reducedMotion)
-      camera.quaternion.copy(cameraRig.quaternion);
-    else camera.quaternion.slerp(cameraRig.quaternion, 1 - Math.exp(-12 * dt));
+    // Camera modes and parallax ease above; route framing stays on the same
+    // pose as the actors, including direct navigation to a distant stop.
+    camera.quaternion.copy(cameraRig.quaternion);
     cameraInitialized = true;
     const color = (opts.night ? dusk : sky)
       .clone()
       .lerp(spaceColor, pose.space);
-    (scene.background as THREE.Color).lerp(color, 1 - Math.exp(-4 * dt));
+    if (direct) (scene.background as THREE.Color).copy(color);
+    else (scene.background as THREE.Color).lerp(color, 1 - Math.exp(-4 * dt));
     const fog = scene.fog as THREE.Fog;
     fog.color.copy(scene.background as THREE.Color);
     fog.near = 65 + pose.space * 110;

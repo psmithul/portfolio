@@ -35,7 +35,7 @@ export function journeyPosition(
   experienceCount = 3,
 ): JourneyPosition {
   let stop = 0;
-  for (let i = 0; i < offsets.length; i++) if (y + 2 >= offsets[i]) stop = i;
+  for (let i = 0; i < offsets.length; i++) if (y >= offsets[i]) stop = i;
   stop = clamp(stop, 0, 6);
   const start = offsets[stop] ?? 0;
   const length =

@@ -1361,6 +1361,9 @@ a:focus-visible {
 .mobile-journey .station-footnote {
   display: none;
 }
+.mobile-journey .nav-stop-label {
+  display: none;
+}
 .mobile-journey .scene-controls > .tour-play {
   width: 88px;
   min-width: 88px;
@@ -1860,5 +1863,89 @@ a:focus-visible {
   .train-journey .experience-panel.in-world-board .planet-selector button {
     min-height: 46px;
     min-width: 48px;
+  }
+}
+
+/* The visitor chooses motion before the railway starts. Manual snap is primary. */
+.journey-start {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100svh - 32px);
+  box-sizing: border-box;
+  padding: 28px;
+  border: 2px solid #ad925a;
+  background: #172e29;
+  color: #f4ecd5;
+  box-shadow: 0 8px 0 #0d1916;
+  text-shadow: none;
+  touch-action: pan-y pinch-zoom;
+}
+.journey-start::backdrop {
+  background: #071b216b;
+}
+.journey-start > svg {
+  color: #d8b572;
+}
+.journey-start h2 {
+  font: 700 30px/1.1 var(--pixel);
+  margin: 16px 0 12px;
+}
+.journey-start p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #c6d4c9;
+  margin: 0 0 22px;
+}
+.journey-start button {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px;
+  border: 1px solid #889c85;
+  background: #243e35;
+  color: #f4ecd5;
+  font-size: 16px;
+  cursor: pointer;
+}
+.journey-start button + button {
+  margin-top: 12px;
+}
+.journey-start .journey-start-manual {
+  background: #d1b371;
+  color: #172e29;
+  border-color: #efd89a;
+}
+.journey-start button small {
+  flex-basis: 100%;
+  font-size: 11px;
+  opacity: 0.85;
+}
+.journey-start button:focus-visible {
+  outline: 3px solid #f4ecd5;
+  outline-offset: 3px;
+}
+@media (orientation: landscape) and (max-height: 500px) {
+  .journey-start {
+    width: min(600px, calc(100vw - 32px));
+    padding: 18px 24px;
+  }
+  .journey-start > svg {
+    display: none;
+  }
+  .journey-start h2 {
+    margin-top: 0;
+    font-size: 26px;
+  }
+  .journey-start p {
+    margin-bottom: 12px;
+  }
+  .journey-start button {
+    min-height: 56px;
   }
 }

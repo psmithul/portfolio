@@ -71,7 +71,9 @@ export function TrainJourney({
   const engine = useRef<VoxelWorld | null>(null);
   const scroll = useRef<JourneyScroll | null>(null);
   const restored = useRef(false);
-  const mobileTourStarted = useRef(false);
+  const publishPosition = useRef<(y: number) => void>(() => {});
+  const startDialog = useRef<HTMLDialogElement>(null);
+  const manualStart = useRef<HTMLButtonElement>(null);
   const world = useRef<WorldOptions>({
     timeline: 0,
     progress: 0,
@@ -83,6 +85,7 @@ export function TrainJourney({
     mobile: false,
     reducedMotion: false,
     night: false,
+    navigationRevision: 0,
   });
   const planetRefs = useRef<(HTMLElement | null)[]>([]);
   const sceneAction = useRef<(action: WorldAction) => void>(() => {});
@@ -90,6 +93,7 @@ export function TrainJourney({
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [tourPlaying, setTourPlaying] = useState(false);
+  const [choosingTour, setChoosingTour] = useState(true);
   const [cinemaScale, setCinemaScale] = useState(0.54);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
@@ -153,10 +157,8 @@ export function TrainJourney({
 
   useEffect(() => {
     let queued = 0;
-    function update() {
-      queued = 0;
-      const y = scroll.current?.position() ?? window.scrollY;
-      const offsets = sectionRefs.current.map((el) => el?.offsetTop ?? 0);
+    let offsets = sectionRefs.current.map((el) => el?.offsetTop ?? 0);
+    function update(y: number) {
       const position = journeyPosition(
         y,
         offsets,
@@ -170,36 +172,32 @@ export function TrainJourney({
       world.current.experience = position.experience;
       setActive(position.stop);
     }
-    function schedule() {
-      if (!queued) queued = requestAnimationFrame(update);
+    publishPosition.current = update;
+    function measure() {
+      queued = 0;
+      offsets = sectionRefs.current.map((el) => el?.offsetTop ?? 0);
+      update(scroll.current?.position() ?? window.scrollY);
     }
-    window.addEventListener('scroll', schedule, { passive: true });
+    function schedule() {
+      if (!queued) queued = requestAnimationFrame(measure);
+    }
+    function native() {
+      if (!scroll.current) update(window.scrollY);
+    }
+    window.addEventListener('scroll', native, { passive: true });
     window.addEventListener('resize', schedule);
-    update();
+    measure();
     const resize = new ResizeObserver(schedule);
     sectionRefs.current.forEach((el) => {
       if (el) resize.observe(el);
     });
     return () => {
-      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('scroll', native);
       window.removeEventListener('resize', schedule);
       resize.disconnect();
       cancelAnimationFrame(queued);
     };
   }, []);
-
-  useEffect(() => {
-    if (!ready || restored.current) return;
-    restored.current = true;
-    const index = stations.findIndex(
-      (station) => '#' + station.id === window.location.hash,
-    );
-    if (index >= 0)
-      sectionRefs.current[index]?.scrollIntoView({
-        behavior: 'instant',
-        block: 'start',
-      });
-  }, [ready]);
 
   useEffect(() => {
     if (!ready || unavailable) return;
@@ -209,8 +207,23 @@ export function TrainJourney({
       {
         viewport: () => host.current?.clientHeight || window.innerHeight,
         onPlayingChange: setTourPlaying,
+        onPositionChange: (y, direct) => {
+          if (direct) world.current.navigationRevision++;
+          publishPosition.current(y);
+        },
       },
     );
+    if (!restored.current) {
+      restored.current = true;
+      const index = stations.findIndex(
+        (station) => '#' + station.id === window.location.hash,
+      );
+      scroll.current.jump(
+        index >= 0
+          ? (sectionRefs.current[index]?.offsetTop ?? 0)
+          : window.scrollY,
+      );
+    }
     return () => {
       scroll.current?.dispose();
       scroll.current = null;
@@ -218,21 +231,22 @@ export function TrainJourney({
   }, [ready, unavailable]);
 
   useEffect(() => {
-    if (!ready || unavailable) return;
-    if (!mobile || reducedMotion) {
-      scroll.current?.pause();
-      return;
-    }
-    if (!mobileTourStarted.current) {
-      mobileTourStarted.current = true;
-      scroll.current?.play();
-    }
-  }, [mobile, ready, unavailable, reducedMotion]);
+    if (!ready || unavailable || !choosingTour) return;
+    startDialog.current?.showModal();
+    manualStart.current?.focus();
+  }, [ready, unavailable, choosingTour]);
+
+  function chooseTour(automatic: boolean) {
+    startDialog.current?.close();
+    setChoosingTour(false);
+    if (automatic) scroll.current?.play();
+    else scroll.current?.pause();
+  }
 
   function travelTo(element: HTMLElement | null | undefined) {
     if (!element) return;
     const y = element.getBoundingClientRect().top + window.scrollY;
-    if (scroll.current) scroll.current.to(y);
+    if (scroll.current) scroll.current.jump(y);
     else window.scrollTo({ top: y, behavior: 'smooth' });
   }
 
@@ -296,6 +310,8 @@ export function TrainJourney({
   }, []);
 
   function goExperience(index: number) {
+    world.current.reading = null;
+    world.current.onboard = false;
     setReading(null);
     setOnboard(false);
     const section = sectionRefs.current[4];
@@ -307,11 +323,13 @@ export function TrainJourney({
     const length =
       (sectionRefs.current[5]?.offsetTop ?? start + section.offsetHeight) -
       start;
-    scroll.current.to(
+    scroll.current.jump(
       start + length * experienceReadingPhase(index, journeyExperience.length),
     );
   }
   function go(index: number) {
+    world.current.reading = null;
+    world.current.onboard = false;
     setReading(null);
     setOnboard(false);
     travelTo(sectionRefs.current[index]);
@@ -356,7 +374,6 @@ export function TrainJourney({
       id="main"
       onClickCapture={(event) => {
         if (
-          mobile &&
           event.target instanceof Element &&
           event.target.closest('button, a') &&
           !event.target.closest('[data-tour-control]')
@@ -397,6 +414,37 @@ export function TrainJourney({
           The 3D journey needs WebGL. You can read every section below.
         </div>
       )}
+      {!unavailable && choosingTour && (
+        <dialog
+          ref={startDialog}
+          className="journey-start"
+          aria-labelledby="journey-start-title"
+          aria-describedby="journey-start-copy"
+          onCancel={(event) => {
+            event.preventDefault();
+            chooseTour(false);
+          }}
+        >
+          <TrainFront size={28} aria-hidden="true" />
+          <h2 id="journey-start-title">How would you like to travel?</h2>
+          <p id="journey-start-copy">
+            Swipe or scroll between stops, or let the train take you there
+            automatically.
+          </p>
+          <button
+            ref={manualStart}
+            onClick={() => chooseTour(false)}
+            className="journey-start-manual"
+          >
+            Snap scroll <ChevronRight size={18} />
+            <small>You set the pace · default</small>
+          </button>
+          <button data-tour-control="" onClick={() => chooseTour(true)}>
+            <Play size={16} /> Automatic tour
+            <small>Pauses at every reading stop</small>
+          </button>
+        </dialog>
+      )}
       <div className="scene-controls">
         {mobile ? (
           <>
@@ -416,7 +464,7 @@ export function TrainJourney({
               }
               disabled={!ready || unavailable}
               aria-label={
-                tourPlaying ? 'Pause mobile tour' : 'Play mobile tour'
+                tourPlaying ? 'Pause automatic tour' : 'Play automatic tour'
               }
               aria-pressed={tourPlaying}
             >
@@ -434,6 +482,20 @@ export function TrainJourney({
           </>
         ) : (
           <>
+            <button
+              data-tour-control=""
+              className="tour-play"
+              onClick={() =>
+                tourPlaying ? scroll.current?.pause() : scroll.current?.play()
+              }
+              disabled={!ready || unavailable}
+              aria-label={
+                tourPlaying ? 'Pause automatic tour' : 'Play automatic tour'
+              }
+              aria-pressed={tourPlaying}
+            >
+              {tourPlaying ? <Pause size={16} /> : <Play size={16} />}
+            </button>
             <button
               onClick={() => {
                 setReading(reading !== true);
@@ -527,7 +589,7 @@ export function TrainJourney({
             {mobile
               ? tourPlaying
                 ? 'Auto tour · swipe to pause · tap to explore'
-                : 'Play the tour or swipe to travel'
+                : 'Swipe between stops · Play for an automatic tour'
               : 'Scroll to travel · drag to look around'}
           </p>
         </div>
