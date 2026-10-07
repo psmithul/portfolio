@@ -7,6 +7,7 @@ import {
 } from '../lib/journey-scroll-speed.ts';
 import { journeyPosition } from '../lib/journey-timeline.ts';
 import { journeyPose } from '../lib/journey-choreography.ts';
+import { createJourneyMotion } from '../lib/journey-scroll-motion.ts';
 
 const offsets = [0, 990, 2115, 3240, 4815, 7065, 8190];
 const distance = (a: readonly number[], b: readonly number[]) =>
@@ -15,6 +16,59 @@ const sample = (y: number) => {
   const p = journeyPosition(y, offsets, 900, 5);
   return journeyPose(p.stop + p.phase, 5);
 };
+
+void test('snap motion eases into and out of a stop without overshoot at 30, 60 and 144 Hz', () => {
+  const endings: number[] = [];
+  const free = () => ({
+    trainX: 0,
+    avatar: [0, 0, 0],
+    rocket: [0, 0, 0],
+    rover: [0, 0, 0],
+    focus: [0, 0, 0],
+    walking: false,
+    avatarVisible: false,
+    transit: 0,
+  });
+  for (const fps of [30, 60, 144]) {
+    const motion = createJourneyMotion();
+    let y = 0,
+      velocity = 0,
+      peak = 0;
+    for (let i = 0; i < fps * 12; i++) {
+      const next = motion.step(y, 1000, 1 / fps, 900, free);
+      const speed = (next - y) * fps;
+      assert.ok(next >= y && next <= 1000);
+      assert.ok(
+        Math.abs(speed - velocity) <= 900 / fps + 0.3,
+        `velocity snap at ${fps} Hz: ${speed} vs ${velocity}`,
+      );
+      velocity = speed;
+      peak = Math.max(peak, speed);
+      y = next;
+      if (i === fps * 2 - 1) endings.push(y);
+    }
+    assert.equal(y, 1000);
+    assert.equal(velocity, 0);
+    assert.ok(peak > 200 && peak <= 240.00001);
+  }
+  assert.ok(Math.max(...endings) - Math.min(...endings) < 2);
+});
+
+void test('one smoothed route position stays continuous through every world transition and reverse', () => {
+  const motion = createJourneyMotion();
+  let y = 0;
+  for (const target of [8190, 0]) {
+    let frames = 0;
+    while (y !== target && frames++ < 18000) {
+      const next = motion.step(y, target, 1 / 60, 900, sample);
+      assert.ok(Number.isFinite(next));
+      assert.ok(Math.abs(next - y) < 11);
+      assertSpeed(sample(y), sample(next), 1 / 60 + 0.0001);
+      y = next;
+    }
+    assert.equal(y, target);
+  }
+});
 
 function assertSpeed(a: ScrollPose, b: ScrollPose, dt: number) {
   const limits = journeyMotionLimits(Math.min(a.transit, b.transit));
