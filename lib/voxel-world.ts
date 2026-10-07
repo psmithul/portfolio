@@ -1432,7 +1432,7 @@ export function createVoxelWorld(
   for (let i = 0; i < 10; i++) {
     const cloud = new THREE.Group();
     const x = -45 + i * 22;
-    cloud.position.set(x, 23 + (i % 3) * 3, -48 - (i % 4) * 14);
+    cloud.position.set(x, 14 + (i % 3) * 1.5, -82 - (i % 4) * 18);
     cloud.userData.sky = true;
     land.add(cloud);
     clouds.push({ group: cloud, x });
@@ -1656,10 +1656,17 @@ export function createVoxelWorld(
   );
   // Batch static voxels by parent and texture, leaving articulated objects separate.
   const dummy = new THREE.Object3D();
+  const cloudMaterials: THREE.MeshBasicMaterial[] = [];
   batches.forEach(({ parent, type, items }) => {
     const material = parent.userData.sky
-      ? new THREE.MeshBasicMaterial({ color: type })
+      ? new THREE.MeshBasicMaterial({
+          color: type,
+          fog: false,
+          transparent: true,
+        })
       : mats.get(type);
+    if (parent.userData.sky)
+      cloudMaterials.push(material as THREE.MeshBasicMaterial);
     const mesh = new THREE.InstancedMesh(cube, material, items.length);
     items.forEach((v, i) => {
       dummy.position.set(v.x, v.y, v.z);
@@ -1896,6 +1903,13 @@ export function createVoxelWorld(
     clouds.forEach(({ group, x }, i) => {
       group.position.x =
         x + (opts.reducedMotion ? 0 : Math.sin(time * 0.025 + i) * 3);
+    });
+    const cloudOpacity = 1 - THREE.MathUtils.smoothstep(pose.space, 0.2, 0.75);
+    cloudMaterials.forEach((material) => {
+      material.opacity = cloudOpacity;
+    });
+    clouds.forEach(({ group }) => {
+      group.visible = cloudOpacity > 0.001;
     });
     if (pose.space > 0.9) orbitalUpdates.forEach((update) => update(time));
     if (Math.abs(trainX - 68) < 28 && pose.space < 0.1)
@@ -2285,7 +2299,7 @@ export function createVoxelWorld(
     sun.position.copy(focus).add(new THREE.Vector3(-24, 36, -80));
     sun.target.position.copy(focus);
     sun.target.updateMatrixWorld();
-    skyBody.position.copy(focus).add(new THREE.Vector3(-16, 34, -125));
+    skyBody.position.copy(focus).add(new THREE.Vector3(-16, 15.5, -125));
     skyBody.quaternion.copy(camera.quaternion);
     sunMaterial.color.lerp(
       new THREE.Color(opts.night ? '#d8e4ed' : '#ffe6a0'),
