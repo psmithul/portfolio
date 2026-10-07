@@ -483,12 +483,14 @@ export function TrainJourney({
           </>
         )}
         <button
+          data-tour-control=""
           onClick={() => setNight(!night)}
           aria-label={night ? 'Switch to daytime' : 'Switch to moonlight'}
         >
           {night ? <Sun size={15} /> : <Moon size={15} />}
         </button>
         <button
+          data-tour-control=""
           onClick={() => void toggleSound()}
           aria-label={muted ? 'Play the railway tune' : 'Mute the railway tune'}
         >

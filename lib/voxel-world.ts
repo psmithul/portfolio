@@ -1778,7 +1778,7 @@ export function createVoxelWorld(
   };
   const move = (e: PointerEvent) => {
     if (!dragging) {
-      if (pointerType !== 'mouse') {
+      if (pointerType !== 'mouse' || read().mobile) {
         dragDistance += Math.abs(e.clientX - px) + Math.abs(e.clientY - py);
         px = e.clientX;
         py = e.clientY;

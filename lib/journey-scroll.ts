@@ -59,7 +59,9 @@ export function createJourneyScroll(
   const exempt = (node: EventTarget | null) =>
     node instanceof Element &&
     Boolean(
-      node.closest('dialog, input, textarea, select, [contenteditable="true"]'),
+      node.closest(
+        'dialog, .route-menu, .scene-controls, input, textarea, select, [contenteditable="true"]',
+      ),
     );
   function nudge(delta: number) {
     if (tour.playing()) pause();
