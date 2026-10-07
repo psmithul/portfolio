@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { MinecraftLoader } from '@/components/minecraft-loader';
 import { Box, Pause, Play, RotateCcw, Scan, Layers3, Hand } from 'lucide-react';
 import type {
   ModelKind,
@@ -192,8 +193,7 @@ export function EngineeringPlayground({
         />
         {!ready && !error && (
           <div className="scene-loading">
-            <Box size={32} />
-            <p>Setting up the workbench…</p>
+            <MinecraftLoader label="Setting up the workbench…" compact />
           </div>
         )}
         {error && (

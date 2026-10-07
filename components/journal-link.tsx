@@ -2,6 +2,7 @@
 
 import Link, { useLinkStatus } from 'next/link';
 import type { ComponentProps } from 'react';
+import { ChapterLoading } from '@/components/minecraft-link';
 
 function NavigationStatus() {
   const { pending } = useLinkStatus();
@@ -14,6 +15,7 @@ function NavigationStatus() {
       <output className="sr-only" aria-live="polite">
         {pending ? 'Opening…' : ''}
       </output>
+      <ChapterLoading />
     </>
   );
 }

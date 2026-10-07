@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { MinecraftLink as Link } from '@/components/minecraft-link';
 export const metadata: Metadata = {
   title: 'About',
   description:

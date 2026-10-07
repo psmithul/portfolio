@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import { MinecraftLink as Link } from '@/components/minecraft-link';
 import Image from 'next/image';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
