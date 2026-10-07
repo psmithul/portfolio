@@ -1,6 +1,9 @@
 'use client';
 import dynamic from 'next/dynamic';
 import type { ModelKind } from '@/lib/engineering-scene';
+import { usePortfolioMode } from '@/components/use-portfolio-mode';
+import { ProjectVisual } from '@/components/project-visual';
+import { MinecraftLoader } from '@/components/minecraft-loader';
 const Playground = dynamic(
   () =>
     import('@/components/engineering-playground').then(
@@ -8,10 +11,13 @@ const Playground = dynamic(
     ),
   {
     ssr: false,
-    loading: () => <p className="lab-loading">Assembling the concept model…</p>,
+    loading: () => (
+      <MinecraftLoader label="Assembling the concept model…" compact />
+    ),
   },
 );
 export function ProjectLaboratory({ model }: { model: ModelKind }) {
+  const mode = usePortfolioMode();
   return (
     <section
       className="project-laboratory"
@@ -19,15 +25,26 @@ export function ProjectLaboratory({ model }: { model: ModelKind }) {
     >
       <div className="laboratory-heading">
         <div>
-          <p className="world-eyebrow">THE INTERACTIVE LAB</p>
+          <p className="world-eyebrow">THE WORKBENCH</p>
           <h2>Get a feel for the mechanics.</h2>
         </div>
         <p>
-          Drag to orbit. Animate the mechanism, change a parameter, or pull the
-          assembly apart.
+          {mode === 'desktop'
+            ? 'Drag to orbit. Animate the mechanism, change a parameter, or pull the assembly apart.'
+            : 'A concept view of the mechanism. The design and analysis continue below.'}
         </p>
       </div>
-      <Playground initialModel={model} compact />
+      {mode === 'desktop' ? (
+        <Playground initialModel={model} compact />
+      ) : (
+        <figure className="mobile-model-illustration">
+          <ProjectVisual kind={model} />
+          <figcaption>
+            Concept illustration. Open this page on a computer to explore the
+            interactive mechanics.
+          </figcaption>
+        </figure>
+      )}
     </section>
   );
 }
