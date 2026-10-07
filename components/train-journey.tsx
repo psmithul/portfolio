@@ -15,10 +15,14 @@ import {
   Box,
   Check,
   Copy,
+  ChevronLeft,
+  ChevronRight,
   Mail,
   Map,
   Moon,
   Mouse,
+  Pause,
+  Play,
   RotateCcw,
   Truck,
   Sun,
@@ -67,6 +71,7 @@ export function TrainJourney({
   const engine = useRef<VoxelWorld | null>(null);
   const scroll = useRef<JourneyScroll | null>(null);
   const restored = useRef(false);
+  const mobileTourStarted = useRef(false);
   const world = useRef<WorldOptions>({
     timeline: 0,
     progress: 0,
@@ -84,6 +89,7 @@ export function TrainJourney({
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
+  const [tourPlaying, setTourPlaying] = useState(false);
   const [cinemaScale, setCinemaScale] = useState(0.54);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
@@ -154,7 +160,7 @@ export function TrainJourney({
       const position = journeyPosition(
         y,
         offsets,
-        window.innerHeight,
+        host.current?.clientHeight || window.innerHeight,
         journeyExperience.length,
       );
       world.current.timeline = position.stop + position.phase;
@@ -200,12 +206,28 @@ export function TrainJourney({
     scroll.current = createJourneyScroll(
       () => sectionRefs.current.map((el) => el?.offsetTop ?? 0),
       journeyExperience.length,
+      {
+        viewport: () => host.current?.clientHeight || window.innerHeight,
+        onPlayingChange: setTourPlaying,
+      },
     );
     return () => {
       scroll.current?.dispose();
       scroll.current = null;
     };
   }, [ready, unavailable]);
+
+  useEffect(() => {
+    if (!ready || unavailable) return;
+    if (!mobile || reducedMotion) {
+      scroll.current?.pause();
+      return;
+    }
+    if (!mobileTourStarted.current) {
+      mobileTourStarted.current = true;
+      scroll.current?.play();
+    }
+  }, [mobile, ready, unavailable, reducedMotion]);
 
   function travelTo(element: HTMLElement | null | undefined) {
     if (!element) return;
@@ -215,9 +237,9 @@ export function TrainJourney({
   }
 
   useEffect(() => {
-    world.current.onboard = onboard;
+    world.current.onboard = mobile ? false : onboard;
     world.current.night = night;
-    world.current.reading = reading;
+    world.current.reading = mobile ? null : reading;
     world.current.mobile = mobile;
   }, [onboard, night, reading, mobile]);
   useEffect(
@@ -232,6 +254,7 @@ export function TrainJourney({
   );
   useEffect(() => {
     if (!lab) return;
+    scroll.current?.pause();
     const previous = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     labDialog.current?.showModal();
@@ -331,6 +354,15 @@ export function TrainJourney({
   return (
     <main
       id="main"
+      onClickCapture={(event) => {
+        if (
+          mobile &&
+          event.target instanceof Element &&
+          event.target.closest('button, a') &&
+          !event.target.closest('[data-tour-control]')
+        )
+          scroll.current?.pause();
+      }}
       style={
         mobile
           ? ({ '--cinema-scale': cinemaScale } as CSSProperties)
@@ -366,50 +398,90 @@ export function TrainJourney({
         </div>
       )}
       <div className="scene-controls">
-        <button
-          onClick={() => {
-            setReading(reading !== true);
-            setOnboard(false);
-          }}
-          disabled={!ready || unavailable}
-          aria-pressed={Boolean(reading)}
-          aria-label={
-            reading ? 'Return to the world' : 'Read this station up close'
-          }
-          title={reading ? 'Return to the world' : 'Read this station up close'}
-        >
-          <BookOpen size={16} />
-        </button>
-        <button
-          onClick={() => {
-            setOnboard(!onboard);
-            setReading(false);
-          }}
-          disabled={!ready || unavailable}
-          aria-pressed={onboard}
-          title="Change camera"
-          aria-label={
-            onboard
-              ? 'Return to world view'
-              : active >= 4
-                ? 'Look from the rover'
-                : 'Look from the train'
-          }
-        >
-          {active >= 4 ? <Truck size={16} /> : <TrainFront size={16} />}
-          <span>{onboard ? 'On board' : 'Ride'}</span>
-        </button>
-        <button
-          onClick={() => {
-            engine.current?.resetView();
-            setOnboard(false);
-            setReading(null);
-          }}
-          aria-label="Reset camera view"
-          disabled={!ready || unavailable}
-        >
-          <RotateCcw size={15} />
-        </button>
+        {mobile ? (
+          <>
+            <button
+              data-tour-control=""
+              onClick={() => scroll.current?.skip(-1)}
+              disabled={!ready || unavailable || active === 0}
+              aria-label="Previous reading stop"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              data-tour-control=""
+              className="tour-play"
+              onClick={() =>
+                tourPlaying ? scroll.current?.pause() : scroll.current?.play()
+              }
+              disabled={!ready || unavailable}
+              aria-label={
+                tourPlaying ? 'Pause mobile tour' : 'Play mobile tour'
+              }
+              aria-pressed={tourPlaying}
+            >
+              {tourPlaying ? <Pause size={16} /> : <Play size={16} />}
+              <span>{tourPlaying ? 'Pause' : 'Play'}</span>
+            </button>
+            <button
+              data-tour-control=""
+              onClick={() => scroll.current?.skip(1)}
+              disabled={!ready || unavailable || active === 6}
+              aria-label="Next reading stop"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                setReading(reading !== true);
+                setOnboard(false);
+              }}
+              disabled={!ready || unavailable}
+              aria-pressed={Boolean(reading)}
+              aria-label={
+                reading ? 'Return to the world' : 'Read this station up close'
+              }
+              title={
+                reading ? 'Return to the world' : 'Read this station up close'
+              }
+            >
+              <BookOpen size={16} />
+            </button>
+            <button
+              onClick={() => {
+                setOnboard(!onboard);
+                setReading(false);
+              }}
+              disabled={!ready || unavailable}
+              aria-pressed={onboard}
+              title="Change camera"
+              aria-label={
+                onboard
+                  ? 'Return to world view'
+                  : active >= 4
+                    ? 'Look from the rover'
+                    : 'Look from the train'
+              }
+            >
+              {active >= 4 ? <Truck size={16} /> : <TrainFront size={16} />}
+              <span>{onboard ? 'On board' : 'Ride'}</span>
+            </button>
+            <button
+              onClick={() => {
+                engine.current?.resetView();
+                setOnboard(false);
+                setReading(null);
+              }}
+              aria-label="Reset camera view"
+              disabled={!ready || unavailable}
+            >
+              <RotateCcw size={15} />
+            </button>
+          </>
+        )}
         <button
           onClick={() => setNight(!night)}
           aria-label={night ? 'Switch to daytime' : 'Switch to moonlight'}
@@ -451,7 +523,9 @@ export function TrainJourney({
           <p className="world-board-hint">
             <Mouse size={16} />{' '}
             {mobile
-              ? 'Swipe up or left to travel · tap to explore'
+              ? tourPlaying
+                ? 'Auto tour · swipe to pause · tap to explore'
+                : 'Play the tour or swipe to travel'
               : 'Scroll to travel · drag to look around'}
           </p>
         </div>
