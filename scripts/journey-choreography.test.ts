@@ -31,6 +31,18 @@ import {
 const distance = (a: Point, b: Point) =>
   Math.hypot(...a.map((v, i) => v - b[i]));
 
+void test('the first scroll rolls the train immediately while the introduction stays in place', () => {
+  const start = journeyPose(0);
+  for (const phase of [0.0001, 0.001, 0.01, 0.1, 0.2]) {
+    const pose = journeyPose(phase);
+    assert.ok(pose.trainX > start.trainX);
+    assert.ok(pose.trainX <= phase * 4 + 1e-9);
+    assert.equal(pose.board, 0);
+    assert.deepEqual(pose.display, start.display);
+    assert.deepEqual(pose.avatar, trainCab(pose.trainX));
+  }
+});
+
 void test('camera, train and rocket remain continuous through every chapter and planet boundary', () => {
   const boundaries = [1, 2, 3, 3.68, 4, 4.2, 4.4, 4.6, 4.8, 5, 6];
   for (const boundary of boundaries) {

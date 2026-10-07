@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { MinecraftLink as Link } from '@/components/minecraft-link';
 import { usePathname } from 'next/navigation';
 import { ArrowUpRight, TrainFront } from 'lucide-react';
 

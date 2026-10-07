@@ -131,7 +131,13 @@ export function journeyPose(timeline: number, count = 5) {
   );
   const departure = easeBetween(stop === 0 ? 0.45 : 0.6, 1, phase);
   const offset = chapter < 4 ? gallery.offset : ARCHIVE_TRAIN_X - 102;
-  const trainX = stop * 34 + (stop < 3 ? mix(offset, 34, departure) : offset);
+  // A gentle roll from the very first scroll keeps the introduction readable
+  // while the wheels and passing landscape make every input visible.
+  const trainX =
+    stop * 34 +
+    (stop < 3
+      ? mix(chapter === 0 ? phase * 4 : offset, 34, departure)
+      : offset);
   const cab = trainCab(trainX);
   let avatar = cab,
     avatarVisible = true;

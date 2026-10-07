@@ -44,7 +44,11 @@ export type WorldAction =
   | { kind: 'project'; slug: string }
   | { kind: 'planet'; index: number }
   | { kind: 'journal' };
-export type VoxelWorld = { dispose: () => void; resetView: () => void };
+export type VoxelWorld = {
+  ready: Promise<void>;
+  dispose: () => void;
+  resetView: () => void;
+};
 const SPACING = 34;
 const CONTACT_X = LIBRARY_X + 32;
 const clamp = THREE.MathUtils.clamp;
@@ -67,6 +71,10 @@ export function createVoxelWorld(
   onLost: () => void,
   onAction?: (action: WorldAction) => void,
 ): VoxelWorld {
+  let rendered: () => void;
+  const firstFrame = new Promise<void>((resolve) => {
+    rendered = resolve;
+  });
   const scene = new THREE.Scene();
   const sky = new THREE.Color('#97bbce'),
     dusk = new THREE.Color('#203352'),
@@ -757,7 +765,16 @@ export function createVoxelWorld(
     part(cars[0], -2.9, 2.8, side * 1.1, 'gold', 0.16, 1.15, 0.16);
   }
   // Technoblade's original 64×64 skin, including the crown/jacket overlays.
-  const skin = new THREE.TextureLoader().load('/skins/technoblade.png');
+  let skinLoaded: () => void;
+  const skinReady = new Promise<void>((resolve) => {
+    skinLoaded = resolve;
+  });
+  const skin = new THREE.TextureLoader().load(
+    '/skins/technoblade.png',
+    () => skinLoaded(),
+    undefined,
+    () => skinLoaded(),
+  );
   skin.colorSpace = THREE.SRGBColorSpace;
   skin.magFilter = skin.minFilter = THREE.NearestFilter;
   skin.generateMipmaps = false;
@@ -1088,6 +1105,50 @@ export function createVoxelWorld(
   orbitalUpdates.push((time) => {
     stationGear.rotation.z = time * 0.24;
   });
+  // One field laboratory, with a shared power core and connected mission bays.
+  // All extra equipment stays inside the centre or outside the walking ring.
+  part(station, 0, 3.75, 0, 'oxidized', 1.6, 0.5, 1.6);
+  part(station, 0, 4.25, 0, 'iron', 0.45, 0.5, 0.45);
+  part(station, 0, 4.75, 0, 'glass', 0.65, 0.5, 0.65);
+  part(station, 0, 5.05, 0, 'copper', 1, 0.12, 1);
+  const solar = new THREE.Group();
+  solar.position.set(-16, 3.5, -5);
+  station.add(solar);
+  part(solar, 0, -0.4, 0, 'stone', 10, 0.8, 5);
+  for (const x of [-3, 0, 3]) {
+    part(solar, x, 0.4, 0, 'iron', 0.25, 0.8, 0.25);
+    const panel = new THREE.Group();
+    panel.position.set(x, 0.95, 0);
+    panel.rotation.x = -0.28;
+    solar.add(panel);
+    part(panel, 0, 0, 0, 'iron', 2.7, 0.15, 3.7);
+    for (let a = -1; a <= 1; a++)
+      for (let b = -2; b <= 2; b++)
+        part(panel, a * 0.8, 0.11, b * 0.65, '#25445e', 0.72, 0.08, 0.56);
+  }
+  const bayMaterials = ['oxidized', 'copper', 'gold', 'purple', 'iron'];
+  for (let index = 0; index < journeyExperience.length; index++) {
+    const angle = experienceBay(index, journeyExperience.length).angle;
+    for (let r = 5.6; r < 8; r += 0.55)
+      block(
+        station,
+        Math.sin(angle) * r,
+        3.515,
+        Math.cos(angle) * r,
+        bayMaterials[index],
+        0.24,
+        0.025,
+        0.24,
+      );
+    const marking = new THREE.Group();
+    marking.position.set(Math.sin(angle) * 8.5, 3.5, Math.cos(angle) * 8.5);
+    marking.rotation.y = angle;
+    station.add(marking);
+    part(marking, 0, 0.016, 0, 'dark', 3.2, 0.03, 2.8);
+    part(marking, 0, 0.04, 1.3, bayMaterials[index], 3.2, 0.02, 0.12);
+    for (const x of [-1.6, 1.6])
+      part(marking, x, 0.04, 0, bayMaterials[index], 0.12, 0.02, 2.8);
+  }
   part(orbit, 12, 3.25, 2.75, 'iron', 5, 0.5, 0.5);
   // Each role has a working object beneath its floating annotation.
   for (let index = 0; index < journeyExperience.length; index++) {
@@ -1464,7 +1525,9 @@ export function createVoxelWorld(
         scale =
           terminal && read().mobile && host.clientWidth < host.clientHeight
             ? 0.016
-            : 0.011;
+            : terminal
+              ? 0.014
+              : 0.011;
         measured = height;
         measuredWidth = width;
       };
@@ -2083,7 +2146,7 @@ export function createVoxelWorld(
         .addScaledVector(
           radial,
           -Math.max(
-            22,
+            20,
             distance,
             ((terminalHeight + 4.2) /
               (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))) *
@@ -2239,15 +2302,19 @@ export function createVoxelWorld(
     );
     renderer.render(scene, camera);
     lettering.render(textScene, camera);
+    rendered!();
   }
   frame = requestAnimationFrame(animate);
   return {
+    ready: Promise.all([skinReady, firstFrame]).then(() => {}),
     resetView() {
       azimuth = 0;
       elevation = 0;
       mouse.set(0, 0);
     },
     dispose() {
+      rendered!();
+      skinLoaded!();
       cancelAnimationFrame(frame);
       observer.disconnect();
       pageObserver.disconnect();

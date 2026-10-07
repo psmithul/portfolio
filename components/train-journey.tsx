@@ -1,6 +1,7 @@
 'use client';
 
 import { chapterEntryTimeline } from '@/lib/journey-tour';
+import { MinecraftLoader } from '@/components/minecraft-loader';
 
 // Document navigation ends the scene's scroll controller before opening a
 // reading page, so the journey position cannot overwrite its initial scroll.
@@ -53,7 +54,7 @@ const EngineeringPlayground = dynamic(
     ),
   {
     ssr: false,
-    loading: () => <p className="lab-loading">Opening the workbench…</p>,
+    loading: () => <MinecraftLoader label="Opening the workbench…" compact />,
   },
 );
 const projectModel = {
@@ -65,17 +66,23 @@ const projectModel = {
 export function TrainJourney({
   projects,
   posts,
+  onStatic,
+  onReady,
+  started = true,
+  initialAutomatic = false,
 }: {
   projects: Project[];
   posts: JournalSummary[];
+  onStatic?: () => void;
+  onReady?: () => void;
+  started?: boolean;
+  initialAutomatic?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
   const engine = useRef<VoxelWorld | null>(null);
   const scroll = useRef<JourneyScroll | null>(null);
   const restored = useRef(false);
   const publishPosition = useRef<(y: number) => void>(() => {});
-  const startDialog = useRef<HTMLDialogElement>(null);
-  const manualStart = useRef<HTMLButtonElement>(null);
   const world = useRef<WorldOptions>({
     timeline: 0,
     progress: 0,
@@ -96,7 +103,6 @@ export function TrainJourney({
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [tourPlaying, setTourPlaying] = useState(false);
-  const [choosingTour, setChoosingTour] = useState(true);
   const [cinemaScale, setCinemaScale] = useState(0.54);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
@@ -139,16 +145,27 @@ export function TrainJourney({
               engine.current?.dispose();
               engine.current = null;
               setUnavailable(true);
+              onStatic?.();
             },
             (action) => sceneAction.current(action),
           );
+          const created = engine.current;
+          await created.ready;
+          if (disposed || engine.current !== created) return;
           setReady(true);
+          onReady?.();
         } catch {
-          setUnavailable(true);
+          if (!disposed) {
+            setUnavailable(true);
+            onStatic?.();
+          }
         }
       })
       .catch(() => {
-        if (!disposed) setUnavailable(true);
+        if (!disposed) {
+          setUnavailable(true);
+          onStatic?.();
+        }
       });
     return () => {
       disposed = true;
@@ -156,7 +173,7 @@ export function TrainJourney({
       engine.current = null;
       media.removeEventListener('change', motion);
     };
-  }, []);
+  }, [onStatic, onReady]);
 
   useEffect(() => {
     let queued = 0;
@@ -207,7 +224,7 @@ export function TrainJourney({
   }, []);
 
   useEffect(() => {
-    if (!ready || unavailable) return;
+    if (!ready || unavailable || !started) return;
     scroll.current = createJourneyScroll(
       () => sectionRefs.current.map((el) => el?.offsetTop ?? 0),
       journeyExperience.length,
@@ -235,24 +252,12 @@ export function TrainJourney({
           : 0,
       );
     }
+    if (initialAutomatic) scroll.current.play();
     return () => {
       scroll.current?.dispose();
       scroll.current = null;
     };
-  }, [ready, unavailable]);
-
-  useEffect(() => {
-    if (!ready || unavailable || !choosingTour) return;
-    startDialog.current?.showModal();
-    manualStart.current?.focus();
-  }, [ready, unavailable, choosingTour]);
-
-  function chooseTour(automatic: boolean) {
-    startDialog.current?.close();
-    setChoosingTour(false);
-    if (automatic) scroll.current?.play();
-    else scroll.current?.pause();
-  }
+  }, [ready, unavailable, started, initialAutomatic]);
 
   function travelTo(element: HTMLElement | null | undefined) {
     if (!element) return;
@@ -427,46 +432,10 @@ export function TrainJourney({
         <span className="journey-thread-fill" />
         <span className="journey-thread-marker" />
       </div>
-      {!ready && !unavailable && (
-        <div className="world-loading">
-          <TrainFront size={16} /> Loading the railway…
-        </div>
-      )}
       {unavailable && (
         <div className="world-fallback">
           The 3D journey needs WebGL. You can read every section below.
         </div>
-      )}
-      {!unavailable && choosingTour && (
-        <dialog
-          ref={startDialog}
-          className="journey-start"
-          aria-labelledby="journey-start-title"
-          aria-describedby="journey-start-copy"
-          onCancel={(event) => {
-            event.preventDefault();
-            chooseTour(false);
-          }}
-        >
-          <TrainFront size={28} aria-hidden="true" />
-          <h2 id="journey-start-title">How would you like to travel?</h2>
-          <p id="journey-start-copy">
-            Scroll through the journey at your own pace, or let it unfold
-            automatically.
-          </p>
-          <button
-            ref={manualStart}
-            onClick={() => chooseTour(false)}
-            className="journey-start-manual"
-          >
-            Explore the journey <ChevronRight size={18} />
-            <small>You set the pace · default</small>
-          </button>
-          <button data-tour-control="" onClick={() => chooseTour(true)}>
-            <Play size={16} /> Automatic tour
-            <small>Time to read every chapter</small>
-          </button>
-        </dialog>
       )}
       <div className="scene-controls">
         {mobile ? (
@@ -803,7 +772,7 @@ export function TrainJourney({
               data-world-board={4 + index}
             >
               <p className="world-eyebrow">
-                EXPERIENCE · {String(index + 1).padStart(2, '0')} /{' '}
+                LUNAR FIELD LAB · {String(index + 1).padStart(2, '0')} /{' '}
                 {String(journeyExperience.length).padStart(2, '0')}
               </p>
               <h2 id={'planet-title-' + index}>{item.company}</h2>

@@ -1,11 +1,33 @@
-import { TrainJourney } from '@/components/train-journey';
+import { PortfolioExperience } from '@/components/portfolio-experience';
+import { StaticPortfolio } from '@/components/static-portfolio';
+import { MinecraftLoader } from '@/components/minecraft-loader';
+import { Suspense } from 'react';
 import { projects } from '@/content/projects';
 import { getPublicPosts } from '@/lib/journal-store';
 import { journalSummary } from '@/lib/journal-editorial';
 
 export const dynamic = 'force-dynamic';
 
-export default async function Home() {
+async function Portfolio() {
   const posts = await getPublicPosts();
-  return <TrainJourney projects={projects} posts={posts.map(journalSummary)} />;
+  const summaries = posts.map(journalSummary);
+  return (
+    <PortfolioExperience projects={projects} posts={summaries}>
+      <StaticPortfolio projects={projects} posts={summaries} />
+    </PortfolioExperience>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <main id="main">
+          <MinecraftLoader />
+        </main>
+      }
+    >
+      <Portfolio />
+    </Suspense>
+  );
 }
