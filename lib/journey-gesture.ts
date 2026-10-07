@@ -21,7 +21,7 @@ export function createJourneyGesture() {
       if (!axis) {
         const dx = startX - x,
           dy = startY - y;
-        if (Math.max(Math.abs(dx), Math.abs(dy)) < 5) return 0;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 1) return 0;
         axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
       }
       const delta = axis === 'x' ? lastX - x : lastY - y;

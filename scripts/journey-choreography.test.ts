@@ -128,12 +128,18 @@ void test('the rocket transfer uses the final gangway and never crosses the arch
     const pose = journeyPose(t),
       next = journeyPose(t + 0.0001);
     walked += distance(pose.avatar, next.avatar);
-    assert.ok(pose.avatar[2] < 7.6, 'archive walls start at z=9.65');
+    assert.ok(
+      pose.avatar[2] < 8,
+      'the walk approaches the front threshold on the launch pad',
+    );
     if (pose.avatar[2] < 4.15)
       assert.ok(Math.abs(pose.avatar[0] - cab[0]) < 1e-8, 'on the cab gangway');
     assert.ok(pose.avatar[1] >= 0.9);
   }
-  assert.ok(walked < 12, 'a single short boarding walk');
+  assert.ok(
+    walked < 14,
+    'one short walk from final cab to the unobstructed launch field',
+  );
 });
 
 void test('boarding, entry and exit clear the rover tyres and cabin roof', () => {

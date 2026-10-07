@@ -1,7 +1,7 @@
 import { journeyPosition, journeyOffset } from './journey-timeline.ts';
 import { journeyPose } from './journey-choreography.ts';
 import { createJourneyMotion } from './journey-scroll-motion.ts';
-import { createJourneyTour, journeyTourStops } from './journey-tour.ts';
+import { createJourneyTour, chapterEntryTimeline } from './journey-tour.ts';
 import { createJourneyGesture } from './journey-gesture.ts';
 
 export type JourneyScroll = {
@@ -27,15 +27,10 @@ export function createJourneyScroll(
     target = current,
     last = 0,
     frame = 0,
-    writing = false,
-    wheelLast = -Infinity,
-    wheelTotal = 0,
-    wheelCommitted = false,
-    touchTotal = 0;
+    writing = false;
   const viewport = options.viewport ?? (() => window.innerHeight);
   const gesture = createJourneyGesture();
   const tour = createJourneyTour(count);
-  const stops = journeyTourStops(count);
   const motion = createJourneyMotion();
   let previousOffsets = offsets(),
     previousViewport = viewport();
@@ -62,17 +57,13 @@ export function createJourneyScroll(
       previousOffsets,
       previousViewport,
     );
-  const closest = (y: number) =>
-    stops.reduce((a, b) =>
-      Math.abs(b.timeline - at(y)) < Math.abs(a.timeline - at(y)) ? b : a,
-    ).timeline;
   const to = (y: number) => {
     pause();
-    setTarget(offset(closest(y)));
+    setTarget(y);
   };
   function jump(y: number) {
     pause();
-    current = Math.max(0, Math.min(maximum(), offset(closest(y))));
+    current = Math.max(0, Math.min(maximum(), y));
     target = current;
     options.onPositionChange?.(current, true);
     writing = true;
@@ -92,70 +83,51 @@ export function createJourneyScroll(
   const exempt = (node: EventTarget | null) =>
     node instanceof Element &&
     Boolean(
-      node.closest(
-        'dialog, .route-menu, .scene-controls, input, textarea, select, [contenteditable="true"]',
-      ),
+      node.closest('dialog, input, textarea, select, [contenteditable="true"]'),
     );
   function snap(direction: -1 | 1) {
     if (tour.playing()) pause();
-    // A gesture cannot queue several unread pages while the train is in transit.
-    if (
-      Math.abs(target - current) > 0.5 &&
-      Math.sign(target - current) === direction
-    )
-      return;
     tour.skip(timeline(), direction);
     setTarget(tourDestination());
   }
+  // Every input contributes immediately. Keep a bounded runway, rather than
+  // dropping gestures while travelling or waiting for a swipe to end.
+  const nudge = (delta: number) => {
+    if (!delta) return;
+    if (tour.playing()) pause();
+    const runway = viewport() * 0.65;
+    setTarget(
+      Math.max(current - runway, Math.min(current + runway, target + delta)),
+    );
+  };
   const wheel = (e: WheelEvent) => {
     if (e.ctrlKey || exempt(e.target)) return;
     if (e.cancelable) e.preventDefault();
-    const delta =
+    nudge(
       (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) *
-      (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1);
-    const now = e.timeStamp;
-    if (now - wheelLast > 240) {
-      wheelTotal = 0;
-      wheelCommitted = false;
-    }
-    wheelLast = now;
-    wheelTotal += delta;
-    if (!wheelCommitted && Math.abs(wheelTotal) >= 18) {
-      wheelCommitted = true;
-      snap(wheelTotal > 0 ? 1 : -1);
-    }
+        (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? viewport() : 1),
+    );
   };
   const startTouch = (e: TouchEvent) => {
     if (e.touches.length !== 1 || exempt(e.target)) {
       gesture.cancel();
-      touchTotal = 0;
       if (e.touches.length > 1) pause();
       return;
     }
     gesture.start(e.touches[0].clientX, e.touches[0].clientY);
-    touchTotal = 0;
   };
   const touch = (e: TouchEvent) => {
     if (e.touches.length !== 1 || exempt(e.target) || !e.cancelable) {
       gesture.cancel();
-      touchTotal = 0;
       return;
     }
     e.preventDefault();
-    const delta = gesture.move(e.touches[0].clientX, e.touches[0].clientY);
-    if (delta) {
-      if (tour.playing()) pause();
-      touchTotal += delta;
-    }
+    nudge(gesture.move(e.touches[0].clientX, e.touches[0].clientY));
   };
-  const endTouch = () => {
-    if (Math.abs(touchTotal) >= 24) snap(touchTotal > 0 ? 1 : -1);
-    gesture.cancel();
-    touchTotal = 0;
-  };
+  const endTouch = () => gesture.cancel();
   const cancelTouch = () => {
     gesture.cancel();
-    touchTotal = 0;
+    pause();
   };
   const key = (e: KeyboardEvent) => {
     if (exempt(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -177,7 +149,7 @@ export function createJourneyScroll(
               : 0;
     if (delta) {
       e.preventDefault();
-      if (!e.repeat) snap(delta > 0 ? 1 : -1);
+      nudge(delta);
     } else if (e.key === 'Home' || e.key === 'End') {
       e.preventDefault();
       to(e.key === 'Home' ? 0 : maximum());
@@ -199,7 +171,10 @@ export function createJourneyScroll(
       return;
     }
     const element = document.getElementById(id);
-    if (element?.matches('.journey-stop, #main')) jump(element.offsetTop);
+    if (element?.matches('.journey-stop, #main')) {
+      const chapter = previousOffsets.indexOf(element.offsetTop);
+      jump(chapter < 0 ? 0 : offset(chapterEntryTimeline(chapter, count)));
+    }
   };
   function resize() {
     const points = offsets();
@@ -257,9 +232,15 @@ export function createJourneyScroll(
       writing = false;
     }
   }
-  window.addEventListener('wheel', wheel, { passive: false });
-  window.addEventListener('touchstart', startTouch, { passive: true });
-  window.addEventListener('touchmove', touch, { passive: false });
+  window.addEventListener('wheel', wheel, { passive: false, capture: true });
+  window.addEventListener('touchstart', startTouch, {
+    passive: true,
+    capture: true,
+  });
+  window.addEventListener('touchmove', touch, {
+    passive: false,
+    capture: true,
+  });
   window.addEventListener('touchend', endTouch);
   window.addEventListener('touchcancel', cancelTouch);
   window.addEventListener('keydown', key);
@@ -287,9 +268,9 @@ export function createJourneyScroll(
     },
     dispose() {
       cancelAnimationFrame(frame);
-      window.removeEventListener('wheel', wheel);
-      window.removeEventListener('touchstart', startTouch);
-      window.removeEventListener('touchmove', touch);
+      window.removeEventListener('wheel', wheel, true);
+      window.removeEventListener('touchstart', startTouch, true);
+      window.removeEventListener('touchmove', touch, true);
       window.removeEventListener('touchend', endTouch);
       window.removeEventListener('touchcancel', cancelTouch);
       window.removeEventListener('keydown', key);
