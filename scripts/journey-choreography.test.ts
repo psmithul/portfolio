@@ -138,7 +138,7 @@ void test('one landing transfer clears the rover wheels; all later roles are vie
     if (
       Math.abs(pose.avatar[0] - pose.rover[0]) < 0.5 &&
       z > 0.7 &&
-      z < 1.4 &&
+      z < 1.93 &&
       !pose.seated
     )
       assert.ok(

@@ -187,10 +187,12 @@ export function journeyPose(timeline: number, count = 5) {
       ? walkPath(
           [
             hatch,
-            [baseX + 9, baseY, baseZ + 6.5],
-            [baseX + 6, baseY, baseZ + 6.5],
-            [baseX + 6, baseY + 0.58, baseZ + 6.45],
-            [baseX + 6, baseY + 1.25, baseZ + 6.05],
+            [baseX + 9, baseY, baseZ + 0.3],
+            [baseX + 10.2, baseY, baseZ + 6.95],
+            [baseX + 6, baseY, baseZ + 6.95],
+            [baseX + 6, baseY + 0.58, baseZ + 6.95],
+            [baseX + 6, baseY + 1.25, baseZ + 6.95],
+            [baseX + 6, baseY + 1.25, baseZ + 6.5],
             [seat[0], baseY + 1.25, seat[2]],
             seat,
           ],
