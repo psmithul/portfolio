@@ -1022,8 +1022,21 @@ export function createVoxelWorld(
   for (let a = -3; a <= 3; a++)
     part(roverBody, a * 0.4, 3.85, 0, 'glass', 0.3, 0.06, 1.8);
   // Boarding steps are outside the wheel envelope; the raised entry clears the tyres.
-  part(orbit, 6, 4, 6.45, 'iron', 1.2, 0.16, 0.5);
-  part(orbit, 6, 4.67, 6.15, 'iron', 1.2, 0.16, 0.4);
+  part(orbit, 6, 4, 6.95, 'iron', 1.2, 0.16, 0.5);
+  part(orbit, 6, 4.67, 6.35, 'iron', 1.2, 0.16, 0.7);
+  for (const side of [-1, 1])
+    part(orbit, 6 + side * 0.5, 4.06, 6.35, 'iron', 0.1, 1.1, 0.1);
+  const landingRamp = part(
+    orbit,
+    9,
+    (4.025 + 3.5) / 2 - 0.07,
+    -0.625,
+    'iron',
+    1.25,
+    0.14,
+    Math.hypot(1.85, 0.525),
+  );
+  landingRamp.rotation.x = Math.atan2(0.525, 1.85);
   const roverWheels = [-1, 1].flatMap((side) =>
     [-2, 0, 2].map((axle) => ({
       axle,
