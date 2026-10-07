@@ -21,6 +21,10 @@ import {
   railAngle,
 } from '@/lib/journey-choreography';
 import { EXHIBIT_SPACING } from '@/lib/journey-exhibits';
+import {
+  stationCameraFov,
+  stationCameraDistance,
+} from '@/lib/journey-station-camera';
 import { createSuspensionResponse } from '@/lib/suspension-physics';
 import { journeyExperience } from '@/content/journey';
 import { createBlockMaterials, type Block } from '@/lib/voxel-textures';
@@ -1647,6 +1651,9 @@ export function createVoxelWorld(
       };
     });
   });
+  const roleBoards = boards.filter(
+    (board) => board.index >= 4 && board.index < 9,
+  );
   // Batch static voxels by parent and texture, leaving articulated objects separate.
   const dummy = new THREE.Object3D();
   batches.forEach(({ parent, type, items }) => {
@@ -1706,7 +1713,8 @@ export function createVoxelWorld(
   const readingFrustum = new THREE.Frustum(),
     viewProjection = new THREE.Matrix4(),
     pageBounds = new THREE.Box3(),
-    halfPage = new THREE.Vector3();
+    halfPage = new THREE.Vector3(),
+    pageCenter = new THREE.Vector3();
   const mouse = new THREE.Vector2(),
     parallax = new THREE.Vector2();
   const raycaster = new THREE.Raycaster(),
@@ -1828,6 +1836,23 @@ export function createVoxelWorld(
       : smoothTimeline(timeline, opts.timeline, dt);
     const pose = journeyPose(timeline, journeyExperience.length);
     const portrait = opts.mobile && camera.aspect < 1;
+    const terminalWidth = Math.max(
+      ...roleBoards.map((page) => page.readWidth()),
+    );
+    const terminalHeight = Math.max(
+      ...roleBoards.map((page) => page.readHeight()),
+    );
+    const roomFov = stationCameraFov(
+      camera.aspect,
+      terminalWidth,
+      terminalHeight,
+      portrait,
+    );
+    const targetFov = 43 + (roomFov - 43) * pose.stationView;
+    if (camera.fov !== targetFov) {
+      camera.fov = targetFov;
+      camera.updateProjectionMatrix();
+    }
     projectStages.forEach((stage, i) => {
       const page = boards.find(
         (board) => board.index === 2 && board.leaf === i,
@@ -2131,23 +2156,14 @@ export function createVoxelWorld(
       look.lerp(center, readingBlend);
     }
     if (pose.stationView > 0.001) {
-      const rolePages = boards.filter(
-        (board) => board.index >= 4 && board.index < 9,
-      );
-      // Fit the largest terminal before circling, preventing per-role zoom snaps.
-      const width = Math.max(...rolePages.map((page) => page.readWidth()));
-      const height = Math.max(...rolePages.map((page) => page.readHeight()));
-      const fov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      const distance = Math.max(
-        opts.reading === true
-          ? 0
-          : smallScreen
-            ? 10.5
-            : opts.reading === false && !portrait
-              ? 20
-              : 17,
-        (height * 1.4) / (2 * fov),
-        (width * 1.3) / (2 * fov * camera.aspect),
+      // Widen portrait optics instead of retreating through another exhibit.
+      const distance = stationCameraDistance(
+        camera.aspect,
+        terminalWidth,
+        terminalHeight,
+        camera.fov,
+        opts.reading === true,
+        smallScreen,
       );
       const angle = pose.galleryAngle + azimuth * 0.12;
       const radial = new THREE.Vector3(Math.sin(angle), 0, Math.cos(angle));
@@ -2304,7 +2320,11 @@ export function createVoxelWorld(
           index === pose.board &&
           Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) < 2.5 &&
           cameraMode < 0.5;
+        pageCenter
+          .copy(object.position)
+          .applyMatrix4(camera.matrixWorldInverse);
         object.visible =
+          pageCenter.z < -0.5 &&
           camera.position.clone().sub(object.position).dot(normal) > 0 &&
           readingFrustum.intersectsBox(pageBounds) &&
           cameraMode < 0.9995 &&
