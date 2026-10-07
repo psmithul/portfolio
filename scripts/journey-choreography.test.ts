@@ -1,3 +1,8 @@
+import {
+  stationCameraFov,
+  stationCameraDistance,
+  STATION_CAMERA_DISTANCE,
+} from '../lib/journey-station-camera.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { journeyOffset, journeyPosition } from '../lib/journey-timeline.ts';
@@ -275,4 +280,46 @@ void test('phone rotation preserves the same actor and camera pose', () => {
       for (const key of ['avatar', 'rocket', 'rover', 'focus'] as const)
         assert.ok(distance(a[key], b[key]) < 1e-8);
     }
+});
+
+void test('station cameras fit desktop and portrait terminals without entering another bay', () => {
+  for (const [width, height] of [
+    [1280, 720],
+    [390, 844],
+    [320, 932],
+    [375, 812],
+    [844, 390],
+  ]) {
+    const aspect = width / height;
+    const pageWidth = width < height ? 5.28 : 6.16;
+    const pageHeight = 5.3;
+    const fov = stationCameraFov(aspect, pageWidth, pageHeight, width < height);
+    for (const closeUp of [false, true]) {
+      const distance = stationCameraDistance(
+        aspect,
+        pageWidth,
+        pageHeight,
+        fov,
+        closeUp,
+        height < 550,
+      );
+      const tangent = Math.tan((fov * Math.PI) / 360);
+      assert.ok(
+        distance <= STATION_CAMERA_DISTANCE,
+        'camera stays in the clear ring',
+      );
+      assert.ok(
+        Math.abs(9.5 - distance) <= 7.5,
+        'at least two metres from terminal surfaces',
+      );
+      assert.ok(
+        pageWidth / (2 * distance * tangent * aspect) <= 1 / 1.3 + 1e-8,
+        'full width fits',
+      );
+      assert.ok(
+        pageHeight / (2 * distance * tangent) <= 1 / 1.4 + 1e-8,
+        'full height fits',
+      );
+    }
+  }
 });
