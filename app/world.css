@@ -106,6 +106,24 @@ body {
   touch-action: pan-y;
   background: #83b8ed;
 }
+/* One owner for panning; the browser still owns pinch zoom and dialog scrolling. */
+html:has(.mobile-journey.world-integrated) {
+  touch-action: pinch-zoom;
+  overscroll-behavior: none;
+}
+.mobile-journey.world-integrated .voxel-canvas {
+  bottom: auto;
+  height: 100svh;
+  touch-action: pinch-zoom;
+}
+.mobile-journey .world-lettering,
+.mobile-journey .in-world-board {
+  touch-action: pinch-zoom;
+}
+.workshop-overlay,
+.route-menu {
+  touch-action: pan-y pinch-zoom;
+}
 .voxel-canvas canvas {
   display: block;
   width: 100%;
@@ -1342,6 +1360,20 @@ a:focus-visible {
 }
 .mobile-journey .station-footnote {
   display: none;
+}
+.mobile-journey .scene-controls > .tour-play {
+  width: 88px;
+  min-width: 88px;
+  gap: 6px;
+}
+.mobile-journey .scene-controls > .tour-play span {
+  display: inline;
+  font-size: 11px;
+}
+@media (max-width: 370px) {
+  .mobile-journey.world-integrated .scene-controls {
+    gap: 4px;
+  }
 }
 
 /* Small reading alcoves live in the Three.js scene and share the page scroll. */
