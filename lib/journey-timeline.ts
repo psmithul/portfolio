@@ -1,3 +1,9 @@
+import {
+  GALLERY_START,
+  GALLERY_END,
+  easeBetween,
+} from './journey-choreography.ts';
+
 export type JourneyPosition = {
   stop: number;
   phase: number;
@@ -35,23 +41,20 @@ export function journeyPosition(
   const length =
     stop < 6 ? (offsets[stop + 1] ?? start + viewport) - start : viewport;
   const phase = clamp((y - start) / Math.max(length, 1), 0, 1);
-  const hold =
-    stop === 0
-      ? 0
-      : stop === 3
-        ? 0.35
-        : stop === 4
-          ? 1 - 0.3 / experienceCount
-          : 0.72;
+  const hold = stop === 0 ? 0 : stop === 3 ? 0.35 : stop === 4 ? 0.9 : 0.72;
   const departure = clamp((phase - hold) / (1 - hold), 0, 1);
-  const p = phase * experienceCount,
-    whole = Math.floor(p);
-  const fraction = clamp((p - whole - 0.65) / 0.35, 0, 1);
+  const p =
+    clamp((phase - GALLERY_START) / (GALLERY_END - GALLERY_START), 0, 1) *
+    experienceCount;
+  const whole = Math.min(experienceCount - 1, Math.floor(p + 1e-9));
+  const fraction = p - whole;
   return {
     stop,
     phase,
     progress: Math.min(6, stop + ease(departure)),
     experience:
-      stop === 4 ? Math.min(experienceCount - 1, whole + ease(fraction)) : 0,
+      stop === 4
+        ? Math.min(experienceCount - 1, whole + easeBetween(0.56, 1, fraction))
+        : 0,
   };
 }

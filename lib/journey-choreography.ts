@@ -6,7 +6,29 @@ import {
 
 export type Point = [number, number, number];
 export const ORBIT_ORIGIN: Point = [112, 80, -12];
-export const PLANET_SPACING = 20;
+export const STATION_CENTER: Point = [12, 3.5, -10];
+export const STATION_RADIUS = 12;
+export const GALLERY_RADIUS = 3.8;
+export const DISPLAY_RADIUS = 9.5;
+export const GALLERY_START = 0.25;
+export const GALLERY_END = 0.79;
+export const GALLERY_ANGLE = 0.4;
+export const LIBRARY_X = 42;
+/** All role navigation uses the same gallery timing as the camera and guide. */
+export const experienceReadingPhase = (index: number, count = 5) =>
+  GALLERY_START + ((GALLERY_END - GALLERY_START) / count) * (index + 0.3);
+export function experienceBay(index: number, count = 5) {
+  const angle = GALLERY_ANGLE + (index * Math.PI * 2) / count;
+  return {
+    angle,
+    position: [
+      ORBIT_ORIGIN[0] + STATION_CENTER[0] + Math.sin(angle) * DISPLAY_RADIUS,
+      ORBIT_ORIGIN[1] + STATION_CENTER[1] + 4,
+      ORBIT_ORIGIN[2] + STATION_CENTER[2] + Math.cos(angle) * DISPLAY_RADIUS,
+    ] as Point,
+    yaw: angle + Math.PI,
+  };
+}
 export const ARCHIVE_TRAIN_X = 102 + (EXHIBIT_COUNTS[3] - 1) * EXHIBIT_SPACING;
 const ROCKET_FOOT = 0.475;
 export const railZ = (x: number) => Math.sin(x * 0.032) * 2;
@@ -51,19 +73,42 @@ function walkPath(points: Point[], amount: number): Point {
   }
   return points[points.length - 1];
 }
-export const libraryX = (count: number) => (count - 1) * PLANET_SPACING + 36;
-/** Level outposts connect through a shallow, continuous lunar ramp. */
-export function lunarFloor(x: number, count = 5) {
-  return (
-    3.5 *
-    (1 - easeBetween((count - 1) * PLANET_SPACING + 10, libraryX(count) - 8, x))
-  );
+/** The station and library connect through a shallow, continuous lunar ramp. */
+export function lunarFloor(x: number) {
+  return 3.5 * (1 - easeBetween(22, LIBRARY_X - 8, x));
 }
-export function dock(x: number, moon = false): Point {
+export function dock(x = 0): Point {
   return [
-    ORBIT_ORIGIN[0] + x + 9,
-    ORBIT_ORIGIN[1] + (moon ? 0 : 3.5) - ROCKET_FOOT,
-    ORBIT_ORIGIN[2] - 3,
+    ORBIT_ORIGIN[0] + x + 6,
+    ORBIT_ORIGIN[1] + 3.5 - ROCKET_FOOT,
+    ORBIT_ORIGIN[2] + 12,
+  ];
+}
+const orbitPoint = (x: number, y: number, z: number): Point => [
+  ORBIT_ORIGIN[0] + x,
+  ORBIT_ORIGIN[1] + y,
+  ORBIT_ORIGIN[2] + z,
+];
+const circlePoint = (angle: number): Point =>
+  orbitPoint(
+    STATION_CENTER[0] + Math.sin(angle + 0.45) * GALLERY_RADIUS,
+    STATION_CENTER[1],
+    STATION_CENTER[2] + Math.cos(angle + 0.45) * GALLERY_RADIUS,
+  );
+/** Raised side entry clears the wheel envelope before lowering onto the floor. */
+export function stationEntryPath(): Point[] {
+  return [
+    orbitPoint(18, 4.4, 4.5),
+    orbitPoint(18, 4.75, 4.5),
+    orbitPoint(18, 4.75, 6.5),
+    orbitPoint(18, 4.75, 6.95),
+    orbitPoint(18, 4.08, 6.95),
+    orbitPoint(18, 3.5, 6.95),
+    orbitPoint(14.5, 3.5, 6.95),
+    orbitPoint(14.5, 3.5, 3.4),
+    orbitPoint(12, 3.5, 3.4),
+    orbitPoint(12, 3.5, -3),
+    circlePoint(GALLERY_ANGLE),
   ];
 }
 
@@ -91,6 +136,8 @@ export function journeyPose(timeline: number, count = 5) {
   ];
   let seated = false;
   let seating = 0;
+  let stationView = 0,
+    galleryAngle = GALLERY_ANGLE;
   let focus: Point = [trainX, 0, 0];
   let flight = 0,
     pitch = 0,
@@ -127,85 +174,104 @@ export function journeyPose(timeline: number, count = 5) {
     flight = Math.sin(Math.PI * launch);
     pitch = -Math.sin(Math.PI * launch) * 0.16;
     focus = blend([trainX, 0, 0], [112, 0, 6], easeBetween(3.4, 3.68, t));
-    focus[2] = mix(focus[2], -12, launch);
+    focus[0] = mix(focus[0], ORBIT_ORIGIN[0], launch);
+    focus[2] = mix(focus[2], ORBIT_ORIGIN[2], launch);
     focus[1] =
       rocket[1] -
       (0.9 - ROCKET_FOOT) * (1 - launch) -
       (3.5 - ROCKET_FOOT) * launch;
   }
   if (t >= 4) {
-    let local = (t - 4) * count;
-    // Decimal stop coordinates such as 4.6 must resolve to the new workplace.
-    if (Math.abs(local - Math.round(local)) < 1e-9) local = Math.round(local);
-    let index = Math.min(count - 1, Math.floor(local));
-    let fraction = local - index;
-    let fromX = index * PLANET_SPACING,
-      toX = fromX + PLANET_SPACING;
-    let moonFrom = false;
+    rocket = dock();
     if (chapter === 4) {
+      const local =
+        clamp((phase - GALLERY_START) / (GALLERY_END - GALLERY_START)) * count;
+      const index = Math.min(count - 1, Math.floor(local + 1e-9));
+      const fraction = Math.min(1, Math.max(0, local - index));
       board = 4 + index;
-      if (index === count - 1) {
-        toX = libraryX(count);
+      boardPhase = fraction;
+      display = experienceBay(index, count).position;
+      const advance = easeBetween(0.56, 1, fraction);
+      galleryAngle = GALLERY_ANGLE + ((index + advance) * Math.PI * 2) / count;
+      const driveIn = easeBetween(0.1, 0.16, phase);
+      const driveOut = easeBetween(0.9, 1, phase);
+      const roverX = mix(mix(6, 18, driveIn), LIBRARY_X + 6, driveOut);
+      rover = orbitPoint(roverX, lunarFloor(roverX), 4.5);
+      const seat = roverSeat(rover);
+      const landingPath: Point[] = [
+        [rocket[0], rocket[1] + 1, rocket[2] + 1.45],
+        orbitPoint(6, 3.5, 11.6),
+        orbitPoint(6, 3.5, 6.95),
+        orbitPoint(6, 4.08, 6.95),
+        orbitPoint(6, 4.75, 6.95),
+        orbitPoint(6, 4.75, 6.5),
+        orbitPoint(6, 4.75, 4.5),
+        orbitPoint(6, 4.4, 4.5),
+      ];
+      if (phase < 0.1) {
+        const arrival = easeBetween(0.007, 0.1, phase);
+        avatar = walkPath(landingPath, arrival);
+        avatarVisible = phase > 0.012;
+        walking = arrival > 0 && arrival < 1;
+        seating = easeBetween(0.075, 0.1, phase);
+        seated = arrival >= 1;
+      } else if (phase < 0.16 || phase >= 0.9) {
+        avatar = seat;
+        seated = true;
+        seating = 1;
+      } else if (phase < GALLERY_START) {
+        const entry = easeBetween(0.16, GALLERY_START, phase);
+        avatar = walkPath(stationEntryPath(), entry);
+        walking = entry > 0 && entry < 1;
+        seating = 1 - easeBetween(0.16, 0.175, phase);
+      } else if (phase <= GALLERY_END) {
+        avatar = circlePoint(galleryAngle);
+        walking = fraction > 0.56 && fraction < 1;
+        inspecting = !walking;
+      } else {
+        const exit = easeBetween(GALLERY_END, 0.9, phase);
+        avatar = walkPath(stationEntryPath().reverse(), exit);
+        walking = exit > 0 && exit < 1;
+        seating = easeBetween(0.88, 0.9, phase);
       }
+      // Enter and leave once. The camera follows the open doorway, then circles
+      // the gallery continuously; the rover is stationary for the entire visit.
+      stationView =
+        easeBetween(0.1, 0.16, phase) * (1 - easeBetween(0.9, 1, phase));
+      const center = orbitPoint(...STATION_CENTER);
+      focus = blend(
+        orbitPoint(roverX - 6, 0, 0),
+        center,
+        easeBetween(0.16, GALLERY_START, phase) *
+          (1 - easeBetween(GALLERY_END, 0.9, phase)),
+      );
+      const galleryTransit =
+        easeBetween(0.5, 0.68, fraction) * (1 - easeBetween(0.9, 1, fraction));
+      transit =
+        phase < GALLERY_START
+          ? easeBetween(0.02, 0.055, phase) *
+            (1 - easeBetween(0.22, GALLERY_START, phase))
+          : phase <= GALLERY_END
+            ? galleryTransit
+            : easeBetween(GALLERY_END, 0.81, phase) *
+              (1 - easeBetween(0.97, 1, phase));
     } else {
-      index = chapter === 5 ? count : count + 1;
-      local = index + phase;
-      fraction = phase;
-      fromX = libraryX(count) + (chapter === 6 ? 32 : 0);
-      toX = fromX + (chapter === 6 ? 0 : 32);
-      moonFrom = true;
-      board = 4 + index;
+      const fromX = LIBRARY_X + (chapter === 6 ? 32 : 0);
+      const toX = fromX + (chapter === 6 ? 0 : 32);
+      const travel = easeBetween(0.72, 1, phase);
+      const roverX = mix(fromX + gallery.offset, toX, travel) + 6;
+      rover = orbitPoint(roverX, lunarFloor(roverX), 4.5);
+      avatar = roverSeat(rover);
+      seated = true;
+      seating = 1;
+      board = chapter === 5 ? 9 : 10;
+      boardPhase = phase;
+      transit =
+        (chapter === 5 ? gallery.transit : 0) *
+        (1 - easeBetween(0.92, 1, phase));
+      display = orbitPoint(fromX - 5 + gallery.offset, 5.4, 8);
+      focus = orbitPoint(roverX - 6, 0, 0);
     }
-    const travel = easeBetween(chapter === 4 ? 0.52 : 0.72, 1, fraction);
-    boardPhase = fraction;
-    transit =
-      chapter === 5
-        ? gallery.transit
-        : chapter === 6
-          ? 0
-          : easeBetween(0.42, 0.56, fraction);
-    transit *= 1 - easeBetween(0.92, 1, fraction);
-    rocket = dock(0);
-    const roverX = mix(fromX + gallery.offset, toX, travel) + 6;
-    rover = [
-      ORBIT_ORIGIN[0] + roverX,
-      ORBIT_ORIGIN[1] + lunarFloor(roverX, count),
-      ORBIT_ORIGIN[2] + 4.5,
-    ];
-    const baseX = ORBIT_ORIGIN[0] + fromX,
-      baseY = ORBIT_ORIGIN[1] + (moonFrom ? 0 : 3.5),
-      baseZ = ORBIT_ORIGIN[2];
-    const seat = roverSeat(rover);
-    const firstLanding = chapter === 4 && index === 0;
-    const hatch: Point = firstLanding
-      ? [rocket[0], rocket[1] + 1, rocket[2] + 1.45]
-      : seat;
-    // A single transfer from the landing gantry to a raised side step. All later
-    // reading stops are viewed from the rover, without crossing its chassis.
-    const arrival = easeBetween(0.025, 0.24, fraction);
-    avatar = firstLanding
-      ? walkPath(
-          [
-            hatch,
-            [baseX + 9, baseY, baseZ + 0.3],
-            [baseX + 10.2, baseY, baseZ + 6.95],
-            [baseX + 6, baseY, baseZ + 6.95],
-            [baseX + 6, baseY + 0.58, baseZ + 6.95],
-            [baseX + 6, baseY + 1.25, baseZ + 6.95],
-            [baseX + 6, baseY + 1.25, baseZ + 6.5],
-            [seat[0], baseY + 1.25, seat[2]],
-            seat,
-          ],
-          arrival,
-        )
-      : seat;
-    avatarVisible = !firstLanding || fraction > 0.035;
-    seating = firstLanding ? easeBetween(0.16, 0.24, fraction) : 1;
-    seated = !firstLanding || arrival >= 1;
-    walking = firstLanding && arrival > 0 && arrival < 1;
-    inspecting = false;
-    display = [baseX - 5 + gallery.offset, baseY + 5.4, baseZ + 8];
-    focus = [ORBIT_ORIGIN[0] + roverX - 6, ORBIT_ORIGIN[1], ORBIT_ORIGIN[2]];
   }
   if (chapter < 4) transit *= 1 - easeBetween(0.94, 1, phase);
   return {
@@ -220,6 +286,8 @@ export function journeyPose(timeline: number, count = 5) {
     rover,
     seated,
     seating,
+    stationView,
+    galleryAngle,
     focus,
     flight,
     pitch,

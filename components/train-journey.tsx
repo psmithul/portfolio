@@ -32,6 +32,7 @@ import {
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
 import { journeyPosition } from '@/lib/journey-timeline';
+import { experienceReadingPhase } from '@/lib/journey-choreography';
 import { createJourneyScroll, type JourneyScroll } from '@/lib/journey-scroll';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import type { VoxelWorld, WorldOptions, WorldAction } from '@/lib/voxel-world';
@@ -268,6 +269,22 @@ export function TrainJourney({
     };
   }, []);
 
+  function goExperience(index: number) {
+    setReading(null);
+    setOnboard(false);
+    const section = sectionRefs.current[4];
+    if (!section || !scroll.current) {
+      travelTo(planetRefs.current[index]);
+      return;
+    }
+    const start = section.offsetTop;
+    const length =
+      (sectionRefs.current[5]?.offsetTop ?? start + section.offsetHeight) -
+      start;
+    scroll.current.to(
+      start + length * experienceReadingPhase(index, journeyExperience.length),
+    );
+  }
   function go(index: number) {
     setReading(null);
     setOnboard(false);
@@ -283,7 +300,7 @@ export function TrainJourney({
     sceneAction.current = (action) => {
       if (action.kind === 'project') setLab(action.slug);
       else if (action.kind === 'planet') {
-        travelTo(planetRefs.current[action.index]);
+        goExperience(action.index);
       } else window.location.assign('/blog');
     };
   }, [mobile, reducedMotion]);
@@ -641,7 +658,7 @@ export function TrainJourney({
                   <button
                     key={p.company}
                     onClick={() => {
-                      travelTo(planetRefs.current[i]);
+                      goExperience(i);
                     }}
                     aria-current={i === index ? 'step' : undefined}
                     aria-label={'Go to ' + p.company}

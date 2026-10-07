@@ -8,7 +8,7 @@ import {
 import { journeyPosition } from '../lib/journey-timeline.ts';
 import { journeyPose } from '../lib/journey-choreography.ts';
 
-const offsets = [0, 990, 2115, 3240, 4815, 7965, 9090];
+const offsets = [0, 990, 2115, 3240, 4815, 7065, 8190];
 const distance = (a: readonly number[], b: readonly number[]) =>
   Math.hypot(...a.map((n, i) => n - b[i]));
 const sample = (y: number) => {
@@ -77,7 +77,7 @@ void test('scroll traverses the entire continuous route and reverses without get
   assertSpeed(sample(y), sample(reverse), 1 / 60);
 });
 
-void test('the compact experience trail has time to read every role without repeated walking delays', () => {
+void test('the compact station visit reads every role with one entry and exit', () => {
   let y = offsets[4],
     elapsed = 0;
   const visited = new Set<number>();
@@ -88,7 +88,7 @@ void test('the compact experience trail has time to read every role without repe
     elapsed += 1 / 60;
   }
   assert.deepEqual([...visited], [4, 5, 6, 7, 8]);
-  assert.ok(elapsed >= 12 && elapsed < 22, `experience took ${elapsed}s`);
+  assert.ok(elapsed >= 12 && elapsed < 38, `experience took ${elapsed}s`);
 });
 
 void test('frame stalls, small targets, and phone viewports cannot bypass the speed limit', () => {

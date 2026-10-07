@@ -1606,8 +1606,8 @@ a:focus-visible {
   min-height: 0;
 }
 .train-journey:not(.world-unavailable) .planet-chapter {
-  height: 70svh;
-  min-height: 70svh;
+  height: 50svh;
+  min-height: 50svh;
 }
 
 .journey-portrait {
@@ -1752,5 +1752,81 @@ a:focus-visible {
 @media (max-width: 370px) {
   .workshop-dialog .stage-toolbar button span {
     display: none;
+  }
+}
+
+/* Compact orbital terminals share the room's copper and dark instrument palette. */
+.train-journey .experience-panel.in-world-board {
+  width: 560px !important;
+  padding: 24px 28px !important;
+  background: #142a31;
+  color: #eaf2df;
+}
+.train-journey .experience-panel.in-world-board h2 {
+  color: #f4e2b6;
+  font-size: 42px;
+  line-height: 1.05;
+  margin: 10px 0 12px;
+}
+.train-journey .experience-panel.in-world-board p {
+  color: #e0e9e2;
+  font-size: 26px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.train-journey .experience-panel.in-world-board .world-eyebrow {
+  color: #b4cfbe;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.train-journey .experience-panel.in-world-board .experience-role {
+  color: #f3cb8a;
+  font-size: 23px;
+  margin-bottom: 6px;
+}
+.train-journey .experience-panel.in-world-board .project-discipline {
+  display: block;
+  color: #abc5bd;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+.train-journey .experience-panel.in-world-board .station-text-link {
+  color: #d4eec9;
+  font-size: 19px;
+  min-height: 38px;
+}
+.train-journey .experience-panel.in-world-board .planet-selector {
+  margin: 12px 0 0;
+  gap: 8px;
+}
+.train-journey .experience-panel.in-world-board .planet-selector button {
+  color: #d6e6d9;
+  border-color: #8dafaa;
+  background: #203f43;
+  font-size: 16px;
+  min-height: 40px;
+  padding: 6px 10px;
+}
+.train-journey
+  .experience-panel.in-world-board
+  .planet-selector
+  button[aria-current] {
+  background: #c8914e;
+  color: #142a31;
+}
+.train-journey .experience-panel.in-world-board :focus-visible {
+  outline-color: #e2ba75;
+}
+@media (max-width: 800px) and (orientation: portrait) {
+  .train-journey .experience-panel.in-world-board {
+    width: 480px !important;
+    padding: 22px 26px !important;
+  }
+  .train-journey .experience-panel.in-world-board h2 {
+    font-size: 39px;
+  }
+  .train-journey .experience-panel.in-world-board .planet-selector button {
+    min-height: 46px;
+    min-width: 48px;
   }
 }

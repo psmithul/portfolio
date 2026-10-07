@@ -9,7 +9,13 @@ import {
   easeBetween,
   smoothTimeline,
   lunarFloor,
-  PLANET_SPACING,
+  LIBRARY_X,
+  STATION_CENTER,
+  STATION_RADIUS,
+  DISPLAY_RADIUS,
+  GALLERY_START,
+  GALLERY_END,
+  experienceBay,
   ARCHIVE_TRAIN_X,
   trainCab,
   railAngle,
@@ -37,8 +43,6 @@ export type WorldAction =
   | { kind: 'journal' };
 export type VoxelWorld = { dispose: () => void; resetView: () => void };
 const SPACING = 34;
-const LAST_PLANET_X = (journeyExperience.length - 1) * PLANET_SPACING;
-const LIBRARY_X = LAST_PLANET_X + 36;
 const CONTACT_X = LIBRARY_X + 32;
 const clamp = THREE.MathUtils.clamp;
 
@@ -53,7 +57,7 @@ type BatchItem = {
   h: number;
   d: number;
 };
-/** A continuous Three.js journey: railway, walking character, launch, and voxel planets. */
+/** A continuous Three.js journey: railway, walking character, launch, and orbital station. */
 export function createVoxelWorld(
   host: HTMLElement,
   read: () => WorldOptions,
@@ -1021,22 +1025,31 @@ export function createVoxelWorld(
   part(roverBody, -0.1, 3.75, 0, 'dark', 3.6, 0.15, 2.3);
   for (let a = -3; a <= 3; a++)
     part(roverBody, a * 0.4, 3.85, 0, 'glass', 0.3, 0.06, 1.8);
-  // Boarding steps are outside the wheel envelope; the raised entry clears the tyres.
-  part(orbit, 6, 4, 6.95, 'iron', 1.2, 0.16, 0.5);
-  part(orbit, 6, 4.67, 6.35, 'iron', 1.2, 0.16, 0.7);
-  for (const side of [-1, 1])
-    part(orbit, 6 + side * 0.5, 4.06, 6.35, 'iron', 0.1, 1.1, 0.1);
+  // Both parking bays have the same raised side step, outside the tyre envelope.
+  for (const x of [6, 18]) {
+    part(orbit, x, 4, 6.95, 'iron', 1.2, 0.16, 0.5);
+    part(orbit, x, 4.67, 6.35, 'iron', 1.2, 0.16, 0.7);
+    for (const side of [-1, 1])
+      part(orbit, x + side * 0.5, 4.06, 6.35, 'iron', 0.1, 1.1, 0.1);
+  }
+  // Rocket and rover have separate pads, joined by a real sloped landing ramp.
+  for (let x = 4; x <= 8; x++)
+    for (let z = 9; z <= 14; z++) block(orbit, x, 3.25, z, 'iron', 1, 0.5, 1);
+  for (let x = 5; x <= 21; x++)
+    for (let z = 7; z <= 8; z++) {
+      block(orbit, x, 3.25, z, 'moon', 1, 0.5, 1);
+    }
   const landingRamp = part(
     orbit,
-    9,
+    6,
     (4.025 + 3.5) / 2 - 0.07,
-    -0.625,
+    12.525,
     'iron',
     1.25,
     0.14,
     Math.hypot(1.85, 0.525),
   );
-  landingRamp.rotation.x = Math.atan2(0.525, 1.85);
+  landingRamp.rotation.x = -Math.atan2(0.525, 1.85);
   const roverWheels = [-1, 1].flatMap((side) =>
     [-2, 0, 2].map((axle) => ({
       axle,
@@ -1075,181 +1088,183 @@ export function createVoxelWorld(
     }
   }
 
-  // Five orbital workplaces make each role a place to visit, rather than a generic globe.
+  // One block-built orbital station: a shared floor, five radial exhibit bays,
+  // an open entrance and a roof with a central skylight. The visitor makes one
+  // circular tour while the rover stays in its parking bay outside.
   const orbitalUpdates: ((time: number) => void)[] = [];
+  const station = new THREE.Group();
+  station.position.set(STATION_CENTER[0], 0, STATION_CENTER[2]);
+  orbit.add(station);
+  for (let x = -13; x <= 13; x++)
+    for (let z = -13; z <= 13; z++) {
+      const radius = Math.hypot(x, z);
+      if (radius > STATION_RADIUS + 0.6) continue;
+      const edge = radius > STATION_RADIUS - 0.6;
+      const track = radius >= 3.1 && radius <= 4.5;
+      block(station, x, 3, z, edge ? 'copper' : track ? 'dark' : 'iron');
+      block(station, x, 1.65, z, 'stone', 1, 1.7, 1);
+      if (track && (x + z + 30) % 3 === 0)
+        block(station, x, 3.515, z, 'gold', 0.28, 0.025, 0.28);
+      if (edge) {
+        const doorway = z > 10 && Math.abs(x) <= 2;
+        if (!doorway) {
+          for (let y = 4; y <= 10; y++)
+            block(
+              station,
+              x,
+              y,
+              z,
+              y === 4 || y === 10 || (x + z + 30) % 4 === 0
+                ? 'oxidized'
+                : 'glass',
+            );
+        } else block(station, x, 10, z, 'copper');
+      }
+      if (radius > 4.8) block(station, x, 11, z, edge ? 'copper' : 'dark');
+    }
+  // Low guide lights mark the uninterrupted ring, leaving the walking lane clear.
+  for (let i = 0; i < 24; i++) {
+    const angle = (i * Math.PI * 2) / 24;
+    block(
+      station,
+      Math.sin(angle) * 5.2,
+      3.6,
+      Math.cos(angle) * 5.2,
+      '#c4e4d6',
+      0.2,
+      0.15,
+      0.2,
+    );
+  }
+  for (const x of [-3.2, 3.2]) {
+    block(station, x, 6, 12, 'iron', 0.45, 5, 0.7);
+    block(station, x, 8.35, 12, 'gold', 0.6, 0.25, 0.8);
+  }
+  block(station, 0, 8.5, 12, 'oxidized', 6.8, 0.4, 0.8);
+  // Fill the half-block threshold between the circular foundation and road.
+  part(orbit, 12, 3.25, 2.75, 'iron', 5, 0.5, 0.5);
+  // A suspended flywheel powers the station, high above people and cameras.
+  const stationGear = gearWheel(station, 1.35, 0, 11.25, 0);
+  stationGear.rotation.x = Math.PI / 2;
+  for (const x of [-1, 1])
+    block(station, x * 1.9, 11.3, 0, 'iron', 0.25, 0.3, 4.8);
+  orbitalUpdates.push((time) => {
+    stationGear.rotation.z = time * 0.24;
+  });
+  // Small physical exhibits tell each role's story beside its inset terminal.
   for (let index = 0; index < journeyExperience.length; index++) {
+    const bay = experienceBay(index, journeyExperience.length);
     const group = new THREE.Group();
-    group.position.set(index * PLANET_SPACING, -1, 0);
+    group.position.set(
+      bay.position[0] - ORBIT_ORIGIN[0],
+      3.5,
+      bay.position[2] - ORBIT_ORIGIN[2],
+    );
+    group.rotation.y = bay.yaw;
     orbit.add(group);
-    const floor = index === 0 ? 'grass' : index === 3 ? 'plank' : 'moon';
-    for (let a = -6; a <= 6; a++)
-      for (let c = -5; c <= 5; c++) {
-        const edge = Math.abs(a) === 6 || Math.abs(c) === 5;
-        block(group, a, 4, c, edge ? 'oxidized' : floor);
-        const depth = edge ? 2 : 3 + ((a + c + 20) % 3 === 0 ? 1 : 0);
-        block(
-          group,
-          a,
-          3.5 - depth / 2,
-          c,
-          edge ? 'dark' : 'stone',
-          1,
-          depth,
-          1,
-        );
-      }
-    for (const a of [-5.5, 5.5])
-      for (const c of [-4.5, 4.5]) {
-        block(group, a, 0.7, c, 'copper', 0.65, 1, 0.65);
-        block(group, a, 0.05, c, 'glass', 0.85, 0.35, 0.85);
-      }
-    for (let a = 7; a <= (index === 0 ? 11 : 10); a++)
-      for (let c = index === 0 ? -5 : 2; c <= (index === 0 ? 5 : 4); c++)
-        block(group, a, 4, c, 'iron');
-    // The visitor lane stays clear of the rover's tyres and passenger cabin.
-    // Back-wall beams and a completed roof give every workplace a distinct architectural silhouette.
+    part(group, 4.2, 0.55, 0.25, 'oxidized', 2, 1.1, 1.8);
+    part(group, 4.2, 1.15, 0.25, 'dark', 2.2, 0.12, 2);
     if (index === 0) {
-      for (let a = -4; a <= 4; a++)
-        for (let y = 5; y <= 8; y++) block(group, a, y, -4, 'iron');
-      for (const a of [-4, 4])
-        for (let y = 5; y <= 9; y++)
-          for (let c = -3; c <= 1; c++)
-            block(group, a, y, c, y < 8 && c > -2 ? 'glass' : 'iron');
-      for (let c = -5; c <= 2; c++)
-        for (let a = -5; a <= 5; a++)
-          block(
-            group,
-            a,
-            10 + Math.floor((5 - Math.abs(a)) / 2) * 0.5,
-            c,
-            'oxidized',
-            1,
-            0.5,
-            1,
-          );
-      block(group, 0, 4.55, 0, 'dark', 7, 0.1, 3);
-      for (let a = -3; a <= 3; a++)
-        block(group, a, 4.62, 0, 'gold', 0.5, 0.04, 0.2);
       const aircraft = new THREE.Group();
-      aircraft.position.set(0, 5.15, 0);
+      part(group, 4.2, 1.405, 0.3, 'iron', 0.18, 0.39, 0.18);
+      aircraft.position.set(4.2, 1.75, 0.3);
       group.add(aircraft);
-      part(aircraft, 0, 0, 0, 'white', 4, 0.45, 0.6);
-      part(aircraft, -0.25, 0.2, 0, 'oxidized', 0.8, 0.3, 4.3);
-      part(aircraft, -1.65, 0.55, 0, 'copper', 0.7, 0.6, 0.2);
+      part(aircraft, 0, 0, 0, 'white', 2.3, 0.3, 0.35);
+      part(aircraft, -0.15, 0.15, 0, 'oxidized', 0.5, 0.16, 1.7);
+      part(aircraft, -0.85, 0.3, 0, 'copper', 0.4, 0.5, 0.15);
       const propeller = new THREE.Group();
-      propeller.position.set(2.1, 0, 0);
+      propeller.position.x = 1.2;
       aircraft.add(propeller);
-      part(propeller, 0, 0, 0, 'dark', 0.12, 1.6, 0.12);
-      part(propeller, 0, 0, 0, 'dark', 0.12, 0.12, 1.6);
+      part(propeller, 0, 0, 0, 'dark', 0.1, 1, 0.1);
+      part(propeller, 0, 0, 0, 'dark', 0.1, 0.1, 1);
       orbitalUpdates.push((time) => {
         propeller.rotation.x = time * 2;
       });
-      for (const a of [-5, 5]) {
-        block(group, a, 5, 2, 'log', 1, 1, 1);
-        block(group, a, 6, 2, 'leaf', 2, 1, 2);
-      }
     } else if (index === 1) {
-      for (let a = -4; a <= 4; a++)
-        for (let y = 5; y <= 9; y++)
-          block(group, a, y, -4, y === 9 ? 'oxidized' : 'dark');
-      for (const a of [-4, 4])
-        for (let c = -3; c <= 1; c++)
-          for (let y = 5; y <= 8; y++)
-            block(group, a, y, c, y === 5 || c === 1 ? 'oxidized' : 'glass');
-      for (let a = -4; a <= 4; a++)
-        for (let c = -4; c <= 1; c++)
-          block(group, a, 9.6, c, 'oxidized', 1, 0.2, 1);
-      for (let a = -3; a <= 3; a += 3) {
-        block(group, a, 5.35, -1, 'log', 2, 0.2, 1.2);
-        block(group, a, 6.2, -1.3, 'dark', 1.35, 1.1, 0.18);
-        block(group, a, 6.2, -1.19, 'glass', 1.1, 0.85, 0.05);
-        block(group, a, 4.9, 0.8, 'purple', 0.9, 0.8, 0.8);
-      }
-      for (let a = -3; a <= 3; a++)
-        block(group, a, 4.55, 2.5, 'redstone', 1, 0.06, 0.15);
-      for (let y = 5; y <= 8; y++)
-        block(group, 2, y, -3.3, 'copper', 1, 1, 0.5);
-    } else if (index === 2) {
-      for (const a of [-4, -2, 2, 4])
-        for (let y = 5; y <= 8; y++)
-          block(group, a, y, -1.5, 'white', 0.7, 1, 0.7);
-      for (let a = -5; a <= 5; a++) block(group, a, 9, -1.5, 'white', 1, 1, 2);
-      for (let a = -4; a <= 4; a++)
-        block(group, a, 9.75, -1.5, 'gold', 1, 0.5, 2);
-      for (let a = -4; a <= 4; a++)
-        for (let y = 5; y <= 8; y++) block(group, a, y, -4, 'plank');
-      block(group, 0, 5.2, -2.5, 'log', 5, 1.2, 1);
-      for (let a = -2; a <= 2; a += 2)
-        block(group, a, 6, -2.4, 'white', 0.8, 0.08, 0.6);
-      for (let step = 0; step < 3; step++)
-        block(
+      for (let i = 0; i < 3; i++) {
+        part(
           group,
-          0,
-          4.6 + step * 0.25,
-          2 - step * 0.5,
-          'white',
-          6,
+          3.55 + i * 0.65,
+          1.71 + i * 0.2,
           0.25,
+          'copper',
+          0.45,
+          1 + i * 0.4,
           0.5,
         );
+        part(
+          group,
+          3.55 + i * 0.65,
+          2.285 + i * 0.4,
+          0.25,
+          '#b9e1c4',
+          0.25,
+          0.15,
+          0.3,
+        );
+      }
+    } else if (index === 2) {
+      for (let i = 0; i < 4; i++) {
+        part(
+          group,
+          3.45 + i * 0.48,
+          1.36 + i * 0.18,
+          0.25,
+          'gold',
+          0.32,
+          0.3 + i * 0.36,
+          0.8,
+        );
+        part(
+          group,
+          3.45 + i * 0.48,
+          1.57 + i * 0.36,
+          -0.35,
+          'plank',
+          0.32,
+          0.12,
+          0.7,
+        );
+      }
     } else if (index === 3) {
-      for (let a = -4; a <= 4; a++)
-        block(group, a, 4.85, -1.5, 'plank', 1, 0.7, 4);
-      for (const a of [-4, 4])
-        for (let y = 5; y <= 10; y++)
-          block(group, a, y, -3, 'log', 0.5, 1, 0.5);
-      for (let a = -5; a <= 5; a++)
-        for (let c = -4; c <= 0; c++)
-          block(group, a, 10.25, c, 'copper', 1, 0.5, 1);
-      for (const a of [-3, 3])
-        block(group, a, 8.5, -3, 'redstone', 1.5, 2.5, 0.15);
-      block(group, 0, 5.8, -0.5, 'dark', 1.2, 1.2, 0.8);
-      block(group, 0, 6.7, -0.5, 'iron', 0.12, 0.6, 0.12);
-      for (const a of [-3, 0, 3])
-        block(group, a, 4.95, 2, 'plank', 2, 0.5, 0.7);
+      part(group, 4.2, 1.81, 0.25, 'iron', 0.15, 1.2, 0.15);
+      part(group, 4.2, 2.4, 0.25, 'dark', 0.4, 0.35, 0.4);
+      for (const side of [-1, 1])
+        part(group, 4.2 + side * 0.65, 1.7, 0.25, 'dark', 0.35, 1, 0.5);
     } else {
-      for (let a = -4; a <= 4; a++)
-        for (let c = -4; c <= 1; c++) {
-          if (Math.abs(a) === 4 || c === -4)
-            for (let y = 5; y <= 8; y++)
-              block(group, a, y, c, y >= 6 && c > -4 ? 'glass' : 'plank');
-        }
-      for (let level = 0; level < 4; level++)
-        for (let a = -5 + level; a <= 5 - level; a++)
-          for (let c = -4 + level; c <= 2 - level; c++)
-            block(group, a, 9 + level * 0.5, c, 'oxidized', 1, 0.5, 1);
-      block(group, 0, 5.35, -0.5, 'log', 4.5, 0.3, 1.5);
-      for (let a = -1; a <= 1; a++)
-        block(group, a, 5.6, -0.5, 'white', 0.6, 0.08, 0.8);
-      const telescope = new THREE.Group();
-      telescope.position.set(4.5, 5, 2);
-      group.add(telescope);
-      part(telescope, 0, 0.3, 0, 'iron', 0.3, 1.4, 0.3);
-      const tube = new THREE.Group();
-      tube.position.y = 1;
-      telescope.add(tube);
-      part(tube, 0, 0.5, 0, 'copper', 0.65, 2, 0.65);
-      part(tube, 0, 1.7, 0, 'dark', 0.8, 0.3, 0.8);
-      part(tube, 0, 1.88, 0, 'glass', 0.5, 0.04, 0.5);
+      for (let i = 0; i < 3; i++)
+        part(
+          group,
+          3.6 + i * 0.55,
+          1.42,
+          0.25,
+          ['purple', 'copper', 'gold'][i],
+          0.38,
+          0.5,
+          0.9,
+        );
+      part(group, 4.2, 1.75, 0.25, 'iron', 0.12, 0.2, 0.12);
+      const globe = new THREE.Group();
+      globe.position.set(4.2, 2.15, 0.25);
+      group.add(globe);
+      for (let x = -1; x <= 1; x++)
+        for (let y = -1; y <= 1; y++)
+          for (let z = -1; z <= 1; z++)
+            if (Math.abs(x) + Math.abs(y) + Math.abs(z) < 3)
+              part(
+                globe,
+                x * 0.22,
+                y * 0.22,
+                z * 0.22,
+                y === 0 ? 'oxidized' : 'glass',
+                0.22,
+                0.22,
+                0.22,
+              );
       orbitalUpdates.push((time) => {
-        telescope.rotation.y = Math.sin(time * 0.08) * 0.3;
-        tube.rotation.z = -0.55 + Math.sin(time * 0.11) * 0.1;
+        globe.rotation.y = time * 0.16;
       });
     }
-  }
-  // A small asteroid belt links the workplaces visually.
-  for (let i = 0; i < 100; i++) {
-    const angle = (i * Math.PI * 2) / 100;
-    block(
-      orbit,
-      PLANET_SPACING + Math.cos(angle) * 7,
-      -2 + Math.sin(angle) * 3,
-      Math.sin(angle) * 8,
-      'moon',
-      0.5,
-      0.25,
-      0.5,
-    );
   }
   // A lunar library at the sixth chapter, with a stepped observatory roof.
   const moon = new THREE.Group();
@@ -1466,15 +1481,10 @@ export function createVoxelWorld(
     const baseX =
       index < 4
         ? index * 34
-        : ORBIT_ORIGIN[0] +
-          (index < 9
-            ? (index - 4) * PLANET_SPACING
-            : index === 9
-              ? LIBRARY_X
-              : CONTACT_X);
+        : ORBIT_ORIGIN[0] + (index === 9 ? LIBRARY_X : CONTACT_X);
     const y = index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0);
     const z = index < 4 ? 10 : ORBIT_ORIGIN[2] + 8;
-    if (index >= 4) {
+    if (index >= 9) {
       const deck = new THREE.Group();
       deck.position.set(baseX - 4, y, z - 1);
       scene.add(deck);
@@ -1490,27 +1500,58 @@ export function createVoxelWorld(
         next = element.nextSibling,
         oldStyle = element.getAttribute('style');
       element.classList.add('in-world-board');
+      const terminal = index >= 4 && index < 9;
+      const bay = terminal
+        ? experienceBay(index - 4, journeyExperience.length)
+        : null;
       const scale = 0.011;
-      const position = new THREE.Vector3(
-        baseX - 5 + leaf * EXHIBIT_SPACING,
-        y + 5.4,
-        z,
-      );
+      const position = bay
+        ? new THREE.Vector3(...bay.position)
+        : new THREE.Vector3(baseX - 5 + leaf * EXHIBIT_SPACING, y + 5.4, z);
+      const yaw = bay?.yaw ?? 0;
       const frameGroup = new THREE.Group();
       frameGroup.position.copy(position);
+      frameGroup.rotation.y = yaw;
       scene.add(frameGroup);
       const w = element.offsetWidth * scale;
-      const plate = part(frameGroup, 0, 0, -0.05, '#e8e5d7', w, 1, 0.06);
+      const plate = part(
+        frameGroup,
+        0,
+        0,
+        -0.05,
+        terminal ? '#142a31' : '#e8e5d7',
+        w,
+        1,
+        0.06,
+      );
       // An open stone-and-copper alcove: masonry below, a small canopy above,
       // with the text inset in its wall instead of a freestanding giant board.
-      const wall = part(frameGroup, 0, 0, -0.2, 'iron', w + 0.3, 1, 0.3);
-      const base = part(frameGroup, 0, 0, -0.75, 'cobble', w + 0.5, 1, 1.5);
+      const wall = part(
+        frameGroup,
+        0,
+        0,
+        -0.2,
+        terminal ? 'dark' : 'iron',
+        w + 0.3,
+        1,
+        0.3,
+      );
+      const base = part(
+        frameGroup,
+        0,
+        0,
+        -0.75,
+        terminal ? 'oxidized' : 'cobble',
+        w + 0.5,
+        1,
+        terminal ? 1 : 1.5,
+      );
       const canopy = part(
         frameGroup,
         0,
         0,
         0,
-        index < 4 ? 'oxidized' : 'dark',
+        terminal ? 'copper' : index < 4 ? 'oxidized' : 'dark',
         w + 0.9,
         0.22,
         2.5,
@@ -1528,6 +1569,20 @@ export function createVoxelWorld(
           0.22,
         ),
       );
+      if (terminal) {
+        part(frameGroup, 0, -2.75, 0.35, 'oxidized', 3.2, 0.3, 1.2);
+        for (let key = -3; key <= 3; key++)
+          part(
+            frameGroup,
+            key * 0.28,
+            -2.55,
+            0.7,
+            key === 3 ? 'gold' : 'iron',
+            0.2,
+            0.08,
+            0.3,
+          );
+      }
       let measured = 0,
         measuredWidth = 0;
       const resizeFrame = () => {
@@ -1549,21 +1604,27 @@ export function createVoxelWorld(
         plate.scale.x = w;
         base.scale.y = 0.65;
         base.scale.x = w + 0.5;
-        base.position.y = -5.4 + 0.325;
+        base.position.y = -(terminal ? 4 : 5.4) + 0.325;
         canopy.position.y = h / 2 + 0.18;
         canopy.scale.x = w + 0.9;
-        canopy.scale.z = index === 2 && camera.aspect < 1 ? 5 : 2.5;
+        canopy.scale.z = terminal
+          ? 0.6
+          : index === 2 && camera.aspect < 1
+            ? 5
+            : 2.5;
         sill.position.y = -h / 2 - 0.04;
         sill.scale.x = w + 0.5;
         columns.forEach((column, i) => {
           column.position.x = (i ? 1 : -1) * (w / 2 + 0.24);
-          column.scale.y = 5.4 + h / 2;
-          column.position.y = (h / 2 - 5.4) / 2;
+          const floor = terminal ? 4 : 5.4;
+          column.scale.y = floor + h / 2;
+          column.position.y = (h / 2 - floor) / 2;
         });
       };
       resizeFrame();
       const object = new CSS3DObject(element);
       object.position.copy(position);
+      object.rotation.y = yaw;
       object.scale.setScalar(scale);
       textScene.add(object);
       return {
@@ -1576,6 +1637,10 @@ export function createVoxelWorld(
         index,
         leaf,
         scale,
+        normal: new THREE.Vector3(0, 0, 1).applyAxisAngle(
+          new THREE.Vector3(0, 1, 0),
+          yaw,
+        ),
         readHeight: () => measured * scale,
         readWidth: () => measuredWidth * scale,
         resizeFrame,
@@ -1887,14 +1952,13 @@ export function createVoxelWorld(
     });
     launchRocket.position.set(...pose.rocket);
     launchRocket.rotation.z = pose.pitch;
-    const planetPhase = pose.boardPhase;
     const opening =
       timeline < 4
         ? easeBetween(3.3, 3.48, timeline) *
           (1 - easeBetween(3.64, 3.68, timeline))
-        : timeline < 4.08
-          ? easeBetween(0, 0.035, planetPhase) *
-            (1 - easeBetween(0.22, 0.35, planetPhase))
+        : timeline < 4.1
+          ? easeBetween(4, 4.012, timeline) *
+            (1 - easeBetween(4.08, 4.1, timeline))
           : 0;
     hatchPanels.forEach((hatch) => {
       hatch.position.x = opening * 0.82;
@@ -1974,8 +2038,8 @@ export function createVoxelWorld(
       !opts.onboard &&
       (timeline < 0.45
         ? 1 - easeBetween(0.28, 0.45, timeline)
-        : timeline >= 3.3 && timeline < 4
-          ? easeBetween(3.93, 4, timeline)
+        : timeline >= 3.3 && timeline < 5
+          ? easeBetween(4.9, 5, timeline)
           : Math.max(
               1 - easeBetween(0.55, 0.72, localPhase),
               easeBetween(0.92, 1, localPhase),
@@ -1986,13 +2050,33 @@ export function createVoxelWorld(
       5,
       dt,
     );
-    if (currentBoard && readMode > 0.001) {
-      const siblings = boards.filter((board) => board.index === pose.board);
+    const approachingJournal = timeline >= 4.9 && timeline < 5;
+    const readingBoard = approachingJournal
+      ? boards.find((board) => board.index === 9 && board.leaf === 0)
+      : currentBoard;
+    const readingBlend =
+      readMode *
+      (approachingJournal
+        ? easeBetween(4.9, 5, timeline)
+        : timeline >= 3.3 && timeline < 4
+          ? 1 - easeBetween(3.3, 3.65, timeline)
+          : 1);
+    if (
+      readingBoard &&
+      readingBlend > 0.001 &&
+      (timeline < 4 || timeline >= 4.9)
+    ) {
+      const siblings = boards.filter(
+        (board) => board.index === readingBoard.index,
+      );
+      const fitPhase = approachingJournal ? 0 : localPhase;
       // Follow the continuous world anchor rather than jumping to the next DOM page.
       const center = focus
         .clone()
         .add(new THREE.Vector3(-5, floorOffset + 5.4, 10 - pose.space * 2));
-      const page = pose.exhibitOffset / EXHIBIT_SPACING;
+      const page = approachingJournal
+        ? 0
+        : pose.exhibitOffset / EXHIBIT_SPACING;
       const first = Math.min(siblings.length - 1, Math.floor(page));
       const next = Math.min(siblings.length - 1, first + 1);
       let height = THREE.MathUtils.lerp(
@@ -2005,11 +2089,17 @@ export function createVoxelWorld(
         siblings[next].readWidth(),
         page - first,
       );
-      const upcoming = boards.find((board) => board.index === pose.board + 1);
+      const upcoming = boards.find(
+        (board) => board.index === readingBoard.index + 1,
+      );
       const blend = easeBetween(
-        pose.board === 0 ? 0.45 : pose.board === 3 ? 0.68 : 0.72,
+        readingBoard.index === 0
+          ? 0.45
+          : readingBoard.index === 3
+            ? 0.68
+            : 0.72,
         1,
-        localPhase,
+        fitPhase,
       );
       if (upcoming) {
         height = THREE.MathUtils.lerp(height, upcoming.readHeight(), blend);
@@ -2036,9 +2126,78 @@ export function createVoxelWorld(
       );
       destination.lerp(
         center.clone().add(new THREE.Vector3(0.3, 0.08, distance)),
-        readMode,
+        readingBlend,
       );
-      look.lerp(center, readMode);
+      look.lerp(center, readingBlend);
+    }
+    if (pose.stationView > 0.001) {
+      const rolePages = boards.filter(
+        (board) => board.index >= 4 && board.index < 9,
+      );
+      // Fit the largest terminal before circling, preventing per-role zoom snaps.
+      const width = Math.max(...rolePages.map((page) => page.readWidth()));
+      const height = Math.max(...rolePages.map((page) => page.readHeight()));
+      const fov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      const distance = Math.max(
+        opts.reading === true
+          ? 0
+          : smallScreen
+            ? 10.5
+            : opts.reading === false && !portrait
+              ? 20
+              : 17,
+        (height * 1.4) / (2 * fov),
+        (width * 1.3) / (2 * fov * camera.aspect),
+      );
+      const angle = pose.galleryAngle + azimuth * 0.12;
+      const radial = new THREE.Vector3(Math.sin(angle), 0, Math.cos(angle));
+      const center = new THREE.Vector3(
+        ORBIT_ORIGIN[0] + STATION_CENTER[0],
+        ORBIT_ORIGIN[1] + 7.5,
+        ORBIT_ORIGIN[2] + STATION_CENTER[2],
+      );
+      const interiorPosition = center
+        .clone()
+        .addScaledVector(radial, DISPLAY_RADIUS - distance);
+      interiorPosition.y += elevation * 0.08;
+      const interiorLook = center
+        .clone()
+        .addScaledVector(radial, DISPLAY_RADIUS);
+      const phase = timeline - 4;
+      const approach = new THREE.Vector3(
+        ORBIT_ORIGIN[0] + 12,
+        ORBIT_ORIGIN[1] + 7.5,
+        ORBIT_ORIGIN[2] + 12,
+      );
+      const doorway = new THREE.Vector3(
+        ORBIT_ORIGIN[0] + 12,
+        ORBIT_ORIGIN[1] + 7.5,
+        ORBIT_ORIGIN[2] - 1,
+      );
+      const doorwayLook = center.clone();
+      if (phase < GALLERY_START) {
+        approach.lerp(doorway, easeBetween(0.16, 0.22, phase));
+        approach.lerp(
+          interiorPosition,
+          easeBetween(0.22, GALLERY_START, phase),
+        );
+        doorwayLook.lerp(interiorLook, easeBetween(0.22, GALLERY_START, phase));
+      } else if (phase > GALLERY_END) {
+        approach.lerp(doorway, 1 - easeBetween(0.83, 0.9, phase));
+        approach.lerp(
+          interiorPosition,
+          1 - easeBetween(GALLERY_END, 0.83, phase),
+        );
+        doorwayLook.lerp(
+          interiorLook,
+          1 - easeBetween(GALLERY_END, 0.83, phase),
+        );
+      } else {
+        approach.copy(interiorPosition);
+        doorwayLook.copy(interiorLook);
+      }
+      destination.lerp(approach, pose.stationView);
+      look.lerp(doorwayLook, pose.stationView);
     }
     cameraMode = THREE.MathUtils.damp(cameraMode, opts.onboard ? 1 : 0, 4, dt);
     if (cameraMode > 0.001) {
@@ -2050,13 +2209,21 @@ export function createVoxelWorld(
       const roverRide = lunarRover.position
         .clone()
         .add(new THREE.Vector3(-2, 3.1, 1.3));
+      if (pose.stationView > 0)
+        roverRide.lerp(
+          new THREE.Vector3(...pose.avatar).add(new THREE.Vector3(0, 1.8, 0)),
+          pose.stationView,
+        );
       const ride = new THREE.Vector3(trainX - 2.4, 3.5, trainZ + 1.6)
         .lerp(rocketRide, boarding)
         .lerp(roverRide, landing);
       const rideLook = new THREE.Vector3(trainX + 6, 2.4, trainZ - 2)
         .lerp(rocketRide.clone().add(new THREE.Vector3(0, -1, -14)), boarding)
         .lerp(
-          roverRide.clone().add(new THREE.Vector3(10, -0.5, -1.3)),
+          roverRide
+            .clone()
+            .add(new THREE.Vector3(10, -0.5, -1.3))
+            .lerp(new THREE.Vector3(...pose.display), pose.stationView),
           landing,
         );
       destination.lerp(ride, cameraMode);
@@ -2121,23 +2288,34 @@ export function createVoxelWorld(
       ),
     );
     boards.forEach(
-      ({ element, object, index, leaf, readHeight, readWidth }) => {
+      ({ element, object, normal, index, leaf, readHeight, readWidth }) => {
         halfPage.set(readWidth() / 2, readHeight() / 2, 0.02);
-        pageBounds.min.copy(object.position).sub(halfPage);
-        pageBounds.max.copy(object.position).add(halfPage);
+        object.updateMatrixWorld();
+        // Build bounds in page coordinates, then rotate into the actual room.
+        pageBounds.min.copy(halfPage).multiplyScalar(-1);
+        pageBounds.max.copy(halfPage);
+        const pageMatrix = new THREE.Matrix4().compose(
+          object.position,
+          object.quaternion,
+          new THREE.Vector3(1, 1, 1),
+        );
+        pageBounds.applyMatrix4(pageMatrix);
         const near =
           index === pose.board &&
           Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) < 2.5 &&
           cameraMode < 0.5;
         object.visible =
-          camera.position.z > object.position.z &&
+          camera.position.clone().sub(object.position).dot(normal) > 0 &&
           readingFrustum.intersectsBox(pageBounds) &&
-          cameraMode < 0.9995;
-        element.inert = !near;
-        element.setAttribute('aria-hidden', String(!near));
+          cameraMode < 0.9995 &&
+          (!(index >= 4 && index < 9) ||
+            (pose.stationView > 0.99 && timeline > 4.22 && timeline < 4.84));
+        const interactive = near && object.visible;
+        element.inert = !interactive;
+        element.setAttribute('aria-hidden', String(!interactive));
         element.style.opacity = '1';
-        element.style.pointerEvents = near ? 'auto' : 'none';
-        element.dataset.active = String(index === pose.board && near);
+        element.style.pointerEvents = interactive ? 'auto' : 'none';
+        element.dataset.active = String(index === pose.board && interactive);
       },
     );
     renderer.render(scene, camera);
