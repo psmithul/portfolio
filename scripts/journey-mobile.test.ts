@@ -1,17 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createJourneyGesture } from '../lib/journey-gesture.ts';
-import { createJourneyTour, journeyTourStops } from '../lib/journey-tour.ts';
+import {
+  createJourneyTour,
+  journeyTourStops,
+  chapterEntryTimeline,
+} from '../lib/journey-tour.ts';
 import { createJourneyScroll } from '../lib/journey-scroll.ts';
-import { journeyPosition } from '../lib/journey-timeline.ts';
+import { journeyPosition, journeyOffset } from '../lib/journey-timeline.ts';
 import { journeyPose } from '../lib/journey-choreography.ts';
 import { exhibitTravel } from '../lib/journey-exhibits.ts';
 
 void test('slow horizontal swipes lock from cumulative motion and reverse without a jump', () => {
   const gesture = createJourneyGesture();
   gesture.start(200, 400);
-  for (let x = 199; x > 195; x--) assert.equal(gesture.move(x, 400), 0);
-  assert.equal(gesture.move(195, 400), 4.5);
+  for (let x = 199; x >= 195; x--) assert.equal(gesture.move(x, 400), 0.9);
   assert.equal(gesture.move(194, 395), 0.9);
   assert.equal(gesture.move(197, 380), -2.7);
   gesture.cancel();
@@ -217,49 +220,57 @@ void test('mobile autoplay visits all 18 pages, gives reading time, and stops at
   assert.equal(env.scroll.position(), end);
 });
 
-void test('manual snap is idle until chosen and one long swipe visits only the next reading frame', (t) => {
+void test('manual scrolling moves while the finger is down and never advances by itself', (t) => {
   const env = environment(t);
   env.run(60);
   assert.equal(env.scroll.position(), 0);
   assert.deepEqual(env.states, []);
   env.touch('touchstart', [[200, 700]]);
-  for (let y = 660; y >= 100; y -= 40) env.touch('touchmove', [[200, y]]);
-  assert.equal(
-    env.scroll.position(),
-    0,
-    'no jitter while a finger is held down',
+  env.touch('touchmove', [[200, 699]]);
+  env.run(0.2);
+  assert.ok(env.scroll.position() > 0, 'first one-pixel swipe moves the scene');
+  for (let y = 660; y >= 100; y -= 40) {
+    env.touch('touchmove', [[200, y]]);
+    env.run(0.1);
+  }
+  assert.ok(
+    env.scroll.position() > 10,
+    'movement continues while finger is held',
   );
   env.touch('touchend', []);
   env.run(30);
-  const p = env.position();
-  assert.ok(
-    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
-  );
   const y = env.scroll.position();
+  assert.ok(
+    y > 100 && y < 928.4,
+    'continuous displacement, no forced jump to another chapter',
+  );
   env.run(30);
-  assert.equal(env.scroll.position(), y, 'manual mode never advances itself');
+  assert.equal(env.scroll.position(), y);
 });
 
-void test('a wheel burst and repeated swipes during transit cannot skip unread frames', (t) => {
+void test('small wheels and additional input during transit all contribute; queue length stays bounded', (t) => {
   const env = environment(t);
-  for (let i = 0; i < 80; i++)
-    assert.equal(env.wheel(120, i * 16).defaultPrevented, true);
-  env.run(0.5);
-  for (let i = 0; i < 8; i++) {
-    env.touch('touchstart', [[200, 600]]);
-    env.touch('touchmove', [[200, 100]]);
-    env.touch('touchend', []);
+  assert.equal(env.wheel(1, 0).defaultPrevented, true);
+  env.run(0.2);
+  assert.ok(env.scroll.position() > 0, 'no wheel threshold');
+  for (let i = 0; i < 10; i++) {
+    env.wheel(20, i * 16);
+    env.run(0.1);
   }
-  env.run(30);
-  const p = env.position();
-  assert.ok(
-    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
-  );
+  env.run(15);
+  const first = env.scroll.position();
+  assert.ok(first > 150);
   env.wheel(20, 3000);
   env.run(15);
-  const next = env.position();
   assert.ok(
-    Math.abs(next.stop + next.phase - journeyTourStops(5)[2].timeline) < 1e-9,
+    env.scroll.position() > first + 19,
+    'next input is never discarded',
+  );
+  for (let i = 0; i < 80; i++) env.wheel(120, 4000 + i * 16);
+  env.run(30);
+  assert.ok(
+    env.scroll.position() < first + 650,
+    'runway cannot build up many seconds of stale input',
   );
 });
 
@@ -283,7 +294,13 @@ void test('cancelled or pinched swipes do not trigger a snap on release', (t) =>
 void test('direct navigation publishes only the selected frame and never flies through the route', (t) => {
   const env = environment(t);
   env.scroll.play();
-  env.scroll.jump(4515.4);
+  env.scroll.jump(
+    journeyOffset(
+      { stop: 4, phase: chapterEntryTimeline(4) - 4 },
+      [0, 928.4, 1983.4, 3038.4, 4515.4, 6625.4, 7680.4],
+      844,
+    ),
+  );
   const pose = journeyPose(env.position().stop + env.position().phase, 5);
   assert.equal(pose.board, 4);
   assert.equal(pose.stationView, 1);
@@ -300,9 +317,7 @@ void test('direct navigation publishes only the selected frame and never flies t
   assert.equal(env.states.at(-1), false);
   env.scroll.jump(928.4);
   const p = env.position();
-  assert.ok(
-    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
-  );
+  assert.ok(Math.abs(p.stop + p.phase - 1) < 1e-9);
 });
 
 void test('swiping pauses the tour, cancels safely, and pinch zoom stays with the browser', (t) => {
