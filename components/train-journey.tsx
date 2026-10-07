@@ -636,7 +636,7 @@ export function TrainJourney({
                   Internship case study <ArrowUpRight size={15} />
                 </Link>
               )}
-              <nav className="planet-selector" aria-label="Experience planets">
+              <nav className="planet-selector" aria-label="Experience stops">
                 {journeyExperience.map((p, i) => (
                   <button
                     key={p.company}
@@ -644,8 +644,10 @@ export function TrainJourney({
                       travelTo(planetRefs.current[i]);
                     }}
                     aria-current={i === index ? 'step' : undefined}
+                    aria-label={'Go to ' + p.company}
+                    title={p.company}
                   >
-                    {p.company}
+                    {String(i + 1).padStart(2, '0')}
                   </button>
                 ))}
               </nav>

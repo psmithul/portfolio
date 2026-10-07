@@ -9,8 +9,12 @@ import {
   easeBetween,
   smoothTimeline,
   lunarFloor,
+  PLANET_SPACING,
+  ARCHIVE_TRAIN_X,
+  trainCab,
+  railAngle,
 } from '@/lib/journey-choreography';
-import { EXHIBIT_SPACING, exhibitPresentation } from '@/lib/journey-exhibits';
+import { EXHIBIT_SPACING } from '@/lib/journey-exhibits';
 import { createSuspensionResponse } from '@/lib/suspension-physics';
 import { journeyExperience } from '@/content/journey';
 import { createBlockMaterials, type Block } from '@/lib/voxel-textures';
@@ -33,13 +37,13 @@ export type WorldAction =
   | { kind: 'journal' };
 export type VoxelWorld = { dispose: () => void; resetView: () => void };
 const SPACING = 34;
-const LAST_PLANET_X = (journeyExperience.length - 1) * 32;
+const LAST_PLANET_X = (journeyExperience.length - 1) * PLANET_SPACING;
 const LIBRARY_X = LAST_PLANET_X + 36;
 const CONTACT_X = LIBRARY_X + 32;
 const clamp = THREE.MathUtils.clamp;
 
 const routeZ = (x: number) => Math.sin(x * 0.032) * 2;
-const routeAngle = (x: number) => -Math.atan(Math.cos(x * 0.032) * 0.064);
+const routeAngle = railAngle;
 
 type BatchItem = {
   x: number;
@@ -393,12 +397,13 @@ export function createVoxelWorld(
       s === 2 ? 13 : 9,
     );
     // A Create-style inclined gangway joins the exact cab and platform floor heights.
-    const startZ = routeZ(x) + 1.7,
+    const boardingX = s === 3 ? ARCHIVE_TRAIN_X : x;
+    const startZ = routeZ(boardingX) + 1.7,
       endZ = 4.15,
       length = Math.hypot(endZ - startZ, 0.58);
     const gangway = part(
       land,
-      x - 2.2,
+      trainCab(boardingX)[0],
       1.19 - 0.07,
       (startZ + endZ) / 2,
       'plank',
@@ -410,7 +415,7 @@ export function createVoxelWorld(
     for (const side of [-1, 1]) {
       const rail = part(
         land,
-        x - 2.2 + side * 0.67,
+        trainCab(boardingX)[0] + side * 0.67,
         1.75,
         (startZ + endZ) / 2,
         'iron',
@@ -1009,13 +1014,16 @@ export function createVoxelWorld(
   part(roverBody, 0, 1.45, 0, 'dark', 0.8, 0.4, 0.9);
   part(roverBody, -0.45, 2, 0, 'dark', 0.2, 1.2, 0.9);
   for (const side of [-1, 1]) {
-    part(roverBody, 1.4, 2.7, side * 0.94, 'iron', 0.12, 1.4, 0.12);
-    part(roverBody, -1.6, 2.7, side * 0.94, 'iron', 0.12, 1.4, 0.12);
+    part(roverBody, 1.4, 2.8, side * 0.94, 'iron', 0.12, 1.8, 0.12);
+    part(roverBody, -1.6, 2.8, side * 0.94, 'iron', 0.12, 1.8, 0.12);
     part(roverBody, 2.62, 1.9, side * 0.7, '#fff0b0', 0.08, 0.3, 0.3);
   }
-  part(roverBody, -0.1, 3.4, 0, 'dark', 3.6, 0.15, 2.3);
+  part(roverBody, -0.1, 3.75, 0, 'dark', 3.6, 0.15, 2.3);
   for (let a = -3; a <= 3; a++)
-    part(roverBody, a * 0.4, 3.5, 0, 'glass', 0.3, 0.06, 1.8);
+    part(roverBody, a * 0.4, 3.85, 0, 'glass', 0.3, 0.06, 1.8);
+  // Boarding steps are outside the wheel envelope; the raised entry clears the tyres.
+  part(orbit, 6, 4, 6.45, 'iron', 1.2, 0.16, 0.5);
+  part(orbit, 6, 4.67, 6.15, 'iron', 1.2, 0.16, 0.4);
   const roverWheels = [-1, 1].flatMap((side) =>
     [-2, 0, 2].map((axle) => ({
       axle,
@@ -1045,10 +1053,10 @@ export function createVoxelWorld(
     if (x % 4 === 0 && Math.abs(b - a) < 1e-8)
       block(orbit, x, a + 0.05, 4.5, 'gold', 1.25, 0.025, 0.1);
     for (const side of [-1, 1]) {
-      block(orbit, x, a - 0.45, 4.5 + side * 2, 'moon', 1, 0.9, 1);
+      block(orbit, x, a - 0.42, 4.5 + side * 2, 'moon', 1, 0.9, 1);
       block(orbit, x, a - 1.9, 4.5 + side * 2, 'stone', 1, 2, 1);
     }
-    if (x % 8 === 0) {
+    if (x % 8 === 0 && x > 12) {
       block(orbit, x, a + 0.7, 6.5, 'iron', 0.16, 1.4, 0.16);
       block(orbit, x, a + 1.4, 6.5, 'glass', 0.28, 0.22, 0.28);
     }
@@ -1058,7 +1066,7 @@ export function createVoxelWorld(
   const orbitalUpdates: ((time: number) => void)[] = [];
   for (let index = 0; index < journeyExperience.length; index++) {
     const group = new THREE.Group();
-    group.position.set(index * 32, -1, 0);
+    group.position.set(index * PLANET_SPACING, -1, 0);
     orbit.add(group);
     const floor = index === 0 ? 'grass' : index === 3 ? 'plank' : 'moon';
     for (let a = -6; a <= 6; a++)
@@ -1082,11 +1090,10 @@ export function createVoxelWorld(
         block(group, a, 0.7, c, 'copper', 0.65, 1, 0.65);
         block(group, a, 0.05, c, 'glass', 0.85, 0.35, 0.85);
       }
-    for (let a = 6; a <= (index === 0 ? 11 : 10); a++)
+    for (let a = 7; a <= (index === 0 ? 11 : 10); a++)
       for (let c = index === 0 ? -5 : 2; c <= (index === 0 ? 5 : 4); c++)
         block(group, a, 4, c, 'iron');
-    for (let a = 7; a < 10; a++)
-      block(group, a, 4.7, 4.5, 'iron', 1, 0.15, 0.15);
+    // The visitor lane stays clear of the rover's tyres and passenger cabin.
     // Back-wall beams and a completed roof give every workplace a distinct architectural silhouette.
     if (index === 0) {
       for (let a = -4; a <= 4; a++)
@@ -1222,7 +1229,7 @@ export function createVoxelWorld(
     const angle = (i * Math.PI * 2) / 100;
     block(
       orbit,
-      32 + Math.cos(angle) * 10,
+      PLANET_SPACING + Math.cos(angle) * 7,
       -2 + Math.sin(angle) * 3,
       Math.sin(angle) * 8,
       'moon',
@@ -1429,14 +1436,11 @@ export function createVoxelWorld(
   // the main scroll timeline; nothing in this scene has its own scroll surface.
   const lettering = new CSS3DRenderer();
   lettering.domElement.className = 'world-lettering';
+  // Unlike hidden, clip cannot acquire a private scroll offset when a projected
+  // link or button receives focus. Text must share the WebGL camera's origin.
+  lettering.domElement.style.overflow = 'clip';
   host.appendChild(lettering.domElement);
   const textScene = new THREE.Scene();
-  const galleryGlass = new THREE.MeshLambertMaterial({
-    color: '#b9d2c6',
-    transparent: true,
-    opacity: 0.08,
-    depthWrite: false,
-  });
   const boardElements = Array.from(
     host.closest('main')!.querySelectorAll<HTMLElement>('[data-world-board]'),
   );
@@ -1450,15 +1454,20 @@ export function createVoxelWorld(
       index < 4
         ? index * 34
         : ORBIT_ORIGIN[0] +
-          (index < 9 ? (index - 4) * 32 : index === 9 ? LIBRARY_X : CONTACT_X);
+          (index < 9
+            ? (index - 4) * PLANET_SPACING
+            : index === 9
+              ? LIBRARY_X
+              : CONTACT_X);
     const y = index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0);
-    const z = index < 4 ? 8 : ORBIT_ORIGIN[2] + 8;
+    const z = index < 4 ? 10 : ORBIT_ORIGIN[2] + 8;
     if (index >= 4) {
       const deck = new THREE.Group();
       deck.position.set(baseX - 4, y, z - 1);
       scene.add(deck);
       for (let a = -6; a <= 7 + (elements.length - 1) * EXHIBIT_SPACING; a++)
-        for (let b = -3; b <= 2; b++)
+        // Road and curb already fill the front edge; duplicate floors flicker.
+        for (let b = 0; b <= 2; b++)
           block(deck, a, -0.25, b, 'plank', 1, 0.5, 1);
       for (let a = -6; a <= 7 + (elements.length - 1) * EXHIBIT_SPACING; a += 2)
         block(deck, a, -0.8, 0, 'log', 0.6, 1, 5.5);
@@ -1478,14 +1487,10 @@ export function createVoxelWorld(
       frameGroup.position.copy(position);
       scene.add(frameGroup);
       const w = element.offsetWidth * scale;
-      const turntable = new THREE.Group();
-      frameGroup.add(turntable);
-      const plate = part(turntable, 0, 0, -0.05, '#e8e5d7', w, 1, 0.06);
-      const spindle = part(frameGroup, 0, 0, -0.08, 'copper', 0.08, 1, 0.08);
+      const plate = part(frameGroup, 0, 0, -0.05, '#e8e5d7', w, 1, 0.06);
       // An open stone-and-copper alcove: masonry below, a small canopy above,
       // with the text inset in its wall instead of a freestanding giant board.
       const wall = part(frameGroup, 0, 0, -0.2, 'iron', w + 0.3, 1, 0.3);
-      wall.material = galleryGlass;
       const base = part(frameGroup, 0, 0, -0.75, 'cobble', w + 0.5, 1, 1.5);
       const canopy = part(
         frameGroup,
@@ -1529,7 +1534,6 @@ export function createVoxelWorld(
         wall.scale.x = w + 0.3;
         plate.scale.y = h;
         plate.scale.x = w;
-        spindle.scale.y = h + 0.35;
         base.scale.y = 0.65;
         base.scale.x = w + 0.5;
         base.position.y = -5.4 + 0.325;
@@ -1561,7 +1565,6 @@ export function createVoxelWorld(
         scale,
         readHeight: () => measured * scale,
         readWidth: () => measuredWidth * scale,
-        turntable,
         resizeFrame,
       };
     });
@@ -1622,6 +1625,10 @@ export function createVoxelWorld(
   const destination = new THREE.Vector3(),
     look = new THREE.Vector3(),
     cameraRig = new THREE.PerspectiveCamera();
+  const readingFrustum = new THREE.Frustum(),
+    viewProjection = new THREE.Matrix4(),
+    pageBounds = new THREE.Box3(),
+    halfPage = new THREE.Vector3();
   const mouse = new THREE.Vector2(),
     parallax = new THREE.Vector2();
   const raycaster = new THREE.Raycaster(),
@@ -1750,7 +1757,7 @@ export function createVoxelWorld(
       stage.position.set(
         portrait ? page.object.position.x : 70 + i * EXHIBIT_SPACING,
         portrait ? page.object.position.y + page.readHeight() / 2 + 0.3 : 0,
-        portrait ? 7.5 : -5,
+        portrait ? 9.5 : -5,
       );
     });
     const trainX = pose.trainX,
@@ -1807,7 +1814,7 @@ export function createVoxelWorld(
           )
         : pose.walking && distance > 0.0001
           ? Math.atan2(avatarVelocity.x, avatarVelocity.z)
-          : Math.PI / 2;
+          : Math.PI / 2 + (timeline <= 3.32 ? routeAngle(pose.trainX) : 0);
       const facing = new THREE.Quaternion().setFromEuler(
         new THREE.Euler(0, heading, 0),
       );
@@ -1824,15 +1831,35 @@ export function createVoxelWorld(
     if (pose.inspecting) guide.limbs[1].rotation.x = -0.8;
     lastAvatar.copy(guide.avatar.position);
     guide.avatar.visible = pose.avatarVisible;
-    if (pose.seated) {
+    if (pose.seating > 0) {
       guide.limbs.forEach((limb, i) => {
-        limb.rotation.x = i < 2 ? -0.65 : -Math.PI / 2;
+        limb.rotation.x = THREE.MathUtils.lerp(
+          limb.rotation.x,
+          i < 2 ? -0.65 : -Math.PI / 2,
+          pose.seating,
+        );
       });
     }
     lunarRover.position.set(...pose.rover);
     const roadX = pose.rover[0] - ORBIT_ORIGIN[0];
     const slope = Math.atan2(lunarFloor(roadX + 2) - lunarFloor(roadX - 2), 4);
     roverBody.rotation.z = slope;
+    if (pose.seating > 0) {
+      guide.avatar.quaternion.slerp(
+        new THREE.Quaternion().setFromEuler(
+          new THREE.Euler(0, Math.PI / 2, slope, 'ZYX'),
+        ),
+        pose.seating,
+      );
+    }
+    if (pose.seated) {
+      // Passenger and seat share the body's pitch on the lunar ramp.
+      guide.avatar.position.set(
+        pose.rover[0] - Math.sin(slope) * 0.9,
+        pose.rover[1] + Math.cos(slope) * 0.9,
+        pose.rover[2],
+      );
+    }
     roverWheels.forEach(({ wheel, axle, side, link }) => {
       wheel.position.y = 0.655 + lunarFloor(roadX + axle) - lunarFloor(roadX);
       wheel.rotation.z = -(pose.rover[0] - ORBIT_ORIGIN[0] - 6) / 0.62;
@@ -1951,7 +1978,7 @@ export function createVoxelWorld(
       // Follow the continuous world anchor rather than jumping to the next DOM page.
       const center = focus
         .clone()
-        .add(new THREE.Vector3(-5, floorOffset + 5.4, 8));
+        .add(new THREE.Vector3(-5, floorOffset + 5.4, 10 - pose.space * 2));
       const page = pose.exhibitOffset / EXHIBIT_SPACING;
       const first = Math.min(siblings.length - 1, Math.floor(page));
       const next = Math.min(siblings.length - 1, first + 1);
@@ -2071,26 +2098,35 @@ export function createVoxelWorld(
     haloMaterial.opacity = (opts.night ? 0.035 : 0.08) * (1 - pose.space * 0.4);
     starMaterial.opacity = pose.space;
     nebulaMaterial.opacity = pose.space * 0.18;
-    // Opaque pages rotate on copper spindles as the camera walks the arcade.
-    // Their neighbours turn edge-on, avoiding ghosted text over the landscape.
-    boards.forEach(({ element, object, index, leaf, turntable }) => {
-      const distance = object.position.distanceTo(focus);
-      const { fold, angle } = exhibitPresentation(
-        index,
-        leaf,
-        timeline,
-        journeyExperience.length,
-      );
-      object.rotation.y = angle;
-      turntable.rotation.y = angle;
-      const near = index === pose.board && fold < 0.2 && cameraMode < 0.5;
-      object.visible = distance < 55 && fold < 0.9995 && cameraMode < 0.9995;
-      element.inert = !near;
-      element.setAttribute('aria-hidden', String(!near));
-      element.style.opacity = '1';
-      element.style.pointerEvents = near ? 'auto' : 'none';
-      element.dataset.active = String(index === pose.board && near);
-    });
+    // Fixed alcove walls scroll past the camera. Cull only outside its view so
+    // cards never swing, fade through their masonry, or disappear mid-frame.
+    camera.updateMatrixWorld();
+    readingFrustum.setFromProjectionMatrix(
+      viewProjection.multiplyMatrices(
+        camera.projectionMatrix,
+        camera.matrixWorldInverse,
+      ),
+    );
+    boards.forEach(
+      ({ element, object, index, leaf, readHeight, readWidth }) => {
+        halfPage.set(readWidth() / 2, readHeight() / 2, 0.02);
+        pageBounds.min.copy(object.position).sub(halfPage);
+        pageBounds.max.copy(object.position).add(halfPage);
+        const near =
+          index === pose.board &&
+          Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) < 2.5 &&
+          cameraMode < 0.5;
+        object.visible =
+          camera.position.z > object.position.z &&
+          readingFrustum.intersectsBox(pageBounds) &&
+          cameraMode < 0.9995;
+        element.inert = !near;
+        element.setAttribute('aria-hidden', String(!near));
+        element.style.opacity = '1';
+        element.style.pointerEvents = near ? 'auto' : 'none';
+        element.dataset.active = String(index === pose.board && near);
+      },
+    );
     renderer.render(scene, camera);
     lettering.render(textScene, camera);
   }

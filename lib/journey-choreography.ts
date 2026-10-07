@@ -1,10 +1,30 @@
-import { exhibitTravel } from './journey-exhibits.ts';
+import {
+  exhibitTravel,
+  EXHIBIT_COUNTS,
+  EXHIBIT_SPACING,
+} from './journey-exhibits.ts';
 
 export type Point = [number, number, number];
 export const ORBIT_ORIGIN: Point = [112, 80, -12];
-export const PLANET_SPACING = 32;
+export const PLANET_SPACING = 20;
+export const ARCHIVE_TRAIN_X = 102 + (EXHIBIT_COUNTS[3] - 1) * EXHIBIT_SPACING;
 const ROCKET_FOOT = 0.475;
 export const railZ = (x: number) => Math.sin(x * 0.032) * 2;
+export const railAngle = (x: number) => -Math.atan(Math.cos(x * 0.032) * 0.064);
+/** The guide's feet use the same rotated cab floor as the rendered locomotive. */
+export function trainCab(x: number): Point {
+  const angle = railAngle(x);
+  return [
+    x - 2.2 * Math.cos(angle) + 0.4 * Math.sin(angle),
+    1.48,
+    railZ(x) + 2.2 * Math.sin(angle) + 0.4 * Math.cos(angle),
+  ];
+}
+export const roverSeat = (rover: Point): Point => [
+  rover[0],
+  rover[1] + 0.9,
+  rover[2],
+];
 const clamp = (x: number) => Math.max(0, Math.min(1, x));
 /** Quintic easing has zero velocity AND acceleration at both ends. */
 export const easeBetween = (a: number, b: number, x: number) => {
@@ -53,9 +73,14 @@ export function journeyPose(timeline: number, count = 5) {
   const chapter = Math.floor(t),
     phase = t - chapter;
   const stop = Math.min(chapter, 3);
-  const departure = easeBetween(stop === 0 ? 0.45 : 0.76, 1, phase);
-  const trainX = stop * 34 + (stop < 3 ? departure * 34 : 0);
-  const cab: Point = [trainX - 2.2, 1.48, railZ(trainX) + 0.4];
+  const gallery = exhibitTravel(
+    chapter < 4 ? chapter : chapter === 5 ? 9 : 10,
+    phase,
+  );
+  const departure = easeBetween(stop === 0 ? 0.45 : 0.6, 1, phase);
+  const offset = chapter < 4 ? gallery.offset : ARCHIVE_TRAIN_X - 102;
+  const trainX = stop * 34 + (stop < 3 ? mix(offset, 34, departure) : offset);
+  const cab = trainCab(trainX);
   let avatar = cab,
     avatarVisible = true;
   let rocket: Point = [112, 0.9 - ROCKET_FOOT, 6];
@@ -65,6 +90,7 @@ export function journeyPose(timeline: number, count = 5) {
     ORBIT_ORIGIN[2] + 4.5,
   ];
   let seated = false;
+  let seating = 0;
   let focus: Point = [trainX, 0, 0];
   let flight = 0,
     pitch = 0,
@@ -74,50 +100,33 @@ export function journeyPose(timeline: number, count = 5) {
     inspecting = false,
     transit = 0,
     trainDoor = 0;
-  let display: Point = [stop * 34 - 5, 6.3, 8];
-  const gallery = exhibitTravel(
-    chapter < 4 ? chapter : chapter === 5 ? 9 : 10,
-    phase,
-  );
+  let display: Point = [stop * 34 - 5, 6.3, 10];
   if (chapter < 4) {
-    focus[0] += gallery.offset;
     display[0] += gallery.offset;
     transit = chapter === 0 ? easeBetween(0.28, 0.45, phase) : gallery.transit;
   }
-  const platformPath: Point[] = [
-    cab,
-    [cab[0], 1.48, railZ(trainX) + 1.7],
-    [cab[0], 0.9, 4.15],
-    [stop * 34 + 1 + gallery.offset, 0.9, 6.5],
-  ];
-  if (chapter === 1 || chapter === 2) {
-    const walk =
-      easeBetween(0, 0.1, phase) * (1 - easeBetween(0.56, 0.76, phase));
-    avatar = walkPath(platformPath, walk);
-    walking = phase < 0.1 || (phase > 0.56 && phase < 0.76) || gallery.moving;
-    inspecting = walk > 0.99 && !gallery.moving;
-    trainDoor =
-      easeBetween(0, 0.025, phase) * (1 - easeBetween(0.74, 0.76, phase));
-  }
   if (t >= 3 && t < 4) {
     const hatch: Point = [112, 0.9, 7.45];
-    avatar = walkPath(platformPath, easeBetween(3, 3.05, t));
-    avatar = blend(avatar, hatch, easeBetween(3.3, 3.55, t));
-    avatar = blend(avatar, [112, 1.15, 6.55], easeBetween(3.55, 3.64, t));
+    // Only leave after the last archive card, on the gangway beside the launch pad.
+    avatar = walkPath(
+      [
+        cab,
+        [cab[0], 1.48, railZ(trainX) + 1.7],
+        [cab[0], 0.9, 4.15],
+        hatch,
+        [112, 1.15, 6.55],
+      ],
+      easeBetween(3.32, 3.64, t),
+    );
     avatarVisible = t < 3.64;
-    walking = t < 3.05 || (t > 3.3 && t < 3.64) || gallery.moving;
-    inspecting = t >= 3.05 && t <= 3.3 && !gallery.moving;
-    trainDoor = easeBetween(3, 3.025, t) * (1 - easeBetween(3.2, 3.25, t));
+    walking = t > 3.32 && t < 3.64;
+    trainDoor = easeBetween(3.3, 3.32, t) * (1 - easeBetween(3.5, 3.56, t));
     const launch = easeBetween(3.68, 4, t);
     rocket = blend(rocket, dock(0), launch);
     rocket[1] += Math.sin(Math.PI * launch) * 18;
     flight = Math.sin(Math.PI * launch);
     pitch = -Math.sin(Math.PI * launch) * 0.16;
-    focus = blend(
-      [102 + gallery.offset, 0, 0],
-      [112, 0, 6],
-      easeBetween(3.4, 3.68, t),
-    );
+    focus = blend([trainX, 0, 0], [112, 0, 6], easeBetween(3.4, 3.68, t));
     focus[2] = mix(focus[2], -12, launch);
     focus[1] =
       rocket[1] -
@@ -147,17 +156,17 @@ export function journeyPose(timeline: number, count = 5) {
       moonFrom = true;
       board = 4 + index;
     }
-    const travel = easeBetween(0.72, 1, fraction);
+    const travel = easeBetween(chapter === 4 ? 0.52 : 0.72, 1, fraction);
     boardPhase = fraction;
     transit =
       chapter === 5
         ? gallery.transit
         : chapter === 6
           ? 0
-          : easeBetween(0.5, 0.7, fraction);
+          : easeBetween(0.42, 0.56, fraction);
     transit *= 1 - easeBetween(0.92, 1, fraction);
     rocket = dock(0);
-    const roverX = mix(fromX, toX, travel) + 6;
+    const roverX = mix(fromX + gallery.offset, toX, travel) + 6;
     rover = [
       ORBIT_ORIGIN[0] + roverX,
       ORBIT_ORIGIN[1] + lunarFloor(roverX, count),
@@ -166,45 +175,35 @@ export function journeyPose(timeline: number, count = 5) {
     const baseX = ORBIT_ORIGIN[0] + fromX,
       baseY = ORBIT_ORIGIN[1] + (moonFrom ? 0 : 3.5),
       baseZ = ORBIT_ORIGIN[2];
-    const seat: Point = [rover[0], rover[1] + 0.9, rover[2]];
+    const seat = roverSeat(rover);
     const firstLanding = chapter === 4 && index === 0;
     const hatch: Point = firstLanding
       ? [rocket[0], rocket[1] + 1, rocket[2] + 1.45]
       : seat;
-    const goal: Point = [baseX + 1 + gallery.offset, baseY, baseZ + 7];
-    const arrival = easeBetween(0, chapter === 5 ? 0.1 : 0.2, fraction);
-    const leaving = easeBetween(chapter === 5 ? 0.56 : 0.5, 0.7, fraction);
-    avatar = walkPath(
-      [
-        hatch,
-        [baseX + 6, baseY, baseZ + 4.5],
-        [baseX + 2 + gallery.offset, baseY, baseZ + 5],
-        goal,
-      ],
-      arrival,
-    );
-    if (leaving > 0)
-      avatar = walkPath(
-        [
-          goal,
-          [baseX + 2 + gallery.offset, baseY, baseZ + 5],
-          [baseX + 6, baseY, baseZ + 4.5],
-          seat,
-        ],
-        leaving,
-      );
-    avatarVisible = !firstLanding || fraction > 0.015;
-    seated = leaving >= 1 || (!firstLanding && arrival <= 0);
-    walking =
-      !seated &&
-      (fraction < 0.2 || (leaving > 0 && leaving < 1) || gallery.moving);
-    inspecting = arrival > 0.99 && leaving < 0.01 && !gallery.moving;
+    // A single transfer from the landing gantry to a raised side step. All later
+    // reading stops are viewed from the rover, without crossing its chassis.
+    const arrival = easeBetween(0.025, 0.24, fraction);
+    avatar = firstLanding
+      ? walkPath(
+          [
+            hatch,
+            [baseX + 9, baseY, baseZ + 6.5],
+            [baseX + 6, baseY, baseZ + 6.5],
+            [baseX + 6, baseY + 0.58, baseZ + 6.45],
+            [baseX + 6, baseY + 1.25, baseZ + 6.05],
+            [seat[0], baseY + 1.25, seat[2]],
+            seat,
+          ],
+          arrival,
+        )
+      : seat;
+    avatarVisible = !firstLanding || fraction > 0.035;
+    seating = firstLanding ? easeBetween(0.16, 0.24, fraction) : 1;
+    seated = !firstLanding || arrival >= 1;
+    walking = firstLanding && arrival > 0 && arrival < 1;
+    inspecting = false;
     display = [baseX - 5 + gallery.offset, baseY + 5.4, baseZ + 8];
-    focus = [
-      ORBIT_ORIGIN[0] + mix(fromX, toX, travel) + gallery.offset,
-      ORBIT_ORIGIN[1],
-      ORBIT_ORIGIN[2],
-    ];
+    focus = [ORBIT_ORIGIN[0] + roverX - 6, ORBIT_ORIGIN[1], ORBIT_ORIGIN[2]];
   }
   if (chapter < 4) transit *= 1 - easeBetween(0.94, 1, phase);
   return {
@@ -218,6 +217,7 @@ export function journeyPose(timeline: number, count = 5) {
     rocket,
     rover,
     seated,
+    seating,
     focus,
     flight,
     pitch,

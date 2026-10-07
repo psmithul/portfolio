@@ -5,7 +5,6 @@ import {
   exhibitTravel,
   exhibitReadingPhases,
   EXHIBIT_SPACING,
-  exhibitPresentation,
 } from '../lib/journey-exhibits.ts';
 import {
   journeyPose,
@@ -13,6 +12,10 @@ import {
   dock,
   lunarFloor,
   type Point,
+  PLANET_SPACING,
+  ARCHIVE_TRAIN_X,
+  trainCab,
+  roverSeat,
 } from '../lib/journey-choreography.ts';
 const distance = (a: Point, b: Point) =>
   Math.hypot(...a.map((v, i) => v - b[i]));
@@ -42,7 +45,7 @@ void test('the rocket docks once and the rover connects the orbital workplaces',
     assert.ok(distance(pose.rocket, dock(0)) < 1e-6);
     assert.equal(pose.flight, 0);
     assert.equal(pose.pitch, 0);
-    assert.ok(Math.abs(pose.rover[0] - 112 - i * 32 - 6) < 1e-8);
+    assert.ok(Math.abs(pose.rover[0] - 112 - i * PLANET_SPACING - 6) < 1e-8);
     assert.ok(
       Math.abs(pose.rocket[2] - pose.rover[2]) > 6,
       'landing bay is separate from the rover road',
@@ -55,13 +58,7 @@ void test('the rocket docks once and the rover connects the orbital workplaces',
     );
     assert.equal(pose.rover[2], -7.5);
     if (pose.seated)
-      assert.ok(
-        distance(pose.avatar, [
-          pose.rover[0],
-          pose.rover[1] + 0.9,
-          pose.rover[2],
-        ]) < 1e-8,
-      );
+      assert.ok(distance(pose.avatar, roverSeat(pose.rover)) < 1e-8);
   }
 });
 void test('visible walking has no jumps and the character boards before launch', () => {
@@ -108,43 +105,73 @@ void test('navigation settles at the new workplace rather than remaining just be
     }
 });
 
-void test('the guide uses the visitor side, stands on its floor, and visits the current display', () => {
-  for (const chapter of [1, 2, 3]) {
-    const pose = journeyPose(chapter + 0.25);
-    const offset = exhibitTravel(chapter, 0.25).offset;
-    assert.equal(pose.avatar[0], chapter * 34 + 1 + offset);
-    assert.equal(pose.avatar[1], 0.9);
-    assert.equal(pose.avatar[2], 6.5);
-    assert.equal(pose.inspecting, true);
-    assert.equal(pose.display[0], chapter * 34 - 5 + offset);
-    assert.equal(pose.display[2], 8);
-  }
-  for (let t = 3.3; t < 3.64; t += 0.001) {
+void test('the guide stays inside the moving cab through every ground card until the rocket transfer', () => {
+  for (let t = 0; t <= 3.32; t += 0.001) {
     const pose = journeyPose(t);
-    assert.ok(pose.avatar[2] >= 6.5);
-    assert.ok(pose.avatar[1] >= 0.9);
+    assert.ok(distance(pose.avatar, trainCab(pose.trainX)) < 1e-8);
+    assert.equal(pose.walking, false);
+    assert.equal(pose.inspecting, false);
+    if (t < 3.3) assert.equal(pose.trainDoor, 0);
   }
 });
 
-void test('orbital walks stay on the docking gantry, workplace floor, or connected visitor deck', () => {
-  for (let i = 0; i < 5; i++)
-    for (let phase = 0.035; phase < 0.7; phase += 0.001) {
-      const pose = journeyPose(4 + (i + phase) / 5);
-      const x = pose.avatar[0] - 112 - i * 32,
-        z = pose.avatar[2] + 12;
-      const floor = Math.abs(x) <= 6.5 && Math.abs(z) <= 5.5;
-      const gantry =
-        x >= 5.5 &&
-        x <= (i === 0 ? 11.5 : 10.5) &&
-        z >= (i === 0 ? -5.5 : 1.5) &&
-        z <= (i === 0 ? 5.5 : 4.5);
-      const visitor = x >= -10.5 && x <= 3.5 && z >= 4 && z <= 9.5;
+void test('the rocket transfer uses the final gangway and never crosses the archive walls', () => {
+  const cab = trainCab(ARCHIVE_TRAIN_X);
+  let walked = 0;
+  for (let t = 3.32; t < 3.64; t += 0.0001) {
+    const pose = journeyPose(t),
+      next = journeyPose(t + 0.0001);
+    walked += distance(pose.avatar, next.avatar);
+    assert.ok(pose.avatar[2] < 7.6, 'archive walls start at z=9.65');
+    if (pose.avatar[2] < 4.15)
+      assert.ok(Math.abs(pose.avatar[0] - cab[0]) < 1e-8, 'on the cab gangway');
+    assert.ok(pose.avatar[1] >= 0.9);
+  }
+  assert.ok(walked < 12, 'a single short boarding walk');
+});
+
+void test('one landing transfer clears the rover wheels; all later roles are viewed from its seat', () => {
+  for (let t = 4.005; t < 4.048; t += 0.0001) {
+    const pose = journeyPose(t);
+    const z = pose.avatar[2] - pose.rover[2];
+    assert.ok(pose.avatar[1] >= 83.5);
+    if (
+      Math.abs(pose.avatar[0] - pose.rover[0]) < 0.5 &&
+      z > 0.7 &&
+      z < 1.4 &&
+      !pose.seated
+    )
       assert.ok(
-        floor || gantry || visitor,
-        `unsupported foot at ${i}: ${x}, ${z}`,
+        pose.avatar[1] - pose.rover[1] > 1.15,
+        'entry passes above the tyre',
       );
-      assert.ok(pose.avatar[1] >= 83.5);
-    }
+    assert.ok(
+      pose.avatar[1] - pose.rover[1] + 2.25 < 3.675,
+      'head clears the cabin roof',
+    );
+  }
+  for (let t = 4.05; t < 6.999; t += 0.001) {
+    const pose = journeyPose(t);
+    assert.equal(pose.walking, false);
+    assert.equal(pose.seated, true);
+    assert.ok(distance(pose.avatar, roverSeat(pose.rover)) < 1e-8);
+    assert.ok(
+      pose.avatar[2] + 0.5 < pose.display[2] - 0.35,
+      'passenger clears the alcove wall',
+    );
+  }
+});
+
+void test('experience travel is compact and includes no repeat disembarking or boarding', () => {
+  assert.ok(PLANET_SPACING <= 20);
+  for (let role = 0; role < 5; role++) {
+    const reading = journeyPose(4 + (role + 0.3) / 5);
+    assert.equal(reading.board, 4 + role);
+    assert.equal(reading.seated, true);
+    const departing = journeyPose(4 + (role + 0.7) / 5);
+    assert.ok(departing.rover[0] > reading.rover[0]);
+    assert.equal(departing.walking, false);
+  }
 });
 
 void test('one continuous scroll visits every reading bay before departure', () => {
@@ -156,24 +183,29 @@ void test('one continuous scroll visits every reading bay before departure', () 
       assert.equal(gallery.moving, false);
       const pose = journeyPose((board === 9 ? 5 : board) + phase);
       assert.equal(pose.exhibitOffset, page * EXHIBIT_SPACING);
-      assert.equal(pose.inspecting, true);
-      assert.ok(Math.abs(pose.avatar[0] - pose.display[0] - 6) < 1e-8);
       assert.ok(Math.abs(pose.focus[0] - pose.display[0] - 5) < 1e-8);
+      assert.equal(pose.walking, false);
     }
   }
 });
 
-void test('reading bays return to the same train and rocket coordinates without an end-of-section jump', () => {
-  for (const board of [1, 2, 3, 9])
-    assert.equal(exhibitTravel(board, 0.999).offset, 0);
-  for (const chapter of [1, 2, 3])
-    for (let phase = 0.001; phase < 0.76; phase += 0.001) {
-      const p = journeyPose(chapter + phase);
-      assert.ok(
-        p.avatar[0] >= chapter * 34 - 12 && p.avatar[0] <= chapter * 34 + 20,
-      );
-      assert.ok(p.avatar[1] >= 0.9);
+void test('ground cards are passed in order with no camera or train return trip', () => {
+  for (const board of [1, 2, 3]) {
+    let lastOffset = 0;
+    for (let phase = 0; phase < 1; phase += 0.001) {
+      const offset = exhibitTravel(board, phase).offset;
+      assert.ok(offset >= lastOffset);
+      lastOffset = offset;
     }
+    assert.equal(lastOffset, 16);
+  }
+  let last = journeyPose(0);
+  for (let t = 0.001; t < 3.32; t += 0.001) {
+    const next = journeyPose(t);
+    assert.ok(next.trainX >= last.trainX - 1e-9, `train reverses at ${t}`);
+    assert.ok(next.focus[0] >= last.focus[0] - 1e-9, `camera reverses at ${t}`);
+    last = next;
+  }
 });
 
 void test('phone rotation preserves the same actor and camera pose', () => {
@@ -199,23 +231,4 @@ void test('phone rotation preserves the same actor and camera pose', () => {
       for (const key of ['avatar', 'rocket', 'rover', 'focus'] as const)
         assert.ok(distance(a[key], b[key]) < 1e-8);
     }
-});
-
-void test('pages turn into view continuously before chapter and planet boundaries', () => {
-  for (let board = 0; board <= 10; board++) {
-    const start =
-      board < 4 ? board : board < 9 ? 4 + (board - 4) / 5 : board - 4;
-    if (board)
-      assert.ok(exhibitPresentation(board, 0, start - 0.00001).fold < 0.001);
-    for (let t = 0; t < 7; t += 0.0005) {
-      for (let leaf = 0; leaf < 3; leaf++) {
-        const a = exhibitPresentation(board, leaf, t),
-          b = exhibitPresentation(board, leaf, t + 0.0005);
-        assert.ok(
-          Math.abs(a.angle - b.angle) < 0.12,
-          `page rotation snap at ${board}/${leaf}/${t}`,
-        );
-      }
-    }
-  }
 });
