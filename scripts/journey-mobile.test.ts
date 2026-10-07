@@ -109,9 +109,11 @@ function environment(t: { after: (fn: () => void) => void }) {
     });
   }
   const states: boolean[] = [];
+  const published: number[] = [];
   const scroll = createJourneyScroll(() => points, 5, {
     viewport: () => viewport,
     onPlayingChange: (playing) => states.push(playing),
+    onPositionChange: (y) => published.push(y),
   });
   t.after(() => {
     scroll.dispose();
@@ -141,8 +143,20 @@ function environment(t: { after: (fn: () => void) => void }) {
     document,
     scroll,
     states,
+    published,
     run,
     touch,
+    wheel(delta: number, timestamp: number) {
+      const event = new Event('wheel', { cancelable: true });
+      Object.defineProperties(event, {
+        deltaY: { value: delta },
+        deltaX: { value: 0 },
+        deltaMode: { value: 0 },
+        timeStamp: { value: timestamp },
+      });
+      browser.dispatchEvent(event);
+      return event;
+    },
     position: () => journeyPosition(scroll.position(), points, viewport, 5),
     resize(height: number, stable: number) {
       browser.innerHeight = height;
@@ -201,6 +215,94 @@ void test('mobile autoplay visits all 18 pages, gives reading time, and stops at
   const end = env.scroll.position();
   env.run(30);
   assert.equal(env.scroll.position(), end);
+});
+
+void test('manual snap is idle until chosen and one long swipe visits only the next reading frame', (t) => {
+  const env = environment(t);
+  env.run(60);
+  assert.equal(env.scroll.position(), 0);
+  assert.deepEqual(env.states, []);
+  env.touch('touchstart', [[200, 700]]);
+  for (let y = 660; y >= 100; y -= 40) env.touch('touchmove', [[200, y]]);
+  assert.equal(
+    env.scroll.position(),
+    0,
+    'no jitter while a finger is held down',
+  );
+  env.touch('touchend', []);
+  env.run(30);
+  const p = env.position();
+  assert.ok(
+    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
+  );
+  const y = env.scroll.position();
+  env.run(30);
+  assert.equal(env.scroll.position(), y, 'manual mode never advances itself');
+});
+
+void test('a wheel burst and repeated swipes during transit cannot skip unread frames', (t) => {
+  const env = environment(t);
+  for (let i = 0; i < 80; i++)
+    assert.equal(env.wheel(120, i * 16).defaultPrevented, true);
+  env.run(0.5);
+  for (let i = 0; i < 8; i++) {
+    env.touch('touchstart', [[200, 600]]);
+    env.touch('touchmove', [[200, 100]]);
+    env.touch('touchend', []);
+  }
+  env.run(30);
+  const p = env.position();
+  assert.ok(
+    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
+  );
+  env.wheel(20, 3000);
+  env.run(15);
+  const next = env.position();
+  assert.ok(
+    Math.abs(next.stop + next.phase - journeyTourStops(5)[2].timeline) < 1e-9,
+  );
+});
+
+void test('cancelled or pinched swipes do not trigger a snap on release', (t) => {
+  const env = environment(t);
+  for (const kind of ['cancel', 'pinch']) {
+    env.touch('touchstart', [[200, 600]]);
+    env.touch('touchmove', [[200, 100]]);
+    if (kind === 'cancel') env.touch('touchcancel', []);
+    else
+      env.touch('touchstart', [
+        [200, 100],
+        [300, 100],
+      ]);
+    env.touch('touchend', []);
+    env.run(20);
+    assert.equal(env.scroll.position(), 0);
+  }
+});
+
+void test('direct navigation publishes only the selected frame and never flies through the route', (t) => {
+  const env = environment(t);
+  env.scroll.play();
+  env.scroll.jump(4515.4);
+  const pose = journeyPose(env.position().stop + env.position().phase, 5);
+  assert.equal(pose.board, 4);
+  assert.equal(pose.stationView, 1);
+  assert.equal(pose.walking, false);
+  assert.equal(
+    env.published.length,
+    2,
+    'initial position and destination only',
+  );
+  const y = env.scroll.position();
+  env.run(30);
+  assert.equal(env.scroll.position(), y);
+  assert.equal(env.published.length, 2);
+  assert.equal(env.states.at(-1), false);
+  env.scroll.jump(928.4);
+  const p = env.position();
+  assert.ok(
+    Math.abs(p.stop + p.phase - journeyTourStops(5)[1].timeline) < 1e-9,
+  );
 });
 
 void test('swiping pauses the tour, cancels safely, and pinch zoom stays with the browser', (t) => {
