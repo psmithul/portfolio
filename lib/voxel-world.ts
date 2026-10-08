@@ -2,6 +2,10 @@ import { annotationOpacity } from '@/lib/journey-annotations';
 import { createJourneyClearance } from '@/lib/journey-clearance';
 import { createWorldCompositor } from '@/lib/world-compositor';
 import { voxelSurfaceGeometry } from '@/lib/voxel-surface-geometry';
+import { mergeVoxelParts, rollingTireGeometry } from '@/lib/voxel-assembly';
+import { exhaustSample } from '@/lib/journey-exhaust';
+import { leafCollectorLinkage } from '@/lib/leaf-collector-linkage';
+import { stationCameraTransfer } from '@/lib/journey-camera-transfer';
 import type { VoxelSolid } from '@/lib/voxel-surfaces';
 import * as THREE from 'three';
 import {
@@ -23,8 +27,9 @@ import {
   ARCHIVE_TRAIN_X,
   trainCab,
   railAngle,
+  type Point,
 } from '@/lib/journey-choreography';
-import { EXHIBIT_SPACING } from '@/lib/journey-exhibits';
+import { exhibitSpacing } from '@/lib/journey-exhibits';
 import { stationCameraDistance } from '@/lib/journey-station-camera';
 import { createSuspensionResponse } from '@/lib/suspension-physics';
 import { journeyExperience } from '@/content/journey';
@@ -120,6 +125,7 @@ export function createVoxelWorld(
   const clearance = createJourneyClearance();
   let clearedBlocks = 0;
   const staticParts: THREE.Mesh[] = [];
+  const rigidAssemblies: { parent: THREE.Group; parts: THREE.Mesh[] }[] = [];
   const targets: THREE.Object3D[] = [];
   const ownedTextures: THREE.Texture[] = [];
   let seed = 120226;
@@ -164,6 +170,7 @@ export function createVoxelWorld(
     mesh.scale.set(w, h, d);
     mesh.castShadow = true;
     mesh.receiveShadow = true;
+    mesh.userData.voxelType = type;
     parent.add(mesh);
     let root: THREE.Object3D | null = parent;
     while (root && root !== land && root !== orbit) root = root.parent;
@@ -471,19 +478,46 @@ export function createVoxelWorld(
     'tensegrity-joint',
     'off-road-leaf-robot',
   ];
-  const projectStages: THREE.Group[] = [];
+  function rollingWheel(
+    parent: THREE.Group,
+    radius: number,
+    x: number,
+    y: number,
+    z: number,
+  ) {
+    const wheel = new THREE.Group();
+    wheel.position.set(x, y, z);
+    parent.add(wheel);
+    const tire = new THREE.Mesh(rollingTireGeometry(radius), mats.get('dark'));
+    tire.castShadow = tire.receiveShadow = true;
+    wheel.add(tire);
+    for (const side of [-1, 1]) {
+      part(wheel, 0, 0, side * 0.205, 'iron', radius * 1.1, radius * 1.1, 0.05);
+      part(
+        wheel,
+        0,
+        0,
+        side * 0.245,
+        'gold',
+        radius * 0.35,
+        radius * 0.35,
+        0.03,
+      );
+    }
+    return wheel;
+  }
   for (let i = 0; i < 3; i++) {
-    const x = 70 + i * EXHIBIT_SPACING;
+    const x = 63 + i * exhibitSpacing(2);
     const stage = new THREE.Group();
-    stage.position.set(x, 0, -5);
+    stage.position.set(x, 0, 10);
     land.add(stage);
-    projectStages.push(stage);
-    block(stage, 0, 1.75, 0, 'dark', 5.5, 0.25, 4);
-    for (const a of [-2, 2])
+    const halfWidth = i === 2 ? 3 : 2;
+    block(stage, 0, 1.75, 0, 'dark', i === 2 ? 7.6 : 5.5, 0.25, 4);
+    for (const a of [-halfWidth, halfWidth])
       for (const b of [-1.5, 1.5])
         block(stage, a, 0.85, b, 'log', 0.5, 1.7, 0.5);
     const exhibit = new THREE.Group();
-    exhibit.position.set(0, 1.9, 0);
+    exhibit.position.set(0, 1.875, 0);
     stage.add(exhibit);
     if (i === 0) {
       const chassis = new THREE.Group();
@@ -497,27 +531,39 @@ export function createVoxelWorld(
         coils: ReturnType<typeof beam>[][] = [];
       for (const side of [-1, 1])
         for (const axle of [-1.3, 0, 1.3]) {
-          wheels.push(gearWheel(exhibit, 0.48, axle, 0.48, side * 1.05));
+          wheels.push(rollingWheel(exhibit, 0.48, axle, 0.56, side * 1.05));
           links.push(beam(exhibit, 'iron', 0.14));
           coils.push(
             Array.from({ length: 10 }, () => beam(exhibit, 'copper', 0.07)),
           );
         }
       const response = createSuspensionResponse();
-      const drive = gearWheel(exhibit, 0.4, -2.15, 0.45, 0);
-      const cam = part(exhibit, -1.3, 0.05, 0, 'redstone', 0.6, 0.1, 2.3);
+      const drive = gearWheel(exhibit, 0.4, -2.15, 0.75, 0);
+      part(exhibit, -2.15, 0.35, -0.24, 'iron', 0.35, 0.7, 0.3);
+      part(exhibit, -2.15, 0.75, 0, 'iron', 0.14, 0.14, 0.6);
+      const terrain = [-1.3, 0, 1.3].map((axle) =>
+        part(exhibit, axle, 0.04, 0, 'redstone', 0.95, 0.08, 2.7),
+      );
+      rigidAssemblies.push({
+        parent: chassis,
+        parts: [...chassis.children] as THREE.Mesh[],
+      });
       mechanicalUpdates.push((time, dt) => {
         const angle = time * 1.35,
           base = (1 + Math.sin(angle)) * 0.23;
         const displacement = response.step(dt, base, 1);
         chassis.position.y = displacement;
         drive.rotation.z = -angle;
-        cam.position.y = base * 0.85;
+        terrain.forEach((platform, j) => {
+          const rise = base * [1, 0.5, 0][j];
+          platform.scale.y = 0.08 + rise;
+          platform.position.y = platform.scale.y / 2;
+        });
         wheels.forEach((wheel, j) => {
           const axle = [-1.3, 0, 1.3][j % 3],
             side = j < 3 ? -1 : 1;
           const rise = j % 3 === 0 ? base : j % 3 === 1 ? base * 0.5 : 0;
-          wheel.position.y = 0.48 + rise;
+          wheel.position.y = 0.56 + rise;
           wheel.rotation.z = -angle;
           const a = new THREE.Vector3(axle, wheel.position.y, side * 0.94);
           const b = new THREE.Vector3(
@@ -537,7 +583,7 @@ export function createVoxelWorld(
       });
     } else if (i === 1) {
       const bars = Array.from({ length: 3 }, () => beam(exhibit, 'iron', 0.17));
-      const cables = Array.from({ length: 9 }, () =>
+      const cables = Array.from({ length: 6 }, () =>
         beam(exhibit, 'redstone', 0.045),
       );
       const baseEdges = Array.from({ length: 3 }, () =>
@@ -547,6 +593,20 @@ export function createVoxelWorld(
         beam(exhibit, 'copper', 0.16),
       );
       const drive = gearWheel(exhibit, 0.42, 1.9, 0.6, 0);
+      part(exhibit, 1.9, 0.3, -0.25, 'iron', 0.5, 0.6, 0.5);
+      for (let j = 0; j < 3; j++) {
+        const angle = (j * Math.PI * 2) / 3;
+        part(
+          exhibit,
+          Math.cos(angle) * 1.3,
+          0.125,
+          Math.sin(angle) * 1.3,
+          'copper',
+          0.36,
+          0.25,
+          0.36,
+        );
+      }
       const actuator = beam(exhibit, 'gold', 0.14);
       const response = createSuspensionResponse();
       mechanicalUpdates.push((time, dt) => {
@@ -575,19 +635,34 @@ export function createVoxelWorld(
           upperEdges[j](top[j], top[(j + 1) % 3]);
           cables[j](bottom[j], top[j]);
           cables[3 + j](bottom[j], top[(j + 2) % 3]);
-          cables[6 + j](bottom[j], bottom[(j + 1) % 3]);
         }
         drive.rotation.z = -time * 1.1;
         actuator(new THREE.Vector3(1.9, 0.6, 0), top[0]);
       });
     } else {
-      part(exhibit, 0, 0.85, 0, 'gold', 3, 0.6, 1.65);
-      part(exhibit, -0.7, 1.65, 0, 'copper', 1.25, 1.1, 1.5);
+      const chassis = new THREE.Group();
+      exhibit.add(chassis);
+      part(chassis, 0, 0.85, 0, 'gold', 3, 0.6, 1.65);
+      part(chassis, -0.7, 1.65, 0, 'copper', 1.25, 1.1, 1.5);
+      for (const axle of [-1, 1]) {
+        part(chassis, axle, 0.43, 0, 'iron', 0.16, 0.16, 2.45);
+        part(chassis, axle, 0.63, 0, 'iron', 0.25, 0.4, 1.1);
+      }
       for (const side of [-1, 1])
         for (const axle of [-1, 1])
-          gearWheel(exhibit, 0.43, axle, 0.43, side * 1.05);
-      const pivotA = new THREE.Vector3(0.3, 1.3, 1.05),
-        pivotD = new THREE.Vector3(1.25, 1.3, 1.05);
+          rollingWheel(exhibit, 0.43, axle, 0.43, side * 1.05);
+      const pivots = leafCollectorLinkage(0);
+      const pivotA = new THREE.Vector3(...pivots.A);
+      part(chassis, 1.35, 1.31, 0.75, 'iron', 0.3, 0.32, 0.2);
+      part(chassis, 2, 1.31, 0.75, 'iron', 1.4, 0.18, 0.18);
+      for (const pivot of [pivots.A, pivots.D]) {
+        part(chassis, pivot[0], 1.5, 0.75, 'iron', 0.2, 0.3, 0.18);
+        part(chassis, pivot[0], pivot[1], 0.93, 'iron', 0.14, 0.14, 0.5);
+      }
+      rigidAssemblies.push({
+        parent: chassis,
+        parts: [...chassis.children] as THREE.Mesh[],
+      });
       const links = Array.from({ length: 3 }, () =>
         beam(exhibit, 'iron', 0.16),
       );
@@ -602,25 +677,17 @@ export function createVoxelWorld(
       );
       mechanicalUpdates.push((time) => {
         const a = time * 0.8;
-        const B = pivotA
-          .clone()
-          .add(new THREE.Vector3(Math.cos(a) * 0.3, Math.sin(a) * 0.3, 0));
-        const delta = pivotD.clone().sub(B),
-          d = delta.length(),
-          along = (1.25 ** 2 - 1.05 ** 2 + d ** 2) / (2 * d),
-          h = Math.sqrt(Math.max(0, 1.25 ** 2 - along ** 2));
-        const C = B.clone()
-          .addScaledVector(delta, along / d)
-          .add(
-            new THREE.Vector3(-delta.y / d, delta.x / d, 0).multiplyScalar(-h),
-          );
+        const pose = leafCollectorLinkage(a);
+        const B = new THREE.Vector3(...pose.B);
+        const C = new THREE.Vector3(...pose.C);
+        const pivotD = new THREE.Vector3(...pose.D);
         links[0](pivotA, B);
         links[1](B, C);
         links[2](C, pivotD);
         drive.rotation.z = a;
         scoop.position.copy(C);
         scoop.position.z = 0;
-        scoop.rotation.z = Math.atan2(C.y - B.y, C.x - B.x);
+        scoop.rotation.z = pose.scoopAngle;
         conveyor.forEach((slat, j) => {
           slat.position.x = -0.4 + ((time * 0.25 + j * 0.18) % 1.7);
         });
@@ -1019,6 +1086,15 @@ export function createVoxelWorld(
   const engineLight = new THREE.PointLight('#ffb85c', 0, 14, 2);
   engineLight.position.y = -0.2;
   launchRocket.add(engineLight);
+  rigidAssemblies.push({
+    parent: launchRocket,
+    parts: launchRocket.children.filter(
+      (child): child is THREE.Mesh =>
+        child instanceof THREE.Mesh &&
+        !hatchPanels.includes(child) &&
+        child.quaternion.angleTo(new THREE.Quaternion()) < 1e-6,
+    ),
+  });
 
   // A six-wheel lunar rover travels on a continuous road. Wheel heights sample
   // the road under each axle, and wheel rotation comes from distance travelled.
@@ -1038,6 +1114,10 @@ export function createVoxelWorld(
   part(roverBody, -0.1, 3.75, 0, 'dark', 3.6, 0.15, 2.3);
   for (let a = -3; a <= 3; a++)
     part(roverBody, a * 0.4, 3.85, 0, 'glass', 0.3, 0.06, 1.8);
+  rigidAssemblies.push({
+    parent: roverBody,
+    parts: [...roverBody.children] as THREE.Mesh[],
+  });
   // Both parking bays use the same continuous incline, outside the tyres.
   for (const x of [6, 18]) {
     const ramp = part(
@@ -1065,7 +1145,7 @@ export function createVoxelWorld(
     [-2, 0, 2].map((axle) => ({
       axle,
       side,
-      wheel: gearWheel(lunarRover, 0.62, axle, 0.62, side * 1.25),
+      wheel: rollingWheel(lunarRover, 0.62, axle, 0.655, side * 1.25),
       link: beam(lunarRover, 'iron', 0.16),
     })),
   );
@@ -1159,10 +1239,26 @@ export function createVoxelWorld(
     }
     for (const x of [-5.6, 0, 5.6])
       part(wall, x, 5.6, 0, 'iron', 0.16, 6.6, 0.22);
-    part(wall, 0, 10, 0, 'dark', 17.8, 0.5, 1.7);
-    part(wall, 0, 10.33, 0, 'oxidized', 17.8, 0.16, 1.8);
     part(wall, 0, 9.66, 0.65, '#d6e7dc', 15, 0.13, 0.13);
+    rigidAssemblies.push({
+      parent: wall,
+      parts: [...wall.children] as THREE.Mesh[],
+    });
   }
+  // One voxel ring owns the roof surface. Five rotated beams formerly crossed
+  // at the corners and wrote to the same horizontal plane.
+  for (let x = -18; x <= 18; x++)
+    for (let z = -18; z <= 18; z++) {
+      const edge = Math.max(
+        ...journeyExperience.map((_, index) => {
+          const { angle } = experienceBay(index, journeyExperience.length);
+          return x * Math.sin(angle) + z * Math.cos(angle);
+        }),
+      );
+      if (edge < 12.4 || edge > 14) continue;
+      block(station, x, 13.5, z, 'dark', 1, 0.5, 1);
+      block(station, x, 13.85, z, 'oxidized', 1, 0.2, 1);
+    }
   // A low orrery sits inside the empty centre, clear of the walking ring.
   const stationGear = gearWheel(station, 1.35, 0, 4.35, 0);
   stationGear.rotation.x = Math.PI / 2;
@@ -1580,7 +1676,11 @@ export function createVoxelWorld(
       let scale = 0.011;
       const position = bay
         ? new THREE.Vector3(...bay.position)
-        : new THREE.Vector3(baseX - 5 + leaf * EXHIBIT_SPACING, y + 5.4, z);
+        : new THREE.Vector3(
+            baseX - 5 + leaf * exhibitSpacing(index),
+            y + 5.4,
+            z,
+          );
       const yaw = bay?.yaw ?? 0;
       let measured = 0,
         measuredWidth = 0;
@@ -1634,7 +1734,7 @@ export function createVoxelWorld(
           });
           rails.slice(2).forEach((rail, i) => {
             rail.position.set(0, (i ? 1 : -1) * (h / 2 + 0.13), -0.02);
-            rail.scale.set(w + 0.5, 0.2, 0.2);
+            rail.scale.set(w + 0.06, 0.2, 0.2);
           });
           feet.forEach((foot, i) => {
             foot.position.set((i ? 1 : -1) * w * 0.36, -h / 2 - 1.25, -0.1);
@@ -1697,6 +1797,19 @@ export function createVoxelWorld(
     }
   }
   let auditedBlocks = 0;
+  let assemblyTrimmedFaces = 0;
+  rigidAssemblies.forEach(({ parent, parts }) => {
+    const retained = parts.filter((mesh) => mesh.parent === parent);
+    if (!retained.length) return;
+    const joined = mergeVoxelParts(parent, retained, (type) => mats.get(type));
+    assemblyTrimmedFaces += joined.trimmedFaces;
+    for (let i = targets.length - 1; i >= 0; i--)
+      if (parts.includes(targets[i] as THREE.Mesh)) targets.splice(i, 1);
+    joined.meshes.forEach((mesh) => {
+      if (mesh.userData.action) targets.push(mesh);
+    });
+  });
+  host.dataset.assemblyTrimmedFaces = String(assemblyTrimmedFaces);
   const solids: VoxelSolid[] = [];
   batches.forEach(({ parent, type, items }) => {
     // Later construction replaces a coincident terrain cell instead of leaving
@@ -1990,12 +2103,6 @@ export function createVoxelWorld(
       camera.fov = targetFov;
       camera.updateProjectionMatrix();
     }
-    projectStages.forEach((stage, i) => {
-      const page = boards.find(
-        (board) => board.index === 2 && board.leaf === i,
-      )!;
-      stage.position.set(page.object.position.x, 0, 10);
-    });
     const trainX = pose.trainX,
       trainZ = routeZ(trainX),
       rotation = -trainX / 0.575;
@@ -2048,7 +2155,7 @@ export function createVoxelWorld(
     if (cameraInitialized) {
       avatarVelocity.copy(guide.avatar.position).sub(lastAvatar);
       const distance = avatarVelocity.length();
-      walkDistance += distance;
+      if (pose.walking && !direct) walkDistance += distance;
       const walking = pose.walking
         ? Math.min(1, distance / Math.max(dt, 0.001) / 2.5)
         : 0;
@@ -2142,19 +2249,15 @@ export function createVoxelWorld(
     flames.visible = pose.flight > 0.001;
     exhaust.forEach(({ mesh, angle, phase }) => {
       const age = (time * 2.4 + phase) % 1;
-      let radius = 0.08 + age * 0.48;
-      let y = 0.55 - age * (3 + pose.flight * 4);
-      // Exhaust spreads across the launch pad instead of passing through its floor.
-      if (pose.rocket[1] < 8 && y + pose.rocket[1] < 0.95) {
-        radius += (0.95 - y - pose.rocket[1]) * 0.55;
-        y = 0.95 - pose.rocket[1];
-      }
-      mesh.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-      mesh.scale.set(
-        0.3 * (1 - age * 0.5),
-        0.45 + age * 0.7,
-        0.3 * (1 - age * 0.5),
+      const floor = timeline < 3.91 ? 0.9 : ORBIT_ORIGIN[1] + 3.5;
+      const { radius, y, height } = exhaustSample(
+        age,
+        pose.flight,
+        pose.rocket[1],
+        floor,
       );
+      mesh.position.set(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
+      mesh.scale.set(0.3 * (1 - age * 0.5), height, 0.3 * (1 - age * 0.5));
       (mesh.material as THREE.MeshBasicMaterial).opacity =
         Math.sin(Math.PI * age) * Math.min(1, pose.flight * 5);
       (mesh.material as THREE.MeshBasicMaterial).color.setHSL(
@@ -2197,13 +2300,39 @@ export function createVoxelWorld(
           0,
         ),
       );
+    const rocketView =
+      easeBetween(3.64, 3.72, timeline) *
+      (1 - easeBetween(4.015, 4.1, timeline));
+    if (rocketView > 0) {
+      const rocketCenter = launchRocket.position
+        .clone()
+        .add(new THREE.Vector3(0, 4.1, 0));
+      destination.lerp(
+        rocketCenter
+          .clone()
+          .add(
+            new THREE.Vector3(
+              6 + Math.sin(azimuth) * 10,
+              4 + elevation,
+              Math.max(24, cameraDistance) + Math.cos(azimuth) * 2,
+            ),
+          ),
+        rocketView,
+      );
+      look.lerp(rocketCenter, rocketView);
+    }
     const currentBoard = boards
       .filter((board) => board.index === pose.board)
       .reduce<(typeof boards)[number] | undefined>(
         (closest, candidate) =>
           !closest ||
-          Math.abs(candidate.leaf * EXHIBIT_SPACING - pose.exhibitOffset) <
-            Math.abs(closest.leaf * EXHIBIT_SPACING - pose.exhibitOffset)
+          Math.abs(
+            candidate.leaf * exhibitSpacing(candidate.index) -
+              pose.exhibitOffset,
+          ) <
+            Math.abs(
+              closest.leaf * exhibitSpacing(closest.index) - pose.exhibitOffset,
+            )
             ? candidate
             : closest,
         undefined,
@@ -2242,7 +2371,7 @@ export function createVoxelWorld(
         .add(new THREE.Vector3(-5, floorOffset + 4.6, 10 - pose.space * 2));
       const page = approachingJournal
         ? 0
-        : pose.exhibitOffset / EXHIBIT_SPACING;
+        : pose.exhibitOffset / exhibitSpacing(readingBoard.index);
       const first = Math.min(siblings.length - 1, Math.floor(page));
       const next = Math.min(siblings.length - 1, first + 1);
       let height = THREE.MathUtils.lerp(
@@ -2333,13 +2462,14 @@ export function createVoxelWorld(
         );
       interiorPosition.y += 1.5 + elevation * 0.08;
       const phase = timeline - 4;
-      const approach = destination
-        .clone()
-        .lerp(
-          interiorPosition,
-          easeBetween(0.16, GALLERY_START, phase) *
-            (1 - easeBetween(GALLERY_END, 0.9, phase)),
-        );
+      const approach = new THREE.Vector3(
+        ...stationCameraTransfer(
+          destination.toArray() as Point,
+          interiorPosition.toArray() as Point,
+          phase,
+          ORBIT_ORIGIN[1] + STATION_CENTER[1] + 17,
+        ),
+      );
       const doorwayLook = look
         .clone()
         .lerp(
@@ -2479,7 +2609,7 @@ export function createVoxelWorld(
         const opacity = annotationOpacity(index, leaf, timeline, pose);
         const near =
           index === pose.board &&
-          Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) < 2.5 &&
+          Math.abs(leaf * exhibitSpacing(index) - pose.exhibitOffset) < 2.5 &&
           cameraMode < 0.5;
         pageCenter
           .copy(object.position)

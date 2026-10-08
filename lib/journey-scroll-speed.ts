@@ -1,6 +1,6 @@
-/** One viewport-scaled pace for the whole journey, independent of chapter or actor. */
+/** One moderate ceiling for the whole journey, independent of chapter or actor. */
 export function journeyScrollSpeed(viewport: number) {
-  return Math.min(420, Math.max(240, viewport * 0.5));
+  return Math.min(360, Math.max(220, viewport * 0.45));
 }
 /** Bound input and long frames without changing pace at reading or transfer points. */
 export function journeyScrollStep(
@@ -8,6 +8,7 @@ export function journeyScrollStep(
   target: number,
   seconds: number,
   viewport: number,
+  ceiling = journeyScrollSpeed(viewport),
 ) {
   const remaining = target - current,
     direction = Math.sign(remaining);
@@ -16,7 +17,7 @@ export function journeyScrollStep(
   if (!dt) return current;
   const maximum = Math.min(
     Math.abs(remaining),
-    journeyScrollSpeed(viewport) * dt,
+    Math.min(journeyScrollSpeed(viewport), Math.max(0, ceiling)) * dt,
   );
   return current + direction * maximum;
 }

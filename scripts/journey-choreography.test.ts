@@ -5,11 +5,12 @@ import {
 } from '../lib/journey-station-camera.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { stationCameraTransfer } from '../lib/journey-camera-transfer.ts';
 import { journeyOffset, journeyPosition } from '../lib/journey-timeline.ts';
 import {
   exhibitTravel,
   exhibitReadingPhases,
-  EXHIBIT_SPACING,
+  exhibitSpacing,
 } from '../lib/journey-exhibits.ts';
 import {
   journeyPose,
@@ -31,12 +32,46 @@ import {
 const distance = (a: Point, b: Point) =>
   Math.hypot(...a.map((v, i) => v - b[i]));
 
+void test('the camera clears the roof while crossing and lowers only inside the viewing bay, forward and reverse', () => {
+  const exterior: Point = [135, 94, -5];
+  const interior: Point = [121, 89, -29];
+  const roof = 100.5;
+  assert.deepEqual(
+    stationCameraTransfer(exterior, interior, 0.1, roof),
+    exterior,
+  );
+  assert.deepEqual(
+    stationCameraTransfer(exterior, interior, 1, roof),
+    exterior,
+  );
+  for (let phase = 0.1; phase <= 1; phase += 0.0001) {
+    const p = stationCameraTransfer(exterior, interior, phase, roof);
+    const next = stationCameraTransfer(
+      exterior,
+      interior,
+      phase + 0.0001,
+      roof,
+    );
+    assert.ok(distance(p, next) < 0.1, 'no camera jump at transfer boundaries');
+    if ((phase >= 0.16 && phase <= 0.22) || (phase >= 0.82 && phase <= 0.9))
+      assert.ok(
+        p[1] >= roof - 1e-8,
+        'horizontal crossing stays above the roof',
+      );
+    if ((phase >= 0.22 && phase <= 0.25) || (phase >= 0.79 && phase <= 0.82)) {
+      assert.equal(p[0], interior[0]);
+      assert.equal(p[2], interior[2]);
+    }
+    if (phase >= 0.25 && phase <= 0.79) assert.deepEqual(p, interior);
+  }
+});
+
 void test('the first scroll rolls the train immediately while the introduction stays in place', () => {
   const start = journeyPose(0);
   for (const phase of [0.0001, 0.001, 0.01, 0.1, 0.2]) {
     const pose = journeyPose(phase);
     assert.ok(pose.trainX > start.trainX);
-    assert.ok(pose.trainX <= phase * 10 + 1e-9);
+    assert.ok(pose.trainX <= phase * 37 + 1e-9);
     assert.equal(pose.board, 0);
     assert.deepEqual(pose.display, start.display);
     assert.deepEqual(pose.avatar, trainCab(pose.trainX));
@@ -263,10 +298,10 @@ void test('one continuous scroll visits every reading bay before departure', () 
     const phases = exhibitReadingPhases(board);
     for (const [page, phase] of phases.entries()) {
       const gallery = exhibitTravel(board, phase);
-      assert.equal(gallery.offset, page * EXHIBIT_SPACING);
+      assert.equal(gallery.offset, page * exhibitSpacing(board));
       assert.equal(gallery.moving, false);
       const pose = journeyPose((board === 9 ? 5 : board) + phase);
-      assert.equal(pose.exhibitOffset, page * EXHIBIT_SPACING);
+      assert.equal(pose.exhibitOffset, page * exhibitSpacing(board));
       assert.ok(
         Math.abs(pose.focus[0] - pose.display[0] - 5) < 1.5,
         'the steady reading frame remains close to the cruising train',
@@ -307,7 +342,7 @@ void test('ground cards are passed in order with no camera or train return trip'
       assert.ok(offset >= lastOffset);
       lastOffset = offset;
     }
-    assert.equal(lastOffset, 16);
+    assert.equal(lastOffset, 2 * exhibitSpacing(board));
   }
   let last = journeyPose(0);
   for (let t = 0.001; t < 3.32; t += 0.001) {
@@ -336,6 +371,35 @@ void test('ground glides and gallery turns no longer compress movement into a sh
   // The former late holds peaked at 6.25 and 4.0 times average velocity.
   assert.ok(peakGround <= 3.025);
   assert.ok(peakTurn <= 2.276);
+});
+
+void test('the train cruises at one medium speed through every ground reading frame', () => {
+  const dt = 0.0001;
+  const speed = (journeyPose(dt).trainX - journeyPose(0).trainX) / dt;
+  assert.ok(speed > 30 && speed < 40);
+  for (let t = 0; t < 3.23; t += 0.001) {
+    const actual = (journeyPose(t + dt).trainX - journeyPose(t).trainX) / dt;
+    assert.ok(Math.abs(actual - speed) < 1e-8, `train pace at ${t}`);
+  }
+  let previous = speed;
+  for (let t = 3.24; t < 3.3 - dt; t += dt) {
+    const actual = (journeyPose(t + dt).trainX - journeyPose(t).trainX) / dt;
+    assert.ok(actual >= -1e-8 && actual <= previous + 1e-7);
+    previous = actual;
+  }
+  assert.ok(previous < 0.001, 'brakes smoothly only at the boarding gangway');
+  assert.equal(journeyPose(3.3).trainX, ARCHIVE_TRAIN_X);
+});
+
+void test('the single journal frame has one tour stop and steady rover travel', () => {
+  assert.deepEqual(exhibitReadingPhases(9), [0]);
+  for (let phase = 0; phase < 0.999; phase += 0.001) {
+    const a = journeyPose(5 + phase);
+    const b = journeyPose(5 + phase + 0.0001);
+    assert.ok(Math.abs((b.rover[0] - a.rover[0]) / 0.0001 - 32) < 1e-8);
+    assert.equal(a.exhibitOffset, 0);
+    assert.equal(a.board, 9);
+  }
 });
 
 void test('phone rotation preserves the same actor and camera pose', () => {

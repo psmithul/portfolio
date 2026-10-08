@@ -7,10 +7,15 @@ import {
 import { createJourneyMotion } from '../lib/journey-scroll-motion.ts';
 import { journeyPosition } from '../lib/journey-timeline.ts';
 import { journeyPose } from '../lib/journey-choreography.ts';
+import {
+  journeyWalkingPace,
+  WALKING_SPEED,
+} from '../lib/journey-walking-motion.ts';
 
 const offsets = [0, 990, 2115, 3240, 4815, 7065, 8190];
 
-void test('identical sustained input has one speed at every chapter and transfer, in both directions', () => {
+void test('sustained input accelerates to the same moderate ceiling at every chapter, in both directions', () => {
+  const ceiling = journeyScrollSpeed(900);
   for (const fps of [30, 60, 144])
     for (const direction of [-1, 1])
       for (let start = 0; start < 9000; start += 37) {
@@ -25,10 +30,10 @@ void test('identical sustained input has one speed at every chapter and transfer
             'input',
           );
           assert.ok(direction * (next - y) >= 0);
-          assert.ok(Math.abs(next - y) <= 420 / fps + 1e-8);
-          if (frame > fps / 2)
+          assert.ok(Math.abs(next - y) <= ceiling / fps + 1e-8);
+          if (frame > fps * 0.75)
             assert.ok(
-              Math.abs(Math.abs(next - y) * fps - 420) < 1e-7,
+              Math.abs(Math.abs(next - y) * fps - ceiling) < 1e-7,
               `pace changed near ${y}`,
             );
           y = next;
@@ -55,7 +60,7 @@ void test('navigation eases into and out of a target without overshoot at 30, 60
     }
     assert.equal(y, 1000);
     assert.equal(velocity, 0);
-    assert.ok(peak > 400 && peak <= 420.00001);
+    assert.ok(peak > 350 && peak <= 360.00001);
   }
   assert.ok(Math.max(...endings) - Math.min(...endings) < 3);
 });
@@ -65,10 +70,10 @@ void test('releasing input brakes within 250ms, with no idle drift or target bac
     for (const start of [0, 3200, 4200, 5500, 7200]) {
       const motion = createJourneyMotion();
       let y = start;
-      for (let frame = 0; frame < fps / 2; frame++)
+      for (let frame = 0; frame < fps; frame++)
         y = motion.step(y, y + 96, 1 / fps, 900, 'input');
       const released = y;
-      let lastSpeed = 420;
+      let lastSpeed = journeyScrollSpeed(900);
       for (let frame = 0; frame < Math.ceil(fps * 0.25); frame++) {
         const next = motion.step(y, y, 1 / fps, 900, 'brake');
         const speed = (next - y) * fps;
@@ -102,7 +107,7 @@ void test('long frames, tiny targets and viewport changes stay bounded without a
   }
 });
 
-void test('the entire route crosses every chapter at a uniform pixel pace without skips', () => {
+void test('the entire route crosses every chapter under the same ceiling without skips', () => {
   const motion = createJourneyMotion();
   const visited = new Set<number>();
   let y = 0;
@@ -115,10 +120,82 @@ void test('the entire route crosses every chapter at a uniform pixel pace withou
         (value) => typeof value !== 'number' || Number.isFinite(value),
       ),
     );
-    assert.ok(next > y && next - y <= 7 + 1e-8);
+    assert.ok(next > y && next - y <= 6 + 1e-8);
     visited.add(p.stop);
     y = next;
   }
   assert.ok(y >= 9000);
   assert.deepEqual([...visited], [0, 1, 2, 3, 4, 5, 6]);
+});
+
+void test('resuming after a reading pause starts immediately and ramps up over 600ms without idle travel', () => {
+  for (const fps of [30, 60, 144])
+    for (const start of [120, 2300, 5000, 7400])
+      for (const direction of [-1, 1]) {
+        const motion = createJourneyMotion();
+        const ceiling = journeyScrollSpeed(720);
+        let y = start;
+        for (let gesture = 0; gesture < 2; gesture++) {
+          let lastSpeed = 0;
+          for (let frame = 0; frame < fps; frame++) {
+            const next = motion.step(
+              y,
+              y + direction * 96,
+              1 / fps,
+              720,
+              'input',
+            );
+            const speed = direction * (next - y) * fps;
+            assert.ok(speed > 0 && speed <= ceiling + 1e-7);
+            assert.ok(speed >= lastSpeed - 1e-7);
+            if (frame === 0) assert.ok(speed < ceiling * 0.23);
+            else assert.ok(speed - lastSpeed <= (ceiling * 1.4) / fps + 1e-7);
+            if (frame < fps * 0.4) assert.ok(speed < ceiling * 0.8);
+            if (frame > fps * 0.7) assert.ok(Math.abs(speed - ceiling) < 1e-7);
+            lastSpeed = speed;
+            y = next;
+          }
+          for (let frame = 0; frame < fps; frame++)
+            y = motion.step(y, y, 1 / fps, 720, 'brake');
+          const stopped = y;
+          for (let frame = 0; frame < fps; frame++)
+            y = motion.step(y, y, 1 / fps, 720, 'brake');
+          assert.equal(y, stopped);
+        }
+      }
+});
+
+void test('boarding, landing and the gallery limit walking speed in both directions without a separate actor delay', () => {
+  for (const fps of [30, 60, 144])
+    for (const direction of [-1, 1]) {
+      const motion = createJourneyMotion();
+      let y = direction > 0 ? offsets[3] : offsets[5];
+      let walkingFrames = 0;
+      for (let frame = 0; frame < fps * 100; frame++) {
+        const target = y + direction * 96;
+        const ceiling = journeyWalkingPace(y, target, offsets, 900, 5);
+        const next = motion.step(y, target, 1 / fps, 900, 'input', ceiling);
+        const poses = [y, next].map((position) => {
+          const p = journeyPosition(position, offsets, 900, 5);
+          return journeyPose(p.stop + p.phase, 5);
+        });
+        if (poses.every((pose) => pose.walking)) {
+          const speed =
+            Math.hypot(
+              ...poses[0].avatar.map((n, i) => poses[1].avatar[i] - n),
+            ) * fps;
+          assert.ok(speed <= WALKING_SPEED + 0.25, `walking ${speed} at ${y}`);
+          walkingFrames++;
+        }
+        assert.ok(direction * (next - y) > 0);
+        assert.ok(Math.abs(next - y) * fps <= journeyScrollSpeed(900) + 1e-7);
+        y = next;
+        if (direction > 0 ? y >= offsets[5] : y <= offsets[3]) break;
+      }
+      assert.ok(
+        walkingFrames > fps * 10,
+        'walks remain visible at a human pace',
+      );
+      assert.ok(direction > 0 ? y >= offsets[5] : y <= offsets[3]);
+    }
 });

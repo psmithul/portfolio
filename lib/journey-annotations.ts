@@ -1,5 +1,5 @@
 import { easeBetween, journeyPose } from './journey-choreography.ts';
-import { EXHIBIT_SPACING } from './journey-exhibits.ts';
+import { exhibitSpacing } from './journey-exhibits.ts';
 
 /** A caption fades out before its successor appears: one HTML surface per frame. */
 export function annotationOpacity(
@@ -36,7 +36,8 @@ export function annotationOpacity(
             phase,
           );
     const distance =
-      Math.abs(leaf * EXHIBIT_SPACING - pose.exhibitOffset) / EXHIBIT_SPACING;
+      Math.abs(leaf * exhibitSpacing(index) - pose.exhibitOffset) /
+      exhibitSpacing(index);
     return departure * (1 - easeBetween(0.15, 0.48, distance));
   }
   if (leaf !== 0 || owner !== chapter + 1) return 0;
