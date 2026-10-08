@@ -7,7 +7,7 @@ import { MinecraftLoader } from '@/components/minecraft-loader';
 // reading page, so the journey position cannot overwrite its initial scroll.
 /* oxlint-disable next/no-html-link-for-pages */
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {
@@ -100,9 +100,10 @@ export function TrainJourney({
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
   const settingsMenu = useRef<HTMLDetailsElement>(null);
   const sound = useRef<HTMLAudioElement | null>(null);
-  const [mobile, setMobile] = useState(false);
+  // Phones use the document portfolio; every device mounting this scene gets
+  // the full journey, including portrait iPads and smaller desktop windows.
+  const mobile = false;
   const [tourPlaying, setTourPlaying] = useState(false);
-  const [cinemaScale, setCinemaScale] = useState(0.54);
   const [active, setActive] = useState(0);
   const [ready, setReady] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
@@ -313,24 +314,6 @@ export function TrainJourney({
     return () => document.removeEventListener('keydown', key);
   }, []);
 
-  useEffect(() => {
-    function orientation() {
-      const width = window.innerWidth,
-        height = window.innerHeight;
-      const phone =
-        Math.min(width, height) <= 800 && Math.max(width, height) <= 1200;
-      setMobile(phone);
-      setCinemaScale(Math.min(0.68, Math.max(0.32, (height - 110) / 540)));
-    }
-    orientation();
-    window.addEventListener('resize', orientation);
-    window.addEventListener('orientationchange', orientation);
-    return () => {
-      window.removeEventListener('resize', orientation);
-      window.removeEventListener('orientationchange', orientation);
-    };
-  }, []);
-
   function goExperience(index: number) {
     world.current.reading = null;
     world.current.onboard = false;
@@ -402,11 +385,6 @@ export function TrainJourney({
         )
           scroll.current?.pause();
       }}
-      style={
-        mobile
-          ? ({ '--cinema-scale': cinemaScale } as CSSProperties)
-          : undefined
-      }
       className={
         'train-journey' +
         (active >= 4 ? ' in-space' : '') +

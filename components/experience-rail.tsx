@@ -58,7 +58,11 @@ const experience = [
   },
 ];
 
-export function ExperienceRail() {
+export function ExperienceRail({
+  staticLayout = false,
+}: {
+  staticLayout?: boolean;
+}) {
   return (
     <ArchiveReveal
       id="experience"
@@ -67,6 +71,7 @@ export function ExperienceRail() {
       description="Internships and student leadership, from 2024 to the present."
       image="/images/archive/tool-case.svg"
       kind="toolbox"
+      staticLayout={staticLayout}
     >
       {experience.map(
         (

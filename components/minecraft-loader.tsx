@@ -43,15 +43,6 @@ export function MinecraftLoader({
           <span className="loader-title">{label}</span>
         </output>
         {children}
-        {!compact && (
-          <p className="loader-desktop-note">
-            <span className="loader-mobile-message">
-              Loading the mobile portfolio.{' '}
-            </span>
-            Open psmithul.com on a computer to explore the full 3D train
-            journey.
-          </p>
-        )}
         {onStatic && (
           <button className="loader-static-link" onClick={onStatic}>
             Read the lightweight version →

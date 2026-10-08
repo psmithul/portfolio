@@ -141,6 +141,77 @@ for (const [path, status, content, title] of cases) {
   );
   console.log('PASS ' + status + ' ' + path);
 }
+// The request must choose the right first paint, before client hydration.
+for (const [device, phone, userAgent] of [
+  [
+    'iPhone',
+    true,
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) Mobile/15E148 Safari/604.1',
+  ],
+  [
+    'iPad',
+    false,
+    'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) Mobile/15E148 Safari/604.1',
+  ],
+  [
+    'Android phone',
+    true,
+    'Mozilla/5.0 (Linux; Android 15; Pixel 9) Chrome/131.0.0.0 Mobile Safari/537.36',
+  ],
+  [
+    'Android tablet',
+    false,
+    'Mozilla/5.0 (Linux; Android 14; SM-X710) Chrome/131.0.0.0 Safari/537.36',
+  ],
+  [
+    'iPad desktop mode / Mac',
+    false,
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) Version/18.0 Safari/605.1.15',
+  ],
+]) {
+  const response = await fetch(new URL('/', base), {
+    headers: { 'user-agent': userAgent },
+  });
+  const body = await response.text();
+  assert.equal(response.status, 200, device);
+  assert.equal(
+    body.includes('class="classic-portfolio"'),
+    phone,
+    device + ': phone homepage',
+  );
+  assert.equal(
+    body.includes('class="minecraft-loader'),
+    !phone,
+    device + ': journey loader',
+  );
+  assert.ok(body.includes('id="main"'), device + ': content landmark');
+  if (phone) {
+    assert.ok(
+      body.includes('Open on a desktop or iPad'),
+      device + ': desktop note',
+    );
+    assert.ok(
+      body.includes('class="flow-statement shell"'),
+      device + ': original introduction',
+    );
+    for (const id of [
+      'about',
+      'work',
+      'completed-work',
+      'experience',
+      'accolades',
+      'tools',
+      'journal',
+      'contact',
+    ])
+      assert.ok(body.includes(`id="${id}"`), device + ': ' + id);
+    for (const match of body.matchAll(
+      /src="(\/[^"?]+\.(?:png|jpg|jpeg|webp|svg))"/gi,
+    ))
+      imagePaths.add(match[1]);
+  }
+  console.log('PASS device homepage ' + device);
+}
 for (const path of imagePaths) {
   const response = await fetch(new URL(path, base));
   assert.equal(response.status, 200, path + ': referenced image');

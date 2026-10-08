@@ -15,6 +15,7 @@ type Props = {
   image: string;
   kind: 'toolbox' | 'folder';
   children: ReactNode;
+  staticLayout?: boolean;
 };
 
 export function ArchiveReveal({
@@ -25,10 +26,12 @@ export function ArchiveReveal({
   image,
   kind,
   children,
+  staticLayout = false,
 }: Props) {
   const section = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (staticLayout) return;
     const element = section.current;
     if (!element) return;
     const cards = Array.from(
@@ -182,7 +185,7 @@ export function ArchiveReveal({
         card.style.removeProperty('--fan-y');
       });
     };
-  }, [kind]);
+  }, [kind, staticLayout]);
 
   return (
     <section
@@ -190,6 +193,7 @@ export function ArchiveReveal({
       ref={section}
       className={`archive-reveal archive-${kind}`}
       aria-labelledby={`${id}-heading`}
+      data-layout={staticLayout ? 'stack' : undefined}
     >
       <div className="archive-stage">
         <div className="archive-heading shell">

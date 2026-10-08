@@ -9,6 +9,7 @@ import './reading.css';
 import './journal.css';
 import './world.css';
 import './minecraft.css';
+import './classic-portfolio.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),
