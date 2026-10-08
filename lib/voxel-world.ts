@@ -63,6 +63,7 @@ type BatchItem = {
   w: number;
   h: number;
   d: number;
+  replaced?: boolean;
 };
 /** A continuous Three.js journey: railway, walking character, launch, and orbital station. */
 export function createVoxelWorld(
@@ -106,6 +107,8 @@ export function createVoxelWorld(
     string,
     { parent: THREE.Group; type: string; items: BatchItem[] }
   >();
+  const occupiedVoxels = new Map<string, BatchItem>();
+  let replacedVoxels = 0;
   const clearance = createJourneyClearance();
   let clearedBlocks = 0;
   const staticParts: THREE.Mesh[] = [];
@@ -128,7 +131,15 @@ export function createVoxelWorld(
   ) {
     const key = parent.uuid + type;
     if (!batches.has(key)) batches.set(key, { parent, type, items: [] });
-    batches.get(key)!.items.push({ x, y, z, w, h, d });
+    const cell = [parent.uuid, x, y, z, w, h, d].join(':');
+    const previous = occupiedVoxels.get(cell);
+    if (previous) {
+      previous.replaced = true;
+      replacedVoxels++;
+    }
+    const item = { x, y, z, w, h, d };
+    occupiedVoxels.set(cell, item);
+    batches.get(key)!.items.push(item);
   }
   function part(
     parent: THREE.Group,
@@ -167,6 +178,18 @@ export function createVoxelWorld(
   sun.shadow.bias = -0.001;
   sun.shadow.normalBias = 0.035;
   scene.add(sun, sun.target);
+  // Keep the moving shadow map aligned with world texels; subpixel light
+  // translations otherwise shimmer across touching voxel faces during scroll.
+  const shadowOffset = new THREE.Vector3(-24, 36, -80);
+  const shadowDirection = shadowOffset.clone().normalize();
+  const shadowRight = new THREE.Vector3()
+    .crossVectors(new THREE.Vector3(0, 1, 0), shadowDirection)
+    .normalize();
+  const shadowUp = new THREE.Vector3().crossVectors(
+    shadowDirection,
+    shadowRight,
+  );
+  const shadowFocus = new THREE.Vector3();
   const moonLight = new THREE.DirectionalLight('#a7bfff', 0.25);
   moonLight.position.set(-15, 25, 15);
   scene.add(moonLight);
@@ -1042,7 +1065,7 @@ export function createVoxelWorld(
     const a = lunarFloor(x),
       b = lunarFloor(x + 1);
     if (Math.abs(b - a) < 1e-8)
-      block(orbit, x + 0.5, a - 0.09, 4.5, 'dark', 1.01, 0.25, 3);
+      block(orbit, x + 0.5, a - 0.09, 4.5, 'dark', 1, 0.25, 3);
     else {
       const road = part(
         orbit,
@@ -1385,8 +1408,7 @@ export function createVoxelWorld(
   });
   for (const dockParent of [moon, finalMoon])
     for (let a = 5; a <= 10; a++)
-      for (let c = 2; c <= 4; c++)
-        block(dockParent, a, -0.25, c, 'iron', 1, 0.5, 1);
+      for (let c = 2; c <= 4; c++) block(dockParent, a, -0.5, c, 'iron');
   // Pixel stars at fixed positions; no screen-space images.
   const starPositions = new Float32Array(2400 * 3),
     starColors = new Float32Array(2400 * 3);
@@ -1497,6 +1519,7 @@ export function createVoxelWorld(
   const sunMaterial = new THREE.MeshBasicMaterial({
     color: '#ffe6a0',
     transparent: true,
+    depthWrite: false,
     fog: false,
   });
   const sunDisc = new THREE.Mesh(new THREE.PlaneGeometry(9, 9), sunMaterial);
@@ -1652,6 +1675,10 @@ export function createVoxelWorld(
   }
   let auditedBlocks = 0;
   batches.forEach(({ parent, type, items }) => {
+    // Later construction replaces a coincident terrain cell instead of leaving
+    // two materials fighting for the same depth (launch pads, docks, tree crowns).
+    for (let i = items.length - 1; i >= 0; i--)
+      if (items[i].replaced) items.splice(i, 1);
     if (!parent.userData.sky) {
       parent.updateWorldMatrix(true, false);
       for (let i = items.length - 1; i >= 0; i--) {
@@ -1677,6 +1704,7 @@ export function createVoxelWorld(
           color: type,
           fog: false,
           transparent: true,
+          depthWrite: false,
         })
       : mats.get(type);
     if (parent.userData.sky)
@@ -1702,10 +1730,13 @@ export function createVoxelWorld(
     auditedBlocks,
     clearedBlocks,
   });
+  occupiedVoxels.clear();
+  host.dataset.replacedVoxels = String(replacedVoxels);
   const smokeMaterial = new THREE.MeshLambertMaterial({
     color: '#d9dfdf',
     transparent: true,
     opacity: 0.3,
+    depthWrite: false,
   });
   const smoke = Array.from({ length: 9 }, () => {
     const p = new THREE.Mesh(cube, smokeMaterial.clone());
@@ -1742,8 +1773,6 @@ export function createVoxelWorld(
     pageBounds = new THREE.Box3(),
     halfPage = new THREE.Vector3(),
     pageCenter = new THREE.Vector3();
-  const mouse = new THREE.Vector2(),
-    parallax = new THREE.Vector2();
   const raycaster = new THREE.Raycaster(),
     pointer = new THREE.Vector2();
   const resize = () => {
@@ -1832,14 +1861,6 @@ export function createVoxelWorld(
   renderer.domElement.addEventListener('pointercancel', cancel);
   renderer.domElement.addEventListener('webglcontextlost', lost);
   document.addEventListener('visibilitychange', visibility);
-  const pointerParallax = (e: PointerEvent) => {
-    if (e.pointerType !== 'mouse' || read().mobile) return;
-    mouse.set(
-      (e.clientX / window.innerWidth - 0.5) * 2,
-      (e.clientY / window.innerHeight - 0.5) * 2,
-    );
-  };
-  window.addEventListener('pointermove', pointerParallax, { passive: true });
   function animate(now: number) {
     frame = requestAnimationFrame(animate);
     if (!visible) return;
@@ -2117,9 +2138,10 @@ export function createVoxelWorld(
     const fittedReading = !opts.onboard && (timeline < 4 || timeline >= 4.9);
     const desiredReadMode =
       opts.reading === null ? Number(fittedReading) : Number(opts.reading);
-    readMode = direct
-      ? desiredReadMode
-      : THREE.MathUtils.damp(readMode, desiredReadMode, 5, dt);
+    readMode =
+      direct || opts.reading === null
+        ? desiredReadMode
+        : THREE.MathUtils.damp(readMode, desiredReadMode, 5, dt);
     const approachingJournal = timeline >= 4.9 && timeline < 5;
     const readingBoard = approachingJournal
       ? boards.find((board) => board.index === 9 && board.leaf === 0)
@@ -2175,8 +2197,15 @@ export function createVoxelWorld(
         height = THREE.MathUtils.lerp(height, upcoming.readHeight(), blend);
         width = THREE.MathUtils.lerp(width, upcoming.readWidth(), blend);
       }
+      const room = (index: number) => (index === 2 ? 4.6 : 3.2);
       const modelRoom =
-        opts.reading === true ? 1 : pose.board === 2 ? 4.6 : 3.2;
+        opts.reading === true
+          ? 1
+          : THREE.MathUtils.lerp(
+              room(readingBoard.index),
+              room(upcoming?.index ?? readingBoard.index),
+              blend,
+            );
       // Type occupies the upper part; the train or working mechanism occupies below.
       center.y += height / 2 - modelRoom / 2;
       const fit = portrait ? 1.35 : 1.25;
@@ -2279,12 +2308,6 @@ export function createVoxelWorld(
       destination.lerp(ride, cameraMode);
       look.lerp(rideLook, cameraMode);
     }
-    parallax.lerp(
-      opts.reducedMotion || opts.mobile ? new THREE.Vector2() : mouse,
-      1 - Math.exp(-5 * dt),
-    );
-    destination.x += parallax.x * 0.28;
-    destination.y -= parallax.y * 0.16;
     const drift =
       Math.sin(localPhase * Math.PI * 2) * 0.32 * (1 - pose.stationView);
     destination.x += drift;
@@ -2292,9 +2315,13 @@ export function createVoxelWorld(
     camera.position.copy(destination);
     cameraRig.position.copy(camera.position);
     cameraRig.lookAt(look);
-    // Camera modes and parallax ease above; route framing stays on the same
+    // Explicit camera modes ease above; route framing stays on the same
     // pose as the actors, including direct navigation to a distant stop.
     camera.quaternion.copy(cameraRig.quaternion);
+    host.dataset.cameraPosition = camera.position
+      .toArray()
+      .map((n) => n.toFixed(5))
+      .join(',');
     cameraInitialized = true;
     const color = (opts.night ? dusk : sky)
       .clone()
@@ -2318,8 +2345,21 @@ export function createVoxelWorld(
       dt,
     );
     moonLight.intensity = pose.space * 0.25;
-    sun.position.copy(focus).add(new THREE.Vector3(-24, 36, -80));
-    sun.target.position.copy(focus);
+    const shadowTexel = 64 / sun.shadow.mapSize.x;
+    const sx = focus.dot(shadowRight),
+      sy = focus.dot(shadowUp);
+    shadowFocus
+      .copy(focus)
+      .addScaledVector(
+        shadowRight,
+        Math.round(sx / shadowTexel) * shadowTexel - sx,
+      )
+      .addScaledVector(
+        shadowUp,
+        Math.round(sy / shadowTexel) * shadowTexel - sy,
+      );
+    sun.position.copy(shadowFocus).add(shadowOffset);
+    sun.target.position.copy(shadowFocus);
     sun.target.updateMatrixWorld();
     skyBody.position.copy(focus).add(new THREE.Vector3(12, 34, -95));
     skyBody.quaternion.copy(camera.quaternion);
@@ -2385,7 +2425,6 @@ export function createVoxelWorld(
     resetView() {
       azimuth = 0;
       elevation = 0;
-      mouse.set(0, 0);
     },
     dispose() {
       rendered!();
@@ -2394,7 +2433,6 @@ export function createVoxelWorld(
       observer.disconnect();
       pageObserver.disconnect();
       document.removeEventListener('visibilitychange', visibility);
-      window.removeEventListener('pointermove', pointerParallax);
       boards.forEach(({ element, parent, next, oldStyle }) => {
         element.classList.remove('in-world-board');
         element.inert = false;

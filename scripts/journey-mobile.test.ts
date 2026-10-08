@@ -248,7 +248,7 @@ void test('manual scrolling moves while the finger is down and never advances by
   assert.equal(env.scroll.position(), y);
 });
 
-void test('small wheels and additional input during transit all contribute; queue length stays bounded', (t) => {
+void test('small wheels and additional live input move immediately with only a short buffer', (t) => {
   const env = environment(t);
   assert.equal(env.wheel(1, 0).defaultPrevented, true);
   env.run(0.2);
@@ -263,15 +263,59 @@ void test('small wheels and additional input during transit all contribute; queu
   env.wheel(20, 3000);
   env.run(15);
   assert.ok(
-    env.scroll.position() > first + 19,
-    'next input is never discarded',
+    env.scroll.position() > first + 10,
+    'the next small input visibly moves the scene',
   );
   for (let i = 0; i < 80; i++) env.wheel(120, 4000 + i * 16);
   env.run(30);
   assert.ok(
-    env.scroll.position() < first + 650,
-    'runway cannot build up many seconds of stale input',
+    env.scroll.position() < first + 80,
+    'a burst cannot build up several seconds of stale movement',
   );
+});
+
+void test('manual wheel bursts stop within 300ms in reading, walking, flight and travel frames', (t) => {
+  const env = environment(t);
+  for (const start of [0, 2500, 3500, 4300, 5000, 6200, 6900, 7800]) {
+    env.scroll.jump(start);
+    env.wheel(6000, 0);
+    env.run(0.3);
+    const stopped = env.scroll.position();
+    assert.ok(stopped > start && stopped < start + 80);
+    env.run(3);
+    assert.equal(env.scroll.position(), stopped, `idle drift from ${start}`);
+    env.wheel(-6000, 1000);
+    env.run(0.3);
+    const reversed = env.scroll.position();
+    assert.ok(reversed < stopped);
+    env.run(3);
+    assert.equal(
+      env.scroll.position(),
+      reversed,
+      `reverse drift from ${start}`,
+    );
+  }
+});
+
+void test('scrollbar placement stays at the selected frame without a delayed journey', (t) => {
+  const env = environment(t);
+  env.browser.scrollY = 5000;
+  env.browser.dispatchEvent(new Event('scroll'));
+  assert.equal(env.scroll.position(), 5000);
+  env.run(5);
+  assert.equal(env.scroll.position(), 5000);
+});
+
+void test('hidden tabs discard pending manual input instead of resuming old movement', (t) => {
+  const env = environment(t);
+  env.wheel(400, 0);
+  env.run(0.05);
+  env.document.hidden = true;
+  env.run(30);
+  const stopped = env.scroll.position();
+  env.document.hidden = false;
+  env.run(1);
+  assert.equal(env.scroll.position(), stopped);
 });
 
 void test('cancelled or pinched swipes do not trigger a snap on release', (t) => {

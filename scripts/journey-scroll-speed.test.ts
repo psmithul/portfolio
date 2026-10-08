@@ -70,6 +70,31 @@ void test('one smoothed route position stays continuous through every world tran
   }
 });
 
+void test('manual braking stops smoothly at 30, 60 and 144 Hz without resuming a pending target', () => {
+  for (const fps of [30, 60, 144])
+    for (const start of [0, 3200, 4200, 5500, 7200]) {
+      const motion = createJourneyMotion();
+      let y = start;
+      for (let frame = 0; frame < fps / 2; frame++) {
+        const next = motion.step(y, y + 40, 1 / fps, 900, sample, 'input');
+        assertSpeed(sample(y), sample(next), 1 / fps + 1e-5);
+        y = next;
+      }
+      const released = y;
+      for (let frame = 0; frame < Math.ceil(fps * 0.25); frame++) {
+        const next = motion.step(y, y, 1 / fps, 900, sample, 'brake');
+        assertSpeed(sample(y), sample(next), 1 / fps + 1e-5);
+        assert.ok(next >= y);
+        y = next;
+      }
+      assert.ok(y - released < 40, `braking distance at ${fps} Hz`);
+      const stopped = y;
+      for (let frame = 0; frame < fps; frame++)
+        y = motion.step(y, y, 1 / fps, 900, sample, 'brake');
+      assert.equal(y, stopped, `idle drift at ${fps} Hz from ${start}`);
+    }
+});
+
 function assertSpeed(a: ScrollPose, b: ScrollPose, dt: number) {
   const limits = journeyMotionLimits(Math.min(a.transit, b.transit));
   assert.ok(
