@@ -777,39 +777,31 @@ export function TrainJourney({
         aria-labelledby="journal-title"
       >
         <article className="station-panel journal-station" data-world-board="9">
-          {[0, 1].map((page) => (
-            <div data-world-leaf key={page}>
-              <p className="world-eyebrow">JOURNAL · 0{page + 1} / 02</p>
-              {page === 0 && (
-                <>
-                  <h2 id="journal-title">Mika’s Life.</h2>
-                  <p>
-                    Things I’ve been reading about, trying out, and still
-                    figuring out.
-                  </p>
-                </>
-              )}
-              <div className="station-posts">
-                {posts.slice(page * 2, page * 2 + 2).map((post) => (
-                  <a key={post.slug} href={'/blog/' + post.slug}>
-                    <div>
-                      <span>
-                        {post.category} · {post.readingMinutes} min
-                      </span>
-                      <h3>{post.title}</h3>
-                    </div>
-                    <ArrowUpRight size={16} />
-                  </a>
-                ))}
-              </div>
-              {page === 1 && (
-                <a href="/blog" className="station-text-link">
-                  All my notes <BookOpen size={16} />
-                  <ArrowRight size={15} />
+          <div data-world-leaf>
+            <p className="world-eyebrow">JOURNAL</p>
+            <h2 id="journal-title">Mika’s Life.</h2>
+            <p>
+              Things I’ve been reading about, trying out, and still figuring
+              out.
+            </p>
+            <div className="station-posts">
+              {posts.slice(0, 2).map((post) => (
+                <a key={post.slug} href={'/blog/' + post.slug}>
+                  <div>
+                    <span>
+                      {post.category} · {post.readingMinutes} min
+                    </span>
+                    <h3>{post.title}</h3>
+                  </div>
+                  <ArrowUpRight size={16} />
                 </a>
-              )}
+              ))}
             </div>
-          ))}
+            <a href="/blog" className="station-text-link">
+              Read more in Journal <BookOpen size={16} />
+              <ArrowRight size={15} />
+            </a>
+          </div>
         </article>
       </section>
 

@@ -2,6 +2,7 @@ import {
   exhibitTravel,
   EXHIBIT_COUNTS,
   EXHIBIT_SPACING,
+  exhibitSpacing,
 } from './journey-exhibits.ts';
 
 export type Point = [number, number, number];
@@ -40,6 +41,18 @@ export function experienceBay(index: number, count = 5) {
 }
 export const ARCHIVE_TRAIN_X = 102 + (EXHIBIT_COUNTS[3] - 1) * EXHIBIT_SPACING;
 const ROCKET_FOOT = 0.475;
+/** Constant cruise, with a short braking approach to the boarding gangway. */
+export function trainCruise(timeline: number) {
+  const end = 3.3,
+    braking = 0.06,
+    start = end - braking;
+  const speed = ARCHIVE_TRAIN_X / (end - braking / 2);
+  const t = Math.max(0, Math.min(end, timeline));
+  if (t <= start) return t * speed;
+  const u = (t - start) / braking;
+  const integral = u - 2.5 * u ** 4 + 3 * u ** 5 - u ** 6;
+  return t === end ? ARCHIVE_TRAIN_X : speed * (start + braking * integral);
+}
 export const railZ = (x: number) => Math.sin(x * 0.032) * 2;
 export const railAngle = (x: number) => -Math.atan(Math.cos(x * 0.032) * 0.064);
 /** The guide's feet use the same rotated cab floor as the rendered locomotive. */
@@ -129,7 +142,11 @@ export function journeyPose(timeline: number, count = 5) {
     chapter < 4 ? chapter : chapter === 5 ? 9 : 10,
     phase,
   );
-  const departure = easeBetween(stop === 0 ? 0.45 : 0.6, 1, phase);
+  const departure = easeBetween(
+    stop === 0 ? 0.45 : stop === 2 ? 0.74 : 0.6,
+    1,
+    phase,
+  );
   const offset = chapter < 4 ? gallery.offset : ARCHIVE_TRAIN_X - 102;
   // Keep the train rolling while a reading frame stays steady. Blending the
   // exhibit path with a slow cruise removes the old stationary reading plateaus.
@@ -139,14 +156,18 @@ export function journeyPose(timeline: number, count = 5) {
     chapter === 0
       ? phase * 10
       : offset * 0.82 +
-        ((EXHIBIT_COUNTS[chapter] ?? 1) - 1) * EXHIBIT_SPACING * cruise * 0.18;
-  const trainX =
+        ((EXHIBIT_COUNTS[chapter] ?? 1) - 1) *
+          exhibitSpacing(chapter) *
+          cruise *
+          0.18;
+  const readingX =
     stop * 34 +
     (stop < 3
       ? mix(trainOffset, 34, departure)
       : chapter === 3
         ? trainOffset
         : offset);
+  const trainX = trainCruise(t);
   const cab = trainCab(trainX);
   let avatar = cab,
     avatarVisible = true;
@@ -160,7 +181,7 @@ export function journeyPose(timeline: number, count = 5) {
   let seating = 0;
   let stationView = 0,
     galleryAngle = GALLERY_ANGLE;
-  let focus: Point = [trainX, 0, 0];
+  let focus: Point = [readingX, 0, 0];
   let flight = 0,
     pitch = 0,
     rocketYaw = 0,
@@ -206,7 +227,7 @@ export function journeyPose(timeline: number, count = 5) {
     flight = Math.sin(Math.PI * launch);
     pitch = 0;
     rocketYaw = Math.PI * easeBetween(3.91, 3.965, t);
-    focus = blend([trainX, 0, 0], [122, 0, 6], easeBetween(3.4, 3.68, t));
+    focus = blend([readingX, 0, 0], [122, 0, 6], easeBetween(3.4, 3.68, t));
     focus[0] = mix(focus[0], ORBIT_ORIGIN[0], launch);
     focus[2] = mix(focus[2], ORBIT_ORIGIN[2], launch);
     focus[1] =
@@ -299,12 +320,11 @@ export function journeyPose(timeline: number, count = 5) {
       const fromX = LIBRARY_X + (chapter === 6 ? 32 : 0);
       const toX = fromX + (chapter === 6 ? 0 : 32);
       const travel = easeBetween(0.72, 1, phase);
-      const roll =
-        chapter === 6
-          ? phase * 1.2
-          : gallery.offset * 0.85 + (phase / 0.72) * EXHIBIT_SPACING * 0.15;
+      const roll = phase * 1.2;
       const roverX =
-        mix(fromX + roll, toX + (chapter === 6 ? 1.2 : 0), travel) + 6;
+        (chapter === 5
+          ? mix(fromX, toX, phase)
+          : mix(fromX + roll, toX + 1.2, travel)) + 6;
       rover = orbitPoint(roverX, lunarFloor(roverX), 4.5);
       avatar = roverSeat(rover);
       seated = true;

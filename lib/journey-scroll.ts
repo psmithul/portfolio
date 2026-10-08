@@ -2,6 +2,7 @@ import { journeyPosition, journeyOffset } from './journey-timeline.ts';
 import { createJourneyMotion } from './journey-scroll-motion.ts';
 import { createJourneyTour, chapterEntryTimeline } from './journey-tour.ts';
 import { createJourneyGesture } from './journey-gesture.ts';
+import { journeyWalkingPace } from './journey-walking-motion.ts';
 
 export type JourneyScroll = {
   position: () => number;
@@ -227,7 +228,9 @@ export function createJourneyScroll(
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
     inputAge += Math.min(dt, 0.05);
-    const braking = manual && inputAge > 0.08;
+    // A 100ms gap is still one wheel gesture. Preserve its acceleration rather
+    // than restarting between individual notches; discard input after 120ms.
+    const braking = manual && inputAge > 0.12;
     if (braking) target = current;
     const next = motion.step(
       current,
@@ -235,6 +238,13 @@ export function createJourneyScroll(
       dt,
       previousViewport,
       manual ? (braking ? 'brake' : 'input') : 'travel',
+      journeyWalkingPace(
+        current,
+        target,
+        previousOffsets,
+        previousViewport,
+        count,
+      ),
     );
     if (braking) target = next;
     if (next !== current) {

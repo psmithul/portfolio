@@ -26,7 +26,7 @@ void test('slow horizontal swipes lock from cumulative motion and reverse withou
 
 void test('every original reading page and circular role has an ordered tour stop', () => {
   const stops = journeyTourStops(5);
-  assert.equal(stops.length, 18);
+  assert.equal(stops.length, 17);
   assert.equal(stops[0].timeline, 0);
   assert.equal(stops.at(-1)?.timeline, 6);
   for (let i = 1; i < stops.length; i++)
@@ -176,7 +176,7 @@ function environment(t: { after: (fn: () => void) => void }) {
   };
 }
 
-void test('mobile autoplay visits all 18 pages, gives reading time, and stops at contact', (t) => {
+void test('automatic travel visits all 17 frames, gives reading time, and stops at contact', (t) => {
   const env = environment(t);
   env.scroll.play();
   const visits = new Set<string>();
@@ -211,7 +211,6 @@ void test('mobile autoplay visits all 18 pages, gives reading time, and stops at
     '7',
     '8',
     '9:0',
-    '9:1',
     '10',
   ])
     assert.ok(visits.has(bay), `missed ${bay}`);
