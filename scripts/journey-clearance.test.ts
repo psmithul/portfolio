@@ -1,4 +1,5 @@
 import { annotationOpacity } from '../lib/journey-annotations.ts';
+import { EXHIBIT_COUNTS } from '../lib/journey-exhibits.ts';
 import { journeyTourStops } from '../lib/journey-tour.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -96,7 +97,7 @@ void test('the landed hatch faces the rover and the visible landing walk stays o
   }
 });
 
-void test('chapter and role captions blend continuously without popping at any page boundary', () => {
+void test('chapter and role captions fade continuously without popping at any page boundary', () => {
   const boundaries = [
     1,
     2,
@@ -125,5 +126,15 @@ void test('chapter and role captions blend continuously without popping at any p
       ) > 0.99,
       'every original reading frame stays fully legible',
     );
+  }
+});
+
+void test('only one caption owns the HTML layer throughout forward and reverse travel', () => {
+  for (let t = 0; t < 7; t += 0.0005) {
+    let owners = 0;
+    for (let index = 0; index < EXHIBIT_COUNTS.length; index++)
+      for (let leaf = 0; leaf < EXHIBIT_COUNTS[index]; leaf++)
+        if (annotationOpacity(index, leaf, t) > 0.002) owners++;
+    assert.ok(owners <= 1, `${owners} captions at ${t}`);
   }
 });
