@@ -1,5 +1,5 @@
 import { annotationOpacity } from '../lib/journey-annotations.ts';
-import { EXHIBIT_COUNTS } from '../lib/journey-exhibits.ts';
+import { EXHIBIT_COUNTS, exhibitSpacing } from '../lib/journey-exhibits.ts';
 import { journeyTourStops } from '../lib/journey-tour.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -121,7 +121,7 @@ void test('chapter and role captions fade continuously without popping at any pa
     assert.ok(
       annotationOpacity(
         p.board,
-        Math.round(p.exhibitOffset / 8),
+        Math.round(p.exhibitOffset / exhibitSpacing(p.board)),
         stop.timeline,
       ) > 0.99,
       'every original reading frame stays fully legible',
