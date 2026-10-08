@@ -1068,19 +1068,19 @@ export function createVoxelWorld(
     }
   }
 
-  // An open lunar research camp. Five working exhibits sit around a clear
-  // walking ring; the Earth and stars remain visible throughout the visit.
+  // A single pentagonal lunar workshop, with a skylight and five recessed bays.
+  // The walking ring and entry corridor stay clear of every structural member.
   const orbitalUpdates: ((time: number) => void)[] = [];
   const station = new THREE.Group();
   station.position.set(STATION_CENTER[0], 0, STATION_CENTER[2]);
   orbit.add(station);
-  for (let x = -13; x <= 13; x++)
-    for (let z = -13; z <= 13; z++) {
+  for (let x = -16; x <= 16; x++)
+    for (let z = -16; z <= 16; z++) {
       const radius = Math.hypot(x, z);
-      if (radius > STATION_RADIUS + 0.6) continue;
-      const edge = radius > STATION_RADIUS - 0.6;
+      if (radius > STATION_RADIUS + 4) continue;
+      const edge = radius > STATION_RADIUS + 3;
       const track = radius >= 3.1 && radius <= 4.5;
-      block(station, x, 3, z, edge ? 'copper' : track ? 'dark' : 'iron');
+      block(station, x, 3, z, edge ? 'copper' : track ? 'iron' : 'dark');
       block(station, x, 1.65, z, 'stone', 1, 1.7, 1);
       if (track && (x + z + 30) % 3 === 0)
         block(station, x, 3.515, z, 'gold', 0.28, 0.025, 0.28);
@@ -1098,6 +1098,39 @@ export function createVoxelWorld(
       0.15,
       0.2,
     );
+  }
+  for (let index = 0; index < journeyExperience.length; index++) {
+    const bay = experienceBay(index, journeyExperience.length);
+    const wall = new THREE.Group();
+    wall.position.set(
+      Math.sin(bay.angle) * 13.2,
+      3.5,
+      Math.cos(bay.angle) * 13.2,
+    );
+    wall.rotation.y = bay.yaw;
+    station.add(wall);
+    // Copper columns, deepslate dado, inset glass, and one continuous top beam.
+    for (const x of [-8.5, 8.5]) {
+      part(wall, x, 5, 0, 'copper', 0.65, 10, 0.65);
+      part(wall, x, 0.2, 0, 'iron', 1, 0.4, 1);
+    }
+    const panels =
+      index === 0
+        ? [
+            [-6.7, 3.1],
+            [3.7, 9.4],
+          ]
+        : [[0, 16.4]];
+    for (const [x, width] of panels) {
+      part(wall, x, 1.1, -0.15, 'dark', width, 2.2, 0.6);
+      part(wall, x, 5.6, -0.22, 'glass', width, 6.7, 0.18);
+      part(wall, x, 8.9, -0.1, 'iron', width, 0.24, 0.45);
+    }
+    for (const x of [-5.6, 0, 5.6])
+      part(wall, x, 5.6, 0, 'iron', 0.16, 6.6, 0.22);
+    part(wall, 0, 10, 0, 'dark', 17.8, 0.5, 1.7);
+    part(wall, 0, 10.33, 0, 'oxidized', 17.8, 0.16, 1.8);
+    part(wall, 0, 9.66, 0.65, '#d6e7dc', 15, 0.13, 0.13);
   }
   // A low orrery sits inside the empty centre, clear of the walking ring.
   const stationGear = gearWheel(station, 1.35, 0, 4.35, 0);
@@ -1126,7 +1159,7 @@ export function createVoxelWorld(
       for (let b = -2; b <= 2; b++)
         part(panel, a * 0.8, 0.11, b * 0.65, '#25445e', 0.72, 0.08, 0.56);
   }
-  const bayMaterials = ['oxidized', 'copper', 'gold', 'purple', 'iron'];
+  const bayMaterials = ['copper', 'copper', 'copper', 'copper', 'copper'];
   for (let index = 0; index < journeyExperience.length; index++) {
     const angle = experienceBay(index, journeyExperience.length).angle;
     for (let r = 5.6; r < 8; r += 0.55)
@@ -1164,8 +1197,10 @@ export function createVoxelWorld(
     const instruments = new THREE.Group();
     instruments.position.x = -4.2;
     group.add(instruments);
-    part(instruments, 4.2, 0.55, 0.25, 'oxidized', 2, 1.1, 1.8);
-    part(instruments, 4.2, 1.15, 0.25, 'dark', 2.2, 0.12, 2);
+    part(instruments, 4.2, 0.55, 0.25, 'dark', 3.6, 1.1, 2.2);
+    part(instruments, 4.2, 1.15, 0.25, 'iron', 3.8, 0.12, 2.4);
+    for (const x of [2.6, 5.8])
+      part(instruments, x, 0.55, 1.4, 'copper', 0.18, 1.1, 0.18);
     if (index === 0) {
       const aircraft = new THREE.Group();
       part(instruments, 4.2, 1.405, 0.3, 'iron', 0.18, 0.39, 0.18);
@@ -1533,9 +1568,44 @@ export function createVoxelWorld(
       };
       resizeFrame();
       const object = new CSS3DObject(element);
-      position.y = y + 4.6 + (measured * scale) / 2;
+      position.y = y + (terminal ? 2.5 : 4.6) + (measured * scale) / 2;
       object.position.copy(position);
       object.rotation.y = yaw;
+      // The experience text is mounted in a real framed terminal, supported
+      // from the floor. Its geometry follows the measured CSS3D page exactly.
+      const terminalFrame = terminal ? new THREE.Group() : null;
+      let fitTerminal = () => {};
+      if (terminalFrame) {
+        scene.add(terminalFrame);
+        terminalFrame.rotation.y = yaw;
+        const screen = part(terminalFrame, 0, 0, -0.13, 'dark');
+        const rails = [
+          part(terminalFrame, 0, 0, -0.02, 'copper'),
+          part(terminalFrame, 0, 0, -0.02, 'copper'),
+          part(terminalFrame, 0, 0, -0.02, 'iron'),
+          part(terminalFrame, 0, 0, -0.02, 'iron'),
+        ];
+        const feet = [-1, 1].map(() => part(terminalFrame, 0, 0, -0.1, 'dark'));
+        fitTerminal = () => {
+          const w = measuredWidth * scale,
+            h = measured * scale;
+          terminalFrame.position.copy(object.position);
+          screen.scale.set(w + 0.2, h + 0.2, 0.18);
+          rails.slice(0, 2).forEach((rail, i) => {
+            rail.position.set((i ? 1 : -1) * (w / 2 + 0.13), 0, -0.02);
+            rail.scale.set(0.2, h + 0.5, 0.2);
+          });
+          rails.slice(2).forEach((rail, i) => {
+            rail.position.set(0, (i ? 1 : -1) * (h / 2 + 0.13), -0.02);
+            rail.scale.set(w + 0.5, 0.2, 0.2);
+          });
+          feet.forEach((foot, i) => {
+            foot.position.set((i ? 1 : -1) * w * 0.36, -h / 2 - 1.25, -0.1);
+            foot.scale.set(0.25, 2.5, 0.25);
+          });
+        };
+        fitTerminal();
+      }
       object.scale.setScalar(scale);
       textScene.add(object);
       return {
@@ -1554,6 +1624,7 @@ export function createVoxelWorld(
         readHeight: () => measured * scale,
         readWidth: () => measuredWidth * scale,
         resizeFrame,
+        fitTerminal,
       };
     });
   });
@@ -1789,17 +1860,20 @@ export function createVoxelWorld(
     // Measure the new responsive layout before fitting the camera, including
     // temporarily hidden pages, so a newly visible leaf cannot cause a zoom snap.
     if (layoutDirty)
-      boards.forEach(({ element, object, index, resizeFrame, readHeight }) => {
-        const display = element.style.display;
-        element.style.display = '';
-        resizeFrame();
-        object.scale.setScalar(readHeight() / element.offsetHeight);
-        object.position.y =
-          (index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0)) +
-          4.6 +
-          readHeight() / 2;
-        element.style.display = display;
-      });
+      boards.forEach(
+        ({ element, object, index, resizeFrame, readHeight, fitTerminal }) => {
+          const display = element.style.display;
+          element.style.display = '';
+          resizeFrame();
+          object.scale.setScalar(readHeight() / element.offsetHeight);
+          object.position.y =
+            (index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0)) +
+            (index >= 4 && index < 9 ? 2.5 : 4.6) +
+            readHeight() / 2;
+          fitTerminal();
+          element.style.display = display;
+        },
+      );
     layoutDirty = false;
     if (!opts.reducedMotion) time += dt;
     // The scroll controller already eases and bounds motion. A second timeline
@@ -1807,6 +1881,7 @@ export function createVoxelWorld(
     timeline = opts.timeline;
     const pose = journeyPose(timeline, journeyExperience.length);
     host.dataset.timeline = timeline.toFixed(5);
+    host.dataset.trainX = pose.trainX.toFixed(5);
     const portrait = opts.mobile && camera.aspect < 1;
     const terminalWidth = Math.max(
       ...roleBoards.map((page) => page.readWidth()),
@@ -2135,7 +2210,7 @@ export function createVoxelWorld(
       const radial = new THREE.Vector3(Math.sin(angle), 0, Math.cos(angle));
       const center = new THREE.Vector3(
         ORBIT_ORIGIN[0] + STATION_CENTER[0],
-        ORBIT_ORIGIN[1] + 3.5 + 4.6,
+        ORBIT_ORIGIN[1] + 3.5 + 3.8,
         ORBIT_ORIGIN[2] + STATION_CENTER[2],
       );
       const interiorLook = center
@@ -2146,7 +2221,7 @@ export function createVoxelWorld(
         .addScaledVector(
           radial,
           -Math.max(
-            20,
+            17.5,
             distance,
             ((terminalHeight + 4.2) /
               (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)))) *

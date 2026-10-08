@@ -36,11 +36,28 @@ void test('the first scroll rolls the train immediately while the introduction s
   for (const phase of [0.0001, 0.001, 0.01, 0.1, 0.2]) {
     const pose = journeyPose(phase);
     assert.ok(pose.trainX > start.trainX);
-    assert.ok(pose.trainX <= phase * 4 + 1e-9);
+    assert.ok(pose.trainX <= phase * 10 + 1e-9);
     assert.equal(pose.board, 0);
     assert.deepEqual(pose.display, start.display);
     assert.deepEqual(pose.avatar, trainCab(pose.trainX));
   }
+});
+
+void test('every scroll through ground reading frames moves the train forward and reverses exactly', () => {
+  for (const chapter of [0, 1, 2, 3]) {
+    const end = chapter === 3 ? 0.2999 : 0.9999;
+    for (let phase = 0; phase < end; phase += 0.001) {
+      const a = journeyPose(chapter + phase);
+      const b = journeyPose(chapter + phase + 0.0001);
+      assert.ok(
+        b.trainX > a.trainX,
+        `stationary train in chapter ${chapter}, phase ${phase}`,
+      );
+      assert.deepEqual(b.avatar, trainCab(b.trainX));
+      assert.equal(journeyPose(chapter + phase).trainX, a.trainX);
+    }
+  }
+  assert.equal(journeyPose(3.3).trainX, ARCHIVE_TRAIN_X);
 });
 
 void test('camera, train and rocket remain continuous through every chapter and planet boundary', () => {
@@ -250,10 +267,36 @@ void test('one continuous scroll visits every reading bay before departure', () 
       assert.equal(gallery.moving, false);
       const pose = journeyPose((board === 9 ? 5 : board) + phase);
       assert.equal(pose.exhibitOffset, page * EXHIBIT_SPACING);
-      assert.ok(Math.abs(pose.focus[0] - pose.display[0] - 5) < 1e-8);
+      assert.ok(
+        Math.abs(pose.focus[0] - pose.display[0] - 5) < 1.5,
+        'the steady reading frame remains close to the cruising train',
+      );
       assert.equal(pose.walking, false);
     }
   }
+});
+
+void test('scroll input continues to move the chamber camera and journal rover during reading', () => {
+  for (
+    let phase = GALLERY_START;
+    phase < GALLERY_END - 0.0001;
+    phase += 0.001
+  ) {
+    assert.ok(
+      journeyPose(4 + phase + 0.0001).galleryAngle >
+        journeyPose(4 + phase).galleryAngle,
+    );
+  }
+  for (const chapter of [5, 6])
+    for (let phase = 0; phase < 0.999; phase += 0.001) {
+      const a = journeyPose(chapter + phase),
+        b = journeyPose(chapter + phase + 0.0001);
+      assert.ok(
+        b.rover[0] > a.rover[0],
+        `rover stalls in chapter ${chapter} at ${phase}`,
+      );
+      assert.deepEqual(b.avatar, roverSeat(b.rover));
+    }
 });
 
 void test('ground cards are passed in order with no camera or train return trip', () => {

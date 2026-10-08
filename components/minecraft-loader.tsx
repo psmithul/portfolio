@@ -1,4 +1,4 @@
-import { PixelLandscape } from '@/components/pixel-landscape';
+import { RailwayArt } from '@/components/railway-art';
 import type { ReactNode } from 'react';
 
 export function MinecraftLoader({
@@ -23,16 +23,15 @@ export function MinecraftLoader({
       }
     >
       <div className="loader-inner">
-        <span className="loader-eyebrow">MITHUL SOURAV · LOADING</span>
-        <div className="loader-landscape">
-          <PixelLandscape small />
-        </div>
-        <div className="loader-track" aria-hidden="true">
-          <span />
+        <span className="loader-eyebrow">MITHUL SOURAV</span>
+        <div className="loader-landscape" aria-hidden="true">
+          <RailwayArt decorative />
         </div>
         <output className="loader-status" aria-live="polite" aria-atomic="true">
           <span className="loader-title">{label}</span>
-          <span className="loader-subtitle">One block at a time.</span>
+          <span className="loader-subtitle">
+            {ready ? 'World loaded' : 'Loading terrain…'}
+          </span>
         </output>
         {children}
         {!compact && (
