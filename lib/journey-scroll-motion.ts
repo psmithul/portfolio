@@ -17,6 +17,7 @@ export function createJourneyMotion() {
       seconds: number,
       viewport: number,
       sample: (y: number) => ScrollPose,
+      mode: 'travel' | 'input' | 'brake' = 'travel',
     ) {
       const duration = Math.min(0.05, Math.max(0, seconds));
       const initial = current;
@@ -33,8 +34,18 @@ export function createJourneyMotion() {
         const pace = journeyMotionLimits(sample(current).transit).pixels;
         const speed = Math.min(240, Math.max(90, viewport * 0.28)) * pace;
         const desired =
-          Math.sign(remaining) * Math.min(speed, Math.abs(remaining) * 6);
-        velocity += Math.max(-900 * dt, Math.min(900 * dt, desired - velocity));
+          mode === 'brake'
+            ? 0
+            : Math.sign(remaining) *
+              Math.min(
+                speed,
+                Math.abs(remaining) * (mode === 'input' ? 32 : 6),
+              );
+        const acceleration = mode === 'travel' ? 900 : 3600;
+        velocity += Math.max(
+          -acceleration * dt,
+          Math.min(acceleration * dt, desired - velocity),
+        );
         const proposed = current + velocity * dt;
         const bounded =
           Math.sign(velocity) === Math.sign(remaining)

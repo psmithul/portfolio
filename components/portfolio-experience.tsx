@@ -150,21 +150,21 @@ function DesktopExperience({
                 aria-pressed={travel === 'manual'}
                 onClick={() => setTravel('manual')}
               >
-                Explore at my pace<small>Manual scroll · recommended</small>
+                At my pace
               </button>
               <button
                 aria-pressed={travel === 'automatic'}
                 onClick={() => setTravel('automatic')}
               >
-                Automatic tour<small>Pause whenever you like</small>
+                Automatic
               </button>
             </div>
             <p className="travel-choice-status" aria-live="polite">
               {travel === null
                 ? sceneReady
-                  ? 'Choose a mode to begin.'
-                  : 'Choose while the world loads.'
-                : `${travel === 'manual' ? 'Manual scroll' : 'Automatic tour'} selected. Finishing the landscape…`}
+                  ? 'Choose to begin.'
+                  : 'You can choose while it loads.'
+                : `${travel === 'manual' ? 'Manual' : 'Automatic'} selected. Loading…`}
             </p>
           </fieldset>
         </MinecraftLoader>

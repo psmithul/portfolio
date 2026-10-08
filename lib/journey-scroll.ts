@@ -27,7 +27,9 @@ export function createJourneyScroll(
     target = current,
     last = 0,
     frame = 0,
-    writing = false;
+    writing = false,
+    manual = false,
+    inputAge = 0;
   const viewport = options.viewport ?? (() => window.innerHeight);
   const gesture = createJourneyGesture();
   const tour = createJourneyTour(count);
@@ -45,6 +47,7 @@ export function createJourneyScroll(
       options.onPlayingChange?.(false);
     }
     target = current;
+    manual = false;
     motion.reset();
   };
   const at = (y: number) => {
@@ -86,16 +89,19 @@ export function createJourneyScroll(
       node.closest('dialog, input, textarea, select, [contenteditable="true"]'),
     );
   function snap(direction: -1 | 1) {
-    if (tour.playing()) pause();
+    pause();
     tour.skip(timeline(), direction);
     setTarget(tourDestination());
   }
-  // Every input contributes immediately. Keep a bounded runway, rather than
-  // dropping gestures while travelling or waiting for a swipe to end.
+  // Buffer only a few pixels of live input. Stale wheel momentum must never
+  // carry the visitor through reading frames after they stop scrolling.
   const nudge = (delta: number) => {
     if (!delta) return;
     if (tour.playing()) pause();
-    const runway = viewport() * 0.65;
+    manual = true;
+    inputAge = 0;
+    const runway = Math.max(24, Math.min(48, viewport() * 0.06));
+    if (Math.sign(delta) !== Math.sign(target - current)) target = current;
     setTarget(
       Math.max(current - runway, Math.min(current + runway, target + delta)),
     );
@@ -124,7 +130,10 @@ export function createJourneyScroll(
     e.preventDefault();
     nudge(gesture.move(e.touches[0].clientX, e.touches[0].clientY));
   };
-  const endTouch = () => gesture.cancel();
+  const endTouch = () => {
+    gesture.cancel();
+    inputAge = Infinity;
+  };
   const cancelTouch = () => {
     gesture.cancel();
     pause();
@@ -157,11 +166,9 @@ export function createJourneyScroll(
   };
   const nativeScroll = () => {
     if (writing || Math.abs(window.scrollY - current) < 1.1) return;
-    // Scrollbar drags and browser anchor jumps are routed through the same limiter.
-    to(window.scrollY);
-    writing = true;
-    window.scrollTo({ top: current, behavior: 'instant' });
-    writing = false;
+    // A scrollbar drag already names an exact position; do not queue another
+    // animated journey after the browser has placed the thumb there.
+    jump(window.scrollY);
   };
   const hash = () => {
     let id: string;
@@ -202,7 +209,10 @@ export function createJourneyScroll(
     frame = requestAnimationFrame(animate);
     const dt = last ? (now - last) / 1000 : 0;
     last = now;
-    if (document.hidden || document.querySelector('dialog[open]')) return;
+    if (document.hidden || document.querySelector('dialog[open]')) {
+      if (manual) pause();
+      return;
+    }
     // A browser anchor or scrollbar move can precede its coalesced scroll event.
     // Capture it before our next frame writes the controlled position back.
     nativeScroll();
@@ -222,7 +232,18 @@ export function createJourneyScroll(
       const p = journeyPosition(y, points, viewport(), count);
       return journeyPose(p.stop + p.phase, count);
     };
-    const next = motion.step(current, target, dt, previousViewport, sample);
+    inputAge += Math.min(dt, 0.05);
+    const braking = manual && inputAge > 0.08;
+    if (braking) target = current;
+    const next = motion.step(
+      current,
+      target,
+      dt,
+      previousViewport,
+      sample,
+      manual ? (braking ? 'brake' : 'input') : 'travel',
+    );
+    if (braking) target = next;
     if (next !== current) {
       current = next;
       // Publish the same unrounded position to CSS3D and WebGL on this frame.
@@ -259,6 +280,8 @@ export function createJourneyScroll(
     stop: pause,
     pause,
     play() {
+      manual = false;
+      motion.reset();
       tour.play(timeline());
       setTarget(tourDestination());
       options.onPlayingChange?.(true);
