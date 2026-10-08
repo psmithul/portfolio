@@ -1,3 +1,14 @@
+.train-journey .world-geometry {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.train-journey .world-lettering {
+  z-index: 0;
+}
+
 /* A red boot screen with a custom block-letter wordmark. */
 .minecraft-loader {
   position: fixed;
@@ -947,7 +958,7 @@ body:has(.world-header) .reading-contents a[aria-current] {
 
 /* Calm backing gives the projected copy contrast against moving scenery. */
 .train-journey .in-world-board {
-  background: linear-gradient(110deg, #152f28ed, #152f28d9 82%, #152f2800);
+  background: #152f28;
   padding: 22px 28px !important;
   text-shadow: none;
 }

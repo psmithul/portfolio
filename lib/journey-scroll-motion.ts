@@ -1,7 +1,6 @@
 import {
-  journeyMotionLimits,
+  journeyScrollSpeed,
   journeyScrollStep,
-  type ScrollPose,
 } from './journey-scroll-speed.ts';
 
 /** One velocity buffer for the route. The scene reads this position without a second delay. */
@@ -16,7 +15,6 @@ export function createJourneyMotion() {
       target: number,
       seconds: number,
       viewport: number,
-      sample: (y: number) => ScrollPose,
       mode: 'travel' | 'input' | 'brake' = 'travel',
     ) {
       const duration = Math.min(0.05, Math.max(0, seconds));
@@ -31,17 +29,21 @@ export function createJourneyMotion() {
           current = target;
           break;
         }
-        const pace = journeyMotionLimits(sample(current).transit).pixels;
-        const speed = Math.min(240, Math.max(90, viewport * 0.28)) * pace;
+        const speed = journeyScrollSpeed(viewport);
+        const acceleration = mode === 'travel' ? 900 : 3600;
         const desired =
           mode === 'brake'
             ? 0
             : Math.sign(remaining) *
               Math.min(
                 speed,
+                Math.sqrt(
+                  2 *
+                    acceleration *
+                    Math.max(0, Math.abs(remaining) - Math.abs(velocity) * dt),
+                ),
                 Math.abs(remaining) * (mode === 'input' ? 32 : 6),
               );
-        const acceleration = mode === 'travel' ? 900 : 3600;
         velocity += Math.max(
           -acceleration * dt,
           Math.min(acceleration * dt, desired - velocity),
@@ -53,19 +55,12 @@ export function createJourneyMotion() {
                 Math.min(Math.abs(proposed - current), Math.abs(remaining)) +
               current
             : proposed;
-        const next = journeyScrollStep(current, bounded, dt, viewport, sample);
+        const next = journeyScrollStep(current, bounded, dt, viewport);
         velocity = (next - current) / dt;
         current = next;
       }
-      // Curved paths may change their limit inside the frame. Also bound the
-      // complete displacement observed by the renderer, not just substeps.
-      const bounded = journeyScrollStep(
-        initial,
-        current,
-        duration,
-        viewport,
-        sample,
-      );
+      // Bound the displacement observed by the renderer as well as substeps.
+      const bounded = journeyScrollStep(initial, current, duration, viewport);
       if (bounded !== current) velocity = (bounded - initial) / duration;
       return bounded;
     },

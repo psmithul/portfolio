@@ -1,5 +1,8 @@
 import { annotationOpacity } from '@/lib/journey-annotations';
 import { createJourneyClearance } from '@/lib/journey-clearance';
+import { createWorldCompositor } from '@/lib/world-compositor';
+import { voxelSurfaceGeometry } from '@/lib/voxel-surface-geometry';
+import type { VoxelSolid } from '@/lib/voxel-surfaces';
 import * as THREE from 'three';
 import {
   CSS3DObject,
@@ -63,6 +66,7 @@ type BatchItem = {
   w: number;
   h: number;
   d: number;
+  order: number;
   replaced?: boolean;
 };
 /** A continuous Three.js journey: railway, walking character, launch, and orbital station. */
@@ -87,6 +91,7 @@ export function createVoxelWorld(
     Math.max(window.innerWidth, window.innerHeight) <= 1200;
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
+    alpha: true,
     powerPreference: 'high-performance',
   });
   renderer.setPixelRatio(phone ? 1 : Math.min(window.devicePixelRatio, 1.5));
@@ -96,7 +101,9 @@ export function createVoxelWorld(
   renderer.toneMapping = THREE.NoToneMapping;
   renderer.domElement.setAttribute('aria-hidden', 'true');
   host.appendChild(renderer.domElement);
-  const camera = new THREE.PerspectiveCamera(43, 1, 0.1, 500);
+  const camera = new THREE.PerspectiveCamera(43, 1, 0.5, 500);
+  const compositor = createWorldCompositor(renderer);
+  renderer.domElement.className = 'world-geometry';
   const cube = new THREE.BoxGeometry(1, 1, 1),
     mats = createBlockMaterials();
   const land = new THREE.Group(),
@@ -109,6 +116,7 @@ export function createVoxelWorld(
   >();
   const occupiedVoxels = new Map<string, BatchItem>();
   let replacedVoxels = 0;
+  let voxelOrder = 0;
   const clearance = createJourneyClearance();
   let clearedBlocks = 0;
   const staticParts: THREE.Mesh[] = [];
@@ -137,7 +145,7 @@ export function createVoxelWorld(
       previous.replaced = true;
       replacedVoxels++;
     }
-    const item = { x, y, z, w, h, d };
+    const item = { x, y, z, w, h, d, order: voxelOrder++ };
     occupiedVoxels.set(cell, item);
     batches.get(key)!.items.push(item);
   }
@@ -1541,7 +1549,7 @@ export function createVoxelWorld(
   // Unlike hidden, clip cannot acquire a private scroll offset when a projected
   // link or button receives focus. Text must share the WebGL camera's origin.
   lettering.domElement.style.overflow = 'clip';
-  host.appendChild(lettering.domElement);
+  host.insertBefore(lettering.domElement, renderer.domElement);
   const textScene = new THREE.Scene();
   const boardElements = Array.from(
     host.closest('main')!.querySelectorAll<HTMLElement>('[data-world-board]'),
@@ -1577,8 +1585,11 @@ export function createVoxelWorld(
       let measured = 0,
         measuredWidth = 0;
       const resizeFrame = () => {
-        const height = element.offsetHeight,
-          width = element.offsetWidth;
+        const style = getComputedStyle(element);
+        // CSS3D can have fractional pixel dimensions. Integer offset sizes
+        // made its canvas aperture disagree along moving text edges.
+        const height = parseFloat(style.height) || element.offsetHeight,
+          width = parseFloat(style.width) || element.offsetWidth;
         if (!height || !width) return;
         scale =
           terminal && read().mobile && host.clientWidth < host.clientHeight
@@ -1602,6 +1613,9 @@ export function createVoxelWorld(
         scene.add(terminalFrame);
         terminalFrame.rotation.y = yaw;
         const screen = part(terminalFrame, 0, 0, -0.13, 'dark');
+        // Match the HTML screen exactly during a fade; a textured backing
+        // appeared as a second ghost image beneath partially revealed copy.
+        screen.material = new THREE.MeshBasicMaterial({ color: '#16262c' });
         const rails = [
           part(terminalFrame, 0, 0, -0.02, 'copper'),
           part(terminalFrame, 0, 0, -0.02, 'copper'),
@@ -1631,6 +1645,13 @@ export function createVoxelWorld(
       }
       object.scale.setScalar(scale);
       textScene.add(object);
+      const portal = compositor.portal();
+      const fitPortal = () => {
+        portal.mesh.position.copy(object.position);
+        portal.mesh.quaternion.copy(object.quaternion);
+        portal.mesh.scale.set(measuredWidth * scale, measured * scale, 1);
+      };
+      fitPortal();
       return {
         element,
         object,
@@ -1639,7 +1660,7 @@ export function createVoxelWorld(
         oldStyle,
         index,
         leaf,
-        scale,
+        readScale: () => scale,
         normal: new THREE.Vector3(0, 0, 1).applyAxisAngle(
           new THREE.Vector3(0, 1, 0),
           yaw,
@@ -1648,6 +1669,8 @@ export function createVoxelWorld(
         readWidth: () => measuredWidth * scale,
         resizeFrame,
         fitTerminal,
+        portal,
+        fitPortal,
       };
     });
   });
@@ -1674,6 +1697,7 @@ export function createVoxelWorld(
     }
   }
   let auditedBlocks = 0;
+  const solids: VoxelSolid[] = [];
   batches.forEach(({ parent, type, items }) => {
     // Later construction replaces a coincident terrain cell instead of leaving
     // two materials fighting for the same depth (launch pads, docks, tree crowns).
@@ -1699,16 +1723,37 @@ export function createVoxelWorld(
       }
     }
     if (!items.length) return;
-    const material = parent.userData.sky
-      ? new THREE.MeshBasicMaterial({
-          color: type,
-          fog: false,
-          transparent: true,
-          depthWrite: false,
-        })
-      : mats.get(type);
-    if (parent.userData.sky)
-      cloudMaterials.push(material as THREE.MeshBasicMaterial);
+    if (!parent.userData.sky) {
+      // Static block groups use translation only. Resolve surfaces in world
+      // coordinates so a road and a building cannot own the same patch either.
+      const origin = new THREE.Vector3().setFromMatrixPosition(
+        parent.matrixWorld,
+      );
+      items.forEach((v) =>
+        solids.push({
+          min: [
+            origin.x + v.x - v.w / 2,
+            origin.y + v.y - v.h / 2,
+            origin.z + v.z - v.d / 2,
+          ],
+          max: [
+            origin.x + v.x + v.w / 2,
+            origin.y + v.y + v.h / 2,
+            origin.z + v.z + v.d / 2,
+          ],
+          type,
+          order: v.order,
+        }),
+      );
+      return;
+    }
+    const material = new THREE.MeshBasicMaterial({
+      color: type,
+      fog: false,
+      transparent: true,
+      depthWrite: false,
+    });
+    cloudMaterials.push(material);
     const mesh = new THREE.InstancedMesh(cube, material, items.length);
     items.forEach((v, i) => {
       dummy.position.set(v.x, v.y, v.z);
@@ -1716,14 +1761,22 @@ export function createVoxelWorld(
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
     });
-    mesh.castShadow =
-      !parent.userData.sky &&
-      type !== 'grass' &&
-      type !== 'dirt' &&
-      type !== 'water';
-    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.receiveShadow = false;
     mesh.computeBoundingSphere();
     parent.add(mesh);
+  });
+  const surfaceGeometry = voxelSurfaceGeometry(solids);
+  surfaceGeometry.geometries.forEach((geometry, type) => {
+    const mesh = new THREE.Mesh(geometry, mats.get(type));
+    mesh.castShadow = type !== 'grass' && type !== 'dirt' && type !== 'water';
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+  });
+  host.dataset.surfaceAudit = JSON.stringify({
+    inputFaces: surfaceGeometry.inputFaces,
+    exposedFaces: surfaceGeometry.exposedFaces,
+    trimmedFaces: surfaceGeometry.trimmedFaces,
   });
   host.dataset.clearance = JSON.stringify({
     samples: clearance.samples,
@@ -1791,6 +1844,7 @@ export function createVoxelWorld(
     for (const entry of entries) {
       if (!entry.contentRect.width || !entry.contentRect.height) continue;
       boards.find((board) => board.element === entry.target)?.resizeFrame();
+      layoutDirty = true;
     }
   });
   boards.forEach(({ element }) => pageObserver.observe(element));
@@ -1815,12 +1869,17 @@ export function createVoxelWorld(
   }
   let pointerType = 'mouse';
   const down = (e: PointerEvent) => {
+    if (
+      e.target instanceof Element &&
+      e.target.closest('a, button, input, summary')
+    )
+      return;
     pointerType = e.pointerType;
     dragging = e.pointerType === 'mouse' && !read().mobile;
     dragDistance = 0;
     px = e.clientX;
     py = e.clientY;
-    if (dragging) renderer.domElement.setPointerCapture(e.pointerId);
+    if (dragging) host.setPointerCapture(e.pointerId);
   };
   const move = (e: PointerEvent) => {
     if (!dragging) {
@@ -1840,6 +1899,11 @@ export function createVoxelWorld(
     py = e.clientY;
   };
   const up = (e: PointerEvent) => {
+    if (
+      e.target instanceof Element &&
+      e.target.closest('a, button, input, summary')
+    )
+      return;
     if (dragDistance < 6) pick(e);
     dragging = false;
   };
@@ -1855,10 +1919,10 @@ export function createVoxelWorld(
     visible = false;
     onLost();
   };
-  renderer.domElement.addEventListener('pointerdown', down);
-  renderer.domElement.addEventListener('pointermove', move);
-  renderer.domElement.addEventListener('pointerup', up);
-  renderer.domElement.addEventListener('pointercancel', cancel);
+  host.addEventListener('pointerdown', down);
+  host.addEventListener('pointermove', move);
+  host.addEventListener('pointerup', up);
+  host.addEventListener('pointercancel', cancel);
   renderer.domElement.addEventListener('webglcontextlost', lost);
   document.addEventListener('visibilitychange', visibility);
   function animate(now: number) {
@@ -1882,16 +1946,26 @@ export function createVoxelWorld(
     // temporarily hidden pages, so a newly visible leaf cannot cause a zoom snap.
     if (layoutDirty)
       boards.forEach(
-        ({ element, object, index, resizeFrame, readHeight, fitTerminal }) => {
+        ({
+          element,
+          object,
+          index,
+          resizeFrame,
+          readHeight,
+          readScale,
+          fitTerminal,
+          fitPortal,
+        }) => {
           const display = element.style.display;
           element.style.display = '';
           resizeFrame();
-          object.scale.setScalar(readHeight() / element.offsetHeight);
+          object.scale.setScalar(readScale());
           object.position.y =
             (index < 4 ? 0.9 : ORBIT_ORIGIN[1] + (index < 9 ? 3.5 : 0)) +
             (index >= 4 && index < 9 ? 2.5 : 4.6) +
             readHeight() / 2;
           fitTerminal();
+          fitPortal();
           element.style.display = display;
         },
       );
@@ -2381,7 +2455,16 @@ export function createVoxelWorld(
       ),
     );
     boards.forEach(
-      ({ element, object, normal, index, leaf, readHeight, readWidth }) => {
+      ({
+        element,
+        object,
+        normal,
+        index,
+        leaf,
+        readHeight,
+        readWidth,
+        portal,
+      }) => {
         halfPage.set(readWidth() / 2, readHeight() / 2, 0.02);
         object.updateMatrixWorld();
         // Build bounds in page coordinates, then rotate into the actual room.
@@ -2410,18 +2493,24 @@ export function createVoxelWorld(
         const interactive = near && object.visible && opacity > 0.2;
         element.inert = !interactive;
         element.setAttribute('aria-hidden', String(!interactive));
-        element.style.opacity = String(opacity);
+        // The canvas aperture controls the fade using the same frame's world
+        // colour and depth. Browser opacity would flatten a second 3D layer.
+        element.style.opacity = '1';
+        portal.mesh.visible = object.visible;
+        portal.reveal(opacity);
         element.style.pointerEvents = interactive ? 'auto' : 'none';
         element.dataset.active = String(index === pose.board && interactive);
       },
     );
-    renderer.render(scene, camera);
+    compositor.render(scene, camera);
     lettering.render(textScene, camera);
     rendered!();
   }
   frame = requestAnimationFrame(animate);
   return {
-    ready: Promise.all([skinReady, firstFrame]).then(() => {}),
+    ready: Promise.all([skinReady, firstFrame, document.fonts.ready]).then(
+      () => {},
+    ),
     resetView() {
       azimuth = 0;
       elevation = 0;
@@ -2442,10 +2531,10 @@ export function createVoxelWorld(
         parent.insertBefore(element, next?.parentNode === parent ? next : null);
       });
       lettering.domElement.remove();
-      renderer.domElement.removeEventListener('pointerdown', down);
-      renderer.domElement.removeEventListener('pointermove', move);
-      renderer.domElement.removeEventListener('pointerup', up);
-      renderer.domElement.removeEventListener('pointercancel', cancel);
+      host.removeEventListener('pointerdown', down);
+      host.removeEventListener('pointermove', move);
+      host.removeEventListener('pointerup', up);
+      host.removeEventListener('pointercancel', cancel);
       renderer.domElement.removeEventListener('webglcontextlost', lost);
       const geometry = new Set<THREE.BufferGeometry>(),
         material = new Set<THREE.Material>();
@@ -2461,6 +2550,7 @@ export function createVoxelWorld(
       material.forEach((m) => m.dispose());
       mats.dispose();
       ownedTextures.forEach((t) => t.dispose());
+      compositor.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     },
