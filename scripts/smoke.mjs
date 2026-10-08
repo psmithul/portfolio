@@ -91,6 +91,23 @@ for (const [path, status, content, title] of cases) {
     /src="(\/[^"?]+\.(?:png|jpg|jpeg|webp|svg))"/gi,
   ))
     imagePaths.add(match[1]);
+  for (const article of body.matchAll(
+    /<article class="article-prose">([\s\S]*?)<\/article>/gi,
+  )) {
+    for (const image of article[1].matchAll(/<img\b[^>]*>/gi)) {
+      if (!image[0].includes('src="/images/')) continue;
+      assert.match(
+        image[0],
+        /width="[1-9]\d*"/,
+        path + ': image width reserved',
+      );
+      assert.match(
+        image[0],
+        /height="[1-9]\d*"/,
+        path + ': image height reserved',
+      );
+    }
+  }
   if (status === 200 && !path.startsWith('/write')) {
     const canonicalPath =
       path === '/work/neoleg-knee-mechanism' ? '/work/kneeassist' : path;
@@ -103,6 +120,18 @@ for (const [path, status, content, title] of cases) {
   }
   if (path === '/write')
     assert.match(body, /name="robots" content="noindex, nofollow"/);
+  if (status === 200 && path.startsWith('/work/')) {
+    for (const className of [
+      'playground-stage',
+      'scene-loading',
+      'workbench-controls',
+      'mobile-model-illustration laboratory-mobile',
+    ])
+      assert.ok(
+        body.includes(`class="${className}"`),
+        path + ': reserved server-rendered laboratory frame',
+      );
+  }
   // Next streams the custom 404 through its server-component payload.
   // Its hydrated landmark is also checked in browser QA.
   assert.ok(

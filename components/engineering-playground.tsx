@@ -87,9 +87,11 @@ const models: {
 export function EngineeringPlayground({
   initialModel = 'rover',
   compact = false,
+  enabled = true,
 }: {
   initialModel?: ModelKind;
   compact?: boolean;
+  enabled?: boolean;
 }) {
   const host = useRef<HTMLElement>(null);
   const engine = useRef<EngineeringScene | null>(null);
@@ -114,6 +116,7 @@ export function EngineeringPlayground({
   }, [model, running, exploded, stiffness, terrain]);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
     import('@/lib/engineering-scene')
       .then(({ createEngineeringScene }) => {
@@ -122,13 +125,15 @@ export function EngineeringPlayground({
           host.current,
           () => options.current,
           {
+            onReady() {
+              if (!cancelled) setReady(true);
+            },
             onError(message) {
               setError(message);
               setReady(false);
             },
           },
         );
-        setReady(true);
       })
       .catch((cause: unknown) => {
         if (!cancelled)
@@ -143,7 +148,7 @@ export function EngineeringPlayground({
       engine.current?.dispose();
       engine.current = null;
     };
-  }, []);
+  }, [enabled]);
 
   function reset() {
     setRunning(false);

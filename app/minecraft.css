@@ -872,6 +872,19 @@ body:has(.world-header, .page-error) .back-link {
   background: #294c3c;
   color: #eaddb8;
 }
+.laboratory-mobile {
+  display: none;
+}
+@media (max-width: 900px),
+  (pointer: coarse) and (max-width: 1024px),
+  (pointer: coarse) and (max-height: 1024px) {
+  .laboratory-desktop {
+    display: none;
+  }
+  .laboratory-mobile {
+    display: block;
+  }
+}
 .mobile-model-illustration > svg {
   display: block;
   max-width: 600px;
