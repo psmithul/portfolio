@@ -138,9 +138,7 @@ function DesktopExperience({
       {loading && (
         <MinecraftLoader
           label={
-            sceneReady
-              ? 'Your journey is ready.'
-              : 'Building the voxel landscape…'
+            sceneReady ? 'Your journey is ready.' : 'Preparing your journey…'
           }
           onStatic={onStatic}
           ready={sceneReady}

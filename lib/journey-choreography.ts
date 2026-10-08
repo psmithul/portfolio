@@ -131,13 +131,22 @@ export function journeyPose(timeline: number, count = 5) {
   );
   const departure = easeBetween(stop === 0 ? 0.45 : 0.6, 1, phase);
   const offset = chapter < 4 ? gallery.offset : ARCHIVE_TRAIN_X - 102;
-  // A gentle roll from the very first scroll keeps the introduction readable
-  // while the wheels and passing landscape make every input visible.
+  // Keep the train rolling while a reading frame stays steady. Blending the
+  // exhibit path with a slow cruise removes the old stationary reading plateaus.
+  const readingEnd = chapter === 3 ? 0.3 : 0.6;
+  const cruise = Math.min(chapter === 3 ? 1 : Infinity, phase / readingEnd);
+  const trainOffset =
+    chapter === 0
+      ? phase * 10
+      : offset * 0.82 +
+        ((EXHIBIT_COUNTS[chapter] ?? 1) - 1) * EXHIBIT_SPACING * cruise * 0.18;
   const trainX =
     stop * 34 +
     (stop < 3
-      ? mix(chapter === 0 ? phase * 4 : offset, 34, departure)
-      : offset);
+      ? mix(trainOffset, 34, departure)
+      : chapter === 3
+        ? trainOffset
+        : offset);
   const cab = trainCab(trainX);
   let avatar = cab,
     avatarVisible = true;
@@ -217,7 +226,11 @@ export function journeyPose(timeline: number, count = 5) {
       boardPhase = fraction;
       display = experienceBay(index, count).position;
       const advance = easeBetween(0.56, 1, fraction);
-      galleryAngle = GALLERY_ANGLE + ((index + advance) * Math.PI * 2) / count;
+      // A restrained camera orbit responds during reading too. The guide still
+      // stops to inspect a bay, then walks along the original clear circular path.
+      const cameraAdvance = fraction * 0.08 + advance * 0.92;
+      galleryAngle =
+        GALLERY_ANGLE + ((index + cameraAdvance) * Math.PI * 2) / count;
       const driveIn = easeBetween(0.1, 0.16, phase);
       const driveOut = easeBetween(0.9, 1, phase);
       const roverX = mix(mix(6, 18, driveIn), LIBRARY_X + 6, driveOut);
@@ -249,7 +262,9 @@ export function journeyPose(timeline: number, count = 5) {
         walking = entry > 0 && entry < 1;
         seating = 1 - easeBetween(0.16, 0.175, phase);
       } else if (phase <= GALLERY_END) {
-        avatar = circlePoint(galleryAngle);
+        avatar = circlePoint(
+          GALLERY_ANGLE + ((index + advance) * Math.PI * 2) / count,
+        );
         walking = fraction > 0.56 && fraction < 1;
         inspecting = !walking;
       } else {
@@ -283,7 +298,12 @@ export function journeyPose(timeline: number, count = 5) {
       const fromX = LIBRARY_X + (chapter === 6 ? 32 : 0);
       const toX = fromX + (chapter === 6 ? 0 : 32);
       const travel = easeBetween(0.72, 1, phase);
-      const roverX = mix(fromX + gallery.offset, toX, travel) + 6;
+      const roll =
+        chapter === 6
+          ? phase * 1.2
+          : gallery.offset * 0.85 + (phase / 0.72) * EXHIBIT_SPACING * 0.15;
+      const roverX =
+        mix(fromX + roll, toX + (chapter === 6 ? 1.2 : 0), travel) + 6;
       rover = orbitPoint(roverX, lunarFloor(roverX), 4.5);
       avatar = roverSeat(rover);
       seated = true;

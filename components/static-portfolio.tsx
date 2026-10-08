@@ -15,7 +15,7 @@ import {
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
 import type { JournalSummary } from '@/lib/journal-editorial';
-import { PixelLandscape } from '@/components/pixel-landscape';
+import { RailwayArt } from '@/components/railway-art';
 import { StaticPortfolioMenu } from '@/components/static-portfolio-menu';
 
 export function StaticPortfolio({
@@ -48,6 +48,9 @@ export function StaticPortfolio({
           <p className="static-statement">
             Building and learning along the way, driven by an endless curiosity.
           </p>
+          <figure className="static-world">
+            <RailwayArt />
+          </figure>
           <p>
             I’m a final-year mechanical engineering student at NITK Surathkal. I
             like learning new technologies and using them to build things. I’m
@@ -57,13 +60,6 @@ export function StaticPortfolio({
             Explore my work <ArrowDown size={17} aria-hidden="true" />
           </a>
         </div>
-        <figure className="static-world">
-          <PixelLandscape />
-          <figcaption>
-            <span>01 / THE JOURNEY BEGINS</span>
-            <span>↓ KEEP EXPLORING</span>
-          </figcaption>
-        </figure>
         <aside className="static-desktop-tip">
           <Monitor size={22} aria-hidden="true" />
           <p>
