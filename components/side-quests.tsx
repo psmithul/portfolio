@@ -3,7 +3,13 @@ import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import type { Project } from '@/content/projects';
 import { ScrollRail } from '@/components/scroll-rail';
-export function SideQuests({ projects }: { projects: Project[] }) {
+export function SideQuests({
+  projects,
+  vertical = false,
+}: {
+  projects: Project[];
+  vertical?: boolean;
+}) {
   return (
     <ScrollRail
       id="completed-work"
@@ -12,6 +18,7 @@ export function SideQuests({ projects }: { projects: Project[] }) {
       description="Earlier builds and studies, with the work and results from each."
       itemLabel="completed project"
       count={projects.length}
+      vertical={vertical}
     >
       {projects.map((project, index) => (
         <Link

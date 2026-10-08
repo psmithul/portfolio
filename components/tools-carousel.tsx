@@ -12,14 +12,21 @@ export type PortfolioTool = {
   height: number;
 };
 
-export function ToolsCarousel({ tools }: { tools: PortfolioTool[] }) {
+export function ToolsCarousel({
+  tools,
+  staticLayout = false,
+}: {
+  tools: PortfolioTool[];
+  staticLayout?: boolean;
+}) {
   const [paused, setPaused] = useState(false);
   return (
     <section
       id="tools"
       className="flow-tools flow-section"
       aria-labelledby="tools-heading"
-      data-paused={paused}
+      data-paused={paused || staticLayout}
+      data-layout={staticLayout ? 'grid' : undefined}
     >
       <div className="tools-heading shell">
         <p className="eyebrow">05 — Technical skills</p>
@@ -27,7 +34,7 @@ export function ToolsCarousel({ tools }: { tools: PortfolioTool[] }) {
       </div>
       <div className="tools-viewport">
         <div className="tools-track">
-          {[false, true].map((duplicate) => (
+          {(staticLayout ? [false] : [false, true]).map((duplicate) => (
             <ul
               className="tools-group"
               key={String(duplicate)}
@@ -59,16 +66,22 @@ export function ToolsCarousel({ tools }: { tools: PortfolioTool[] }) {
           <span>·</span> Data acquisition <span>·</span> Prototyping{' '}
           <span>·</span> Experimental testing
         </p>
-        <Button
-          variant="outline"
-          className="tools-motion-control"
-          onClick={() => setPaused((value) => !value)}
-          aria-label={paused ? 'Resume tool carousel' : 'Pause tool carousel'}
-          aria-pressed={paused}
-        >
-          {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
-          {paused ? 'Resume' : 'Pause'}
-        </Button>
+        {!staticLayout && (
+          <Button
+            variant="outline"
+            className="tools-motion-control"
+            onClick={() => setPaused((value) => !value)}
+            aria-label={paused ? 'Resume tool carousel' : 'Pause tool carousel'}
+            aria-pressed={paused}
+          >
+            {paused ? (
+              <Play aria-hidden="true" />
+            ) : (
+              <Pause aria-hidden="true" />
+            )}
+            {paused ? 'Resume' : 'Pause'}
+          </Button>
+        )}
       </div>
     </section>
   );

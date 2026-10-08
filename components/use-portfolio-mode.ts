@@ -1,18 +1,18 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { staticPortfolioQuery } from '@/lib/portfolio-display';
+import {
+  portfolioModeForDevice,
+  type PortfolioMode,
+} from '@/lib/portfolio-display';
 
-function subscribe(change: () => void) {
-  const media = window.matchMedia(staticPortfolioQuery);
-  media.addEventListener('change', change);
-  return () => media.removeEventListener('change', change);
-}
+// Resizing a window or rotating a device must not replace the whole page.
+const subscribe = () => () => {};
 
 function snapshot() {
-  return window.matchMedia(staticPortfolioQuery).matches ? 'static' : 'desktop';
+  return portfolioModeForDevice(navigator);
 }
 
-export function usePortfolioMode() {
-  return useSyncExternalStore(subscribe, snapshot, () => null);
+export function usePortfolioMode(initialMode: PortfolioMode | null = null) {
+  return useSyncExternalStore(subscribe, snapshot, () => initialMode);
 }
