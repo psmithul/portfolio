@@ -18,7 +18,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       item.slug === (slug === 'neoleg-knee-mechanism' ? 'kneeassist' : slug),
   );
   return project
-    ? { title: project.title, description: project.summary }
+    ? {
+        title: project.title,
+        description: project.summary,
+        alternates: { canonical: `/work/${project.slug}` },
+        openGraph: {
+          title: project.title,
+          description: project.summary,
+          url: `/work/${project.slug}`,
+        },
+      }
     : { title: 'Project not found' };
 }
 
@@ -61,7 +70,7 @@ export default async function ProjectPage({ params }: Props) {
         </dl>
       </header>
       <ProjectLaboratory model={project.model} />
-      <div className="reading-layout case-layout">
+      <div id="project-notes" className="reading-layout case-layout">
         <ReadingContents body={body} />
         <div className="case-reader">
           {project.image && (

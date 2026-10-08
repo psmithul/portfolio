@@ -8,6 +8,7 @@ import { journalSummary } from '@/lib/journal-editorial';
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Mika’s Life — Notes on learning and building',
+  alternates: { canonical: '/blog' },
   description:
     'A personal journal by Mithul. Notes on AI, control systems, space, and the things he is learning as a mechanical engineering student.',
 };

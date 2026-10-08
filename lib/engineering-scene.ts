@@ -1044,23 +1044,31 @@ export function createEngineeringScene(
     new THREE.ShadowMaterial({ opacity: 0.18 }),
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.position.y = 0.02;
+  floor.position.y = -0.125;
   floor.castShadow = false;
   scene.add(floor);
   const platform = mesh(
-    new THREE.CylinderGeometry(2.05, 2.07, 0.055, 96),
-    material('#f0f2e5', 0.15, 0.75),
-    [0, -0.02, 0],
+    new THREE.BoxGeometry(4.4, 0.12, 4.4),
+    material('#425346', 0.15, 0.75),
+    [0, -0.065, 0],
   );
   platform.castShadow = false;
   scene.add(platform);
-  const guide = new THREE.Mesh(
-    new THREE.TorusGeometry(1.91, 0.008, 6, 96),
-    new THREE.MeshBasicMaterial({ color: '#96bfe6' }),
-  );
-  guide.rotation.x = Math.PI / 2;
-  guide.position.y = 0.019;
-  scene.add(guide);
+  const guideMaterial = new THREE.MeshBasicMaterial({ color: '#bc9257' });
+  for (const side of [-1, 1]) {
+    scene.add(
+      mesh(new THREE.BoxGeometry(4.235, 0.016, 0.035), guideMaterial, [
+        0,
+        0.003,
+        side * 2.1,
+      ]),
+      mesh(new THREE.BoxGeometry(0.035, 0.016, 4.165), guideMaterial, [
+        side * 2.1,
+        0.003,
+        0,
+      ]),
+    );
+  }
   let current = getOptions().model;
   let model = factories[current]();
   scene.add(model.root);

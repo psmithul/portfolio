@@ -10,12 +10,7 @@ const cases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
-  [
-    '/blog/leave-room-for-the-unfinished',
-    404,
-    'here yet.',
-    '',
-  ],
+  ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
   ['/blog', 200, 'Mika’s', 'Mika’s Life'],
@@ -79,6 +74,7 @@ const cases = [
   ['/blog/not-a-published-entry', 404, 'here yet.', ''],
   ['/this-page-does-not-exist', 404, 'here yet.', ''],
 ];
+const imagePaths = new Set();
 for (const [path, status, content, title] of cases) {
   const response = await fetch(new URL(path, base));
   const body = await response.text();
@@ -91,6 +87,22 @@ for (const [path, status, content, title] of cases) {
       path + ': page-specific title',
     );
   }
+  for (const match of body.matchAll(
+    /src="(\/[^"?]+\.(?:png|jpg|jpeg|webp|svg))"/gi,
+  ))
+    imagePaths.add(match[1]);
+  if (status === 200 && !path.startsWith('/write')) {
+    const canonicalPath =
+      path === '/work/neoleg-knee-mechanism' ? '/work/kneeassist' : path;
+    assert.ok(
+      body.includes(
+        `<link rel="canonical" href="https://psmithul.com${canonicalPath === '/' ? '' : canonicalPath}"`,
+      ),
+      path + ': production canonical',
+    );
+  }
+  if (path === '/write')
+    assert.match(body, /name="robots" content="noindex, nofollow"/);
   // Next streams the custom 404 through its server-component payload.
   // Its hydrated landmark is also checked in browser QA.
   assert.ok(
@@ -100,11 +112,59 @@ for (const [path, status, content, title] of cases) {
   );
   console.log('PASS ' + status + ' ' + path);
 }
+for (const path of imagePaths) {
+  const response = await fetch(new URL(path, base));
+  assert.equal(response.status, 200, path + ': referenced image');
+  assert.ok(response.headers.get('content-type')?.startsWith('image/'), path);
+  await response.body?.cancel();
+}
+console.log(`PASS ${imagePaths.size} referenced portfolio images`);
+const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text();
+for (const [path, status] of cases) {
+  if (
+    status === 200 &&
+    path !== '/write' &&
+    path !== '/work/neoleg-knee-mechanism'
+  )
+    assert.ok(
+      sitemap.includes(`https://psmithul.com${path}</loc>`),
+      path + ': indexed',
+    );
+  if (status === 404 || path.startsWith('/write'))
+    assert.ok(
+      !sitemap.includes(`https://psmithul.com${path}</loc>`),
+      path + ': not indexed',
+    );
+}
+const robots = await (await fetch(new URL('/robots.txt', base))).text();
+assert.match(robots, /Sitemap: https:\/\/psmithul.com\/sitemap.xml/);
+assert.match(robots, /Disallow: \/write/);
+console.log('PASS published-only sitemap and robots');
+for (const path of ['/api/journal', '/api/journal/example-entry']) {
+  const response = await fetch(new URL(path, base));
+  assert.equal(response.status, 401, path + ': owner access required');
+  assert.match(response.headers.get('cache-control'), /no-store/);
+}
+const editor = await fetch(new URL('/write/example-entry', base), {
+  redirect: 'manual',
+});
+assert.equal(editor.status, 307);
+assert.ok(editor.headers.get('location')?.endsWith('/write'));
+console.log('PASS anonymous journal access denied');
+const health = await fetch(new URL('/health', base));
+assert.equal(health.status, 200);
+assert.equal((await health.json()).status, 'ok');
+console.log('PASS production health');
 for (const path of [
   '/fonts/manrope-latin-variable.woff2',
   '/fonts/barlow-condensed-800.ttf',
   '/fonts/fraunces-latin-variable.woff2',
   '/fonts/space-mono-latin-regular.woff2',
+  '/fonts/pixelify-sans-700.ttf',
+  '/fonts/space-grotesk-latin-variable.woff2',
+  '/fonts/tanker-regular.woff2',
+  '/skins/technoblade.png',
+  '/audio/railway-theme.wav',
   '/favicon.svg',
 ]) {
   const response = await fetch(new URL(path, base));
