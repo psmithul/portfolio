@@ -318,6 +318,26 @@ void test('ground cards are passed in order with no camera or train return trip'
   }
 });
 
+void test('ground glides and gallery turns no longer compress movement into a short late burst', () => {
+  const step = 0.00001;
+  let peakGround = 0,
+    peakTurn = 0;
+  for (let fraction = 0; fraction < 1 - step; fraction += step) {
+    const phase = (fraction * 0.56) / 3;
+    const a = exhibitTravel(1, phase).offset;
+    const b = exhibitTravel(1, ((fraction + step) * 0.56) / 3).offset;
+    peakGround = Math.max(peakGround, (b - a) / (8 * step));
+    const t = 4.25 + (fraction * 0.54) / 5;
+    const turn =
+      journeyPose(t + (step * 0.54) / 5).galleryAngle -
+      journeyPose(t).galleryAngle;
+    peakTurn = Math.max(peakTurn, turn / (((Math.PI * 2) / 5) * step));
+  }
+  // The former late holds peaked at 6.25 and 4.0 times average velocity.
+  assert.ok(peakGround <= 3.025);
+  assert.ok(peakTurn <= 2.276);
+});
+
 void test('phone rotation preserves the same actor and camera pose', () => {
   const landscape = [0, 429, 916.5, 1404, 2086.5, 4426.5, 4914];
   const portrait = landscape.map((y) => (y * 844) / 390);
