@@ -17,7 +17,19 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPublicPost((await params).slug);
   return post
-    ? { title: `${post.title} — Mika’s Life`, description: post.description }
+    ? {
+        title: `${post.title} — Mika’s Life`,
+        description: post.description,
+        alternates: { canonical: `/blog/${post.slug}` },
+        openGraph: {
+          type: 'article',
+          title: post.title,
+          description: post.description,
+          url: `/blog/${post.slug}`,
+          publishedTime: post.date,
+          authors: ['Mithul Sourav'],
+        },
+      }
     : { title: 'Entry not found' };
 }
 export default async function Article({ params }: Props) {

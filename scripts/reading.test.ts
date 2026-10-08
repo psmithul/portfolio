@@ -5,7 +5,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import Markdown from 'react-markdown';
 import katex from 'katex';
-import matter from 'gray-matter';
+import { parsePost } from './content.mjs';
 import {
   readingHeadings,
   readingRemarkPlugins,
@@ -101,17 +101,9 @@ await test('every project has a write-up and every equation compiles strictly', 
 await test('all four requested learning notes are highlighted without repeating entries', () => {
   const posts: Post[] = readdirSync('content/posts')
     .filter((filename) => filename.endsWith('.md'))
-    .map((filename) => {
-      const { data, content } = matter(
-        readFileSync('content/posts/' + filename, 'utf8'),
-      );
-      return {
-        ...data,
-        slug: filename.replace(/\.md$/, ''),
-        body: content,
-        readingMinutes: 2,
-      } as Post;
-    })
+    .map((filename) =>
+      parsePost(readFileSync('content/posts/' + filename, 'utf8'), filename),
+    )
     .filter((post) => !post.draft);
   const highlights = journalHighlights(posts);
   assert.deepEqual(

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { MinecraftLink as Link } from '@/components/minecraft-link';
 export const metadata: Metadata = {
   title: 'About',
+  alternates: { canonical: '/about' },
   description:
     'Mithul Sourav, Mechanical Engineering at NITK Surathkal. Research in field robotics, dynamics, vibration, sensing, control, and mechatronic systems.',
 };

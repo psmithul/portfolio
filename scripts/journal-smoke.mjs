@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { join } from 'node:path';
 const base = process.argv[2];
 if (!base || !['localhost', '127.0.0.1'].includes(new URL(base).hostname))
   throw new Error(
@@ -72,7 +74,7 @@ assert.equal(
 const password =
   process.env.JOURNAL_SMOKE_PASSWORD ??
   readFileSync(
-    '/Users/mika/.config/mithul-portfolio/writing-desk-password.txt',
+    join(homedir(), '.config/mithul-portfolio/writing-desk-password.txt'),
     'utf8',
   ).trim();
 const login = await request('/api/journal/session', {
