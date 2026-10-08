@@ -18,8 +18,6 @@ import {
   Box,
   Check,
   Copy,
-  ChevronLeft,
-  ChevronRight,
   Mail,
   Map,
   Moon,
@@ -29,6 +27,7 @@ import {
   RotateCcw,
   Truck,
   Sun,
+  Settings2,
   TrainFront,
   Volume2,
   VolumeX,
@@ -99,7 +98,7 @@ export function TrainJourney({
   const planetRefs = useRef<(HTMLElement | null)[]>([]);
   const sceneAction = useRef<(action: WorldAction) => void>(() => {});
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const progressLine = useRef<HTMLDivElement | null>(null);
+  const settingsMenu = useRef<HTMLDetailsElement>(null);
   const sound = useRef<HTMLAudioElement | null>(null);
   const [mobile, setMobile] = useState(false);
   const [tourPlaying, setTourPlaying] = useState(false);
@@ -191,10 +190,6 @@ export function TrainJourney({
       world.current.stop = position.stop;
       world.current.experience = position.experience;
       setActive(position.stop);
-      progressLine.current?.style.setProperty(
-        '--journey-progress',
-        String(Math.min(1, (position.stop + position.phase) / 6)),
-      );
     }
     publishPosition.current = update;
     function measure() {
@@ -309,7 +304,10 @@ export function TrainJourney({
   }, [lab]);
   useEffect(() => {
     function key(event: KeyboardEvent) {
-      if (event.key === 'Escape') setRouteOpen(false);
+      if (event.key === 'Escape') {
+        setRouteOpen(false);
+        if (settingsMenu.current) settingsMenu.current.open = false;
+      }
     }
     document.addEventListener('keydown', key);
     return () => document.removeEventListener('keydown', key);
@@ -428,65 +426,37 @@ export function TrainJourney({
       />
       <div className="voxel-canvas" ref={host} />
       <div className="world-atmosphere" aria-hidden="true" />
-      <div className="journey-thread" ref={progressLine} aria-hidden="true">
-        <span className="journey-thread-fill" />
-        <span className="journey-thread-marker" />
-      </div>
       {unavailable && (
         <div className="world-fallback">
           The 3D journey needs WebGL. You can read every section below.
         </div>
       )}
-      <div className="scene-controls">
-        {mobile ? (
-          <>
+      <div className="journey-tools">
+        {tourPlaying && (
+          <button
+            className="journey-pause"
+            data-tour-control=""
+            onClick={() => scroll.current?.pause()}
+          >
+            <Pause size={15} aria-hidden="true" /> Pause tour
+          </button>
+        )}
+        <details className="journey-settings" ref={settingsMenu}>
+          <summary aria-label="Journey settings" title="Journey settings">
+            <Settings2 size={18} aria-hidden="true" />
+          </summary>
+          <div className="journey-settings-menu">
+            <p>Journey settings</p>
             <button
               data-tour-control=""
-              onClick={() => scroll.current?.skip(-1)}
-              disabled={!ready || unavailable || active === 0}
-              aria-label="Previous page"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              data-tour-control=""
-              className="tour-play"
               onClick={() =>
                 tourPlaying ? scroll.current?.pause() : scroll.current?.play()
               }
               disabled={!ready || unavailable}
-              aria-label={
-                tourPlaying ? 'Pause automatic tour' : 'Play automatic tour'
-              }
               aria-pressed={tourPlaying}
             >
-              {tourPlaying ? <Pause size={16} /> : <Play size={16} />}
-              <span>{tourPlaying ? 'Pause' : 'Play'}</span>
-            </button>
-            <button
-              data-tour-control=""
-              onClick={() => scroll.current?.skip(1)}
-              disabled={!ready || unavailable || active === 6}
-              aria-label="Next page"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              data-tour-control=""
-              className="tour-play"
-              onClick={() =>
-                tourPlaying ? scroll.current?.pause() : scroll.current?.play()
-              }
-              disabled={!ready || unavailable}
-              aria-label={
-                tourPlaying ? 'Pause automatic tour' : 'Play automatic tour'
-              }
-              aria-pressed={tourPlaying}
-            >
-              {tourPlaying ? <Pause size={16} /> : <Play size={16} />}
+              {tourPlaying ? <Pause size={16} /> : <Play size={16} />}{' '}
+              {tourPlaying ? 'Pause automatic tour' : 'Start automatic tour'}
             </button>
             <button
               onClick={() => {
@@ -495,14 +465,8 @@ export function TrainJourney({
               }}
               disabled={!ready || unavailable}
               aria-pressed={Boolean(reading)}
-              aria-label={
-                reading ? 'Return to the world' : 'Read this chapter up close'
-              }
-              title={
-                reading ? 'Return to the world' : 'Read this chapter up close'
-              }
             >
-              <BookOpen size={16} />
+              <BookOpen size={16} /> Read up close
             </button>
             <button
               onClick={() => {
@@ -511,17 +475,13 @@ export function TrainJourney({
               }}
               disabled={!ready || unavailable}
               aria-pressed={onboard}
-              title="Change camera"
-              aria-label={
-                onboard
-                  ? 'Return to world view'
-                  : active >= 4
-                    ? 'Look from the rover'
-                    : 'Look from the train'
-              }
             >
-              {active >= 4 ? <Truck size={16} /> : <TrainFront size={16} />}
-              <span>{onboard ? 'On board' : 'Ride'}</span>
+              {active >= 4 ? <Truck size={16} /> : <TrainFront size={16} />}{' '}
+              {onboard
+                ? 'World camera'
+                : active >= 4
+                  ? 'Rover camera'
+                  : 'Train camera'}
             </button>
             <button
               onClick={() => {
@@ -529,27 +489,24 @@ export function TrainJourney({
                 setOnboard(false);
                 setReading(null);
               }}
-              aria-label="Reset camera view"
               disabled={!ready || unavailable}
             >
-              <RotateCcw size={15} />
+              <RotateCcw size={16} /> Reset camera
             </button>
-          </>
-        )}
-        <button
-          data-tour-control=""
-          onClick={() => setNight(!night)}
-          aria-label={night ? 'Switch to daytime' : 'Switch to moonlight'}
-        >
-          {night ? <Sun size={15} /> : <Moon size={15} />}
-        </button>
-        <button
-          data-tour-control=""
-          onClick={() => void toggleSound()}
-          aria-label={muted ? 'Play the railway tune' : 'Mute the railway tune'}
-        >
-          {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-        </button>
+            <button data-tour-control="" onClick={() => setNight(!night)}>
+              {night ? <Sun size={16} /> : <Moon size={16} />}{' '}
+              {night ? 'Daylight' : 'Moonlight'}
+            </button>
+            <button
+              data-tour-control=""
+              onClick={() => void toggleSound()}
+              aria-pressed={!muted}
+            >
+              {muted ? <VolumeX size={16} /> : <Volume2 size={16} />}{' '}
+              {muted ? 'Play railway tune' : 'Mute railway tune'}
+            </button>
+          </div>
+        </details>
       </div>
 
       <section
@@ -772,7 +729,7 @@ export function TrainJourney({
               data-world-board={4 + index}
             >
               <p className="world-eyebrow">
-                LUNAR FIELD LAB · {String(index + 1).padStart(2, '0')} /{' '}
+                LUNAR WORKSHOP · {String(index + 1).padStart(2, '0')} /{' '}
                 {String(journeyExperience.length).padStart(2, '0')}
               </p>
               <h2 id={'planet-title-' + index}>{item.company}</h2>
@@ -934,8 +891,7 @@ export function TrainJourney({
         aria-controls="route-menu"
       >
         <Map size={14} />
-        <span>{stations[active].name}</span>
-        <span>{String(active + 1).padStart(2, '0')} / 07</span>
+        <span>Menu</span>
       </button>
       {routeOpen && (
         <nav className="route-menu" id="route-menu" aria-label="Route map">
