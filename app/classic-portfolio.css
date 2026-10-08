@@ -1,0 +1,114 @@
+/* The original paper / ink portfolio, with one native vertical phone scroll. */
+body:has(.classic-portfolio) {
+  background: var(--paper);
+}
+.classic-portfolio {
+  color: var(--ink);
+  background: var(--paper);
+}
+.classic-loading {
+  display: block;
+  padding: 48px 24px;
+  color: var(--muted);
+  font-family: var(--sans);
+}
+.classic-desktop-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-block: 12px 0;
+  padding-block: 16px;
+  border-block: 1px solid var(--line);
+  color: var(--muted);
+}
+.classic-desktop-note svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.classic-desktop-note p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.classic-desktop-note strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+.classic-portfolio .flow-statement {
+  min-height: 0;
+  padding-top: 32px;
+}
+.classic-portfolio .flow-hero-details {
+  grid-template-columns: minmax(0, 1fr);
+  padding-bottom: 0;
+}
+.classic-portfolio .flow-hero-aside {
+  max-width: 520px;
+}
+.flow-side-quests[data-mode='vertical'] .quest-viewport {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+.flow-side-quests[data-mode='vertical'] .quest-track {
+  display: grid;
+  width: min(1320px, 100%);
+  margin: auto;
+  padding-inline: max(22px, 5%);
+  gap: 48px;
+  will-change: auto;
+}
+.flow-side-quests[data-mode='vertical'] .quest-card {
+  width: 100%;
+  max-width: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+.classic-portfolio .archive-container {
+  display: none;
+}
+.classic-portfolio .archive-card {
+  min-height: 0;
+}
+.flow-tools[data-layout='grid'] .tools-track {
+  width: min(1320px, 90%);
+  margin: auto;
+  display: block;
+  animation: none;
+  transform: none;
+  will-change: auto;
+}
+.flow-tools[data-layout='grid'] .tools-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 0;
+  gap: 12px;
+}
+.flow-tools[data-layout='grid'] .tool-card {
+  width: auto;
+  height: auto;
+  min-height: 148px;
+  padding: 20px 12px;
+  gap: 16px;
+  border-radius: 8px;
+}
+.flow-tools[data-layout='grid'] .tool-logo {
+  width: 100%;
+  max-width: 120px;
+  height: 50px;
+}
+.flow-tools[data-layout='grid'] .tool-card > span {
+  font-size: 14px;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .classic-portfolio .flow-statement {
+    padding-top: 28px;
+  }
+  .classic-portfolio .flow-portrait-stage {
+    margin-top: 8px;
+  }
+  .flow-tools[data-layout='grid'] .tools-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -12,13 +12,14 @@ import type { Project } from '@/content/projects';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import { MinecraftLoader } from '@/components/minecraft-loader';
 import { usePortfolioMode } from '@/components/use-portfolio-mode';
+import type { PortfolioMode } from '@/lib/portfolio-display';
 
-// Only mount (and fetch) the desktop bundle after checking the viewport.
+// Only mount (and fetch) the desktop bundle after checking the device.
 // The server-rendered reading version stays independent of Three.js.
 const DesktopJourney = dynamic(
   () =>
     import('@/components/train-journey').then((module) => module.TrainJourney),
-  { ssr: false, loading: () => null },
+  { ssr: false, loading: () => <main id="main" /> },
 );
 
 class SceneBoundary extends Component<
@@ -41,37 +42,32 @@ export function PortfolioExperience({
   children,
   projects,
   posts,
+  initialMode,
 }: {
   children: ReactNode;
   projects: Project[];
   posts: JournalSummary[];
+  initialMode: PortfolioMode;
 }) {
-  const mode = usePortfolioMode();
+  const mode = usePortfolioMode(initialMode);
   const [preferStatic, setPreferStatic] = useState(false);
-  const [fontsReady, setFontsReady] = useState(false);
   const showStatic = preferStatic || mode !== 'desktop';
   const readStatic = useCallback(() => setPreferStatic(true), []);
 
   useEffect(() => {
     if (!showStatic || mode === null) return;
     let disposed = false;
-    void document.fonts.ready.then(() => {
-      if (!disposed) setFontsReady(true);
-    });
+    const restore = () => {
+      if (disposed) return;
+      const id = window.location.hash.slice(1);
+      if (id)
+        document.getElementById(id)?.scrollIntoView({ behavior: 'instant' });
+    };
+    void document.fonts.ready.then(restore);
     return () => {
       disposed = true;
     };
   }, [showStatic, mode]);
-
-  useEffect(() => {
-    if (!showStatic || !fontsReady) return;
-    const frame = requestAnimationFrame(() => {
-      const id = window.location.hash.slice(1);
-      if (id)
-        document.getElementById(id)?.scrollIntoView({ behavior: 'instant' });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [showStatic, fontsReady]);
 
   if (!showStatic)
     return (
@@ -82,27 +78,7 @@ export function PortfolioExperience({
       />
     );
 
-  return (
-    <div
-      className={
-        'portfolio-entry' + (!fontsReady ? ' portfolio-preparing' : '')
-      }
-    >
-      {children}
-      {!fontsReady && (
-        <div className="portfolio-loading-shell">
-          <MinecraftLoader label="Preparing your portfolio…" />
-        </div>
-      )}
-      <noscript>
-        <style>
-          {
-            '.portfolio-loading-shell{display:none}.portfolio-preparing .static-portfolio{visibility:visible}'
-          }
-        </style>
-      </noscript>
-    </div>
-  );
+  return <div className="portfolio-entry">{children}</div>;
 }
 
 function DesktopExperience({

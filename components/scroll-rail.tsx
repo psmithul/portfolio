@@ -13,6 +13,7 @@ type Props = {
   children: ReactNode;
   aside?: ReactNode;
   className?: string;
+  vertical?: boolean;
 };
 export function ScrollRail({
   id,
@@ -24,6 +25,7 @@ export function ScrollRail({
   children,
   aside,
   className = '',
+  vertical = false,
 }: Props) {
   const section = useRef<HTMLElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
@@ -60,6 +62,7 @@ export function ScrollRail({
     }
   };
   useEffect(() => {
+    if (vertical) return;
     const element = section.current,
       windowElement = viewport.current,
       rail = track.current;
@@ -183,13 +186,14 @@ export function ScrollRail({
       delete element.dataset.scrollLead;
       delete element.dataset.mode;
     };
-  }, []);
+  }, [vertical]);
   return (
     <section
       ref={section}
       id={id}
       className={`flow-side-quests ${className}`}
       aria-labelledby={`${id}-heading`}
+      data-mode={vertical ? 'vertical' : undefined}
     >
       <div className="quest-sticky">
         <div className="flow-section-heading shell">
@@ -202,48 +206,56 @@ export function ScrollRail({
             {aside}
           </div>
         </div>
-        <div className="quest-navigation shell">
-          <button
-            type="button"
-            onClick={() => browse(-1)}
-            aria-label={`Previous ${itemLabel}`}
-          >
-            <ArrowLeft className="link-arrow" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={() => browse(1)}
-            aria-label={`Next ${itemLabel}`}
-          >
-            <ArrowRight className="link-arrow" aria-hidden="true" />
-          </button>
-        </div>
+        {!vertical && (
+          <div className="quest-navigation shell">
+            <button
+              type="button"
+              onClick={() => browse(-1)}
+              aria-label={`Previous ${itemLabel}`}
+            >
+              <ArrowLeft className="link-arrow" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={() => browse(1)}
+              aria-label={`Next ${itemLabel}`}
+            >
+              <ArrowRight className="link-arrow" aria-hidden="true" />
+            </button>
+          </div>
+        )}
         <section
           ref={viewport}
           className="quest-viewport"
-          aria-label={`${title}. Swipe or use the previous and next buttons to browse.`}
+          aria-label={
+            vertical
+              ? title
+              : `${title}. Swipe or use the previous and next buttons to browse.`
+          }
         >
           <div ref={track} className="quest-track">
             {children}
           </div>
         </section>
-        <div className="quest-progress shell">
-          <span ref={count}>01</span>
-          <div>
-            <i />
+        {!vertical && (
+          <div className="quest-progress shell">
+            <span ref={count}>01</span>
+            <div>
+              <i />
+            </div>
+            <span>{String(total).padStart(2, '0')}</span>
+            <p className="quest-hint">
+              <span className="quest-hint-desktop">
+                Scroll to browse{' '}
+                <ArrowDown className="link-arrow" aria-hidden="true" />
+              </span>
+              <span className="quest-hint-mobile">
+                Swipe to browse{' '}
+                <ArrowRight className="link-arrow" aria-hidden="true" />
+              </span>
+            </p>
           </div>
-          <span>{String(total).padStart(2, '0')}</span>
-          <p className="quest-hint">
-            <span className="quest-hint-desktop">
-              Scroll to browse{' '}
-              <ArrowDown className="link-arrow" aria-hidden="true" />
-            </span>
-            <span className="quest-hint-mobile">
-              Swipe to browse{' '}
-              <ArrowRight className="link-arrow" aria-hidden="true" />
-            </span>
-          </p>
-        </div>
+        )}
       </div>
     </section>
   );

@@ -5,9 +5,16 @@ import Link from 'next/link';
 import { ArrowDown, ArrowUpRight } from 'lucide-react';
 import { HeroModels } from '@/components/hero-models';
 import { DESKTOP_MOTION_QUERY } from '@/lib/portfolio-motion';
-export function PortraitStory() {
+export function PortraitStory({
+  staticLayout = false,
+  introId = 'intro',
+}: {
+  staticLayout?: boolean;
+  introId?: string;
+}) {
   const story = useRef<HTMLElement>(null);
   useEffect(() => {
+    if (staticLayout) return;
     const element = story.current;
     if (!element) return;
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -46,7 +53,7 @@ export function PortraitStory() {
         element.style.removeProperty(property),
       );
     };
-  }, []);
+  }, [staticLayout]);
   return (
     <section className="flow-opening" ref={story} aria-label="Meet Mithul">
       <div className="flow-statement shell">
@@ -62,11 +69,11 @@ export function PortraitStory() {
               I like learning new technologies and using them to build things.
               I’m especially interested in robotics, control systems, and space.
             </p>
-            <a className="flow-scroll-cue" href="#intro">
+            <a className="flow-scroll-cue" href={`#${introId}`}>
               About me <ArrowDown className="link-arrow" aria-hidden="true" />
             </a>
           </div>
-          <HeroModels />
+          {!staticLayout && <HeroModels />}
         </div>
       </div>
       <div className="flow-portrait-stage shell">
@@ -89,7 +96,7 @@ export function PortraitStory() {
           </blockquote>
         </aside>
       </div>
-      <div id="intro" className="flow-intro shell">
+      <div id={introId} className="flow-intro shell">
         <h2>
           A little
           <br /> about me.

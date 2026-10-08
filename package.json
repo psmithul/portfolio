@@ -16,7 +16,7 @@
     "content": "node scripts/content.mjs",
     "post": "node scripts/new-post.mjs",
     "dev:drafts": "JOURNAL_DRAFT_PREVIEW=1 npm run dev",
-    "test": "node --test scripts/content.test.mjs scripts/journal.test.ts scripts/journal-session.test.ts scripts/hero-physics.test.ts scripts/reading.test.ts scripts/portfolio-motion.test.ts scripts/suspension-physics.test.ts scripts/journey-timeline.test.ts scripts/journey-choreography.test.ts scripts/journey-scroll-speed.test.ts scripts/journey-mobile.test.ts scripts/journey-clearance.test.ts scripts/voxel-surfaces.test.ts",
+    "test": "node --test scripts/content.test.mjs scripts/journal.test.ts scripts/journal-session.test.ts scripts/hero-physics.test.ts scripts/reading.test.ts scripts/portfolio-motion.test.ts scripts/portfolio-display.test.ts scripts/suspension-physics.test.ts scripts/journey-timeline.test.ts scripts/journey-choreography.test.ts scripts/journey-scroll-speed.test.ts scripts/journey-mobile.test.ts scripts/journey-clearance.test.ts scripts/voxel-surfaces.test.ts",
     "typecheck": "tsc --noEmit",
     "smoke": "node scripts/smoke.mjs",
     "smoke:journal": "node scripts/journal-smoke.mjs"

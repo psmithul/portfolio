@@ -25,7 +25,11 @@ const accolades = [
   },
 ];
 
-export function Accolades() {
+export function Accolades({
+  staticLayout = false,
+}: {
+  staticLayout?: boolean;
+}) {
   return (
     <ArchiveReveal
       id="accolades"
@@ -34,6 +38,7 @@ export function Accolades() {
       description="Two team achievements from my résumé."
       image="/images/archive/folder-open.svg"
       kind="folder"
+      staticLayout={staticLayout}
     >
       {accolades.map(
         ({ title, result, period, scope, detail, href, link }, index) => (
