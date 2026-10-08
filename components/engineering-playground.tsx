@@ -200,8 +200,7 @@ export function EngineeringPlayground({
           <output className="scene-error">
             <Box size={38} />
             <p>3D is unavailable in this browser.</p>
-            <span>{error}</span>
-            <Link href="/#work">Read the project</Link>
+            <Link href="#project-notes">Continue to the write-up ↓</Link>
           </output>
         )}
         <div className="stage-orientation" aria-hidden="true">

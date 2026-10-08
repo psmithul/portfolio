@@ -1,20 +1,39 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import matter from 'gray-matter';
+import { parseDocument } from 'yaml';
 
 export function parsePost(raw, filename) {
-  const { data, content } = matter(raw);
   const fail = (message) => {
     throw new Error(filename + ': ' + message);
   };
+  const match = raw.match(
+    /^\uFEFF?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)([\s\S]*)$/,
+  );
+  if (!match)
+    fail('Start the article with YAML front matter between --- lines.');
+  const document = parseDocument(match[1]);
+  if (document.errors.length) fail(document.errors[0].message);
+  let data;
+  try {
+    data = document.toJS({ maxAliasCount: 50 });
+  } catch {
+    fail('Front matter contains too many aliases.');
+  }
+  if (!data || typeof data !== 'object' || Array.isArray(data))
+    fail('Front matter must contain named fields.');
+  const content = match[2];
   const slug = basename(filename, '.md');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug))
     fail('Filename must use lowercase words separated by single hyphens.');
   for (const key of ['title', 'description'])
     if (typeof data[key] !== 'string' || !data[key].trim())
       fail('Missing or empty "' + key + '" in front matter.');
-  if (typeof data.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(data.date))
+  if (
+    typeof data.date !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(data.date) ||
+    document.get('date', true)?.type === 'PLAIN'
+  )
     fail('Use a quoted date in YYYY-MM-DD format.');
   const date = new Date(data.date + 'T00:00:00Z');
   if (

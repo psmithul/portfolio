@@ -5,8 +5,10 @@ import { Suspense } from 'react';
 import { projects } from '@/content/projects';
 import { getPublicPosts } from '@/lib/journal-store';
 import { journalSummary } from '@/lib/journal-editorial';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 async function Portfolio() {
   const posts = await getPublicPosts();

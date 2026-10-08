@@ -74,6 +74,38 @@ test('duplicate slugs are rejected', () => {
   const p = parsePost(fixture(), 'one.md');
   assert.throws(() => selectPosts([p, p]), /Duplicate article slug/);
 });
+test('YAML front matter supports multiline text and rejects ambiguous metadata', () => {
+  const article = fixture()
+    .replace(
+      'description: "An introduction"',
+      'description: >-\n  An introduction\n  across two lines',
+    )
+    .replace('tags: ["Engineering"]', 'tags:\n  - Engineering\n  - Robotics');
+  const post = parsePost(article.replaceAll('\n', '\r\n'), 'windows.md');
+  assert.equal(post.description, 'An introduction across two lines');
+  assert.deepEqual(post.tags, ['Engineering', 'Robotics']);
+  assert.equal(post.body, 'A real essay body.');
+  assert.throws(
+    () =>
+      parsePost(
+        article.replace('draft: false', 'draft: false\ndraft: true'),
+        'duplicate.md',
+      ),
+    /duplicate.md:.*unique/,
+  );
+  assert.throws(
+    () => parsePost(fixture().replace('"2026-09-08"', '2026-09-08'), 'date.md'),
+    /quoted date/,
+  );
+  assert.throws(
+    () => parsePost('---\n- invalid\n---\nA body', 'list.md'),
+    /named fields/,
+  );
+  assert.throws(
+    () => parsePost('An essay without metadata', 'missing.md'),
+    /front matter/,
+  );
+});
 test('production generation removes draft text even after draft preview', () => {
   const root = mkdtempSync(join(tmpdir(), 'mithul-journal-'));
   try {

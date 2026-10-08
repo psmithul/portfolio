@@ -46,18 +46,18 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 
 ## Change the portfolio
 
-| Content                                                  | Location                        |
-| -------------------------------------------------------- | ------------------------------- |
-| Project facts, contribution, method, status, and results | `content/projects.ts`           |
-| Portrait opening and introduction                        | `components/portrait-story.tsx` |
-| Education, experience, skills, and recognition           | `app/about/page.tsx`            |
-| Name, contacts, and navigation                           | `app/layout.tsx`                |
-| CV download                                              | `public/Mithul-Sourav-CV.pdf`   |
-| Journal introduction                                     | `app/blog/page.tsx`             |
-| Shared palette and reading-page styles                   | `app/flow.css`                  |
-| Homepage flow and display typography                     | `app/flow.css`                  |
-| Base typography and reading layouts                      | `app/globals.css`               |
-| Owner authorization                                      | `lib/journal-model.ts`          |
+| Content                                                  | Location                          |
+| -------------------------------------------------------- | --------------------------------- |
+| Project facts, contribution, method, status, and results | `content/projects.ts`             |
+| Portfolio copy and chapter order                         | `content/journey.ts`              |
+| Education, experience, skills, and recognition           | `app/about/page.tsx`              |
+| Mobile portfolio and navigation                          | `components/static-portfolio.tsx` |
+| CV download                                              | `public/Mithul-Sourav-CV.pdf`     |
+| Journal introduction                                     | `app/blog/page.tsx`               |
+| Minecraft palette and reading-page styles                | `app/minecraft.css`               |
+| Desktop journey and navigation                           | `components/train-journey.tsx`    |
+| Base typography and reading layouts                      | `app/globals.css`                 |
+| Owner authorization                                      | `lib/journal-model.ts`            |
 
 The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. Project images are optional: add an `image` object with `src`, `alt`, `width`, `height`, and an accurate `caption` only when the asset is verified. A `referenceUrl` may credit a paper. Current covers use credited reference photography where original project photographs are unavailable. References are labelled accurately and must not be described as personally built hardware. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
@@ -74,7 +74,7 @@ npm run smoke:journal -- http://localhost:3000
 
 Use the address printed by your actual development server. The journal integration check creates a clearly named local test entry, verifies save/reload, publication, private revisions, conflicts, and unpublishing, then prints its ID. It finishes as an unpublished draft. Run it only against a disposable local preview, never a live site.
 
-`npm start` serves the Next.js production build locally. Next.js output is under `.next/`; credentials, environment files, dependencies, and local verification artifacts are excluded from source control. The old Cloudflare/D1 migration files are retained as historical source and are not used by the current Vercel runtime.
+`npm start` serves the Next.js production build locally. Next.js output is under `.next/`; credentials, environment files, dependencies, and local verification artifacts are excluded from source control. Historical D1 SQL migrations remain in `drizzle/`; the unused Cloudflare/Vite runtime and generic UI scaffold have been removed. Lint checks every application component.
 
 The editor includes a feature-detected `save_journal_draft` WebMCP action for compatible browsers. The regular writing desk works without it. A supported WebMCP validation context was not available in the development session; no browser integration verification is claimed for this optional action.
 
@@ -88,11 +88,13 @@ After a push, check that the Vercel deployment is Ready, its commit matches the 
 
 ## The train journey
 
-The homepage is a scroll-driven Three.js voxel world with seven stops: Welcome, About, Current Projects, Past Projects, Experience, Blog, and Contact. A Create-inspired copper-and-oxidized locomotive follows curved rails through pixel-textured terrain and timber stations. Its flywheels and coupling rods move with the train. The guide stays in the cab as the train and camera advance past fixed reading alcoves, with no return walk after a card. After the archive, the cab door opens for one short gangway walk to the launch pad. The guide boards through a sliding hatch, and scrolling launches the same rocket and camera into space. Vayu Aerospace, Thinkify Labs, ILO Consulting, ISTE NITK, and NH66 Fund each have an individual orbital workplace: a hangar, product lab, finance hall, campus stage, and fund observatory; the final chapters visit a lunar library and landing platform. Small navigation dots and a route menu select destinations, with travel through the intervening scenery.
+The desktop homepage is a scroll-driven Three.js voxel world with seven chapters: Welcome, About, Current Projects, Past Projects, Experience, Blog, and Contact. A copper locomotive follows curved rails through pixel-textured terrain and timber exhibits. Its flywheels and coupling rods move with distance. The guide stays in the cab through the ground chapters, then walks across the launch gangway and boards the rocket. On the moon, a rover parks beside one workshop. The guide visits five work bays around its circular interior, boards the rover, and continues to the library and contact chapter.
 
-Wheel input, vertical or horizontal touch swipes, keyboard scrolling, scrollbar drags and navigation share one bounded, manual scroll. Reading keeps the original slow pace; after content ends, travel ramps up to 2.6 times the page speed, with separate limits for walking, train, rover, rocket and camera movement. Arrivals ease back to reading speed. Large wheel deltas are reduced and queued manual input is bounded to three quarters of a screen. Reversing direction cancels pending forward travel. Long content is divided into reading alcoves that the camera and guide visit in order; there are no nested text scrollbars. Open dialogs pause travel.
+Wheel input, keyboard scrolling, scrollbar drags, and navigation share one scroll controller. Scroll input uses a uniform pace across all chapters; input acceleration and braking are bounded, with a short runway that prevents idle drift. Reading-page transfers and gallery turns use continuous easing across wider intervals. Sidebar destinations and content anchors jump directly to their matching readable frame. There are no nested text scrollbars. Open dialogs pause travel.
 
-Visitors can drag the desktop canvas to look around, choose an onboard view, reset the camera, switch between daylight and moonlight, open a close-up reading view, and opt into an original instrumental tune. Sound starts only after a click. Mobile works directly in portrait, with narrower in-world pages, a fitted camera and 44-pixel controls outside the reading area. Landscape remains supported; rotation preserves the journey position. There is no autoplay, start screen or rotation requirement. The rocket makes one launch to a lunar campus; a six-wheel rover connects the experience workplaces, library and contact station on a continuous road. Experience is a compact drive-through trail: each workplace occupies 70% of a viewport height rather than 120%, and workplaces are 20 world units apart rather than 32. A single landing transfer uses steps outside the wheel envelope; the guide stays seated for later stops. Axle heights follow the lunar ramp, wheels turn with distance, and the passenger shares the cabin pitch. Fixed opaque pages pass out of the camera frustum without swinging or fading, and framing blends continuously. The sky includes stepped clouds and a square sun; space uses fixed stars and a subtle galactic ribbon. Rocket exhaust streams from the nozzle with a fading lifetime and throttle-linked light. Reduced-motion preferences remove decorative motion and camera easing; the complete HTML content remains readable when 3D is unavailable.
+A red MITHUL loading screen waits for fonts, textures, and the first rendered frame. Its small travel selector offers manual or automatic exploration. Visitors can change camera view, daylight, and sound in the settings menu. Music starts only after a click. Phones, touch tablets, and small windows use a normal, vertical Minecraft-themed document with native scrolling; they do not load the desktop Three.js journey. If WebGL cannot start, desktop visitors can use that same lightweight version.
+
+Static voxel cuboids render only exposed surfaces: shared, buried, and overlapping faces are removed before upload. World geometry and projected HTML share a depth compositor, so nearer objects consistently occlude text. Only one caption owns the visible aperture at a time. Page dimensions, backing frames, and apertures resize together after fonts or viewport changes. The sky includes stepped clouds and a square sun; space uses fixed stars and a galactic ribbon. Rocket exhaust follows the nozzle, ground clearance, and flight phase. Reduced-motion preferences suppress decorative motion; the complete HTML content remains available.
 
 Current Projects has the adaptive suspension rover, tensegrity joint, and leaf-collection robot. Each has a clickable mechanical exhibit in the Three.js workshop: the rover responds to a cam-driven bump through a fixed-step spring–damper, the tensegrity assembly shows connected tension and compression members, and the leaf robot uses a closed four-bar linkage, an interactive workbench, and its existing case-study URL. Every project page also includes a 3D laboratory with orbit, animation, assembly separation, and model-specific controls. The rover and flight-controller isolation models use a fixed-step base-excited spring–mass–damper response; the four-bar model solves its closed geometry with circle intersections. These are illustrative concept models, not original CAD, measured results, or numerical validation of the projects.
 
@@ -107,9 +109,9 @@ The Blog station opens the existing two-dimensional journal and article pages. B
 | Continuous actor/camera choreography and tests          | `lib/journey-choreography.ts`, `scripts/journey-choreography.test.ts`                          |
 | Reading alcove order and forward travel                 | `lib/journey-exhibits.ts`                                                                      |
 | Native scroll mapping                                   | `lib/journey-timeline.ts`, `scripts/journey-timeline.test.ts`                                  |
-| Input control and world speed limits                    | `lib/journey-scroll.ts`, `lib/journey-scroll-speed.ts`, `scripts/journey-scroll-speed.test.ts` |
+| Input control and uniform scroll speed                  | `lib/journey-scroll.ts`, `lib/journey-scroll-speed.ts`, `scripts/journey-scroll-speed.test.ts` |
 | Original 53-second instrumental and reproducible source | `public/audio/railway-theme.wav`, `scripts/compose-journey.py`                                 |
-| World typography, colors, responsive layouts            | `app/world.css`                                                                                |
+| World typography, colors, responsive layouts            | `app/minecraft.css`, `app/world.css`                                                           |
 | Interactive engineering models                          | `lib/engineering-scene.ts`                                                                     |
 | Spring response and tests                               | `lib/suspension-physics.ts`, `scripts/suspension-physics.test.ts`                              |
 
@@ -117,9 +119,9 @@ On systems with restrictive file-watcher limits, use `WATCHPACK_POLLING=true npm
 
 ## Design and credits
 
-Visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). The reference informed the camera rig, quaternion rotation buffer, and coherent architecture. Geometry, pixel textures, and choreography here are original.
+Visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). The references informed the camera composition and block architecture. Geometry, pixel textures, and choreography here are original.
 
-Portfolio text remains selectable semantic HTML, projected with Three.js CSS3DRenderer using the same camera as the small stone-and-copper station alcoves. Each fixed alcove resizes to its full page after fonts and device orientation change. Its opaque backing stays behind the text; station walls are set clear of the rocket boarding path. Duplicate deck surfaces and railings across the rover lane are removed. The text renderer uses overflow clipping that cannot scroll on focus, so selecting an in-world button keeps text aligned with its frame. Phone rotation rebases page position to preserve the current actor and camera pose. The About station includes the original portrait and favourite quote; the guide wears a matching black shirt, squared glasses, block curls and short beard. Low, broad voxel clouds drift gently over the railway. One smoothed coordinate drives reversible train, walking, boarding, flight, and docking poses; land and orbit occupy the same world coordinates. Tests check chapter-boundary continuity, forward-only ground travel, boarding clearance, seated rover travel and equivalent motion at 30, 60, and 144 Hz.
+Portfolio text remains selectable semantic HTML, projected with CSS3DRenderer using the same camera and measured dimensions as the WebGL apertures. The About chapter includes the original portrait and favourite quote; the guide wears the requested Technoblade skin. Tests cover surface ownership, one-caption visibility, route continuity, cab and rover clearance, reversible travel, uniform scroll speed, braking, and equivalent motion at 30, 60, and 144 Hz.
 
 The original 16-bar tune uses synthesized piano, soft sustained chords, and circular echo tails. It is bundled locally, loops, starts only when the visitor enables it, and can be muted at any time. The composition can be regenerated with `python3 scripts/compose-journey.py`; no external recordings are used.
 
@@ -131,3 +133,5 @@ The world and all its block geometry are generated locally in Three.js; no game 
 Current stack: Next.js, React, TypeScript, Vercel Functions, private Vercel Blob, and signed owner sessions. Articles render with react-markdown and remark-gfm; raw HTML and executable link protocols are not rendered.
 
 The public résumé is the exact user-supplied `Mithul_Sourav_MIT_SM_Research_CV (2).pdf`. Its single completed Actuated Knee Assistance System project spans October 2025–September 2026. NeoLeg’s passive mechanism and KneeAssist’s actuated brace are presented as one case study at `/work/kneeassist`; the former NeoLeg URL redirects there. Procurement readiness is distinct from the planned bench tests.
+
+Public routes have production canonical URLs. `sitemap.xml` reads the current published journal, so withdrawals and new posts are reflected without a redeploy; private writing routes, API endpoints, and health checks are excluded. Page errors offer a retry and a return link in the same theme.
