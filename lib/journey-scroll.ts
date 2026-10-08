@@ -1,5 +1,4 @@
 import { journeyPosition, journeyOffset } from './journey-timeline.ts';
-import { journeyPose } from './journey-choreography.ts';
 import { createJourneyMotion } from './journey-scroll-motion.ts';
 import { createJourneyTour, chapterEntryTimeline } from './journey-tour.ts';
 import { createJourneyGesture } from './journey-gesture.ts';
@@ -100,7 +99,7 @@ export function createJourneyScroll(
     if (tour.playing()) pause();
     manual = true;
     inputAge = 0;
-    const runway = Math.max(24, Math.min(48, viewport() * 0.06));
+    const runway = Math.max(48, Math.min(96, viewport() * 0.12));
     if (Math.sign(delta) !== Math.sign(target - current)) target = current;
     setTarget(
       Math.max(current - runway, Math.min(current + runway, target + delta)),
@@ -227,11 +226,6 @@ export function createJourneyScroll(
     }
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
-    const points = previousOffsets;
-    const sample = (y: number) => {
-      const p = journeyPosition(y, points, viewport(), count);
-      return journeyPose(p.stop + p.phase, count);
-    };
     inputAge += Math.min(dt, 0.05);
     const braking = manual && inputAge > 0.08;
     if (braking) target = current;
@@ -240,7 +234,6 @@ export function createJourneyScroll(
       target,
       dt,
       previousViewport,
-      sample,
       manual ? (braking ? 'brake' : 'input') : 'travel',
     );
     if (braking) target = next;
