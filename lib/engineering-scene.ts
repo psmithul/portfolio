@@ -983,6 +983,7 @@ export function createEngineeringScene(
   getOptions: () => SceneOptions,
   settings: {
     thumbnail?: boolean;
+    onReady?: () => void;
     onRendered?: (image: string) => void;
     onError?: (message: string) => void;
   } = {},
@@ -1079,7 +1080,7 @@ export function createEngineeringScene(
     disposed = false;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let interactedUntil = 0;
-  let captured = false;
+  let rendered = false;
   const onInteract = () => {
     interactedUntil = performance.now() + 6000;
   };
@@ -1133,9 +1134,13 @@ export function createEngineeringScene(
     controls.autoRotateSpeed = 0.35;
     controls.update(dt);
     renderer.render(scene, camera);
-    if (settings.thumbnail && !captured) {
-      captured = true;
-      settings.onRendered?.(renderer.domElement.toDataURL('image/webp', 0.92));
+    if (!rendered) {
+      rendered = true;
+      settings.onReady?.();
+      if (settings.thumbnail)
+        settings.onRendered?.(
+          renderer.domElement.toDataURL('image/webp', 0.92),
+        );
     }
   }
   frame = requestAnimationFrame(animate);

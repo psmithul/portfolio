@@ -3,6 +3,13 @@
 import Markdown from 'react-markdown';
 import { readingRemarkPlugins, readingRehypePlugins } from '@/lib/reading';
 
+const imageDimensions: Record<string, { width: number; height: number }> = {
+  '/images/projects/tensegrity-leg-cad.webp': { width: 1200, height: 1067 },
+  '/images/projects/reaction-wheel-cutaway.webp': { width: 1200, height: 900 },
+  '/images/earthrise.jpg': { width: 3000, height: 3000 },
+  '/images/muybridge-plate-49.jpg': { width: 900, height: 1200 },
+};
+
 export function ArticleBody({ body }: { body: string }) {
   return (
     <article className="article-prose">
@@ -12,9 +19,20 @@ export function ArticleBody({ body }: { body: string }) {
         skipHtml
         components={{
           h1: ({ children, id }) => <h2 id={id}>{children}</h2>,
-          img: ({ src, alt }) => (
-            <img src={src} alt={alt || ''} loading="lazy" decoding="async" />
-          ),
+          img: ({ src, alt }) => {
+            const dimensions =
+              typeof src === 'string' ? imageDimensions[src] : undefined;
+            return (
+              <img
+                src={src}
+                alt={alt || ''}
+                width={dimensions?.width}
+                height={dimensions?.height}
+                loading="lazy"
+                decoding="async"
+              />
+            );
+          },
           a: ({ href, children }) => (
             <a
               href={href}
