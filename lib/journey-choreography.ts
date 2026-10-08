@@ -225,10 +225,11 @@ export function journeyPose(timeline: number, count = 5) {
       board = 4 + index;
       boardPhase = fraction;
       display = experienceBay(index, count).position;
-      const advance = easeBetween(0.56, 1, fraction);
+      const advance = easeBetween(0.38, 1, fraction);
       // A restrained camera orbit responds during reading too. The guide still
       // stops to inspect a bay, then walks along the original clear circular path.
-      const cameraAdvance = fraction * 0.08 + advance * 0.92;
+      const cameraAdvance =
+        fraction * 0.24 + easeBetween(0.3, 1, fraction) * 0.76;
       galleryAngle =
         GALLERY_ANGLE + ((index + cameraAdvance) * Math.PI * 2) / count;
       const driveIn = easeBetween(0.1, 0.16, phase);
@@ -265,7 +266,7 @@ export function journeyPose(timeline: number, count = 5) {
         avatar = circlePoint(
           GALLERY_ANGLE + ((index + advance) * Math.PI * 2) / count,
         );
-        walking = fraction > 0.56 && fraction < 1;
+        walking = fraction > 0.38 && fraction < 1;
         inspecting = !walking;
       } else {
         const exit = easeBetween(GALLERY_END, 0.9, phase);

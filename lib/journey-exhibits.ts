@@ -15,15 +15,18 @@ export function exhibitTravel(board: number, phase: number) {
     Math.floor((Math.max(0, phase) / end) * count),
   );
   const fraction = (phase / end) * count - page;
-  const moving = page < count - 1 && fraction > 0.7 && fraction < 1;
+  // Spread the glide across the reading interval instead of holding for 70%
+  // and rushing the full distance at the end. Reading anchors remain legible.
+  const moving = page < count - 1 && fraction > 0.38 && fraction < 1;
   const position =
-    page + (page < count - 1 ? easeBetween(0.7, 1, fraction) : 0);
+    page + (page < count - 1 ? easeBetween(0.38, 1, fraction) : 0);
   return {
     offset: position * EXHIBIT_SPACING,
     moving,
     transit: Math.max(
       page < count - 1
-        ? easeBetween(0.7, 0.82, fraction) * (1 - easeBetween(0.9, 1, fraction))
+        ? easeBetween(0.38, 0.56, fraction) *
+            (1 - easeBetween(0.9, 1, fraction))
         : 0,
       easeBetween(end, end + 0.1, phase),
     ),
@@ -36,5 +39,5 @@ export function exhibitReadingPhases(board: number) {
   if (board === 10) return [0.2];
   const count = EXHIBIT_COUNTS[board] ?? 1;
   const end = board === 3 ? 0.3 : 0.56;
-  return Array.from({ length: count }, (_, i) => (end / count) * (i + 0.55));
+  return Array.from({ length: count }, (_, i) => (end / count) * (i + 0.3));
 }
