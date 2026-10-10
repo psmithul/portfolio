@@ -2,28 +2,7 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Award } from 'lucide-react';
 import { ArchiveReveal } from '@/components/archive-reveal';
-
-const accolades = [
-  {
-    title: 'Incubate X Prosthetic Challenge',
-    result: 'Top 5 of 70',
-    period: 'September 2026',
-    scope: 'National selection',
-    detail:
-      'Our KneeAssist team was selected among the top five teams nationwide.',
-    href: '/work/kneeassist',
-    link: 'Knee assistance project',
-  },
-  {
-    title: 'Global Case Competition at Harvard',
-    result: 'Top 50 globally',
-    period: 'February — March 2026',
-    scope: 'Team competition',
-    detail: 'A four-member team analysing the European defence landscape.',
-    href: '/Mithul-Sourav-CV.pdf',
-    link: 'Read the résumé',
-  },
-];
+import { portfolioRecognition } from '@/content/profile';
 
 export function Accolades({
   staticLayout = false,
@@ -40,7 +19,7 @@ export function Accolades({
       kind="folder"
       staticLayout={staticLayout}
     >
-      {accolades.map(
+      {portfolioRecognition.map(
         ({ title, result, period, scope, detail, href, link }, index) => (
           <article
             key={title}

@@ -18,20 +18,20 @@ const models: {
 }[] = [
   {
     id: 'rover',
-    name: 'Rover',
-    subtitle: 'Six wheels. A little curiosity.',
+    name: 'Variable-stiffness rover',
+    subtitle: 'Mechanically locked suspension states.',
     note: 'Rough-terrain rover · variable-stiffness suspension',
   },
   {
     id: 'tensegrity',
-    name: 'Tensegrity',
-    subtitle: 'Held together by tension.',
-    note: 'Variable-stiffness joint · geometry & member forces',
+    name: 'Tensegrity knee joint',
+    subtitle: 'Geometry, internal force, and joint stiffness.',
+    note: 'Knee-exoskeleton joint · concept view of geometry and member forces',
   },
   {
     id: 'collection',
-    name: 'Leaf collector',
-    subtitle: 'Leaves in. Soil stays out.',
+    name: 'Terrain-adaptive leaf robot',
+    subtitle: 'Locomotion, pickup, transfer, and storage.',
     note: 'Pickup drum, transfer belt, and collection hopper · conceptual architecture',
   },
   {
@@ -43,7 +43,7 @@ const models: {
   {
     id: 'electronics',
     name: 'Isolation mount',
-    subtitle: 'A softer path for vibration.',
+    subtitle: 'Vibration transmission and isolation.',
     note: 'Base-excited spring–mass–damper concept · illustrative normalized units',
   },
   {
@@ -72,15 +72,15 @@ const models: {
   },
   {
     id: 'knee',
-    name: 'KneeAssist',
-    subtitle: 'Assistance, when it is needed.',
+    name: 'Actuated knee-assistance system',
+    subtitle: 'Knee-angle tracking and cable-and-spring assistance.',
     note: 'Actuated brace · cable-and-spring assistance',
   },
   {
     id: 'satellite',
-    name: 'Reaction wheel',
-    subtitle: 'Small vibrations travel far.',
-    note: 'Satellite panel · reaction wheel & camera interface',
+    name: 'Spacecraft vibration model',
+    subtitle: 'Reaction wheel, mount, structure, and payload.',
+    note: 'Concept view of the wheel–structure–payload path · The case study covers FEM and surrogate evaluation',
   },
 ];
 

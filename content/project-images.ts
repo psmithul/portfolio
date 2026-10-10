@@ -31,9 +31,9 @@ export const projectImages: Record<string, NonNullable<Project['image']>> = {
     src: '/images/projects/tensegrity-joint-cad.webp',
     width: 1200,
     height: 1200,
-    alt: 'Native CAD view of the tensegrity joint study, showing links, pivots, tension cables, and springs.',
+    alt: 'Native CAD view of the tensegrity knee-joint study, showing links, pivots, tension cables, and springs.',
     caption:
-      'Joint CAD study · Paper-based mechanism reconstruction; not tested hardware.',
+      'Knee-joint CAD study · Paper-based mechanism reconstruction; not tested hardware.',
     fit: 'cover',
     referenceUrl: 'https://arxiv.org/abs/2504.19685',
     referenceLabel: 'Reference paper',
@@ -43,9 +43,9 @@ export const projectImages: Record<string, NonNullable<Project['image']>> = {
     src: '/images/projects/knee-assistance-cad.png',
     width: 1718,
     height: 1268,
-    alt: 'CAD of the actuated knee assistance system, with adjustable rails, cuffs, knee pivot, motor, spring, and cable drive.',
+    alt: 'CAD of the actuated knee-assistance system, with adjustable rails, cuffs, knee pivot, motor, spring, and cable drive.',
     caption:
-      'Actuated knee assistance system · Original CAD screenshot supplied by Mithul.',
+      'Actuated knee-assistance system · Original CAD screenshot supplied by Mithul.',
     fit: 'cover',
   },
   'reaction-wheel-microvibrations': {
@@ -55,7 +55,7 @@ export const projectImages: Record<string, NonNullable<Project['image']>> = {
     height: 1125,
     alt: 'A sectioned reaction-wheel housing inside the project’s engineering reference satellite assembly.',
     caption:
-      'Project reference CAD · Verified assembly; surface finishes are illustrative.',
+      'Reaction-wheel reference CAD · Illustrative assembly view, not a FEM response or surrogate result.',
     fit: 'cover',
   },
   'off-road-leaf-robot': {

@@ -758,6 +758,11 @@ body:has(.world-header, .page-error) h1 {
 body:has(.world-header, .page-error) h1 em {
   font: inherit;
 }
+body:has(.world-header) .case-header h1.case-title-long {
+  font-size: clamp(30px, 3.8vw, 48px);
+  line-height: 1.14;
+  overflow-wrap: anywhere;
+}
 body:has(.world-header, .page-error) h2 {
   color: #294831;
 }
@@ -1008,6 +1013,9 @@ body:has(.world-header, .page-error) .reading-contents a[aria-current] {
   body:has(.world-header, .page-error) h1 {
     font-size: clamp(32px, 8.6vw, 40px);
     line-height: 1.12;
+  }
+  body:has(.world-header) .case-header h1.case-title-long {
+    font-size: clamp(24px, 6.9vw, 30px);
   }
   .world-header {
     gap: 14px;
