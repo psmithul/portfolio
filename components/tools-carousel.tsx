@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 
 export type PortfolioTool = {
   name: string;
-  logo: string;
+  logo?: string;
+  wordmark?: string;
   width: number;
   height: number;
 };
@@ -45,14 +46,20 @@ export function ToolsCarousel({
             >
               {tools.map((tool) => (
                 <li className="tool-card" key={tool.name} data-tool={tool.name}>
-                  <Image
-                    className="tool-logo"
-                    src={tool.logo}
-                    width={tool.width}
-                    height={tool.height}
-                    alt=""
-                    unoptimized
-                  />
+                  {tool.logo ? (
+                    <Image
+                      className="tool-logo"
+                      src={tool.logo}
+                      width={tool.width}
+                      height={tool.height}
+                      alt=""
+                      unoptimized
+                    />
+                  ) : (
+                    <span className="tool-wordmark" aria-hidden="true">
+                      {tool.wordmark ?? tool.name}
+                    </span>
+                  )}
                   <span>{tool.name}</span>
                 </li>
               ))}

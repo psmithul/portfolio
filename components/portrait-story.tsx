@@ -1,4 +1,5 @@
 'use client';
+import { profile } from '@/content/profile';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -64,11 +65,7 @@ export function PortraitStory({
         </h1>
         <div className="flow-hero-details">
           <div>
-            <p className="flow-hero-aside">
-              I’m a final-year mechanical engineering student at NITK Surathkal.
-              I like learning new technologies and using them to build things.
-              I’m especially interested in robotics, control systems, and space.
-            </p>
+            <p className="flow-hero-aside">{profile.heroIntro}</p>
             <a className="flow-scroll-cue" href={`#${introId}`}>
               About me <ArrowDown className="link-arrow" aria-hidden="true" />
             </a>
@@ -102,23 +99,9 @@ export function PortraitStory({
           <br /> about me.
         </h2>
         <div>
-          <p>
-            I’m a final-year mechanical engineering student at NITK Surathkal. I
-            like learning new things and using what I learn to build something.
-            When an idea interests me, I want to understand how it works and how
-            people came up with it.
-          </p>
-          <p>
-            Right now, I’m working on a rover and a robot for collecting leaves,
-            both meant to move over rough ground. I’m also exploring ways to
-            make a mechanical joint more or less flexible.
-          </p>
-          <p>
-            I like working on hard problems, even when I don’t know where to
-            start. Building things helps me see what I’ve understood and what I
-            still need to learn. I also love space and spend a lot of time
-            reading about how we explore it.
-          </p>
+          <p>{profile.about[0]}</p>
+          <p>{profile.about[1]}</p>
+          <p>{profile.about[2]}</p>
           <Link href="/about" className="flow-text-link">
             Background & experience{' '}
             <ArrowUpRight className="link-arrow" aria-hidden="true" />

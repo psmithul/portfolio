@@ -52,7 +52,11 @@ export default async function ProjectPage({ params }: Props) {
             {project.status}
           </span>
         </div>
-        <h1>{project.title}</h1>
+        <h1
+          className={project.title.length > 80 ? 'case-title-long' : undefined}
+        >
+          {project.title}
+        </h1>
         <p className="case-description">{project.summary}</p>
         <dl className="case-meta">
           <div>

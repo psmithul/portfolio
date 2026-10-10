@@ -1,3 +1,4 @@
+import { profile } from '@/content/profile';
 import Image from 'next/image';
 import { MinecraftLink as Link } from '@/components/minecraft-link';
 import {
@@ -8,11 +9,7 @@ import {
   Monitor,
   TrainFront,
 } from 'lucide-react';
-import {
-  currentProjectSlugs,
-  journeyExperience,
-  shortProjectNames,
-} from '@/content/journey';
+import { currentProjectSlugs, journeyExperience } from '@/content/journey';
 import type { Project } from '@/content/projects';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import { RailwayArt } from '@/components/railway-art';
@@ -51,11 +48,7 @@ export function StaticPortfolio({
           <figure className="static-world">
             <RailwayArt />
           </figure>
-          <p>
-            I’m a final-year mechanical engineering student at NITK Surathkal. I
-            like learning new technologies and using them to build things. I’m
-            especially interested in robotics, control systems, and space.
-          </p>
+          <p>{profile.heroIntro}</p>
           <a className="static-button" href="#work">
             Explore my work <ArrowDown size={17} aria-hidden="true" />
           </a>
@@ -94,29 +87,21 @@ export function StaticPortfolio({
           </blockquote>
         </figure>
         <div className="static-about-copy">
-          <p>
-            I’m a final-year mechanical engineering student at NITK Surathkal. I
-            like learning new things and using what I learn to build something.
-            When an idea interests me, I want to understand how it works and how
-            people came up with it.
-          </p>
-          <p>
-            Right now, I’m working on a rover and a robot for collecting leaves,
-            both meant to move over rough ground. I’m also exploring ways to
-            make a mechanical joint more or less flexible.
-          </p>
-          <p>
-            I like working on hard problems, even when I don’t know where to
-            start. Building things helps me see what I’ve understood and what I
-            still need to learn. I also love space and spend a lot of time
-            reading about how we explore it.
-          </p>
+          <p>{profile.about[0]}</p>
+          <p>{profile.about[1]}</p>
+          <p>{profile.about[2]}</p>
           <div className="static-inventory" aria-label="Tools">
-            {['SolidWorks', 'ANSYS', 'MATLAB', 'Python', 'C / C++'].map(
-              (tool) => (
-                <span key={tool}>{tool}</span>
-              ),
-            )}
+            {[
+              'SolidWorks',
+              'PTC Creo',
+              'ANSYS Mechanical',
+              'COMSOL Multiphysics',
+              'MATLAB',
+              'Python',
+              'C / C++',
+            ].map((tool) => (
+              <span key={tool}>{tool}</span>
+            ))}
           </div>
           <Link className="static-text-link" href="/about">
             Background & experience{' '}
@@ -169,7 +154,7 @@ export function StaticPortfolio({
                 <p className="static-meta">
                   {project.discipline} · {project.period}
                 </p>
-                <h3>{shortProjectNames[project.slug]}</h3>
+                <h3>{project.title}</h3>
                 <p>{project.summary}</p>
                 <Link
                   className="static-text-link"
@@ -235,7 +220,7 @@ export function StaticPortfolio({
                 <h3>{item.company}</h3>
                 <p className="static-role">{item.role}</p>
                 <p>{item.description}</p>
-                {'href' in item && (
+                {item.href && (
                   <Link className="static-text-link" href={item.href}>
                     Internship case study{' '}
                     <ArrowUpRight size={16} aria-hidden="true" />

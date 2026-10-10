@@ -1,4 +1,5 @@
 'use client';
+import { profile } from '@/content/profile';
 
 import { chapterEntryTimeline } from '@/lib/journey-tour';
 import { MinecraftLoader } from '@/components/minecraft-loader';
@@ -36,7 +37,6 @@ import {
 import {
   currentProjectSlugs,
   journeyExperience,
-  shortProjectNames,
   stations,
 } from '@/content/journey';
 import type { Project } from '@/content/projects';
@@ -503,11 +503,7 @@ export function TrainJourney({
           <p className="hero-statement">
             Building and learning along the way, driven by an endless curiosity.
           </p>
-          <p>
-            I’m a final-year mechanical engineering student at NITK Surathkal. I
-            like learning new technologies and using them to build things. I’m
-            especially interested in robotics, control systems, and space.
-          </p>
+          <p>{profile.heroIntro}</p>
           <button className="pixel-button" onClick={() => go(1)}>
             About me <ArrowRight size={16} />
           </button>
@@ -555,28 +551,19 @@ export function TrainJourney({
           </div>
           <div data-world-leaf>
             <p className="world-eyebrow">ABOUT · 02 / 03</p>
-            <p>
-              I’m a final-year mechanical engineering student at NITK Surathkal.
-              I like learning new things and using what I learn to build
-              something. When an idea interests me, I want to understand how it
-              works and how people came up with it.
-            </p>
-            <p>
-              Right now, I’m working on a rover and a robot for collecting
-              leaves, both meant to move over rough ground. I’m also exploring
-              ways to make a mechanical joint more or less flexible.
-            </p>
+            <p>{profile.about[0]}</p>
+            <p>{profile.about[1]}</p>
           </div>
           <div data-world-leaf>
             <p className="world-eyebrow">ABOUT · 03 / 03</p>
-            <p>
-              I like working on hard problems, even when I don’t know where to
-              start. Building things helps me see what I’ve understood and what
-              I still need to learn. I also love space and spend a lot of time
-              reading about how we explore it.
-            </p>
+            <p>{profile.about[2]}</p>
             <div className="inventory">
-              <span>SolidWorks · ANSYS · MATLAB · Python · C / C++</span>
+              <span>
+                {profile.skills
+                  .slice(0, 2)
+                  .map((skill) => skill.detail)
+                  .join(' · ')}
+              </span>
             </div>
             <a className="station-text-link" href="/about">
               Background & experience <ArrowUpRight size={15} />
@@ -609,7 +596,7 @@ export function TrainJourney({
                   <span className="project-discipline">
                     {project.discipline} · {project.period}
                   </span>
-                  <h3>{shortProjectNames[project.slug]}</h3>
+                  <h3>{project.title}</h3>
                   <p>{project.summary}</p>
                   <div className="project-actions">
                     <button
@@ -710,13 +697,20 @@ export function TrainJourney({
                 LUNAR WORKSHOP · {String(index + 1).padStart(2, '0')} /{' '}
                 {String(journeyExperience.length).padStart(2, '0')}
               </p>
-              <h2 id={'planet-title-' + index}>{item.company}</h2>
+              <h2
+                id={'planet-title-' + index}
+                className={
+                  item.company.length > 35 ? 'experience-name-long' : undefined
+                }
+              >
+                {item.company}
+              </h2>
               <p className="experience-role">{item.role}</p>
               <span className="project-discipline">
                 {item.category} · {item.period}
               </span>
               <p>{item.description}</p>
-              {'href' in item && (
+              {item.href && (
                 <a className="station-text-link" href={item.href}>
                   Internship case study <ArrowUpRight size={15} />
                 </a>
@@ -896,9 +890,7 @@ export function TrainJourney({
                 <span className="world-eyebrow">
                   THE WORKSHOP · INTERACTIVE CONCEPT
                 </span>
-                <h2 id="workshop-title">
-                  {shortProjectNames[selectedProject.slug]}
-                </h2>
+                <h2 id="workshop-title">{selectedProject.title}</h2>
               </div>
               <button
                 ref={closeLab}

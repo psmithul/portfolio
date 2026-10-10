@@ -7,7 +7,14 @@ export const portfolioTools: PortfolioTool[] = [
     width: 1804,
     height: 206,
   },
-  { name: 'ANSYS', logo: '/images/tools/ansys.png', width: 999, height: 512 },
+  { name: 'PTC Creo', wordmark: 'Creo', width: 160, height: 50 },
+  {
+    name: 'ANSYS Mechanical',
+    logo: '/images/tools/ansys.png',
+    width: 999,
+    height: 512,
+  },
+  { name: 'COMSOL Multiphysics', wordmark: 'COMSOL', width: 160, height: 50 },
   { name: 'MATLAB', logo: '/images/tools/matlab.svg', width: 128, height: 128 },
   { name: 'Python', logo: '/images/tools/python.png', width: 269, height: 326 },
   {

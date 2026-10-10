@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { WorldHeader, WorldFooter } from '@/components/world-chrome';
+import { profile } from '@/content/profile';
 
 import './globals.css';
 import './experience.css';
@@ -14,8 +15,8 @@ import './classic-portfolio.css';
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),
   title: {
-    default: 'Mithul Sourav — Projects & Notes',
-    template: '%s — Mithul Sourav',
+    default: `${profile.fullName} — Projects & Notes`,
+    template: `%s — ${profile.fullName}`,
   },
   description:
     'Mithul Sourav, Mechanical Engineering at NITK Surathkal. Projects in robotics, mechanisms, vibration, and control.',

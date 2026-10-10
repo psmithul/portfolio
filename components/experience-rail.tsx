@@ -2,61 +2,7 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { ArchiveReveal } from '@/components/archive-reveal';
-
-const experience = [
-  {
-    company: 'Vayu Aerospace',
-    role: 'Product Intern',
-    period: 'Jun — Jul 2026',
-    category: 'Engineering',
-    highlights: [
-      'Compared three flight-controller mounts in ANSYS.',
-      'Integrated the mounts, ran ground tests, and analysed IMU logs in MATLAB.',
-    ],
-    href: '/work/uav-vibration-integration',
-    link: 'Internship case study',
-  },
-  {
-    company: 'Thinkify Labs',
-    role: 'Product & Strategy Intern',
-    period: 'May — Aug 2025',
-    category: 'Product',
-    highlights: [
-      'Built a lead-qualification and follow-up workflow.',
-      'Contributed to a reported 25% gain in operational efficiency.',
-    ],
-  },
-  {
-    company: 'ILO Consulting',
-    role: 'Investment Banking Intern',
-    period: 'May — Jul 2024',
-    category: 'Finance',
-    highlights: [
-      'Built DCF, LBO, and three-statement financial models.',
-      'Supported M&A due diligence and an Ireland market-entry assessment.',
-    ],
-  },
-  {
-    company: 'ISTE NITK',
-    role: 'Secretary',
-    period: 'Sep 2024 — Present',
-    category: 'Leadership',
-    highlights: [
-      'Organised a technical event for 500+ participants.',
-      'Led sponsor outreach and logistics; secured three sponsors.',
-    ],
-  },
-  {
-    company: 'NH66 Fund · P&L Club',
-    role: 'Fund Manager',
-    period: 'Jan 2025 — Apr 2026',
-    category: 'Leadership',
-    highlights: [
-      'Directed strategy for a ₹150K student-run fund.',
-      'Mentored three analysts; organised recruitment and training.',
-    ],
-  },
-];
+import { portfolioExperience } from '@/content/profile';
 
 export function ExperienceRail({
   staticLayout = false,
@@ -73,7 +19,7 @@ export function ExperienceRail({
       kind="toolbox"
       staticLayout={staticLayout}
     >
-      {experience.map(
+      {portfolioExperience.map(
         (
           { company, role, period, category, highlights, href, link },
           index,
