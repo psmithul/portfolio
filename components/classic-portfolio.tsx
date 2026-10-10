@@ -11,6 +11,7 @@ import { JournalPreview } from '@/components/journal-preview';
 import type { Project } from '@/content/projects';
 import { portfolioTools } from '@/content/tools';
 import type { Post } from '@/lib/post-types';
+import { profile } from '@/content/profile';
 
 const featuredOrder = [
   'tensegrity-joint',
@@ -180,7 +181,7 @@ export function ClassicPortfolio({
       <footer className="site-footer shell">
         <div>
           <Link href="/" className="footer-name">
-            Mithul Sourav
+            {profile.fullName}
           </Link>
           <p>NITK Surathkal · Projects, experiments & notes</p>
         </div>
