@@ -60,7 +60,8 @@ void test('navigation eases into and out of a target without overshoot at 30, 60
     }
     assert.equal(y, 1000);
     assert.equal(velocity, 0);
-    assert.ok(peak > 350 && peak <= 360.00001);
+    const ceiling = journeyScrollSpeed(900);
+    assert.ok(peak > ceiling * 0.97 && peak <= ceiling + 1e-5);
   }
   assert.ok(Math.max(...endings) - Math.min(...endings) < 3);
 });
@@ -79,7 +80,7 @@ void test('releasing input brakes within 250ms, with no idle drift or target bac
         const speed = (next - y) * fps;
         assert.ok(next >= y);
         assert.ok(speed <= lastSpeed + 1e-8);
-        assert.ok(lastSpeed - speed <= 3600 / fps + 1e-7);
+        assert.ok(lastSpeed - speed <= 5400 / fps + 1e-7);
         y = next;
         lastSpeed = speed;
       }
@@ -120,7 +121,7 @@ void test('the entire route crosses every chapter under the same ceiling without
         (value) => typeof value !== 'number' || Number.isFinite(value),
       ),
     );
-    assert.ok(next > y && next - y <= 6 + 1e-8);
+    assert.ok(next > y && next - y <= journeyScrollSpeed(900) / 60 + 1e-8);
     visited.add(p.stop);
     y = next;
   }

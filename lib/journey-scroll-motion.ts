@@ -31,7 +31,9 @@ export function createJourneyMotion() {
           break;
         }
         const speed = Math.min(journeyScrollSpeed(viewport), ceiling);
-        const stoppingAcceleration = mode === 'travel' ? 900 : 3600;
+        // Scale manual braking with the higher cruise ceiling so releasing
+        // the wheel still stops promptly without a longer coast.
+        const stoppingAcceleration = mode === 'travel' ? 900 : 5400;
         const desired =
           mode === 'brake'
             ? 0
