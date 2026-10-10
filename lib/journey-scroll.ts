@@ -228,9 +228,9 @@ export function createJourneyScroll(
     target = Math.min(target, maximum());
     current = Math.min(current, maximum());
     inputAge += Math.min(dt, 0.05);
-    // A 100ms gap is still one wheel gesture. Preserve its acceleration rather
-    // than restarting between individual notches; discard input after 120ms.
-    const braking = manual && inputAge > 0.12;
+    // Keep ordinary mouse-wheel notches in one accelerating gesture. The
+    // short 180ms input window plus braking still settles within 300ms.
+    const braking = manual && inputAge > 0.18;
     if (braking) target = current;
     const next = motion.step(
       current,

@@ -1,6 +1,6 @@
 /** One moderate ceiling for the whole journey, independent of chapter or actor. */
 export function journeyScrollSpeed(viewport: number) {
-  return Math.min(360, Math.max(220, viewport * 0.45));
+  return Math.min(540, Math.max(330, viewport * 0.675));
 }
 /** Bound input and long frames without changing pace at reading or transfer points. */
 export function journeyScrollStep(
