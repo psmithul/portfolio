@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { stations } from '@/content/journey';
+import { stations } from '@/content/v1/journey';
 
 export function StaticPortfolioMenu() {
   const menu = useRef<HTMLDetailsElement>(null);

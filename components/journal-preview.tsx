@@ -23,7 +23,7 @@ export function JournalPreview({ posts }: { posts: Post[] }) {
           <p>
             Things I’ve been reading about, trying out, and still figuring out.
           </p>
-          <JournalLink href="/blog">
+          <JournalLink href="/v1/blog">
             All my notes <ArrowUpRight size={20} aria-hidden="true" />
           </JournalLink>
         </div>
@@ -32,7 +32,7 @@ export function JournalPreview({ posts }: { posts: Post[] }) {
         <div className="journal-home-spread">
           <JournalLink
             className="journal-home-lead"
-            href={`/blog/${lead.slug}`}
+            href={`/v1/blog/${lead.slug}`}
             aria-label={`Read ${lead.title}`}
           >
             <JournalArt post={lead} />
@@ -55,7 +55,7 @@ export function JournalPreview({ posts }: { posts: Post[] }) {
               <JournalLink
                 className="journal-home-note"
                 key={post.slug}
-                href={`/blog/${post.slug}`}
+                href={`/v1/blog/${post.slug}`}
                 aria-label={`Read ${post.title}`}
               >
                 <JournalArt post={post} />
@@ -69,7 +69,7 @@ export function JournalPreview({ posts }: { posts: Post[] }) {
                 <ArrowUpRight size={20} aria-hidden="true" />
               </JournalLink>
             ))}
-            <JournalLink href="/blog" className="journal-home-more">
+            <JournalLink href="/v1/blog" className="journal-home-more">
               Find something to read <ArrowRight size={18} aria-hidden="true" />
             </JournalLink>
           </div>

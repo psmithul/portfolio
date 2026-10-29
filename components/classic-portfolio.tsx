@@ -8,10 +8,10 @@ import { Accolades } from '@/components/accolades';
 import { SideQuests } from '@/components/side-quests';
 import { ToolsCarousel } from '@/components/tools-carousel';
 import { JournalPreview } from '@/components/journal-preview';
-import type { Project } from '@/content/projects';
-import { portfolioTools } from '@/content/tools';
+import type { Project } from '@/content/v1/projects';
+import { portfolioTools } from '@/content/v1/tools';
 import type { Post } from '@/lib/post-types';
-import { profile } from '@/content/profile';
+import { profile } from '@/content/v1/profile';
 
 const featuredOrder = [
   'tensegrity-joint',
@@ -51,11 +51,11 @@ export function ClassicPortfolio({
     <div className="classic-portfolio">
       <header className="site-header shell">
         <nav aria-label="Main navigation">
-          <SectionLink href="/#top">Home</SectionLink>
-          <SectionLink href="/#work">Projects</SectionLink>
-          <Link href="/about">About</Link>
-          <Link href="/blog">Journal</Link>
-          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+          <SectionLink href="/v1#top">Home</SectionLink>
+          <SectionLink href="/v1#work">Projects</SectionLink>
+          <Link href="/v1/about">About</Link>
+          <Link href="/v1/blog">Journal</Link>
+          <a href="/v1/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
             Résumé <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </a>
         </nav>
@@ -85,7 +85,7 @@ export function ClassicPortfolio({
               const cover = covers[project.slug];
               return (
                 <Link
-                  href={`/work/${project.slug}`}
+                  href={`/v1/work/${project.slug}`}
                   className={`flow-project-card flow-cover-${project.slug}`}
                   key={project.slug}
                   data-cursor="project"
@@ -172,7 +172,7 @@ export function ClassicPortfolio({
             <a href="mailto:psmithul@gmail.com">
               Email <ArrowUpRight className="link-arrow" aria-hidden="true" />
             </a>
-            <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+            <a href="/v1/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
               Résumé <ArrowUpRight className="link-arrow" aria-hidden="true" />
             </a>
           </div>
@@ -180,7 +180,7 @@ export function ClassicPortfolio({
       </main>
       <footer className="site-footer shell">
         <div>
-          <Link href="/" className="footer-name">
+          <Link href="/v1" className="footer-name">
             {profile.fullName}
           </Link>
           <p>NITK Surathkal · Projects, experiments & notes</p>
@@ -201,13 +201,13 @@ export function ClassicPortfolio({
           >
             LinkedIn
           </a>
-          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+          <a href="/v1/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
             CV
           </a>
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getUTCFullYear()} P S Mithul Sourav</span>
-          <Link href="/write">Writing desk</Link>
+          <Link href="/v1/write">Writing desk</Link>
           <a href="#top">
             Back to top <ArrowUp className="link-arrow" aria-hidden="true" />
           </a>

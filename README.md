@@ -1,10 +1,20 @@
 # Mithul Sourav · Portfolio & Mika’s Life
 
-A Minecraft-inspired 3D train journey through a mechanical engineering and robotics portfolio, with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
+An academic portfolio for mechanical engineering and robotics, with a personal journal and a private writing desk. The original Minecraft train journey is archived at `/v1`, including its project, journal, profile, and writing pages. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
 
 Public website: [psmithul.com](https://psmithul.com/). Vercel fallback: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
 
 Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). Vercel is connected to this repository; pushes to `main` deploy production and other branches create previews.
+
+## Website versions
+
+- `/`, `/about`, `/activities`, `/work`, `/work/[slug]`, `/blog`, and `/blog/[slug]` use the new academic design.
+- `/v1`, `/v1/about`, `/v1/work/[slug]`, `/v1/blog`, and `/v1/blog/[slug]` preserve the Minecraft design. Its phone homepage still uses the original portrait layout.
+- `/write` and `/v1/write` use the same owner-protected journal store. Versioned editor pages and API aliases preserve their own navigation prefix.
+- Archive project/profile copy is frozen in `content/v1/`; edit the top-level `content/` files for the current website. The archived résumé is at `/v1/Mithul-Sourav-CV.pdf`.
+- The new layout is in `app/academic.css` and `components/academic/`. The older styles are loaded by `app/v1/layout.tsx`. Version-switch links use full document navigation so the old styles and scene controller do not carry into the new site.
+
+The academic layout follows [Mayank Mittal’s portfolio](https://mayankm96.github.io/): a centered 700px document, right-aligned navigation, biography with a right-hand portrait, dated news, and compact image/text research rows. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License (`public/fonts/Amarna-OFL.txt`). The work is labelled as projects and research, without inventing publications.
 
 ## Run locally
 
@@ -46,18 +56,18 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 
 ## Change the portfolio
 
-| Content                                                  | Location                          |
-| -------------------------------------------------------- | --------------------------------- |
-| Project facts, contribution, method, status, and results | `content/projects.ts`             |
-| Portfolio copy and chapter order                         | `content/journey.ts`              |
-| Education, experience, skills, and recognition           | `app/about/page.tsx`              |
-| Mobile portfolio and navigation                          | `components/static-portfolio.tsx` |
-| CV download                                              | `public/Mithul-Sourav-CV.pdf`     |
-| Journal introduction                                     | `app/blog/page.tsx`               |
-| Minecraft palette and reading-page styles                | `app/minecraft.css`               |
-| Desktop journey and navigation                           | `components/train-journey.tsx`    |
-| Base typography and reading layouts                      | `app/globals.css`                 |
-| Owner authorization                                      | `lib/journal-model.ts`            |
+| Content                                                  | Location                       |
+| -------------------------------------------------------- | ------------------------------ |
+| Project facts, contribution, method, status, and results | `content/projects.ts`          |
+| Portfolio copy and chapter order                         | `content/v1/journey.ts`        |
+| Education, experience, skills, and recognition           | `content/profile.ts`           |
+| Mobile portfolio and navigation                          | `components/academic/`         |
+| CV download                                              | `public/Mithul-Sourav-CV.pdf`  |
+| Journal introduction                                     | `app/blog/page.tsx`            |
+| Academic layout and reading-page styles                  | `app/academic.css`             |
+| Desktop journey and navigation                           | `components/train-journey.tsx` |
+| Base typography and reading layouts                      | `app/globals.css`              |
+| Owner authorization                                      | `lib/journal-model.ts`         |
 
 The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. Project images are optional: add an `image` object with `src`, `alt`, `width`, `height`, and an accurate `caption` only when the asset is verified. A `referenceUrl` may credit a paper. Current covers use credited reference photography where original project photographs are unavailable. References are labelled accurately and must not be described as personally built hardware. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
 
@@ -102,7 +112,7 @@ The journal appears once in the journey, with two recent entries and a “Read m
 
 | Change                                                  | Location                                                                                                                        |
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Station order, names, and experience                    | `content/journey.ts`                                                                                                            |
+| Station order, names, and experience                    | `content/v1/journey.ts`                                                                                                         |
 | Journey content and navigation                          | `components/train-journey.tsx`                                                                                                  |
 | Voxel terrain, train, station buildings, camera         | `lib/voxel-world.ts`                                                                                                            |
 | Original procedural 16 × 16 block textures              | `lib/voxel-textures.ts`                                                                                                         |
@@ -119,9 +129,9 @@ On systems with restrictive file-watcher limits, use `WATCHPACK_POLLING=true npm
 
 ## Design and credits
 
-Visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). The references informed the camera composition and block architecture. Geometry, pixel textures, and choreography here are original.
+Archived v1 visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). The references informed the camera composition and block architecture. Geometry, pixel textures, and choreography here are original.
 
-Portfolio text remains selectable semantic HTML, projected with CSS3DRenderer using the same camera and measured dimensions as the WebGL apertures. The About chapter includes the original portrait and favourite quote; the guide wears the requested Technoblade skin. Tests cover surface ownership, one-caption visibility, route continuity, cab and rover clearance, reversible travel, resumed-input acceleration, walking speed, braking, and equivalent motion at 30, 60, and 144 Hz.
+In v1, portfolio text remains selectable semantic HTML, projected with CSS3DRenderer using the same camera and measured dimensions as the WebGL apertures. The About chapter includes the original portrait and favourite quote; the guide wears the requested Technoblade skin. Tests cover surface ownership, one-caption visibility, route continuity, cab and rover clearance, reversible travel, resumed-input acceleration, walking speed, braking, and equivalent motion at 30, 60, and 144 Hz.
 
 The original 16-bar tune uses synthesized piano, soft sustained chords, and circular echo tails. It is bundled locally, loops, starts only when the visitor enables it, and can be muted at any time. The composition can be regenerated with `python3 scripts/compose-journey.py`; no external recordings are used.
 
@@ -132,6 +142,6 @@ The world and all its block geometry are generated locally in Three.js; no game 
 
 Current stack: Next.js, React, TypeScript, Vercel Functions, private Vercel Blob, and signed owner sessions. Articles render with react-markdown and remark-gfm; raw HTML and executable link protocols are not rendered.
 
-The public résumé is the exact user-supplied `Mithul_Sourav_MIT_SM_Research_CV (2).pdf`. Its single completed Actuated Knee Assistance System project spans October 2025–September 2026. NeoLeg’s passive mechanism and KneeAssist’s actuated brace are presented as one case study at `/work/kneeassist`; the former NeoLeg URL redirects there. Procurement readiness is distinct from the planned bench tests.
+The public résumé is the exact user-supplied `Mithul _Sourav_CV.pdf`. Its single completed Actuated Knee Assistance System project spans October 2025–September 2026. NeoLeg’s passive mechanism and KneeAssist’s actuated brace are presented as one case study at `/work/kneeassist`; the former NeoLeg URL redirects there. Procurement readiness is distinct from the planned bench tests.
 
 Public routes have production canonical URLs. `sitemap.xml` reads the current published journal, so withdrawals and new posts are reflected without a redeploy; private writing routes, API endpoints, and health checks are excluded. Page errors offer a retry and a return link in the same theme.

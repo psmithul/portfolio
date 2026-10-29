@@ -2,7 +2,7 @@
 import { useState, type SubmitEvent } from 'react';
 import { deskRequest } from './writing-desk';
 
-export function DeskLogin() {
+export function DeskLogin({ basePath = '' }: { basePath?: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   async function signIn(event: SubmitEvent<HTMLFormElement>) {
@@ -11,7 +11,9 @@ export function DeskLogin() {
     setError('');
     const password = new FormData(event.currentTarget).get('password');
     try {
-      await deskRequest('/api/journal/session', 'POST', { password });
+      await deskRequest(`${basePath}/api/journal/session`, 'POST', {
+        password,
+      });
       window.location.reload();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not sign in.');
@@ -36,12 +38,14 @@ export function DeskLogin() {
     </form>
   );
 }
-export function DeskSignOut() {
+export function DeskSignOut({ basePath = '' }: { basePath?: string }) {
   const [error, setError] = useState('');
   async function signOut() {
     try {
-      await deskRequest('/api/journal/session', 'POST', { action: 'signout' });
-      window.location.assign('/blog');
+      await deskRequest(`${basePath}/api/journal/session`, 'POST', {
+        action: 'signout',
+      });
+      window.location.assign(`${basePath}/blog`);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not sign out.');
     }

@@ -25,7 +25,7 @@ export function JournalCover({
     <figure
       className={`journal-photo ${match[2].includes('muybridge') ? 'motion-photo' : ''}`}
     >
-      <JournalLink href={`/blog/${slug}`} aria-label={`Read ${title}`}>
+      <JournalLink href={`/v1/blog/${slug}`} aria-label={`Read ${title}`}>
         <img
           src={match[2]}
           alt={match[1]}

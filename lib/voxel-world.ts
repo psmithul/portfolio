@@ -32,7 +32,7 @@ import {
 import { exhibitSpacing } from '@/lib/journey-exhibits';
 import { stationCameraDistance } from '@/lib/journey-station-camera';
 import { createSuspensionResponse } from '@/lib/suspension-physics';
-import { journeyExperience } from '@/content/journey';
+import { journeyExperience } from '@/content/v1/journey';
 import { createBlockMaterials, type Block } from '@/lib/voxel-textures';
 
 export type WorldOptions = {

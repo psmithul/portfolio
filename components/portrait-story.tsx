@@ -1,5 +1,5 @@
 'use client';
-import { profile } from '@/content/profile';
+import { profile } from '@/content/v1/profile';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -102,7 +102,7 @@ export function PortraitStory({
           <p>{profile.about[0]}</p>
           <p>{profile.about[1]}</p>
           <p>{profile.about[2]}</p>
-          <Link href="/about" className="flow-text-link">
+          <Link href="/v1/about" className="flow-text-link">
             Background & experience{' '}
             <ArrowUpRight className="link-arrow" aria-hidden="true" />
           </Link>

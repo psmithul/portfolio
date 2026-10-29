@@ -1,4 +1,4 @@
-import { profile } from '@/content/profile';
+import { profile } from '@/content/v1/profile';
 import Image from 'next/image';
 import { MinecraftLink as Link } from '@/components/minecraft-link';
 import {
@@ -9,8 +9,8 @@ import {
   Monitor,
   TrainFront,
 } from 'lucide-react';
-import { currentProjectSlugs, journeyExperience } from '@/content/journey';
-import type { Project } from '@/content/projects';
+import { currentProjectSlugs, journeyExperience } from '@/content/v1/journey';
+import type { Project } from '@/content/v1/projects';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import { RailwayArt } from '@/components/railway-art';
 import { StaticPortfolioMenu } from '@/components/static-portfolio-menu';
@@ -103,7 +103,7 @@ export function StaticPortfolio({
               <span key={tool}>{tool}</span>
             ))}
           </div>
-          <Link className="static-text-link" href="/about">
+          <Link className="static-text-link" href="/v1/about">
             Background & experience{' '}
             <ArrowUpRight size={16} aria-hidden="true" />
           </Link>
@@ -158,7 +158,7 @@ export function StaticPortfolio({
                 <p>{project.summary}</p>
                 <Link
                   className="static-text-link"
-                  href={'/work/' + project.slug}
+                  href={'/v1/work/' + project.slug}
                 >
                   Read the case study{' '}
                   <ArrowUpRight size={17} aria-hidden="true" />
@@ -181,7 +181,7 @@ export function StaticPortfolio({
         </p>
         <div className="static-archive-list">
           {archive.map((project, index) => (
-            <Link href={'/work/' + project.slug} key={project.slug}>
+            <Link href={'/v1/work/' + project.slug} key={project.slug}>
               <span className="static-item-number">
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -230,7 +230,7 @@ export function StaticPortfolio({
             </article>
           ))}
         </div>
-        <Link className="static-text-link" href="/about">
+        <Link className="static-text-link" href="/v1/about">
           Full background & leadership{' '}
           <ArrowUpRight size={17} aria-hidden="true" />
         </Link>
@@ -248,7 +248,7 @@ export function StaticPortfolio({
         </p>
         <div className="static-notes">
           {posts.slice(0, 4).map((post) => (
-            <Link href={'/blog/' + post.slug} key={post.slug}>
+            <Link href={'/v1/blog/' + post.slug} key={post.slug}>
               <BookOpen size={22} aria-hidden="true" />
               <div>
                 <p className="static-meta">
@@ -260,7 +260,7 @@ export function StaticPortfolio({
             </Link>
           ))}
         </div>
-        <Link className="static-text-link" href="/blog">
+        <Link className="static-text-link" href="/v1/blog">
           All my notes <ArrowUpRight size={17} aria-hidden="true" />
         </Link>
       </section>
@@ -297,7 +297,7 @@ export function StaticPortfolio({
           >
             LinkedIn ↗
           </a>
-          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+          <a href="/v1/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
             Résumé ↗
           </a>
         </nav>

@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { ArchiveReveal } from '@/components/archive-reveal';
-import { portfolioExperience } from '@/content/profile';
+import { portfolioExperience } from '@/content/v1/profile';
 
 export function ExperienceRail({
   staticLayout = false,
@@ -47,7 +47,7 @@ export function ExperienceRail({
                 <li key={highlight}>{highlight}</li>
               ))}
             </ul>
-            <Link href={href ?? '/about'}>
+            <Link href={href ?? '/v1/about'}>
               {link ?? 'Full background'}
               <ArrowUpRight className="link-arrow" aria-hidden="true" />
             </Link>

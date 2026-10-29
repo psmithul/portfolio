@@ -1,0 +1,16 @@
+.legacy-version-link {
+  position: fixed;
+  bottom: 12px;
+  left: 14px;
+  z-index: 300;
+  padding: 7px 10px;
+  background: #172f28ed;
+  color: #f0dfb9;
+  border: 1px solid #b6a776;
+  font: 11px/1.4 var(--mono, monospace);
+  text-decoration: none;
+}
+.legacy-version-link:focus-visible {
+  outline: 3px solid #f4cc66;
+  outline-offset: 3px;
+}

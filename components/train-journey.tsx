@@ -1,5 +1,5 @@
 'use client';
-import { profile } from '@/content/profile';
+import { profile } from '@/content/v1/profile';
 
 import { chapterEntryTimeline } from '@/lib/journey-tour';
 import { MinecraftLoader } from '@/components/minecraft-loader';
@@ -38,8 +38,8 @@ import {
   currentProjectSlugs,
   journeyExperience,
   stations,
-} from '@/content/journey';
-import type { Project } from '@/content/projects';
+} from '@/content/v1/journey';
+import type { Project } from '@/content/v1/projects';
 import { journeyPosition, journeyOffset } from '@/lib/journey-timeline';
 import { experienceReadingPhase } from '@/lib/journey-choreography';
 import { createJourneyScroll, type JourneyScroll } from '@/lib/journey-scroll';
@@ -341,7 +341,7 @@ export function TrainJourney({
     window.history.replaceState(
       null,
       '',
-      index === 0 ? '/' : '#' + stations[index].id,
+      index === 0 ? '/v1' : '#' + stations[index].id,
     );
     setRouteOpen(false);
   }
@@ -350,7 +350,7 @@ export function TrainJourney({
       if (action.kind === 'project') setLab(action.slug);
       else if (action.kind === 'planet') {
         goExperience(action.index);
-      } else window.location.assign('/blog');
+      } else window.location.assign('/v1/blog');
     };
   }, [mobile, reducedMotion]);
   async function toggleSound() {
@@ -565,7 +565,7 @@ export function TrainJourney({
                   .join(' · ')}
               </span>
             </div>
-            <a className="station-text-link" href="/about">
+            <a className="station-text-link" href="/v1/about">
               Background & experience <ArrowUpRight size={15} />
             </a>
           </div>
@@ -608,7 +608,7 @@ export function TrainJourney({
                       Explore model <Box size={13} />
                     </button>
                     <a
-                      href={'/work/' + project.slug}
+                      href={'/v1/work/' + project.slug}
                       aria-label={'Read ' + project.title}
                     >
                       Case study <ArrowUpRight size={13} />
@@ -647,7 +647,7 @@ export function TrainJourney({
               )}
               <div className="journey-archive">
                 {archive.slice(page * 3, page * 3 + 3).map((project, index) => (
-                  <a href={'/work/' + project.slug} key={project.slug}>
+                  <a href={'/v1/work/' + project.slug} key={project.slug}>
                     <span className="archive-index">
                       {String(page * 3 + index + 1).padStart(2, '0')}
                     </span>
@@ -731,7 +731,7 @@ export function TrainJourney({
                 ))}
               </nav>
               {index === journeyExperience.length - 1 && (
-                <a className="station-text-link" href="/about">
+                <a className="station-text-link" href="/v1/about">
                   Full background & leadership <ArrowUpRight size={15} />
                 </a>
               )}
@@ -758,7 +758,7 @@ export function TrainJourney({
             </p>
             <div className="station-posts">
               {posts.slice(0, 2).map((post) => (
-                <a key={post.slug} href={'/blog/' + post.slug}>
+                <a key={post.slug} href={'/v1/blog/' + post.slug}>
                   <div>
                     <span>
                       {post.category} · {post.readingMinutes} min
@@ -769,7 +769,7 @@ export function TrainJourney({
                 </a>
               ))}
             </div>
-            <a href="/blog" className="station-text-link">
+            <a href="/v1/blog" className="station-text-link">
               Read more in Journal <BookOpen size={16} />
               <ArrowRight size={15} />
             </a>
@@ -821,14 +821,14 @@ export function TrainJourney({
             >
               LinkedIn <ArrowUpRight size={14} />
             </a>
-            <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+            <a href="/v1/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
               Résumé <ArrowUpRight size={14} />
             </a>
           </div>
           <button className="station-text-link" onClick={() => go(0)}>
             Back to the railway <RotateCcw size={15} />
           </button>
-          <a className="writing-desk-link" href="/write">
+          <a className="writing-desk-link" href="/v1/write">
             Writing desk
           </a>
         </article>
@@ -909,7 +909,7 @@ export function TrainJourney({
             />
             <div className="workshop-dialog-foot">
               <p>{selectedProject.question}</p>
-              <a href={'/work/' + selectedProject.slug}>
+              <a href={'/v1/work/' + selectedProject.slug}>
                 Read the case study <ArrowUpRight size={16} />
               </a>
             </div>
