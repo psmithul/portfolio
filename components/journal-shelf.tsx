@@ -49,7 +49,7 @@ export function JournalShelf({ posts }: { posts: JournalSummary[] }) {
       )}
       {lead && (
         <JournalLink
-          href={`/blog/${lead.slug}`}
+          href={`/v1/blog/${lead.slug}`}
           className="journal-lead"
           aria-label={`Read ${lead.title}`}
         >
@@ -81,7 +81,7 @@ export function JournalShelf({ posts }: { posts: JournalSummary[] }) {
         <div className="journal-card-grid">
           {rest.map((post) => (
             <JournalLink
-              href={`/blog/${post.slug}`}
+              href={`/v1/blog/${post.slug}`}
               className="journal-card"
               key={post.slug}
               aria-label={`Read ${post.title}`}

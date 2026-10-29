@@ -1,16 +1,37 @@
 import type { Metadata } from 'next';
-import { WorldHeader, WorldFooter } from '@/components/world-chrome';
+import { SiteChrome } from '@/components/academic/chrome';
+import localFont from 'next/font/local';
 import { profile } from '@/content/profile';
 
-import './globals.css';
-import './experience.css';
-import './flow.css';
 import 'katex/dist/katex.min.css';
-import './reading.css';
-import './journal.css';
-import './world.css';
-import './minecraft.css';
-import './classic-portfolio.css';
+import './academic.css';
+
+const amarna = localFont({
+  src: [
+    {
+      path: '../public/fonts/amarna-light.woff2',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/amarna-regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/amarna-bold.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/amarna-italic.woff2',
+      weight: '400',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-amarna',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),
@@ -28,13 +49,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body id="top">
+      <body id="top" className={amarna.variable}>
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <WorldHeader />
-        {children}
-        <WorldFooter />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

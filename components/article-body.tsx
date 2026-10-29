@@ -2,6 +2,7 @@
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- Wide tables need a keyboard-accessible scroll container. */
 import Markdown from 'react-markdown';
 import { readingRemarkPlugins, readingRehypePlugins } from '@/lib/reading';
+import { siteHref } from '@/lib/site-paths';
 
 const imageDimensions: Record<string, { width: number; height: number }> = {
   '/images/projects/tensegrity-leg-cad.webp': { width: 1200, height: 1067 },
@@ -10,7 +11,13 @@ const imageDimensions: Record<string, { width: number; height: number }> = {
   '/images/muybridge-plate-49.jpg': { width: 900, height: 1200 },
 };
 
-export function ArticleBody({ body }: { body: string }) {
+export function ArticleBody({
+  body,
+  basePath = '',
+}: {
+  body: string;
+  basePath?: string;
+}) {
   return (
     <article className="article-prose">
       <Markdown
@@ -35,7 +42,7 @@ export function ArticleBody({ body }: { body: string }) {
           },
           a: ({ href, children }) => (
             <a
-              href={href}
+              href={siteHref(href, basePath)}
               rel={href?.startsWith('http') ? 'noreferrer' : undefined}
             >
               {children}

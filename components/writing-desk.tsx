@@ -24,7 +24,7 @@ export async function deskRequest<T>(
   return result;
 }
 
-export function WritingDesk() {
+export function WritingDesk({ basePath = '' }: { basePath?: string }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -34,7 +34,7 @@ export function WritingDesk() {
   const load = useCallback(async () => {
     try {
       const data = await deskRequest<{ entries: Entry[] }>(
-        '/api/journal',
+        `${basePath}/api/journal`,
         'POST',
         { action: 'initialize' },
       );
@@ -47,11 +47,11 @@ export function WritingDesk() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [basePath]);
   useEffect(() => {
     // Network completion updates state; this effect does not derive local state.
     let active = true;
-    deskRequest<{ entries: Entry[] }>('/api/journal', 'POST', {
+    deskRequest<{ entries: Entry[] }>(`${basePath}/api/journal`, 'POST', {
       action: 'initialize',
     })
       .then((data) => {
@@ -74,16 +74,20 @@ export function WritingDesk() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [basePath]);
 
   async function newEntry() {
     setBusy(true);
     setError('');
     try {
-      const data = await deskRequest<{ entry: Entry }>('/api/journal', 'POST', {
-        action: 'create',
-      });
-      window.location.assign(`/write/${data.entry.id}`);
+      const data = await deskRequest<{ entry: Entry }>(
+        `${basePath}/api/journal`,
+        'POST',
+        {
+          action: 'create',
+        },
+      );
+      window.location.assign(`${basePath}/write/${data.entry.id}`);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : 'Could not create a draft.',
@@ -187,7 +191,7 @@ export function WritingDesk() {
           {visible.map((entry) => (
             <a
               className="desk-entry"
-              href={`/write/${entry.id}`}
+              href={`${basePath}/write/${entry.id}`}
               key={entry.id}
             >
               <div>
@@ -233,7 +237,7 @@ export function WritingDesk() {
         </div>
       )}
       <footer className="desk-bottom">
-        <Link className="text-link" href="/blog">
+        <Link className="text-link" href={`${basePath}/blog`}>
           Visit the journal <ArrowUpRight size={16} />
         </Link>
         <Button

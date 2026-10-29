@@ -6,11 +6,13 @@ if (!base) {
   console.error('Usage: npm run smoke -- http://localhost:3000');
   process.exit(1);
 }
-const cases = [
+const currentCases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
+  ['/work', 200, 'completed work', 'Research'],
+  ['/activities', 200, 'leadership', 'Activities'],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
   ['/blog', 200, 'Mika’s', 'Mika’s Life'],
@@ -74,6 +76,23 @@ const cases = [
   ['/blog/not-a-published-entry', 404, 'here yet.', ''],
   ['/this-page-does-not-exist', 404, 'here yet.', ''],
 ];
+const archivedCases = currentCases
+  .filter(([path]) => !['/work', '/activities'].includes(path))
+  .map(([path, status, content, title]) => [
+    path === '/' ? '/v1' : '/v1' + path,
+    status,
+    content,
+    path === '/' ? 'Minecraft portfolio' : title,
+  ]);
+const cases = [
+  ...currentCases.map(([path, status, content, title]) => [
+    path,
+    status,
+    status === 404 ? 'Page not found' : content,
+    title,
+  ]),
+  ...archivedCases,
+];
 const imagePaths = new Set();
 for (const [path, status, content, title] of cases) {
   const response = await fetch(new URL(path, base));
@@ -108,9 +127,10 @@ for (const [path, status, content, title] of cases) {
       );
     }
   }
-  if (status === 200 && !path.startsWith('/write')) {
-    const canonicalPath =
-      path === '/work/neoleg-knee-mechanism' ? '/work/kneeassist' : path;
+  if (status === 200 && !path.includes('/write')) {
+    const canonicalPath = path.endsWith('/work/neoleg-knee-mechanism')
+      ? path.replace('/neoleg-knee-mechanism', '/kneeassist')
+      : path;
     assert.ok(
       body.includes(
         `<link rel="canonical" href="https://psmithul.com${canonicalPath === '/' ? '' : canonicalPath}"`,
@@ -118,9 +138,9 @@ for (const [path, status, content, title] of cases) {
       path + ': production canonical',
     );
   }
-  if (path === '/write')
+  if (path.endsWith('/write'))
     assert.match(body, /name="robots" content="noindex, nofollow"/);
-  if (status === 200 && path.startsWith('/work/')) {
+  if (status === 200 && path.startsWith('/v1/work/')) {
     for (const className of [
       'playground-stage',
       'scene-loading',
@@ -131,6 +151,18 @@ for (const [path, status, content, title] of cases) {
         body.includes(`class="${className}"`),
         path + ': reserved server-rendered laboratory frame',
       );
+  }
+  if (path.startsWith('/v1')) {
+    for (const anchor of body.matchAll(/<a\b[^>]*>/gi)) {
+      const href = /href="([^"]+)"/.exec(anchor[0])?.[1];
+      if (!href || anchor[0].includes('legacy-version-link')) continue;
+      assert.ok(
+        !/^\/(?:about|blog|work|write)(?:[/?#]|$)/.test(href) &&
+          href !== '/' &&
+          !href.startsWith('/#'),
+        path + ': archived navigation escaped: ' + href,
+      );
+    }
   }
   // Next streams the custom 404 through its server-component payload.
   // Its hydrated landmark is also checked in browser QA.
@@ -169,7 +201,20 @@ for (const [device, phone, userAgent] of [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) Version/18.0 Safari/605.1.15',
   ],
 ]) {
-  const response = await fetch(new URL('/', base), {
+  const currentResponse = await fetch(new URL('/', base), {
+    headers: { 'user-agent': userAgent },
+  });
+  const currentBody = await currentResponse.text();
+  assert.equal(currentResponse.status, 200, device + ': current homepage');
+  assert.ok(
+    currentBody.includes('class="academic-site"'),
+    device + ': academic first paint',
+  );
+  assert.ok(
+    !currentBody.includes('class="minecraft-loader'),
+    device + ': no 3D loader on current website',
+  );
+  const response = await fetch(new URL('/v1', base), {
     headers: { 'user-agent': userAgent },
   });
   const body = await response.text();
@@ -210,7 +255,7 @@ for (const [device, phone, userAgent] of [
     ))
       imagePaths.add(match[1]);
   }
-  console.log('PASS device homepage ' + device);
+  console.log('PASS current and v1 device homepages ' + device);
 }
 for (const path of imagePaths) {
   const response = await fetch(new URL(path, base));
@@ -223,6 +268,7 @@ const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text();
 for (const [path, status] of cases) {
   if (
     status === 200 &&
+    !path.startsWith('/v1') &&
     path !== '/write' &&
     path !== '/work/neoleg-knee-mechanism'
   )
@@ -230,7 +276,7 @@ for (const [path, status] of cases) {
       sitemap.includes(`https://psmithul.com${path}</loc>`),
       path + ': indexed',
     );
-  if (status === 404 || path.startsWith('/write'))
+  if (status === 404 || path.startsWith('/write') || path.startsWith('/v1'))
     assert.ok(
       !sitemap.includes(`https://psmithul.com${path}</loc>`),
       path + ': not indexed',
@@ -240,22 +286,33 @@ const robots = await (await fetch(new URL('/robots.txt', base))).text();
 assert.match(robots, /Sitemap: https:\/\/psmithul.com\/sitemap.xml/);
 assert.match(robots, /Disallow: \/write/);
 console.log('PASS published-only sitemap and robots');
-for (const path of ['/api/journal', '/api/journal/example-entry']) {
+for (const path of [
+  '/api/journal',
+  '/api/journal/example-entry',
+  '/v1/api/journal',
+  '/v1/api/journal/example-entry',
+]) {
   const response = await fetch(new URL(path, base));
   assert.equal(response.status, 401, path + ': owner access required');
   assert.match(response.headers.get('cache-control'), /no-store/);
 }
-const editor = await fetch(new URL('/write/example-entry', base), {
-  redirect: 'manual',
-});
-assert.equal(editor.status, 307);
-assert.ok(editor.headers.get('location')?.endsWith('/write'));
+for (const prefix of ['', '/v1']) {
+  const editor = await fetch(new URL(prefix + '/write/example-entry', base), {
+    redirect: 'manual',
+  });
+  assert.equal(editor.status, 307);
+  assert.ok(editor.headers.get('location')?.endsWith(prefix + '/write'));
+}
 console.log('PASS anonymous journal access denied');
 const health = await fetch(new URL('/health', base));
 assert.equal(health.status, 200);
 assert.equal((await health.json()).status, 'ok');
 console.log('PASS production health');
 for (const path of [
+  '/fonts/amarna-regular.woff2',
+  '/fonts/amarna-light.woff2',
+  '/fonts/amarna-bold.woff2',
+  '/fonts/amarna-italic.woff2',
   '/fonts/manrope-latin-variable.woff2',
   '/fonts/barlow-condensed-800.ttf',
   '/fonts/fraunces-latin-variable.woff2',
@@ -272,13 +329,19 @@ for (const path of [
   assert.ok((await response.arrayBuffer()).byteLength > 100, path);
   console.log('PASS asset ' + path);
 }
-const cv = await fetch(new URL('/Mithul-Sourav-CV.pdf', base));
-assert.equal(cv.status, 200);
-assert.ok(cv.headers.get('content-type')?.includes('application/pdf'));
-const downloaded = Buffer.from(await cv.arrayBuffer());
-const source = readFileSync('public/Mithul-Sourav-CV.pdf');
-assert.equal(
-  createHash('sha256').update(downloaded).digest('hex'),
-  createHash('sha256').update(source).digest('hex'),
-);
-console.log('PASS CV download matches the supplied document');
+for (const prefix of ['', '/v1']) {
+  const cv = await fetch(new URL(prefix + '/Mithul-Sourav-CV.pdf', base));
+  assert.equal(cv.status, 200);
+  assert.ok(cv.headers.get('content-type')?.includes('application/pdf'));
+  const downloaded = Buffer.from(await cv.arrayBuffer());
+  const source = readFileSync('public/Mithul-Sourav-CV.pdf');
+  assert.equal(
+    createHash('sha256').update(downloaded).digest('hex'),
+    createHash('sha256').update(source).digest('hex'),
+  );
+  console.log(
+    'PASS ' +
+      (prefix || 'current') +
+      ' CV download matches the supplied document',
+  );
+}
