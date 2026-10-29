@@ -5,11 +5,15 @@ import { usePathname } from 'next/navigation';
 import { ArrowUpRight, TrainFront } from 'lucide-react';
 
 export function WorldHeader() {
-  const home = usePathname() === '/';
+  const home = usePathname() === '/v1';
   if (home) return null;
   return (
     <header className={`world-header ${home ? 'world-header-home' : ''}`}>
-      <Link className="world-brand" href="/" aria-label="Mithul Sourav — home">
+      <Link
+        className="world-brand"
+        href="/v1"
+        aria-label="Mithul Sourav — home"
+      >
         <span className="brand-block">
           <TrainFront size={23} strokeWidth={2.5} />
         </span>
@@ -19,12 +23,12 @@ export function WorldHeader() {
         </span>
       </Link>
       <nav aria-label="Main navigation">
-        <Link href="/#about">About</Link>
-        <Link href="/#work">Projects</Link>
-        <Link href="/blog">Journal</Link>
+        <Link href="/v1#about">About</Link>
+        <Link href="/v1#work">Projects</Link>
+        <Link href="/v1/blog">Journal</Link>
         <a
           className="world-resume"
-          href="/Mithul-Sourav-CV.pdf"
+          href="/v1/Mithul-Sourav-CV.pdf"
           target="_blank"
           rel="noreferrer"
         >
@@ -36,13 +40,13 @@ export function WorldHeader() {
 }
 
 export function WorldFooter() {
-  const home = usePathname() === '/';
+  const home = usePathname() === '/v1';
   if (home) return null;
   return (
     <footer className="world-footer">
-      <Link href="/">← Back on the train</Link>
+      <Link href="/v1">← Back on the train</Link>
       <span>Mithul Sourav · Projects & notes.</span>
-      <Link href="/write">Writing desk</Link>
+      <Link href="/v1/write">Writing desk</Link>
     </footer>
   );
 }

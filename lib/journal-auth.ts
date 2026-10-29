@@ -16,8 +16,8 @@ export async function getJournalOwner() {
     return null;
   return { userId: 'mika', email: 'miastromika@gmail.com' };
 }
-export async function requireJournalOwner() {
+export async function requireJournalOwner(loginPath = '/write') {
   const owner = await getJournalOwner();
-  if (!owner) redirect('/write');
+  if (!owner) redirect(loginPath);
   return owner;
 }

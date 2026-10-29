@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import type { Project } from '@/content/projects';
+import type { Project } from '@/content/v1/projects';
 import { ScrollRail } from '@/components/scroll-rail';
 export function SideQuests({
   projects,
@@ -22,7 +22,7 @@ export function SideQuests({
     >
       {projects.map((project, index) => (
         <Link
-          href={`/work/${project.slug}`}
+          href={`/v1/work/${project.slug}`}
           className={`quest-card quest-card-${index % 3}`}
           data-rail-card
           data-cursor="project"

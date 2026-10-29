@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import dynamic from 'next/dynamic';
-import type { Project } from '@/content/projects';
+import type { Project } from '@/content/v1/projects';
 import type { JournalSummary } from '@/lib/journal-editorial';
 import { MinecraftLoader } from '@/components/minecraft-loader';
 import { usePortfolioMode } from '@/components/use-portfolio-mode';

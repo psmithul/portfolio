@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Award } from 'lucide-react';
 import { ArchiveReveal } from '@/components/archive-reveal';
-import { portfolioRecognition } from '@/content/profile';
+import { portfolioRecognition } from '@/content/v1/profile';
 
 export function Accolades({
   staticLayout = false,
