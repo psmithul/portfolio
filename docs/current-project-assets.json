@@ -1,0 +1,45 @@
+{
+  "review_date": "2026-11-09",
+  "assets": [
+    {
+      "path": "public/images/projects/rover-assembly-cad.png",
+      "source": "Complete Rover/Photos/Complete_Rover_Exterior.png",
+      "width": 1800,
+      "height": 1350,
+      "sha256": "30d17f9298714d9015ac70eb6495b711b5e35ff339017d22e19826f8c3efcfe6",
+      "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/rover-interior-cad.png",
+      "source": "Complete Rover/Photos/Complete_Rover_Interior.png",
+      "width": 2400,
+      "height": 1800,
+      "sha256": "0e57ce2d5eb0afca28eebf8ca9a27fc861305a8ac784f8128dd8df277b1c2e38",
+      "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-design.png",
+      "source": "Compound Tensegrity Knee_ Preliminary Design Review.pptx :: ppt/media/image.png",
+      "width": 1600,
+      "height": 588,
+      "sha256": "b86071b2236f02fa5e257db1162289c8a0f6f5293325c688c70406730431864e",
+      "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/spacecraft-comsol-model.png",
+      "source": "Reaction wheel vibration - complete pilot.pptx :: ppt/media/image.png",
+      "width": 2036,
+      "height": 1052,
+      "sha256": "01524e46a9c215adeddd39e843d33e5b0745707f9a1a97f152d881002c847f91",
+      "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/knee-assistance-cad.png",
+      "source": "Original screenshot supplied by Mithul, 1 October 2026; existing asset provenance in assets.md",
+      "width": 1718,
+      "height": 1268,
+      "sha256": "5052aeec15a0a2df9e0a102ca911f7b45e39f19a56d658a07340031a6d6f0b1b",
+      "role": "project documentation; not a hardware photograph"
+    }
+  ]
+}

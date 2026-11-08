@@ -39,7 +39,7 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <main id="main" className="academic-content academic-case">
       <Link href="/work" className="academic-back">
-        ← All research &amp; projects
+        ← All projects
       </Link>
       <header>
         <p className="academic-kicker">
@@ -49,11 +49,11 @@ export default async function ProjectPage({ params }: Props) {
         <p className="academic-deck">{project.summary}</p>
         <dl className="academic-meta">
           <div>
-            <dt>Timeline</dt>
+            <dt>When</dt>
             <dd>{project.period}</dd>
           </div>
           <div>
-            <dt>Context</dt>
+            <dt>Type of work</dt>
             <dd>{project.context}</dd>
           </div>
           <div>
@@ -105,7 +105,7 @@ export default async function ProjectPage({ params }: Props) {
       <ReadingContents body={body} />
       <ArticleBody body={body} />
       <aside className="academic-status">
-        <h2>Project stage</h2>
+        <h2>Where the project stands</h2>
         <p>{project.scope}</p>
       </aside>
       <nav className="academic-next" aria-label="Next project">

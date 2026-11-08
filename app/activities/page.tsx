@@ -11,8 +11,8 @@ export default function Activities() {
     <main id="main" className="academic-content">
       <h1 className="page-title">activities</h1>
       <p className="page-introduction">
-        Work, student leadership, and a few things I’ve learned with other
-        people.
+        Internships, student leadership, and team competitions alongside my
+        engineering studies.
       </p>
       <section className="academic-section" id="experience">
         <h2>work experience</h2>
@@ -30,7 +30,7 @@ export default function Activities() {
                   <li key={text}>{text}</li>
                 ))}
               </ul>
-              {item.href && <Link href={item.href}>Case study →</Link>}
+              {item.href && <Link href={item.href}>What I worked on →</Link>}
             </article>
           ))}
       </section>

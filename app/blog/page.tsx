@@ -16,12 +16,13 @@ export default async function Blog() {
       <header>
         <h1 className="page-title">Mika’s Life.</h1>
         <p className="page-introduction">
-          A journal about AI, robots, and whatever else I’m learning.
+          Notes on robots, AI, and the ideas I’m trying to understand.
         </p>
       </header>
       <p>
-        Usually this starts with a question I can’t leave alone. Writing helps
-        me figure out what I’ve actually understood.
+        I use this space to work through questions that come up while reading,
+        studying, or building something. These are personal notes from a student
+        still learning.
       </p>
       <section
         className="academic-section"

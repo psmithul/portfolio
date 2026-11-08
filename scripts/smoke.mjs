@@ -11,7 +11,7 @@ const currentCases = [
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
-  ['/work', 200, 'completed work', 'Research'],
+  ['/work', 200, 'completed studies', 'Projects'],
   ['/activities', 200, 'leadership', 'Activities'],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
@@ -99,6 +99,13 @@ for (const [path, status, content, title] of cases) {
   const body = await response.text();
   assert.equal(response.status, status, path + ': HTTP status');
   assert.ok(body.includes(content), path + ': expected content');
+  if (!path.startsWith('/v1')) {
+    assert.doesNotMatch(
+      body,
+      /src="\/images\/projects\/(?:photos\/|illustration-|reaction-wheel-reference-cad|tensegrity-(?:joint|leg)-cad)/,
+      path + ': current project imagery must be original documentation',
+    );
+  }
   if (title) {
     const titles = [...body.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
     assert.ok(

@@ -51,9 +51,7 @@ export default function About() {
                   <li key={text}>{text}</li>
                 ))}
               </ul>
-              {item.href && (
-                <Link href={item.href}>Internship case study →</Link>
-              )}
+              {item.href && <Link href={item.href}>What I worked on →</Link>}
             </article>
           ))}
       </section>
