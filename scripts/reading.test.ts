@@ -78,7 +78,8 @@ await test('every project has a write-up and every equation compiles strictly', 
   for (const [slug, body] of Object.entries(projectStudies)) {
     assert.ok(readingHeadings(body).length >= 2, slug + ': document sections');
     const equations = [...body.matchAll(/\$\$\n([\s\S]*?)\n\$\$/g)];
-    assert.ok(equations.length, slug + ': explanatory equation');
+    // Equations are optional editorial content. Validate every equation that
+    // exists without forcing unrelated formulas into practical project notes.
     for (const [, equation] of equations) {
       assert.doesNotThrow(
         () =>

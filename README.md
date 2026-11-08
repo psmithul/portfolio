@@ -14,7 +14,7 @@ Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). 
 - Archive project/profile copy is frozen in `content/v1/`; edit the top-level `content/` files for the current website. The archived résumé is at `/v1/Mithul-Sourav-CV.pdf`.
 - The new layout is in `app/academic.css` and `components/academic/`. The older styles are loaded by `app/v1/layout.tsx`. Version-switch links use full document navigation so the old styles and scene controller do not carry into the new site.
 
-The academic layout follows [Mayank Mittal’s portfolio](https://mayankm96.github.io/): a centered 700px document, right-aligned navigation, biography with a right-hand portrait, dated news, and compact image/text research rows. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License (`public/fonts/Amarna-OFL.txt`). The work is labelled as projects and research, without inventing publications.
+The academic layout follows [Mayank Mittal’s portfolio](https://mayankm96.github.io/): a centered 700px document, right-aligned navigation, biography with a right-hand portrait, dated recent updates, and compact image/text project rows. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License (`public/fonts/Amarna-OFL.txt`). Project summaries are visible directly. Covers use original project documentation, and entries without verified images use text. See `docs/content-review.md` for copy sources and `docs/current-project-assets.json` for image provenance.
 
 ## Run locally
 

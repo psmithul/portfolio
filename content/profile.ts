@@ -1,4 +1,4 @@
-// Professional details shared by the journey, phone homepage, and About page.
+// Current portfolio copy. The v1 archive keeps its own content snapshot.
 export const profile = {
   fullName: 'P S Mithul Sourav',
   education: {
@@ -8,11 +8,11 @@ export const profile = {
     cgpa: '7.37 / 10',
   },
   heroIntro:
-    'I’m a final-year mechanical engineering student at NITK Surathkal. I work on robots and mechatronic systems, bringing together mechanical design, sensing, vibration, and control.',
+    'I’m Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world.',
   about: [
-    'I’m P S Mithul Sourav, a final-year Mechanical Engineering student at NITK Surathkal, graduating in June 2027. I’m interested in the dynamics and control that govern how robots move and interact with the real world.',
-    'Right now, I’m designing a variable-stiffness rough-terrain rover and a modular robot for collecting leaves on wet, uneven ground. I’m also modeling a tensegrity-based variable-stiffness knee joint for a knee exoskeleton.',
-    'I’m particularly interested in experimental and field robotics, where mechanical design, sensing, vibration, and control come together in physical hardware. Building things helps me see what I’ve understood and what I still need to learn.',
+    'Hey, I’m Mithul. I’m a fourth-year Mechanical Engineering undergraduate at NITK Surathkal, graduating in June 2027. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world in new ways.',
+    'What excites me is exploring how ideas from control, dynamics, mechanics, and computation can come together to make things possible. I enjoy both developing the algorithms behind these systems and designing and building the hardware that brings them to life, especially when the problems take me into unfamiliar territory.',
+    'My current projects explore variable-stiffness rover suspension, leaf collection on uneven terrain, and a tensegrity knee joint. I’ve also worked on spacecraft vibration models, indoor robot navigation, and an actuated knee-assistance system.',
   ],
   skills: [
     {
@@ -24,7 +24,7 @@ export const profile = {
     {
       title: 'Research interests',
       detail:
-        'Experimental and field robotics · Mechatronic systems · Dynamics and control · Mechanical design, sensing, and vibration',
+        'Intelligent physical systems · Robotics · Control and dynamics · Mechanical design · Computational modeling',
     },
     { title: 'Languages', detail: 'English · Hindi · Tamil · French (basic)' },
   ],
@@ -121,7 +121,7 @@ export const portfolioRecognition = [
     period: 'September 2026',
     scope: 'National selection',
     detail:
-      'Our actuated knee-assistance team placed in the top five of 70 teams nationwide.',
+      'Team project developing a passive knee mechanism into an actuated cable-and-spring brace design.',
     href: '/work/kneeassist',
     link: 'Actuated knee-assistance project',
   },

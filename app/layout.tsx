@@ -39,8 +39,7 @@ export const metadata: Metadata = {
     default: `${profile.fullName} — Projects & Notes`,
     template: `%s — ${profile.fullName}`,
   },
-  description:
-    'Mithul Sourav, Mechanical Engineering at NITK Surathkal. Projects in robotics, mechanisms, vibration, and control.',
+  description: profile.heroIntro,
   icons: { icon: '/favicon.svg' },
 };
 

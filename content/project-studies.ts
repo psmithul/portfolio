@@ -1,326 +1,233 @@
-// Equations explain the underlying models. They are not additional test results.
+// Project descriptions use the CV and original design/research material.
+// Equations describe the models; they do not stand in for experimental evidence.
 export const projectStudies: Record<string, string> = {
   'uav-vibration-integration': String.raw`
-## Vibration transmission from the motors to the flight-controller IMU
+## What I worked on at Vayu Aerospace
 
-During my product internship at Vayu Aerospace Pvt. Ltd., I worked on how motor and airframe vibration reached the flight-controller IMU. A mount could fit the controller perfectly and still pass too much vibration into it. I needed to understand the support, the controller, and the connections around them as one assembly.
+During my product internship at Vayu Aerospace, I investigated how motor vibration passed through the airframe to the flight-controller IMU. I compared a rigid mount, an elastomer-isolated tray, and a suspended mount in ANSYS, looking at natural frequencies, mode shapes, and vibration response.
 
-I compared a rigid baseline, an elastomer-isolated tray, and a suspended mount in ANSYS. Natural frequencies and mode shapes helped explain how each arrangement changed the vibration path. The response analysis then helped us shortlist the isolation concepts for hardware evaluation.
+The aim was to choose a mounting arrangement that could be integrated into the aircraft and reduce the vibration reaching the controller.
 
-## Mount integration, ground tests, and IMU analysis
+## From simulation to ground tests
 
-When we integrated the shortlisted mounts, I checked the CAD fit, clearances, fasteners, cable slack, and controller orientation. These details mattered because a tight cable or an unintended contact could create another path for vibration, even if the mount itself was compliant.
+I helped integrate the shortlisted mounts and checked fit, fasteners, controller orientation, clearances, and cable slack. A cable pulled tight across an isolated mount can provide another vibration path, so the surrounding assembly mattered too.
 
-The assembled mounts were tested through ground motor runs. I used MATLAB to inspect the IMU time histories and FFT spectra, alongside the RMS levels. For a sampled acceleration signal, RMS is:
+We tested the mounts through ground motor runs. I used MATLAB to compare IMU time histories, RMS vibration, and FFT spectra across consistent operating windows. RMS summarized the signal level; the spectra helped identify the frequencies contributing to it.
 
-$$
-a_{\mathrm{RMS}} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} a_i^2}
-$$
+## The mounting decision
 
-Here, N is the number of samples and aᵢ is the acceleration sample being compared. An RMS value only makes sense beside the processing choices and operating window: the same axis, units, motor condition, and treatment of the signal. The FFT adds another view by showing which frequencies contribute to the response.
+The team selected the elastomer-isolated modular tray using the simulation, integration, and ground-test evidence. My contribution covered mount modeling, integration, ground testing, and IMU analysis.
 
-## Selection of the elastomer-isolated tray
-
-The team selected the elastomer-isolated modular tray after combining the simulation, hardware integration, and IMU analysis. My contribution covered mount modeling, integration, ground tests, and analysis of the logs.
-
-The useful lesson for me was how easily an isolation idea can change during assembly. Checking the vibration path in the real hardware was as important as comparing the modeled supports.
+This work concerned flight-controller mounting and ground tests. It did not establish a flight-performance improvement or a general vibration reduction percentage.
 `,
   'adaptive-suspension-rover': String.raw`
-## Variable stiffness and vibration-induced speed limits
+## The question behind the rover
 
-I’m designing a six-wheel rover around a question I want to test: can the suspension change stiffness before vibration forces the rover to slow down? On rough terrain, speed is only one part of the problem. The suspension also changes how disturbances reach the body and its sensors.
+I’m designing a six-wheel rough-terrain rover to investigate whether changing suspension stiffness can reduce vibration before the robot needs to slow down. The project connects mechanical suspension design with IMU and wheel-encoder feedback.
 
-The design uses adjustable spring leverage to create soft, medium, and stiff settings. Each setting has a mechanical lock. A separate load path keeps the rover supported if the stiffness-changing mechanism fails, so maintaining support does not depend on successfully reconfiguring the suspension.
+The suspension concept uses adjustable spring leverage and supported stiffness settings. The initial control plan defines soft, medium, and stiff states with mechanical locking, plus a separate load path to keep the platform supported if reconfiguration fails.
 
-## Soft, medium, and stiff states with mechanical support
+## Suspension and feedback
 
-A simple mass–spring–damper model helps frame the first design decisions:
-
-$$
-m\ddot{x} + c\dot{x} + kx = F(t)
-$$
-
-In this simplified model, m is the supported mass, c is damping, k is effective stiffness, and x is displacement from equilibrium. F(t) represents a disturbance force. The model leaves out the full rover’s wheel contacts, geometry, and terrain, but makes the relationship between support and vibration easier to examine.
-
-Its undamped natural frequency is:
+A simplified mass–spring–damper model helps frame the design:
 
 $$
-f_n = \frac{1}{2\pi}\sqrt{\frac{k}{m}}
+m\ddot{x}+c\dot{x}+kx=F(t)
 $$
 
-Changing spring leverage changes the effective stiffness seen at the suspension output. That can move the natural frequency, but does not mean one setting will work best on every surface. This is why I want to compare settings under the same terrain and speed conditions.
+Changing effective stiffness k changes how the suspension responds to a disturbance. The complete rover also introduces wheel contact, geometry, and terrain effects, which this simple model leaves out.
 
-## IMU/encoder feedback and verified reconfiguration
+The controller is intended to detect sustained vibration, request a stiffness change, verify the new state, and measure the response again. It reduces speed if reconfiguration is insufficient. These are planned behaviors to evaluate on hardware.
 
-The planned controller uses IMU and wheel-encoder data to identify sustained vibration. It requests a stiffness change, verifies the new setting, and measures the response again. If reconfiguration does not reduce the vibration enough, it can then reduce speed.
+![Interior CAD view of the six-wheel rover with the roof hidden to expose the mechanical assembly.](/images/projects/rover-interior-cad.png)
 
-Verification matters here. Asking a mechanism to move and knowing that it reached a locked state are different things. The control design needs to account for that difference before it can make sensible decisions about speed.
+_Interior view from the rover’s native CAD assembly. The roof is hidden for visibility; this is design documentation._
 
-## Validation across four control strategies
+## What needs testing next
 
-The project is in the design stage. I’m structuring validation from a single suspension unit through full rover trials. The comparison will include fixed stiffness, speed-only control, stiffness-only control, and the combined system.
+The next step is to evaluate one suspension unit before moving to complete rover trials. The validation plan compares fixed stiffness, speed-only control, stiffness-only control, and combined control under comparable terrain conditions.
 
-Those tests should show whether reconfiguration helps, where it does not, and what it costs in time and energy. I want the next design decision to follow from those measurements.
+The CAD assembly documents the mechanical layout. It does not demonstrate load capacity, fatigue life, or vibration attenuation; those depend on analysis and physical testing.
 `,
   'tensegrity-joint': String.raw`
-## Variable-stiffness knee-joint modeling for an exoskeleton
+## A knee joint with adjustable stiffness
 
-I’m modeling a tensegrity-based variable-stiffness knee joint for a knee exoskeleton. The study examines how geometry and internal loading change the joint’s force output and stiffness.
+I’m studying a tensegrity-based knee joint for an exoskeleton. The central question is how geometry, external loading, and internal tendon force change the joint’s force output and stiffness.
 
-In MATLAB, I varied geometry, external loading, and internal force to identify the design variables with the strongest influence on force and stiffness. The analysis narrowed the design space to a smaller set of configurations for a physical knee-exoskeleton prototype.
+My MATLAB work compares these variables and helps narrow the configurations worth developing further. The current preliminary layout uses two Y-frames, a floating tristar, and 24 tendon spans. Support tendons carry the applied force; separate antagonistic tendon stages provide the flexion moment.
 
 ## Member-force analysis and rotational stiffness
 
-A useful starting point is equilibrium. With a consistent force convention, the member forces and external load must balance:
+At a chosen configuration, the member forces must balance the external load:
 
 $$
-A(q)\,t + f_{\mathrm{ext}} = 0
+A(q)t+f_{\mathrm{ext}}=0
 $$
 
-A(q) describes how the members are arranged at configuration q. The vector t contains their axial forces, and fₑₓₜ contains the external loads. The geometry matters because it determines how an individual member’s force contributes to the overall balance. Cable forces also need to remain consistent with cables carrying tension.
+The geometry matrix A(q) maps member tensions t into the applied force balance. Cable tensions must remain positive for the assumed tension network to be maintained.
 
-For rotational response, local joint stiffness can be described by:
+Local rotational stiffness describes how resisting torque changes with joint angle:
 
 $$
-k_\theta = \frac{\mathrm{d}\tau}{\mathrm{d}\theta}
+k_\theta=\frac{\mathrm{d}\tau}{\mathrm{d}\theta}
 $$
 
-Here, θ is joint angle and τ is the resisting torque along the response being examined. I’m interested in how that slope changes across configurations and loading conditions. A single stiffness value does not describe the whole motion.
+I use these relationships to examine the effects of geometry and preload, rather than treating the joint as having one stiffness throughout its motion.
 
-## From influential design variables to prototype configurations
+## Current design and next steps
 
-The CAD views help me inspect the geometry and how the joint fits into a leg assembly. They are a paper-based mechanism reconstruction used for study, drawing on [Mortensen and colleagues’ tensegrity leg design](https://arxiv.org/abs/2504.19685).
+The design review includes preliminary tendon loads, member sizing, and connection checks. Its topology draws on [Mortensen and colleagues’ tensegrity leg study](https://arxiv.org/abs/2504.19685); the project explores its own support and torque layout.
 
-![Native SolidWorks view of the full tensegrity leg study, showing the joint within the surrounding assembly.](/images/projects/tensegrity-leg-cad.webp)
-
-_Full leg assembly · Native SolidWorks view from the paper-based CAD reconstruction. This is a mechanism study, not tested hardware._
-
-The shortlisted configurations are intended for a physical knee-exoskeleton prototype. Modeling and design remain ongoing; the CAD study and MATLAB analysis do not represent tested exoskeleton hardware.
+The current work is computational and mechanical design. Detailed geometry, tendon routing, assembly clearance, full stiffness analysis, and bench tests still need verification. The diagram above shows the project’s design networks; it is not a photograph of a built exoskeleton.
 `,
   kneeassist: String.raw`
-## Passive spring-assisted concept and flexion-range checks
+## From a passive concept to an actuated design
 
-This team project began as a passive spring-assisted knee concept. We wanted to understand how spring placement and joint geometry changed the assistance available through the motion. That meant looking at the force path and usable movement together.
+This team project began with a passive spring-assisted knee mechanism. I worked on the mechanism in SolidWorks and ANSYS, comparing spring placement, joint geometry, and clearance through the intended flexion range.
 
-I modeled and refined the mechanism in SolidWorks, using ANSYS and interference checks to identify layouts that could move through the intended flexion range. Moving a spring attachment could change both the assistance and the clearance, so those decisions needed to be checked together.
+The design then developed into an actuated cable-and-spring brace with knee-angle sensing. It is intended to add assistance while the user continues to extend actively.
 
-## Spring force, moment arm, and assistance torque
+## Spring force and assistance torque
 
-A first-order model connects spring extension to force, and force to the assistance torque:
+The basic design relationship is:
 
 $$
-\begin{aligned}
-F_s &= k_s\,\Delta\ell \\
-\tau_a(\theta) &= F_s\,r_\perp(\theta)
-\end{aligned}
+F_s=k_s\Delta\ell,\qquad
+\tau_a(\theta)=F_s r_\perp(\theta)
 $$
 
-Fₛ is spring force, kₛ is spring stiffness, and Δℓ is extension from the spring’s unloaded length. The perpendicular moment arm r⊥ changes with knee angle θ. These equations explain why the attachment geometry matters: the same spring force can produce a different torque at a different angle.
+Spring extension sets the spring force. The perpendicular moment arm changes with knee angle, so attachment geometry affects the torque available through the motion. Friction, cable routing, and the real spring response still require bench measurements.
 
-This is an idealized relationship for understanding the design. Friction, cable routing, spring behavior, and the physical assembly still need bench measurements.
+The system definition brings together adjustable rails and cuffs, the motor drive, angle sensing, power protection, and an independent manual release. The original CAD screenshot above shows this layout.
 
-## Knee-angle tracking and cable-and-spring actuation
+## Design status and team recognition
 
-We developed the passive concept into an actuated knee assistance system that tracks knee angle and adds controlled cable-and-spring assistance while the user extends actively.
+Our team placed in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge. The completed work covers the passive concept, actuated design, and procurement-ready system definition.
 
-The system definition includes adjustable rails and cuffs, the motor drive, angle sensing, protected power, and an independent manual release. The CAD screenshot above shows this actuated layout. The release is part of the mechanical design, rather than relying only on a software command to stop assistance.
-
-## System architecture, bench tests, and national recognition
-
-The design reached a procurement-ready system, with bench checks defined for angle accuracy, spring force, assisted motion, jam release, faults, and cycle life. Our team placed in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge.
-
-The completed work covers the design and system definition. Procurement and bench testing are the next steps; there are no clinical or human-performance results to report from this work.
+The bench plan includes angle accuracy, spring force, assisted motion, jam release, fault behavior, and cycle life. Procurement and bench testing are the next steps. The project does not yet have human-performance or clinical results.
 `,
   'reaction-wheel-microvibrations': String.raw`
-## Reaction-wheel excitation and payload line-of-sight jitter
+## From reaction-wheel forces to camera motion
 
-I developed a parameterized high-fidelity finite-element model of the reaction-wheel–mount–spacecraft–payload system. The model follows wheel-induced disturbances through the mounting interface and spacecraft structure to the payload, including line-of-sight jitter outputs.
+This project studies how reaction-wheel disturbances pass through a spacecraft structure and affect a camera support. It connects structural dynamics with reduced-order models and neural response prediction.
 
-The excitation is multi-order and speed-dependent. The study combines modal, harmonic-response, and rotordynamic analyses to examine the response as wheel speed changes.
+The latest computational pilot covers 5–20 Hz. The COMSOL model includes wheel locations, mounts, the camera support, optical bench, and equivalent cable regions, with a free-floating spacecraft condition. Force and moment inputs are treated separately, with their own units.
 
-## Structural response and speed-dependent excitation
+## A smaller model for repeated calculations
 
-A simplified linear harmonic structural model can be written as:
+The pilot reduces the structural equations to 52 coordinates: 36 stored natural modes and 16 response corrections. Those corrections address camera-relative bending missed by the smaller basis.
 
-$$
-\left(K-\omega^2 M+\mathrm{i}\omega C\right)\hat{q}=\hat{f}
-$$
-
-M, C, and K are the mass, damping, and stiffness matrices. The complex displacement amplitude q̂ responds to the force amplitude f̂ at angular frequency ω. This equation explains the basic structural response; it is not a complete representation of the project’s rotordynamic model or surrogate architecture.
-
-The fundamental rotational frequency is:
+For each frequency and structural configuration, the reduced system solves:
 
 $$
-f_{\mathrm{rot}} = \frac{n}{60}
+A(f,p)q_j=b_j,\qquad u_j=Cq_j
 $$
 
-n is wheel speed in rpm. The project includes multi-order excitation, so a speed sweep must account for more than the fundamental rotational frequency. The payload response is evaluated alongside the structural vibration.
+Here p contains the structural settings, q is the complex reduced state, and C maps it to the camera and bench responses. The study estimates structural tilt from relative displacement between two camera-support stations. This is a pointing-motion proxy, not a measured optical-jitter result.
 
-![Sectioned reaction-wheel reference CAD showing the rotor, housing, shaft, and support plate.](/images/projects/reaction-wheel-cutaway.webp)
+## Comparing MLP, DeepONet, and physics-informed models
 
-_Section view from the project’s reference assembly. Surface finishes are illustrative; this is CAD, not a FEM response plot or experimental measurement._
+The response predictors learn real and imaginary components from reduced-model labels. Complete structural configurations are separated for training, validation, and testing, so frequencies from the same structure do not leak across those groups.
 
-## Analytical and numerical verification
+The pilot compares an MLP with a standard DeepONet. Separate experiments examine transfer from a 36-coordinate model to the corrected 52-coordinate model, and a physics-informed state predictor with an equation-residual term. These experiments have different targets and evaluation scopes; their errors are reported separately.
 
-I verified the model through analytical, mesh, frequency-step, modal-truncation, and dynamic-equilibrium checks. A strong response appeared near 5,800 rpm, with 0.33% mesh sensitivity in peak amplitude.
+## Numerical checks and the design decision
 
-The 0.33% figure describes the change under mesh refinement. It is not a surrogate prediction error or a claim of experimental accuracy. Frequency-step and modal-truncation checks address different numerical sensitivities around the response peak.
+Selected full-FEM points provide a separate check on the reduced model and neural predictions. Agreement with reduced-model labels alone does not establish agreement with the detailed FEM model at every resonance.
 
-## Low-fidelity models and a leakage-safe multi-fidelity dataset
+An earlier native-FEM study found a response near 5,800 rpm with about 0.33% local mesh sensitivity in peak amplitude. That figure belongs to that earlier mesh comparison. It is not a neural prediction error, an experimental accuracy figure, or evidence that the current pilot covers that frequency range.
 
-I built low-fidelity and reduced-order models alongside the high-fidelity FEM model, then assembled a leakage-safe multi-fidelity dataset for surrogate evaluation.
+In the pilot’s scenario study, the candidate stiffness change produced a very small apparent improvement relative to prediction error. The supported decision was to retain the nominal design.
 
-The evaluation keeps the comparison focused on what a surrogate needs to preserve: resonance behavior, physical consistency, generalization beyond the training distribution, and the amount of high-fidelity data required.
+## What the work establishes
 
-## MLP, DeepONet, and physics-informed surrogate comparisons
+The deliverables include structural response calculations, trained models, tests on unseen configurations, selected full-FEM comparisons, and an interactive demonstration. The current claim is a computational pilot over 5–20 Hz.
 
-I compared MLP, DeepONet, and physics-informed/multi-fidelity variants on resonance accuracy, physics consistency, out-of-distribution generalization, and data efficiency.
-
-## Uncertainty, resonance-risk mapping, and robust design
-
-I used the surrogate for uncertainty quantification, resonance-risk mapping, and robust design. This connects the computational model to design decisions about vibration and payload jitter, rather than treating prediction as the final output.
-
-The completed work is computational modeling, numerical verification, and surrogate evaluation. Experimental validation remains separate.
+Global mesh and basis convergence, measured wheel spectra and damping, and experimental pointing validation remain open. The study does not establish flight qualification or a validated design surrogate across the spacecraft’s full operating range.
 `,
   'off-road-leaf-robot': String.raw`
-## Dry and wet leaf collection on undulating terrain
+## Collecting leaves without collecting the soil
 
-I’m working on a robot that collects dry and wet leaves without pulling in too much soil. A mechanism that works on a flat, clean surface may behave very differently when the leaves are damp, the ground changes height, or the wheels lose traction.
+I’m developing a robot for collecting dry and wet leaves on uneven ground. The pickup mechanism needs to stay close enough to the surface to collect leaves without drawing in too much soil, even as terrain and traction change.
 
-I separated the design into locomotion, pickup, transfer, storage, and terrain-following systems. This lets me test the important functions before committing to the full robot.
+I divided the platform into locomotion, pickup, transfer, storage, and terrain-following subsystems. This makes it possible to compare the important functions before committing to one complete machine.
 
-## Five subsystems, pickup screening, and the BOM
+## Mechanism selection and integration
 
-The pickup mechanism has to fit beside the wheels and transfer system, move material into storage, and stay close enough to uneven ground. I compared concepts against space, manufacturability, and integration limits, then built a bottom-up BOM around the practical options.
+I screened pickup concepts against space, manufacturing, and integration constraints. A promising pickup mechanism still needs to fit alongside the wheels, move material into storage, and tolerate changes in ground height.
 
-The next tests need to distinguish picking up more material from picking up the right material. One proposed measure of pickup efficiency is:
+The current work includes a bottom-up BOM—a bill of materials—and test criteria for traction, pickup efficiency, soil rejection, and endurance. Pickup quantity and soil contamination need separate measurements; collecting more material is not enough if much of it is soil.
 
-$$
-\eta_{\mathrm{pickup}}
-=\frac{m_{\mathrm{leaves,\ collected}}}{m_{\mathrm{leaves,\ available}}}
-$$
+## Current stage
 
-The numerator is the mass of leaves collected, and the denominator is the leaf mass available in a defined test area. Soil needs to be measured separately. A high pickup ratio would not be enough if much of the collected load were soil.
-
-## Traction, pickup efficiency, soil rejection, and endurance
-
-The architecture, mechanism screening, and BOM support the next design decisions. I’ve defined tests for traction, pickup efficiency, soil rejection, and endurance.
-
-The work is ongoing. These measures describe the planned evaluation; I do not have pickup or endurance results to report yet. I want subsystem tests to show where the design needs to change before building the complete machine.
+Subsystem architecture and mechanism selection are ongoing. The performance tests are planned, and no pickup-efficiency or endurance results are claimed yet.
 `,
   'uncertainty-aware-navigation': String.raw`
-## A* planning, heading control, and EKF localization
+## Planning with an uncertain position estimate
 
-I built a differential-drive simulator with A* path planning, heading control, wheel encoders, an IMU, and extended Kalman filter localization. The question was what the robot should do when its estimate of its own position becomes unreliable.
+I built a differential-drive robot simulator that combines A* path planning, heading control, encoder and IMU measurements, and extended Kalman filter (EKF) localization.
 
-I injected encoder noise, IMU drift, yaw bias, and wheel slip. This made it possible to inspect failures that would be hidden by perfect simulated sensing.
+The question was how navigation should change when the robot becomes less certain of its position. I added encoder noise, IMU drift, yaw bias, and wheel slip to test this rather than relying on ideal sensors.
 
-## Differential-drive kinematics and state uncertainty
+## Motion, localization, and recovery
 
-For an ideal differential drive with equal wheel radii, forward speed and heading rate are:
-
-$$
-\begin{aligned}
-v &= \frac{r}{2}\left(\omega_R+\omega_L\right) \\
-\dot{\psi} &= \frac{r}{b}\left(\omega_R-\omega_L\right)
-\end{aligned}
-$$
-
-r is wheel radius, b is the distance between the wheels, and ωᴿ and ωᴸ are their angular velocities. This [differential-drive model](https://www.mathworks.com/help/robotics/ref/differentialdrivekinematics.html) is a starting point; wheel slip means measured wheel rotation does not always translate into the motion predicted by the ideal model.
-
-The EKF tracks uncertainty as well as state. Its prediction step propagates the covariance:
+For an ideal differential drive with equal wheel radii:
 
 $$
-P_k^- = F_k P_{k-1}^+ F_k^\mathsf{T} + Q_k
+v=\frac{r}{2}(\omega_R+\omega_L),\qquad
+\dot{\psi}=\frac{r}{b}(\omega_R-\omega_L)
 $$
 
-P is the state covariance, F is the local linearization of the motion model, and Q represents process uncertainty. The measurement update then corrects the prediction using sensor information. [MathWorks’ EKF explanation](https://www.mathworks.com/help/fusion/ug/extended-kalman-filters.html) gives the underlying prediction and correction structure.
+Wheel radius r and separation b connect wheel speeds to forward and angular motion. Slip means the actual motion can differ from this prediction. The EKF combines the motion model with measurements and tracks uncertainty alongside its state estimate.
 
-## Confidence-aware speed and recovery logic
+I added confidence-aware speed and recovery logic so the simulated robot could respond when localization became unreliable.
 
-I implemented confidence-aware speed and recovery logic so the robot could respond when localization became unreliable. Planning a route, following it, and deciding whether to trust the current state estimate all belong in the navigation loop.
+## Monte Carlo evaluation
 
-## Monte Carlo evaluation with five performance measures
+I evaluated the navigation stack through Monte Carlo trials, tracking collisions, localization error, recovery events, success, and time to goal. These measures help distinguish reaching the target from reaching it reliably.
 
-I evaluated the stack through Monte Carlo trials, tracking collisions, localization error, recovery events, success, and time to goal. Reaching the target alone would not explain whether the route was safe or how often recovery was needed.
-
-This was a simulation project. The results and workflow concern the simulated robot and disturbances, rather than field validation on physical hardware.
+The completed work is a simulation and evaluation workflow. It does not represent tests on a physical robot.
 `,
   'four-bar-door-mechanism': String.raw`
-## Starting from the door motion
+## Designing the door motion
 
-I worked with my team to build a four-bar linkage door-opening mechanism. We began with the movement we wanted, then worked through link lengths and pivot positions to find a layout within the mechanism’s kinematic limits.
+I worked with my team to build a planar four-bar linkage door-opening mechanism. We chose link lengths and pivot positions around the intended door motion and the mechanism’s kinematic limits.
 
-The reference photograph above shows a spatial four-bar linkage. Our door mechanism was a planar team build; the photograph is a related mechanism reference, not our prototype.
+## Building and checking the linkage
 
-## Keeping the loop closed
+We made the links, pivots, and joints, assembled the mechanism, and checked its motion. The build made it easier to see how a small change in pivot position could change the door’s path or limit its travel.
 
-A planar four-bar can be described by the vector loop:
-
-$$
-\mathbf{r}_2+\mathbf{r}_3
-=\mathbf{r}_1+\mathbf{r}_4
-$$
-
-r₁ connects the fixed pivots, while r₂, r₃, and r₄ describe the moving links with directions chosen around the loop. Their positions must satisfy this closure as the mechanism moves. Changing a link length or pivot location changes the motion allowed by that geometry.
-
-We turned the layout into physical links, pivots, and joints and built a working door-opening mechanism. Seeing the assembly move helped me understand how a small geometric change can affect the whole motion.
+The completed result was a working team-built mechanism. This was an early practical project in mechanism design and assembly.
 `,
   'easy-access-wallet': String.raw`
-## A small access problem
+## Making cards easier to reach
 
-This project started with the difficulty of pulling cards out of a compact holder. I developed a wallet layout around easier card access, then turned that requirement into a mechanical design concept.
+I developed a compact wallet concept around a simple access problem: removing a card from a tightly packed holder.
 
-The challenge was to make room for reaching and removing a card while keeping the holder compact. It helped me think about the movement the user needs before choosing a mechanism.
+## Working through the layout
 
-## Making space for the cards
+I considered how the stack would be supported, how much clearance it needed, and where the user’s fingers could reach. The layout followed those requirements rather than starting with a preferred mechanism.
 
-A basic packaging check is:
-
-$$
-h_{\mathrm{inside}} \geq n\,t_{\mathrm{card}} + c
-$$
-
-n is the number of cards, t is card thickness, and c is the clearance allowed for the stack. This simplified relationship explains one of the layout constraints; it is not a manufacturing tolerance specification. Card access also depends on where the fingers can reach and how the stack is supported.
-
-The completed work was an early design concept for easier card access. It was not a mass-produced product or a formal user study. The photograph above is a third-party card holder used as a reference for the topic.
+The completed work was a mechanical design concept. It was not a manufactured product or a formal user study.
 `,
   'solar-smart-home': String.raw`
-## Bringing the functions together
+## Connecting sensors and control logic
 
-I built an Arduino-based smart-home model with several sensors and automated functions connected into one wired electronic system. I worked on the wiring and control logic, then debugged the connections and code until the functions operated together.
-
-Working on the model taught me to trace a problem through the circuit and the code instead of assuming it belonged to only one of them.
+I built an Arduino-based smart-home model with several sensor inputs and automated functions. My work covered circuit wiring, control logic, and debugging the connections and code so the functions operated together.
 
 ## Adding a solar-power option
 
-I added a photovoltaic cell power source and tested how the model behaved with that supply. The basic electrical relationship is:
-
-$$
-P = VI
-$$
-
-Power depends on both voltage and current. A supply needs to provide the conditions required by the connected electronics, including changes in demand as the functions operate. The equation is background for the power question, not a claimed measurement of the model’s solar output.
-
-The project reached a working, debugged model with integrated sensors and a solar-power option. The reference photograph above shows an Arduino circuit, rather than my smart-home assembly.
+I added a photovoltaic cell as a power-source option and tested the model with that supply. This was a model-scale electronics project and an early introduction to integrating sensing, control, and power.
 `,
   'traffic-and-elevated-bus': String.raw`
-## Learning through wired models
+## Two early electronic builds
 
-I built a smart traffic-light system and a separate transit elevated-bus model. Both were working electronic models, wired by hand with logic gates controlling their operating sequences.
+I built a smart traffic-light system and a separate transit elevated-bus model. Both used hand-wired circuits and logic gates to control repeatable operating sequences.
 
-For the traffic-light system, I connected the signal lights into a repeatable junction sequence. For the elevated-bus model, I built a separate control circuit, then traced faults in the connections and logic until the sequence behaved consistently.
+## Wiring and fault tracing
 
-## Thinking about the sequence
+For the traffic-light model, I connected the signals into a junction sequence. The elevated-bus model used its own control circuit. I traced wiring and logic faults until each model followed its intended sequence.
 
-A simple way to express one signal-control requirement is:
-
-$$
-g_{\mathrm{NS}}\,g_{\mathrm{EW}} = 0
-$$
-
-If gᴺˢ and gᴱᵂ are binary indicators for conflicting green signals, this condition says they should not be active together. It illustrates the logic question in a model junction, rather than establishing compliance with real traffic-control standards.
-
-These were early model-scale builds, not deployed transport systems. They gave me practice turning an operating sequence into a wired circuit and following faults when it did not behave as expected.
+These were working model-scale builds and early practice in circuit wiring, sequencing, and debugging.
 `,
 };
