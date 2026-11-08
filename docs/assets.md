@@ -1,6 +1,6 @@
 # Portfolio asset provenance
 
-Verified CAD views are used where available. Project covers otherwise use credited reference photographs of related subjects. The original temporary vector assets remain archived but are not active project covers. No fabricated hardware photograph is used.
+The current site uses only original project documentation, as recorded in `current-project-assets.json` and `content-review.md`. Projects without verified imagery use text entries. The reference photographs and reconstructed CAD documented below describe the archived `/v1` version and earlier revisions; they are not current project covers.
 
 ## Tensegrity joint
 

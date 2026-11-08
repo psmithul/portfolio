@@ -18,6 +18,7 @@ export type Project = {
   evidence: string[];
   image?: {
     kind?: 'documentation' | 'illustration' | 'stock' | 'reference';
+    label?: string;
     referenceLabel?: string;
     licenseUrl?: string;
     fit?: 'cover' | 'contain';
@@ -87,7 +88,7 @@ export const projects: Project[] = [
     discipline: 'Field robotics · Suspension and control',
     period: 'Sep 2026 — Present',
     status: 'Ongoing',
-    context: 'Research & staged hardware development',
+    context: 'Mechanical design and control development',
     model: 'rover',
     visualLabel: 'SIX-WHEEL ROVER / CONCEPT STUDY',
     image: projectImages['adaptive-suspension-rover'],
@@ -97,7 +98,7 @@ export const projects: Project[] = [
       'Control design',
     ],
     summary:
-      'A six-wheel rough-terrain rover with mechanically locked stiffness states and IMU/encoder feedback, designed to investigate vibration-induced speed limits.',
+      'I’m designing a six-wheel rover to study whether changing suspension stiffness can reduce vibration before the robot needs to slow down. CAD and control development are ongoing; terrain tests are planned.',
     question:
       'Can a rover reduce vibration by changing its suspension before it has to slow down?',
     role: 'I am designing a six-wheel rover with adjustable spring leverage. The suspension moves between soft, medium, and stiff settings, then mechanically locks the selected setting.',
@@ -116,7 +117,7 @@ export const projects: Project[] = [
       },
     ],
     outcome:
-      'Designed the six-wheel platform, soft/medium/stiff suspension states, a vibration-aware control strategy, and a validation plan. Hardware validation proceeds from a single suspension unit to the complete rover.',
+      'Developed the rover layout, suspension concepts, feedback strategy, and test plan. The next step is to evaluate a single suspension unit before testing the complete platform.',
     scope:
       'Design and staged hardware development. Rough-terrain testing and full-system comparisons are planned.',
     evidence: [
@@ -133,16 +134,16 @@ export const projects: Project[] = [
     discipline: 'Tensegrity · Knee exoskeletons',
     period: 'May 2026 — Present',
     status: 'Ongoing',
-    context: 'Research project',
+    context: 'Joint modeling and preliminary mechanical design',
     model: 'tensegrity',
     visualLabel: 'KNEE JOINT / GEOMETRY / INTERNAL FORCE / STIFFNESS',
     image: projectImages['tensegrity-joint'],
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
-      'Modeled a variable-stiffness tensegrity knee joint in MATLAB, identifying the geometry and loading variables that most influence force output and stiffness.',
+      'I’m studying how joint geometry and tendon loading change knee stiffness. The work combines MATLAB force calculations with a compound tensegrity layout and preliminary member sizing.',
     question:
       'How can geometry and internal forces make the same joint respond differently to a load?',
-    role: 'I modeled a tensegrity-based variable-stiffness knee joint for a knee exoskeleton and analyzed force output and stiffness in MATLAB while varying geometry, external loading, and internal force.',
+    role: 'I’m modeling the joint’s force and stiffness response in MATLAB and developing a layout with two Y-frames, a floating tristar, and separate support and torque tendons.',
     approach: [
       {
         title: 'Model member forces and joint response',
@@ -158,9 +159,9 @@ export const projects: Project[] = [
       },
     ],
     outcome:
-      'Identified the variables with the strongest influence on force and stiffness, then narrowed the design space to configurations for a physical knee-exoskeleton prototype.',
+      'Narrowed the joint configurations through force and stiffness analysis, then developed a preliminary layout and static sizing calculations. Detailed CAD, assembly checks, and bench validation remain in progress.',
     scope:
-      'Ongoing modeling and design for a knee-exoskeleton joint. The shortlisted configurations are intended for a physical prototype; hardware validation remains a next step.',
+      'Ongoing computational and preliminary mechanical design. Static calculations do not establish whole-joint stability, fatigue life, or suitability for human use.',
     evidence: [
       'MATLAB member-force calculations',
       'Geometry, external-load, and internal-force comparisons',
@@ -181,7 +182,7 @@ export const projects: Project[] = [
     image: projectImages['kneeassist'],
     tools: ['SolidWorks', 'ANSYS', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'A spring-assisted knee mechanism developed into an actuated brace with angle sensing, controlled assistance, and a manual release.',
+      'Our team developed a passive spring-assisted knee concept into an actuated brace design with knee-angle sensing and a manual release. The design reached procurement readiness and placed in the top 5 of 70 teams nationally.',
     question:
       'How can a knee mechanism assist movement while the user continues to extend actively?',
     role: 'I worked on the passive spring-assisted mechanism, refined the assembly in SolidWorks, and checked its motion in ANSYS. We then extended it into an actuated brace and defined a procurement-ready system with drive, sensing, power protection, and an independent manual release.',
@@ -222,50 +223,50 @@ export const projects: Project[] = [
     discipline: 'Spacecraft dynamics · Physics-informed machine learning',
     period: 'Aug — Oct 2026',
     status: 'Completed',
-    context: 'High-fidelity FEM · Multi-fidelity surrogate modeling',
+    context: 'Computational study · 5–20 Hz reduced-model pilot',
     model: 'satellite',
     visualLabel: 'REACTION WHEEL / SPACECRAFT / PAYLOAD JITTER',
     image: projectImages['reaction-wheel-microvibrations'],
     tools: [
-      'High-fidelity FEM',
-      'Modal, harmonic & rotordynamic analysis',
+      'COMSOL Multiphysics',
+      'Modal and harmonic-response analysis',
       'Reduced-order models',
       'MLP & DeepONet',
       'Physics-informed multi-fidelity learning',
     ],
     summary:
-      'A verified reaction-wheel–spacecraft–payload FEM model and physics-informed multi-fidelity surrogates for vibration, line-of-sight jitter, uncertainty, and robust design.',
+      'A spacecraft vibration study connecting finite-element analysis, reduced-order modeling, and neural prediction. The latest computational pilot compares MLP, DeepONet, and physics-informed variants over 5–20 Hz.',
     question:
       'Can a multi-fidelity surrogate preserve resonance and physics while predicting spacecraft microvibration and payload jitter efficiently?',
-    role: 'I developed a parameterized high-fidelity FEM model of the reaction-wheel–mount–spacecraft–payload system, verified the response, built lower-fidelity models and a leakage-safe dataset, and compared MLP, DeepONet, and physics-informed/multi-fidelity variants.',
+    role: 'I worked on the spacecraft structural model, wheel-to-camera response calculations, reduced equations, and comparisons between neural predictors. The current pilot uses a 52-coordinate reduced model and separates complete structural configurations for training, validation, and testing.',
     approach: [
       {
         title: 'Model the coupled wheel–spacecraft–payload system',
-        body: 'Use multi-order speed-dependent excitation with modal, harmonic-response, and rotordynamic analyses. Evaluate structural response and payload line-of-sight jitter.',
+        body: 'Use modal and harmonic-response analysis to calculate wheel-to-camera and optical-bench responses. Treat force and moment inputs separately, and estimate relative structural tilt from the camera-support stations.',
       },
       {
-        title: 'Verify resonance and numerical consistency',
-        body: 'Check analytical behavior, mesh sensitivity, frequency-step resolution, modal truncation, and dynamic equilibrium. A strong response near 5,800 rpm showed 0.33% mesh sensitivity in peak amplitude.',
+        title: 'Check the numerical reference',
+        body: 'Compare reduced-model responses with selected full-FEM points. Keep the earlier local mesh check near 5,800 rpm separate from the current 5–20 Hz pilot; neither establishes full-band convergence.',
       },
       {
         title: 'Build and compare multi-fidelity surrogates',
-        body: 'Build low-fidelity and reduced-order models and a leakage-safe multi-fidelity dataset. Compare MLP, DeepONet, and physics-informed/multi-fidelity variants on resonance accuracy, physics consistency, out-of-distribution generalization, and data efficiency.',
+        body: 'Compare MLP and DeepONet response predictors, then examine physics-residual training and transfer between 36- and 52-coordinate reduced models. Report reduced-model and full-FEM comparisons separately.',
       },
       {
-        title: 'Apply the surrogate to uncertainty and robust design',
-        body: 'Use the surrogate for uncertainty quantification, resonance-risk mapping, and robust design.',
+        title: 'Use scenario studies to question a design change',
+        body: 'Explore assumed stiffness, damping, and wheel-disturbance scenarios. Compare the apparent design gain with numerical and prediction error before recommending a change.',
       },
     ],
     outcome:
-      'Verified the coupled FEM model, identified a response near 5,800 rpm with 0.33% mesh sensitivity, compared multi-fidelity surrogate variants, and used the surrogate for uncertainty quantification, resonance-risk mapping, and robust design.',
+      'Completed a computational pilot with structural response curves, trained neural predictors, held-out configuration tests, and selected full-FEM checks. The scenario study supported retaining the nominal design because prediction error exceeded the candidate’s small apparent gain.',
     scope:
-      'Completed computational modeling, numerical verification, and surrogate evaluation. The 0.33% figure describes mesh sensitivity in peak amplitude, not surrogate error or experimental accuracy.',
+      'Computational pilot over 5–20 Hz. Neural training uses reduced-model labels; selected full-FEM points provide a separate numerical check. Global convergence, measured wheel inputs, and experimental pointing validation remain open.',
     evidence: [
-      'Response peak near 5,800 rpm',
-      '0.33% mesh sensitivity in peak amplitude',
-      'Analytical, mesh, frequency-step, modal-truncation, and equilibrium checks',
+      '52-coordinate reduced model: 36 modes and 16 response corrections',
+      'Configuration-level train, validation, and test separation',
+      'Full-FEM checks reported separately from reduced-model prediction errors',
       'MLP, DeepONet, and physics-informed/multi-fidelity comparisons',
-      'Uncertainty quantification, resonance-risk mapping, and robust design',
+      'Scenario exploration and a conservative design decision',
     ],
   },
   {
@@ -286,7 +287,7 @@ export const projects: Project[] = [
       'BOM & test planning',
     ],
     summary:
-      'A modular field robot for collecting dry and wet leaves on uneven terrain, with subsystem architecture, practical pickup concepts, a BOM, and defined performance tests.',
+      'I’m developing a robot to collect dry and wet leaves on uneven ground while limiting soil pickup. Current work covers subsystem layout, mechanism selection, a bill of materials, and a validation plan.',
     question: 'How do you pick up the leaves without picking up the ground?',
     role: 'I broke the robot into locomotion, pickup, transfer, storage, and terrain-following systems, then compared mechanisms against space, manufacturing, and integration limits.',
     approach: [
@@ -326,7 +327,7 @@ export const projects: Project[] = [
     image: projectImages['uncertainty-aware-navigation'],
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
-      'A differential-drive simulation combining A* planning, EKF localization, and recovery when the position estimate becomes uncertain.',
+      'I built a differential-drive robot simulator combining A* planning and EKF localization, then added sensor noise and wheel slip to test confidence-aware speed and recovery logic through Monte Carlo trials.',
     question:
       'What should a robot do when it no longer trusts its position estimate?',
     role: 'I built a differential-drive simulator with A* planning, heading control, encoders, an IMU, and extended Kalman filter localization.',

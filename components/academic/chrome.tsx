@@ -24,7 +24,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
               href="/#research"
               aria-current={path.startsWith('/work') ? 'page' : undefined}
             >
-              research
+              projects
             </Link>
             <Link
               href="/activities"
@@ -33,7 +33,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
               activities
             </Link>
             <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-              vitae
+              résumé
             </a>
           </nav>
         </div>

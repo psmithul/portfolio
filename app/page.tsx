@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { projects } from '@/content/projects';
-import { news, selectedResearchSlugs } from '@/content/academic';
+import { recentUpdates, selectedResearchSlugs } from '@/content/academic';
 import { ResearchList } from '@/components/academic/research-list';
 import { SocialLinks } from '@/components/academic/social-links';
 import { getPublicPosts } from '@/lib/journal-store';
@@ -39,42 +39,41 @@ export default async function Home() {
           </div>
         </figure>
         <p>
-          I’m a final-year Mechanical Engineering student at{' '}
-          <a href="https://www.nitk.ac.in/">NITK Surathkal</a>, graduating in
-          June 2027.
+          Hey, I’m Mithul. I’m a fourth-year Mechanical Engineering
+          undergraduate at <a href="https://www.nitk.ac.in/">NITK Surathkal</a>,
+          graduating in June 2027.
         </p>
         <p>
-          My interests lie in experimental and field robotics: how mechanical
-          design, sensing, vibration, and control shape the way robots move and
-          interact with the real world. I enjoy connecting modeling and
-          mechanism design with physical hardware. My tools include MATLAB,
-          SolidWorks, and ANSYS.
+          I’m interested in building intelligent physical systems that can move,
+          adapt, and interact with the world in new ways. What excites me is
+          exploring how control, dynamics, mechanics, and computation can come
+          together to make things possible.
         </p>
         <p>
-          Right now, I’m designing a variable-stiffness rough-terrain rover, a
-          terrain-adaptive leaf-collection robot, and a tensegrity knee joint
-          for an exoskeleton. I’ve also worked on{' '}
-          <Link href="/work/reaction-wheel-microvibrations">
-            spacecraft microvibration
-          </Link>{' '}
-          and{' '}
-          <Link href="/work/uav-vibration-integration">
-            UAV vibration isolation
+          I enjoy developing the algorithms behind these systems as much as
+          designing and building their hardware, especially when a problem takes
+          me into unfamiliar territory. My current work includes a{' '}
+          <Link href="/work/adaptive-suspension-rover">
+            rough-terrain rover
           </Link>
+          , a{' '}
+          <Link href="/work/off-road-leaf-robot">leaf-collection robot</Link>,
+          and a <Link href="/work/tensegrity-joint">tensegrity knee joint</Link>
           .
         </p>
         <p>
-          For research, collaborations, or a conversation about robots, feel
-          free to reach out on <a href="mailto:psmithul@gmail.com">email</a>!
+          You can read about my projects below, find my{' '}
+          <Link href="/about">background and experience</Link>, or{' '}
+          <a href="mailto:psmithul@gmail.com">get in touch</a>.
         </p>
       </div>
       <section
         className="academic-section academic-news"
-        aria-labelledby="news-heading"
+        aria-labelledby="updates-heading"
       >
-        <h2 id="news-heading">news</h2>
+        <h2 id="updates-heading">recent updates</h2>
         <div className="news-list">
-          {news.map((item) => (
+          {recentUpdates.map((item) => (
             <div className="news-row" key={item.href}>
               <span>{item.date}</span>
               <p>
@@ -91,7 +90,7 @@ export default async function Home() {
       >
         <span id="work" className="section-anchor" />
         <span id="publications" className="section-anchor" />
-        <h2 id="research-heading">selected research &amp; projects</h2>
+        <h2 id="research-heading">selected projects</h2>
         <ResearchList projects={selected} />
         <p className="section-more">
           <Link href="/work">All projects →</Link>
@@ -103,7 +102,7 @@ export default async function Home() {
         aria-labelledby="journal-heading"
       >
         <h2 id="journal-heading">journal</h2>
-        <p>Notes on things I’m reading, building, and still figuring out.</p>
+        <p>Notes on robots, AI, and the ideas I’m trying to understand.</p>
         <ul className="academic-note-list">
           {posts.map((post) => (
             <li key={post.slug}>

@@ -187,6 +187,15 @@ body:has(.academic-site) {
   align-items: start;
   margin: 0 0 30px;
 }
+.research-row-text {
+  grid-template-columns: minmax(0, 1fr);
+}
+.academic-site .research-description {
+  margin: 7px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
 .research-image {
   display: block;
   width: 100%;
@@ -206,6 +215,7 @@ body:has(.academic-site) {
   margin: 0;
 }
 .research-text h3 a {
+  display: block;
   color: inherit;
 }
 .academic-site :is(.research-context, .research-period) {

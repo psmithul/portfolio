@@ -6,30 +6,25 @@ export const selectedResearchSlugs = [
   'kneeassist',
   'uncertainty-aware-navigation',
 ];
-export const news = [
+export const recentUpdates = [
   {
     date: 'Oct 2026',
-    text: 'Completed a physics-informed multi-fidelity FEM study of spacecraft microvibration and payload jitter.',
+    text: 'Completed a computational pilot comparing spacecraft vibration models with neural response predictors over 5–20 Hz.',
     href: '/work/reaction-wheel-microvibrations',
   },
   {
     date: 'Sep 2026',
-    text: 'Our knee-assistance team placed in the top 5 of 70 teams in the Incubate X Prosthetic Challenge.',
+    text: 'Our Actuated Knee-Assistance System team placed in the top 5 of 70 teams in the Incubate X Prosthetic Challenge.',
     href: '/work/kneeassist',
   },
   {
     date: 'Sep 2026',
-    text: 'Started designing a variable-stiffness suspension and vibration-aware control system for a rough-terrain rover.',
+    text: 'Started a rough-terrain rover project to study how suspension stiffness and control can reduce vibration.',
     href: '/work/adaptive-suspension-rover',
   },
   {
-    date: 'Jul 2026',
-    text: 'Began work on a terrain-adaptive robot for collecting dry and wet leaves on uneven ground.',
-    href: '/work/off-road-leaf-robot',
-  },
-  {
     date: 'Jun–Jul 2026',
-    text: 'Worked on UAV vibration analysis and isolation as a Product Intern at Vayu Aerospace Pvt. Ltd.',
+    text: 'Compared and ground-tested flight-controller mounts during my product internship at Vayu Aerospace.',
     href: '/work/uav-vibration-integration',
   },
 ];
