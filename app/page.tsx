@@ -26,9 +26,8 @@ export default async function Home() {
           <Image
             className="academic-home-photo"
             src="/images/mithul-profile-photo-cutout.webp"
-            width={1672}
-            height={941}
-            sizes="(max-width: 620px) 190px, 218px"
+            fill
+            sizes="(max-width: 462px) calc(100vw - 32px), (max-width: 820px) 430px, 330px"
             alt="Portrait of Mithul Sourav"
             preload
           />
@@ -36,12 +35,12 @@ export default async function Home() {
         <div className="portfolio-intro-copy">
           <p className="academic-lead">{profile.bio}</p>
           <p className="academic-lead">{profile.interests}</p>
-          <div className="portfolio-actions">
-            <a href="#research">
-              Selected projects <span aria-hidden="true">↓</span>
-            </a>
-            <a href="#contact">Get in touch</a>
-          </div>
+        </div>
+        <div className="portfolio-actions">
+          <a href="#research">
+            Selected projects <span aria-hidden="true">↓</span>
+          </a>
+          <a href="#contact">Get in touch</a>
         </div>
       </header>
       <section
