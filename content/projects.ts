@@ -57,7 +57,7 @@ export const battleBots: Project = {
   tools: [],
   image: projectImages['nitk-battle-bots'],
   summary:
-    'A 3 lb unibody flipper inspired by Jelly Baby, the 15 kg GN4RLY 2.5 hammer saw, and a 7 kg successor in development.',
+    'We designed a 3 lb unibody flipper inspired by Jelly Baby and built the sponsored 15 kg GN4RLY 2.5. Its weight and older hammer design are driving the redesign for a 7 kg successor.',
   question:
     'How do the weight limit and weapon change what a combat robot needs from its chassis?',
   approach: [
@@ -145,18 +145,18 @@ export const projects: Project[] = [
       'Control design',
     ],
     summary:
-      'I’m designing a six-wheel rover to study whether changing suspension stiffness can reduce vibration before the robot needs to slow down. CAD and control development are ongoing; terrain tests are planned.',
+      'Each wheel has a guided tensegrity suspension with motor-adjusted preload. We’re designing it to reduce chassis vibration at the same driving speed. Testing starts with one suspension module.',
     question:
       'Can a rover reduce vibration by changing its suspension before it has to slow down?',
-    role: 'I am designing a six-wheel rover with adjustable spring leverage. The suspension moves between soft, medium, and stiff settings, then mechanically locks the selected setting.',
+    role: 'I’m developing a six-wheel rover with one motor-driven preload carriage per suspension module. The carriage holds the selected preload while wheel travel remains passive.',
     approach: [
       {
-        title: 'Design three supported, mechanically locked states',
-        body: 'Build and evaluate one adjustable unit before committing to the full rover. Vary spring leverage to get three stiffness settings, with a mechanical lock at each setting and a separate load path that keeps the rover supported if reconfiguration fails.',
+        title: 'Design a guided suspension with adjustable preload',
+        body: 'A fine-pitch screw moves each preload carriage by up to 6 mm. The design uses three compression links, three elastic tension paths, and a holding lock.',
       },
       {
         title: 'Detect vibration, reconfigure, and verify',
-        body: 'Use IMU and wheel-encoder data to detect sustained vibration. Change stiffness, verify the setting, and assess the new vibration level. Reduce speed only when needed.',
+        body: 'Measure vibration on the wheel carriers and the chassis. Stop to adjust preload, confirm position and lock feedback, then resume and reassess vibration before reducing travel speed.',
       },
       {
         title: 'Compare four control strategies',
@@ -166,10 +166,10 @@ export const projects: Project[] = [
     outcome:
       'Developed the rover layout, suspension concepts, feedback strategy, and test plan. The next step is to evaluate a single suspension unit before testing the complete platform.',
     scope:
-      'Design and staged hardware development. Rough-terrain testing and full-system comparisons are planned.',
+      'The complete rover is documented in CAD. The next step is a loaded test of one suspension module to measure its force–travel response and verify that the lock holds without power.',
     evidence: [
-      'Three mechanically locked stiffness settings',
-      'IMU and encoder feedback architecture',
+      'Six guided suspension modules in CAD',
+      'Wheel-carrier and chassis acceleration measurements planned',
       'Four planned control comparisons',
     ],
   },
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     image: projectImages['tensegrity-joint'],
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
-      'I’m studying how joint geometry and tendon loading change knee stiffness. The work combines MATLAB force calculations with a compound tensegrity layout and preliminary member sizing.',
+      'Twelve support tendons connect two Y-frames to a floating tristar. I’m using MATLAB to see how the geometry and preload affect which tendons carry the load and which might go slack.',
     question:
       'How can geometry and internal forces make the same joint respond differently to a load?',
     role: 'I’m modeling the joint’s force and stiffness response in MATLAB and developing a support network with two Y-frames and a floating tristar.',
@@ -229,7 +229,7 @@ export const projects: Project[] = [
     image: projectImages['kneeassist'],
     tools: ['SolidWorks', 'ANSYS', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'Our team developed a passive spring-assisted knee concept into an actuated brace design with knee-angle sensing and a manual release. The design reached procurement readiness and placed in the top 5 of 70 teams nationally.',
+      'We turned a passive spring mechanism into a motor-driven brace with knee-angle sensing and a manual release. Our team placed in the top 5 of 70 nationally. Procurement and bench testing are next.',
     question:
       'How can a knee mechanism assist movement while the user continues to extend actively?',
     role: 'I worked on the passive spring-assisted mechanism, refined the assembly in SolidWorks, and checked its motion in ANSYS. We then extended it into an actuated brace and defined a procurement-ready system with drive, sensing, power protection, and an independent manual release.',
@@ -282,7 +282,7 @@ export const projects: Project[] = [
       'Physics-informed multi-fidelity learning',
     ],
     summary:
-      'A spacecraft vibration study connecting finite-element analysis, reduced-order modeling, and neural prediction. The latest computational pilot compares MLP, DeepONet, and physics-informed variants over 5–20 Hz.',
+      'I used a 52-coordinate COMSOL-derived model to predict how four reaction wheels affect a spacecraft camera over 5–20 Hz. The model comparison and stiffness study supported keeping the original mount.',
     question:
       'Can a multi-fidelity surrogate preserve resonance and physics while predicting spacecraft microvibration and payload jitter efficiently?',
     role: 'I worked on the spacecraft structural model, wheel-to-camera response calculations, reduced equations, and comparisons between neural predictors. The current pilot uses a 52-coordinate reduced model and separates complete structural configurations for training, validation, and testing.',
