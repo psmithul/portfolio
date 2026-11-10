@@ -1,30 +1,9 @@
 // Current portfolio copy. The v1 archive keeps its own content snapshot.
 export const profile = {
   fullName: 'P S Mithul Sourav',
-  education: {
-    institution: 'National Institute of Technology Karnataka (NITK), Surathkal',
-    degree: 'B.Tech. in Mechanical Engineering',
-    period: 'August 2023 — June 2027',
-    cgpa: '7.37 / 10',
-  },
   heroIntro:
     'I’m Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world.',
-  about: [
-    'Hey, I’m Mithul. I’m a fourth-year Mechanical Engineering undergraduate at NITK Surathkal, graduating in June 2027. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world in new ways.',
-    'Hey, I’m Mithul. I like figuring out how to make robots move and adapt. I enjoy designing and building the parts just as much as writing the code that controls them. My favourite projects are the ones that make me learn something I didn’t know before.',
-    'My current projects explore variable-stiffness rover suspension, leaf collection on uneven terrain, and a tensegrity knee joint. I’ve also worked on spacecraft vibration models, indoor robot navigation, and an actuated knee-assistance system.',
-  ],
-  currentInterests:
-    'I’m curious about how a robot’s shape and materials help it move. That’s what got me interested in embodied intelligence and in robots that are soft, flexible, or can change shape. I’m also learning about bioelectronics, neural engineering, and brain interfaces, and how they connect to biohybrid robotics.',
-  skills: [
-    {
-      title: 'CAD & CAE',
-      detail:
-        'SolidWorks · PTC Creo · ANSYS Mechanical (modal and harmonic analysis) · COMSOL Multiphysics',
-    },
-    { title: 'Programming & computation', detail: 'MATLAB · Python · C · C++' },
-    { title: 'Languages', detail: 'English · Hindi · Tamil · French (basic)' },
-  ],
+  bio: "Hey I'm Mithul. A fourth year undergraduate student at NITK. I'm interested in building intelligent physical systems that can move, adapt, and interact with the world in new ways. What excites me is exploring how ideas from control, dynamics, mechanics, and computation can come together to make things possible. I enjoy both developing the algorithms behind these systems and designing and building the hardware that brings them to life, especially when the problems take me into unfamiliar territory.",
 } as const;
 
 export type PortfolioExperience = {

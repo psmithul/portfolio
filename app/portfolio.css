@@ -11,6 +11,7 @@
   grid-template-areas: 'portrait identity' 'portrait intro';
   align-items: start;
   gap: 9px var(--portfolio-gutter);
+  scroll-margin-top: var(--academic-anchor-offset);
 }
 .portfolio-identity {
   grid-area: identity;
@@ -77,32 +78,6 @@
 }
 .portfolio-section-heading .portfolio-affiliation {
   margin-top: 4px;
-}
-.portfolio-about-copy > p {
-  margin-bottom: 9px;
-}
-.portfolio-interests {
-  margin: 16px 0 12px;
-}
-.academic-home .portfolio-interests h3 {
-  margin-bottom: 4px;
-  font-size: 17px;
-  font-weight: 600;
-}
-.academic-home .portfolio-interests p {
-  margin: 0;
-}
-.academic-about-details {
-  font-size: 14px;
-}
-.academic-about-details summary {
-  display: list-item;
-  width: fit-content;
-  color: var(--academic-accent);
-  cursor: pointer;
-}
-.academic-about-details summary:hover {
-  text-decoration: underline;
 }
 .project-list {
   display: grid;

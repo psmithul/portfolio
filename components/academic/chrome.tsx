@@ -5,7 +5,6 @@ import { useSyncExternalStore } from 'react';
 
 const sections = [
   { id: 'top', label: 'Home' },
-  { id: 'about', label: 'About' },
   { id: 'research', label: 'Projects', detail: '/work/' },
   { id: 'journal', label: 'Journal', detail: '/blog/' },
   { id: 'activities', label: 'Activities' },
@@ -16,7 +15,10 @@ function subscribeToFragment(onChange: () => void) {
   return () => window.removeEventListener('hashchange', onChange);
 }
 
-const getFragment = () => window.location.hash.slice(1) || 'top';
+function getFragment() {
+  const fragment = window.location.hash.slice(1);
+  return !fragment || fragment === 'about' ? 'top' : fragment;
+}
 const getServerFragment = () => 'top';
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
