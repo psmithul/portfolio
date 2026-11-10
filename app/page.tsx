@@ -20,7 +20,7 @@ export default async function Home() {
   );
   return (
     <main id="main" className="academic-content academic-home">
-      <header className="portfolio-hero">
+      <header className="portfolio-hero" id="about">
         <div className="portfolio-identity">
           <h1>{profile.fullName}</h1>
           <p className="portfolio-affiliation">
@@ -39,11 +39,7 @@ export default async function Home() {
           />
         </figure>
         <div className="portfolio-intro-copy">
-          <p className="academic-lead">
-            I’m a fourth-year undergraduate interested in how control, dynamics,
-            and mechanics come together in robots that can move and adapt to the
-            world around them.
-          </p>
+          <p className="academic-lead">{profile.bio}</p>
           <div className="portfolio-actions">
             <a href="#research">
               Selected projects <span aria-hidden="true">↓</span>
@@ -52,41 +48,6 @@ export default async function Home() {
           </div>
         </div>
       </header>
-      <section
-        className="portfolio-section portfolio-about"
-        id="about"
-        aria-labelledby="about-heading"
-      >
-        <header className="portfolio-section-heading">
-          <h2 id="about-heading">About me</h2>
-        </header>
-        <div className="portfolio-about-copy">
-          <p>{profile.about[1]}</p>
-          <div className="portfolio-interests">
-            <h3>Current interests</h3>
-            <p>{profile.currentInterests}</p>
-          </div>
-          <details className="academic-about-details">
-            <summary>Education and skills</summary>
-            <dl className="academic-skill-list">
-              <div className="academic-skill">
-                <dt>Education</dt>
-                <dd>
-                  {profile.education.degree}, NITK Surathkal
-                  <br />
-                  {profile.education.period} · CGPA {profile.education.cgpa}
-                </dd>
-              </div>
-              {profile.skills.map(({ title, detail }) => (
-                <div className="academic-skill" key={title}>
-                  <dt>{title}</dt>
-                  <dd>{detail}</dd>
-                </div>
-              ))}
-            </dl>
-          </details>
-        </div>
-      </section>
       <section
         className="portfolio-section portfolio-projects"
         id="research"
