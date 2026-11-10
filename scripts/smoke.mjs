@@ -104,7 +104,11 @@ for (const [path, status, content, title] of cases) {
   if (path === '/') {
     assert.match(
       body,
-      /id="about-heading"[\s\S]*id="research-heading"[\s\S]*id="journal-heading"[\s\S]*id="activities-heading"/,
+      /class="portfolio-hero" id="about"[\s\S]*id="research-heading"[\s\S]*id="journal-heading"[\s\S]*id="activities-heading"/,
+    );
+    assert.doesNotMatch(
+      body,
+      /id="about-heading"|Current interests|Education and skills/,
     );
     assert.match(body, /src="\/images\/mithul-profile-photo-cutout\.webp"/);
     assert.doesNotMatch(
