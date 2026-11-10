@@ -4,7 +4,7 @@ export const profile = {
   heroIntro:
     'I’m Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world.',
   bio: [
-    "Hey, I'm Mithul, a fourth-year Mechanical Engineering student at NITK Surathkal.",
+    "Hey, I'm Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal.",
     "I've always been fascinated by machines that can move, learn, and adapt to unfamiliar environments, almost like living beings. What interests me most is figuring out how we can build robots that are as flexible as humans while having the intelligence to think, learn, and act independently.",
     "I'm particularly drawn to embodied intelligence, soft robotics, and nature-inspired systems. I enjoy exploring both the mechanical side of robotics, like dynamics and design, and the control and algorithms that make everything work together.",
     "Lately, I've also been curious about neural engineering and bioelectronics, especially how we can learn from biological systems to build more adaptive and intelligent robots.",
