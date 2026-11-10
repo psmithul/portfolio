@@ -21,42 +21,36 @@ export default async function Home() {
   return (
     <main id="main" className="academic-content academic-home">
       <header className="portfolio-hero">
-        <div className="portfolio-hero-copy">
-          <p className="portfolio-label">
-            Mechanical engineering / NITK Surathkal
-          </p>
+        <div className="portfolio-identity">
           <h1>{profile.fullName}</h1>
+          <p className="portfolio-affiliation">
+            Mechanical Engineering · NITK Surathkal
+          </p>
+        </div>
+        <figure className="portfolio-portrait">
+          <Image
+            className="academic-home-photo"
+            src="/images/mithul-profile-photo-cutout.webp"
+            width={1672}
+            height={941}
+            sizes="(max-width: 620px) 110px, 166px"
+            alt="Portrait of Mithul Sourav"
+            preload
+          />
+        </figure>
+        <div className="portfolio-intro-copy">
           <p className="academic-lead">
             I’m a fourth-year undergraduate interested in how control, dynamics,
             and mechanics come together in robots that can move and adapt to the
             world around them.
           </p>
           <div className="portfolio-actions">
-            <a className="portfolio-primary-action" href="#research">
-              Explore projects <span aria-hidden="true">↓</span>
+            <a href="#research">
+              Selected projects <span aria-hidden="true">↓</span>
             </a>
-            <a className="portfolio-secondary-action" href="#contact">
-              Get in touch
-            </a>
+            <a href="#contact">Get in touch</a>
           </div>
         </div>
-        <figure className="portfolio-portrait">
-          <span className="portfolio-portrait-grid" aria-hidden="true" />
-          <span
-            className="portfolio-label portfolio-portrait-tag"
-            aria-hidden="true"
-          >
-            Profile / 01
-          </span>
-          <Image
-            className="academic-home-photo"
-            src="/images/mithul-profile-photo-cutout.webp"
-            width={1672}
-            height={941}
-            alt="Portrait of Mithul Sourav"
-            preload
-          />
-        </figure>
       </header>
       <section
         className="portfolio-section portfolio-about"
@@ -64,7 +58,6 @@ export default async function Home() {
         aria-labelledby="about-heading"
       >
         <header className="portfolio-section-heading">
-          <p className="portfolio-label">01 / Background</p>
           <h2 id="about-heading">About me</h2>
         </header>
         <div className="portfolio-about-copy">
@@ -98,7 +91,6 @@ export default async function Home() {
         <span id="work" className="section-anchor" />
         <span id="publications" className="section-anchor" />
         <header className="portfolio-section-heading">
-          <p className="portfolio-label">02 / Engineering</p>
           <h2 id="research-heading">Selected projects</h2>
         </header>
         <ProjectList projects={selected} />
@@ -108,37 +100,39 @@ export default async function Home() {
         id="journal"
         aria-labelledby="journal-heading"
       >
-        <header className="portfolio-section-heading portfolio-journal-intro">
-          <p className="portfolio-label">03 / Mika’s Life</p>
+        <header className="portfolio-section-heading">
           <h2 id="journal-heading">Journal</h2>
+          <p className="portfolio-affiliation">Mika’s Life</p>
+        </header>
+        <div className="portfolio-journal-content">
           <p>
             I use this space to write about whatever bullshit I’m curious about.
             Right now that’s mostly robots, AI, and control.
           </p>
-        </header>
-        <ul className="academic-note-list">
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <Link
-                href={`/blog/${post.slug}`}
-                aria-labelledby={`note-${post.slug}`}
-              >
-                <div>
-                  <p className="academic-note-meta portfolio-label">
-                    <time dateTime={post.date}>{dateLabel(post.date)}</time>
-                    <span> · {post.readingMinutes} min read</span>
-                  </p>
-                  <h3 id={`note-${post.slug}`}>{post.title}</h3>
-                  <p>{post.description}</p>
-                </div>
-                <span className="portfolio-link-arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </Link>
-            </li>
-          ))}
-          {posts.length === 0 && <li>New notes are on the way.</li>}
-        </ul>
+          <ul className="academic-note-list">
+            {posts.map((post) => (
+              <li key={post.slug}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  aria-labelledby={`note-${post.slug}`}
+                >
+                  <div>
+                    <p className="academic-note-meta">
+                      <time dateTime={post.date}>{dateLabel(post.date)}</time>
+                      <span> · {post.readingMinutes} min read</span>
+                    </p>
+                    <h3 id={`note-${post.slug}`}>{post.title}</h3>
+                    <p>{post.description}</p>
+                  </div>
+                  <span className="portfolio-link-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </Link>
+              </li>
+            ))}
+            {posts.length === 0 && <li>New notes are on the way.</li>}
+          </ul>
+        </div>
       </section>
       <ActivitiesExperience />
       <section
@@ -146,12 +140,13 @@ export default async function Home() {
         id="contact"
         aria-label="Get in touch"
       >
-        <div>
-          <p className="portfolio-label">05 / Contact</p>
+        <header className="portfolio-section-heading">
           <h2>Get in touch</h2>
+        </header>
+        <div className="portfolio-contact-links">
           <a href="mailto:psmithul@gmail.com">psmithul@gmail.com</a>
+          <SocialLinks />
         </div>
-        <SocialLinks />
       </section>
     </main>
   );

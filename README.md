@@ -13,7 +13,7 @@ Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). 
 - The former `/about`, `/work`, `/blog`, and `/activities` index routes redirect to their sections on `/`.
 - Old `/v1` links permanently redirect to the corresponding current paths.
 
-The shared site styles live in `app/academic.css` and the homepage design in `app/portfolio.css`. Manrope, Space Grotesk, and Space Mono are served locally under their included SIL Open Font licenses. Project covers use original documentation. Entries without a landscape project image are shown as text in the listings. Image sources are recorded in `docs/current-project-assets.json`.
+The shared site styles live in `app/academic.css` and the homepage design in `app/portfolio.css`. Amarna and Space Grotesk are served locally under their included SIL Open Font licenses. Project covers use original documentation. Entries without a landscape project image are shown as text in the listings. Image sources are recorded in `docs/current-project-assets.json`.
 
 ## Run locally
 

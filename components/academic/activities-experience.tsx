@@ -36,7 +36,6 @@ export function ActivitiesExperience() {
       aria-labelledby="activities-heading"
     >
       <header className="portfolio-section-heading">
-        <p className="portfolio-label">04 / Experience</p>
         <h2 id="activities-heading">Activities &amp; experience</h2>
       </header>
       <div className="portfolio-activity-layout">
@@ -48,32 +47,30 @@ export function ActivitiesExperience() {
             )}
           />
         </div>
-        <div className="portfolio-activity-side">
-          <div className="academic-activity-group" id="leadership">
-            <h3>Student leadership</h3>
-            <ExperienceList
-              entries={portfolioExperience.filter(
-                ({ category }) => category === 'Leadership',
-              )}
-            />
-          </div>
-          <div className="academic-activity-group" id="recognition">
-            <h3>Awards &amp; competitions</h3>
-            {portfolioRecognition.map(
-              ({ title, period, result, detail, href, link }) => (
-                <div className="academic-recognition" key={title}>
-                  <span>{period}</span>
-                  <div>
-                    <h4>{title}</h4>
-                    <p>
-                      <strong>{result}</strong>. {detail}
-                    </p>
-                    <Link href={href}>{link} →</Link>
-                  </div>
-                </div>
-              ),
+        <div className="academic-activity-group" id="leadership">
+          <h3>Student leadership</h3>
+          <ExperienceList
+            entries={portfolioExperience.filter(
+              ({ category }) => category === 'Leadership',
             )}
-          </div>
+          />
+        </div>
+        <div className="academic-activity-group" id="recognition">
+          <h3>Awards &amp; competitions</h3>
+          {portfolioRecognition.map(
+            ({ title, period, result, detail, href, link }) => (
+              <div className="academic-recognition" key={title}>
+                <span>{period}</span>
+                <div>
+                  <h4>{title}</h4>
+                  <p>
+                    <strong>{result}</strong>. {detail}
+                  </p>
+                  <Link href={href}>{link} →</Link>
+                </div>
+              </div>
+            ),
+          )}
         </div>
       </div>
     </section>
