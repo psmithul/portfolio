@@ -77,17 +77,13 @@ The CAD assembly documents the mechanical layout. It does not demonstrate load c
 
 I’m studying a tensegrity-based knee joint for an exoskeleton. The central question is how geometry, external loading, and internal tendon force change the joint’s force output and stiffness.
 
-My MATLAB work compares these variables and helps narrow the configurations worth developing further. The current preliminary layout uses two Y-frames, a floating tristar, and 24 tendon spans. Support tendons carry the applied force; separate antagonistic tendon stages provide the flexion moment.
+My MATLAB work compares these variables and helps narrow the configurations worth developing further. The support network uses two Y-frames and a floating tristar. Each of the tristar’s three tips connects to both tips on each Y-frame, giving 12 support tendons.
 
 ![Side and front drawings of the femoral and tibial Y-frames, floating tristar, and support tendons at the reference pose.](/images/projects/tensegrity-knee-geometry.png)
 
 _Side and front views of the reference geometry and load-support network. [Open the full-size drawing](/images/projects/tensegrity-knee-geometry.png)._
 
 ## Member-force analysis and rotational stiffness
-
-![Three design diagrams showing the support tendons and the separate femoral and tibial torque networks.](/images/projects/tensegrity-knee-design.png)
-
-_Support and torque networks from the preliminary design review. Blue lines represent rigid members and red lines represent tendons._
 
 At a chosen configuration, the member forces must balance the external load:
 
@@ -107,7 +103,7 @@ I use these relationships to examine the effects of geometry and preload, rather
 
 ## Current design and next steps
 
-The design review includes preliminary tendon loads, member sizing, and connection checks. Its topology draws on [Mortensen and colleagues’ tensegrity leg study](https://arxiv.org/abs/2504.19685); the project explores its own support and torque layout.
+The design review includes preliminary tendon loads, member sizing, and connection checks. The layout draws on [Mortensen and colleagues’ tensegrity leg study](https://arxiv.org/abs/2504.19685).
 
 The current work is computational and mechanical design. Detailed geometry, tendon routing, assembly clearance, full stiffness analysis, and bench tests still need verification.
 `,

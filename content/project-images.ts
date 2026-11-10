@@ -35,13 +35,13 @@ export const projectImages: Partial<
   },
   'tensegrity-joint': {
     kind: 'documentation',
-    label: 'Assembled knee joint',
-    src: '/images/projects/tensegrity-knee-assembly.webp',
+    label: 'Assembled knee · support network',
+    src: '/images/projects/tensegrity-knee-support-network.webp',
     width: 1800,
     height: 1012,
-    alt: 'Assembled tensegrity knee with red tendons connecting the blue femoral stem, amber tristar, and teal tibial stem.',
+    alt: 'Two views of the assembled tensegrity knee with red support tendons connecting the blue femoral stem, amber tristar, and teal tibial stem.',
     caption:
-      'CAD illustration of the knee in its reference pose. The three solid parts come from the STEP files. The 12 support tendons and 12 torque tendons follow the drawing, with their mounts shown schematically.',
+      'Two views of the three STEP parts in the drawing’s reference pose. Twelve support tendons connect the floating tristar to the two Y-frames.',
     fit: 'contain',
   },
   kneeassist: {

@@ -193,7 +193,7 @@ export const projects: Project[] = [
       'I’m studying how joint geometry and tendon loading change knee stiffness. The work combines MATLAB force calculations with a compound tensegrity layout and preliminary member sizing.',
     question:
       'How can geometry and internal forces make the same joint respond differently to a load?',
-    role: 'I’m modeling the joint’s force and stiffness response in MATLAB and developing a layout with two Y-frames, a floating tristar, and separate support and torque tendons.',
+    role: 'I’m modeling the joint’s force and stiffness response in MATLAB and developing a support network with two Y-frames and a floating tristar.',
     approach: [
       {
         title: 'Model member forces and joint response',
