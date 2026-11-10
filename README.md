@@ -28,7 +28,7 @@ Open the address printed by the server. The public journal works from the bundle
 
 ## Write on the website
 
-1. Open **Writing desk** in the footer, or go to `/write`.
+1. Go to `/write` to open the private writing desk.
 2. Choose **New entry**, or open an existing essay.
 3. Add a title, a short introduction, topics separated by commas, and your text.
 4. Use the toolbar for headings, emphasis, quotations, lists, links, and images. The image button accepts a hosted image URL and a description. You can also type Markdown directly.

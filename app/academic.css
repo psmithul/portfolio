@@ -294,10 +294,6 @@ body:has(.academic-site) {
   margin-inline: auto;
   padding-block: 20px;
 }
-.academic-footer nav {
-  display: flex;
-  gap: 16px;
-}
 .skip-link {
   position: fixed;
   top: 8px;
