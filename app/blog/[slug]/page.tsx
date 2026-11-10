@@ -36,7 +36,7 @@ export default async function Article({ params }: Props) {
   return (
     <main id="main" className="academic-content academic-case">
       <HomeSectionLink className="academic-back" section="journal">
-        ← All notes · Mika’s Life
+        ← All notes · <span className="academic-handwritten">Mika’s Life</span>
       </HomeSectionLink>
       <header>
         <p className="academic-kicker">{post.tags.join(' / ')}</p>

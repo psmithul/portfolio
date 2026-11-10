@@ -26,6 +26,13 @@ const displayFont = localFont({
   variable: '--font-portfolio-display',
   display: 'swap',
 });
+const handwrittenFont = localFont({
+  src: '../public/fonts/caveat-latin-bold.woff2',
+  weight: '700',
+  variable: '--font-portfolio-handwritten',
+  display: 'swap',
+  preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://psmithul.com'),
@@ -42,7 +49,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body id="top" className={`${bodyFont.variable} ${displayFont.variable}`}>
+      <body
+        id="top"
+        className={`${bodyFont.variable} ${displayFont.variable} ${handwrittenFont.variable}`}
+      >
         <a className="skip-link" href="#main">
           Skip to content
         </a>
