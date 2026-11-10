@@ -72,7 +72,7 @@ const currentCases = [
     '/work/nitk-battle-bots',
     200,
     'GN4RLY 2.5 (15 kg)',
-    'Combat Robotics Development',
+    'Combat Robot Development',
   ],
   ['/work/battery-control-and-estimation', 404, 'here yet.', ''],
   ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-Bar'],
