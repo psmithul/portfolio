@@ -33,8 +33,11 @@ export default async function Home() {
           />
         </figure>
         <div className="portfolio-intro-copy">
-          <p className="academic-lead">{profile.bio}</p>
-          <p className="academic-lead">{profile.interests}</p>
+          {profile.bio.map((paragraph) => (
+            <p className="academic-lead" key={paragraph}>
+              {paragraph}
+            </p>
+          ))}
         </div>
         <div className="portfolio-actions">
           <a href="#research">
