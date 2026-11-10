@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   profile,
@@ -6,6 +7,7 @@ import {
   portfolioRecognition,
 } from '@/content/profile';
 import { SocialLinks } from '@/components/academic/social-links';
+import { SectionNav } from '@/components/academic/section-nav';
 export const metadata: Metadata = {
   title: 'About',
   description: profile.heroIntro,
@@ -14,15 +16,35 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <main id="main" className="academic-content">
-      <h1 className="page-title">about</h1>
-      <p className="page-introduction">
-        P S Mithul Sourav · Mechanical Engineering · NITK Surathkal
-      </p>
-      {profile.about.map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
-      ))}
-      <section className="academic-section">
-        <h2>education</h2>
+      <header>
+        <h1>About me</h1>
+        <div className="academic-intro academic-about-intro">
+          <Image
+            className="academic-about-portrait"
+            src="/images/mithul-profile-illustration.webp"
+            width={1254}
+            height={1254}
+            alt="Illustrated portrait of Mithul Sourav"
+            loading="eager"
+          />
+          <div>
+            {profile.about.slice(0, 2).map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+      </header>
+      <p>{profile.about[2]}</p>
+      <SectionNav
+        links={[
+          { id: 'education', label: 'Education' },
+          { id: 'experience', label: 'Experience' },
+          { id: 'skills', label: 'Skills & interests' },
+          { id: 'recognition', label: 'Recognition' },
+        ]}
+      />
+      <section className="academic-section" id="education">
+        <h2>Education</h2>
         <h3>{profile.education.institution}</h3>
         <p>
           {profile.education.degree}
@@ -32,8 +54,8 @@ export default function About() {
           CGPA: {profile.education.cgpa}
         </p>
       </section>
-      <section className="academic-section">
-        <h2>experience</h2>
+      <section className="academic-section" id="experience">
+        <h2>Experience</h2>
         {portfolioExperience
           .filter((item) => item.category !== 'Leadership')
           .map((item) => (
@@ -51,12 +73,16 @@ export default function About() {
                   <li key={text}>{text}</li>
                 ))}
               </ul>
-              {item.href && <Link href={item.href}>What I worked on →</Link>}
+              {item.href && (
+                <Link href={item.href}>
+                  {item.link ?? 'Read the case study'} →
+                </Link>
+              )}
             </article>
           ))}
       </section>
-      <section className="academic-section">
-        <h2>skills &amp; interests</h2>
+      <section className="academic-section" id="skills">
+        <h2>Skills &amp; interests</h2>
         <dl className="academic-skill-list">
           {profile.skills.map((skill) => (
             <div className="academic-skill" key={skill.title}>
@@ -66,8 +92,8 @@ export default function About() {
           ))}
         </dl>
       </section>
-      <section className="academic-section">
-        <h2>recognition</h2>
+      <section className="academic-section" id="recognition">
+        <h2>Recognition</h2>
         {portfolioRecognition.map((item) => (
           <div className="academic-recognition" key={item.title}>
             <span>{item.period}</span>

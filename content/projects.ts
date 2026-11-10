@@ -30,6 +30,13 @@ export type Project = {
     height: number;
     caption: string;
     referenceUrl?: string;
+    thumbnail?: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      label: string;
+    };
   };
   model?:
     | ModelKind

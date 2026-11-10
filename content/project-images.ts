@@ -1,7 +1,7 @@
 import type { Project } from '@/content/projects';
 
 // Only documentation from Mithul’s project files belongs here. Entries without
-// verified imagery render as text. The v1 archive retains its own asset list.
+// verified imagery render as text.
 export const projectImages: Partial<
   Record<string, NonNullable<Project['image']>>
 > = {
@@ -14,6 +14,13 @@ export const projectImages: Partial<
     alt: 'Five NITK Battle Bots teammates stand behind a combat robot with black front wedges.',
     caption: 'Our NITK Battle Bots team with one of our robots at the event.',
     fit: 'contain',
+    thumbnail: {
+      src: '/images/projects/gn4rly-2-5-assembly.jpg',
+      width: 768,
+      height: 432,
+      alt: 'GN4RLY 2.5 on the workbench with its chassis, weapon assembly and drivetrain exposed.',
+      label: 'GN4RLY 2.5 assembly',
+    },
   },
   'adaptive-suspension-rover': {
     kind: 'documentation',
