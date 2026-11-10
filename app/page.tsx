@@ -40,6 +40,7 @@ export default async function Home() {
         </figure>
         <div className="portfolio-intro-copy">
           <p className="academic-lead">{profile.bio}</p>
+          <p className="academic-lead">{profile.interests}</p>
           <div className="portfolio-actions">
             <a href="#research">
               Selected projects <span aria-hidden="true">↓</span>
