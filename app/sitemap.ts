@@ -6,14 +6,7 @@ import { getPublicPosts } from '@/lib/journal-store';
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const paths = [
-    '/',
-    '/about',
-    '/activities',
-    '/work',
-    '/blog',
-    ...projects.map((p) => `/work/${p.slug}`),
-  ];
+  const paths = ['/', ...projects.map((p) => `/work/${p.slug}`)];
   const posts = await getPublicPosts();
   return [
     ...paths.map((path) => ({ url: `https://psmithul.com${path}` })),

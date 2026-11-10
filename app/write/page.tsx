@@ -33,7 +33,7 @@ export default async function Write() {
             below.
           </p>
         )}
-        <Link href="/blog" className="text-link">
+        <Link href="/#journal" className="text-link">
           Read Mika’s Life
         </Link>
       </main>
