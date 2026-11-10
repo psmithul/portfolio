@@ -7,20 +7,10 @@
 }
 .portfolio-hero {
   display: grid;
-  grid-template-columns: var(--portfolio-column) minmax(0, 1fr);
-  grid-template-areas: 'portrait identity' 'portrait intro';
+  grid-template-columns: clamp(170px, 20vw, 218px) minmax(0, 1fr);
   align-items: start;
-  gap: 9px var(--portfolio-gutter);
+  gap: 16px var(--portfolio-gutter);
   scroll-margin-top: var(--academic-anchor-offset);
-}
-.portfolio-identity {
-  grid-area: identity;
-}
-.academic-home .portfolio-identity h1 {
-  font-size: clamp(2rem, 5vw, 2.7rem);
-  font-weight: 550;
-  letter-spacing: -0.035em;
-  margin-bottom: 5px;
 }
 .academic-home .portfolio-affiliation {
   color: var(--academic-muted);
@@ -28,9 +18,7 @@
   margin: 0;
 }
 .portfolio-portrait {
-  grid-area: portrait;
   margin: 0;
-  align-self: start;
 }
 .portfolio-portrait img {
   display: block;
@@ -39,9 +27,6 @@
   aspect-ratio: 1.12;
   object-fit: cover;
   object-position: 78% bottom;
-}
-.portfolio-intro-copy {
-  grid-area: intro;
 }
 .academic-home .academic-lead {
   max-width: 66ch;
@@ -217,16 +202,11 @@
 }
 @media (max-width: 620px) {
   .portfolio-hero {
-    grid-template-columns: minmax(0, 1fr) clamp(79px, 26vw, 110px);
-    grid-template-areas: 'identity portrait' 'intro intro';
-    align-items: center;
-    column-gap: 12px;
-  }
-  .academic-home .portfolio-identity h1 {
-    font-size: clamp(1.65rem, 7.5vw, 2.25rem);
+    grid-template-columns: minmax(0, 1fr);
   }
   .portfolio-portrait {
-    align-self: center;
+    width: clamp(142px, 43vw, 190px);
+    justify-self: center;
   }
   .portfolio-section {
     grid-template-columns: minmax(0, 1fr);
