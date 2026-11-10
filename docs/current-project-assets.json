@@ -42,12 +42,12 @@
       "role": "native CAD render of one suspension module"
     },
     {
-      "path": "public/images/projects/tensegrity-knee-assembly.webp",
-      "source": "Mithul’s Femoral_Stem.STEP, tristar.STEP, and Tibial_Stem.STEP, posed using the Rev02 geometry and torque-routing drawings",
+      "path": "public/images/projects/tensegrity-knee-support-network.webp",
+      "source": "Mithul’s Femoral_Stem.STEP, tristar.STEP, and Tibial_Stem.STEP, posed using the Rev02 orthographic geometry and load-support drawing",
       "width": 1800,
       "height": 1012,
-      "sha256": "81b262c446dcf6ead1e1fe3bd69489fe9e49ba7ccb49f8030f1b77b72aa9054b",
-      "role": "assembled project cover with 12 support tendons, six femoral torque tendons, six tibial torque tendons, and schematic mounts"
+      "sha256": "1d59f888b1a5f2e69aa4feb6ae25ad3b6cf84b4b15af0654c131efd9804ab43b",
+      "role": "two views of the assembled STEP parts and 12 load-support tendons"
     },
     {
       "path": "public/images/projects/tensegrity-knee-step-parts.webp",
@@ -64,14 +64,6 @@
       "height": 2338,
       "sha256": "d12b10033201bf692a8f8d112c9fea54e0f4c113e99c2ea0dc1dccee94055365",
       "role": "preliminary orthographic geometry and load-support drawing"
-    },
-    {
-      "path": "public/images/projects/tensegrity-knee-design.png",
-      "source": "Compound Tensegrity Knee_ Preliminary Design Review.pptx :: ppt/media/image.png",
-      "width": 1600,
-      "height": 588,
-      "sha256": "b86071b2236f02fa5e257db1162289c8a0f6f5293325c688c70406730431864e",
-      "role": "project documentation; not a hardware photograph"
     },
     {
       "path": "public/images/projects/spacecraft-comsol-model.png",
