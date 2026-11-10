@@ -6,29 +6,22 @@ export function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <ul className="project-list">
       {projects.map(
-        (
-          {
-            slug,
-            title,
-            shortTitle,
-            discipline,
-            period,
-            status,
-            summary,
-            image,
-          },
-          index,
-        ) => {
+        ({
+          slug,
+          title,
+          shortTitle,
+          discipline,
+          period,
+          status,
+          summary,
+          image,
+        }) => {
           const preview = image?.thumbnail ?? image;
           const landscape =
             preview && preview.width > preview.height ? preview : undefined;
           const heading = `project-${slug}`;
           return (
-            <li
-              className="project-row"
-              key={slug}
-              data-featured={index === 0 && landscape ? 'true' : undefined}
-            >
+            <li className="project-row" key={slug}>
               <Link
                 className="portfolio-project-link"
                 href={`/work/${slug}`}
@@ -41,32 +34,24 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                       alt={landscape.alt}
                       width={landscape.width}
                       height={landscape.height}
+                      sizes="(max-width: 620px) calc(100vw - 32px), 330px"
                     />
                     {landscape.label && (
-                      <figcaption className="portfolio-label">
-                        {landscape.label}
-                      </figcaption>
+                      <figcaption>{landscape.label}</figcaption>
                     )}
                   </figure>
                 )}
                 <div className="project-copy">
-                  <div className="portfolio-project-meta">
-                    <span className="portfolio-label">{discipline}</span>
-                    <span
-                      className="portfolio-project-status"
-                      data-status={status}
-                    >
-                      {status}
-                    </span>
-                  </div>
-                  <h3 id={heading}>{shortTitle ?? title}</h3>
-                  <p className="project-summary">{summary}</p>
-                  <div className="portfolio-project-bottom">
-                    <span>{period}</span>
+                  <h3 id={heading}>
+                    <span>{shortTitle ?? title}</span>{' '}
                     <span className="portfolio-link-arrow" aria-hidden="true">
                       ↗
                     </span>
-                  </div>
+                  </h3>
+                  <p className="project-summary">{summary}</p>
+                  <p className="project-labels">
+                    {[discipline, status, period].filter(Boolean).join(' · ')}
+                  </p>
                 </div>
               </Link>
             </li>

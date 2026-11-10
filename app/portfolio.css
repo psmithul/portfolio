@@ -1,216 +1,124 @@
 .academic-home {
+  --portfolio-column: clamp(143px, 18vw, 166px);
+  --portfolio-gutter: clamp(22px, 4vw, 38px);
   width: var(--academic-shell);
-  --portfolio-dark: #18241c;
-  --portfolio-light: #f8fbf4;
-  --portfolio-lime: #d9fa9c;
-  --portfolio-panel: #edf1e5;
-  --portfolio-gap: clamp(48px, 7vw, 88px);
-  margin-top: clamp(22px, 4vw, 48px);
-}
-.portfolio-label {
-  font:
-    12px/1.45 var(--font-portfolio-label),
-    monospace;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--academic-muted);
-}
-.portfolio-hero,
-.portfolio-journal {
-  --academic-accent: var(--portfolio-lime);
-  border-radius: 18px;
-  background: var(--portfolio-dark);
-  color: #d5dfd2;
+  margin-top: clamp(32px, 5vw, 60px);
+  margin-bottom: 58px;
 }
 .portfolio-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  grid-template-columns: var(--portfolio-column) minmax(0, 1fr);
+  grid-template-areas: 'portrait identity' 'portrait intro';
+  align-items: start;
+  gap: 9px var(--portfolio-gutter);
 }
-.portfolio-hero-copy {
+.portfolio-identity {
+  grid-area: identity;
+}
+.academic-home .portfolio-identity h1 {
+  font-size: clamp(2rem, 5vw, 2.7rem);
+  font-weight: 550;
+  letter-spacing: -0.035em;
+  margin-bottom: 5px;
+}
+.academic-home .portfolio-affiliation {
+  color: var(--academic-muted);
+  font-size: 14px;
+  margin: 0;
+}
+.portfolio-portrait {
+  grid-area: portrait;
+  margin: 0;
   align-self: center;
-  padding: clamp(28px, 5.2vw, 64px);
 }
-.portfolio-hero .portfolio-label,
-.portfolio-journal .portfolio-label {
-  color: var(--portfolio-lime);
+.portfolio-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.12;
+  object-fit: cover;
+  object-position: 78% bottom;
 }
-.academic-home .portfolio-hero h1 {
-  max-width: 10ch;
-  color: var(--portfolio-light);
-  font-size: clamp(3.25rem, 7vw, 5.9rem);
-  font-weight: 650;
-  letter-spacing: -0.06em;
-  line-height: 0.98;
-  margin: 20px 0 26px;
+.portfolio-intro-copy {
+  grid-area: intro;
 }
 .academic-home .academic-lead {
-  max-width: 43ch;
-  font-size: clamp(1rem, 1.8vw, 1.15rem);
-  line-height: 1.65;
+  max-width: 61ch;
+  margin-bottom: 10px;
+  font-size: 17px;
 }
 .portfolio-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 18px;
-  align-items: center;
-  margin-top: 26px;
-}
-.portfolio-actions a {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
+  gap: 4px 20px;
   font-size: 14px;
-  font-weight: 750;
-}
-.portfolio-actions .portfolio-primary-action {
-  padding: 0 15px;
-  border-radius: 7px;
-  background: var(--portfolio-lime);
-  color: var(--portfolio-dark);
-}
-.portfolio-actions .portfolio-primary-action:hover {
-  background: #e8ffc4;
-  text-decoration: none;
-}
-.portfolio-actions .portfolio-secondary-action {
-  color: var(--portfolio-light);
-}
-.portfolio-portrait {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: 420px;
-  margin: 0;
-  border-radius: 0 18px 18px 0;
-  background: #28382b;
-}
-.portfolio-portrait-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, #c7f09915 1px, transparent 1px),
-    linear-gradient(to bottom, #c7f09915 1px, transparent 1px);
-  background-size: 29px 29px;
-  background-position: center;
-}
-.portfolio-portrait-grid::before,
-.portfolio-portrait-grid::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 49%;
-  width: min(72%, 365px);
-  aspect-ratio: 1;
-  border: 1px solid #b6e28a55;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-.portfolio-portrait-grid::after {
-  width: min(60%, 306px);
-  border-color: #b6e28a31;
-}
-.portfolio-portrait-tag {
-  position: absolute;
-  z-index: 1;
-  top: 18px;
-  right: 19px;
-  padding: 5px 8px;
-  border: 1px solid #b6e28a55;
-  border-radius: 4px;
-  background: #233225;
-}
-.portfolio-portrait img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 75% bottom;
 }
 .portfolio-section {
   position: relative;
-  margin-top: var(--portfolio-gap);
+  display: grid;
+  grid-template-columns: var(--portfolio-column) minmax(0, 1fr);
+  gap: 10px var(--portfolio-gutter);
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid var(--academic-line);
   scroll-margin-top: var(--academic-anchor-offset);
 }
 .section-anchor {
   position: absolute;
-  top: 0;
+  inset-block-start: 0;
   scroll-margin-top: var(--academic-anchor-offset);
 }
-.academic-home .portfolio-section-heading .portfolio-label,
-.academic-home .academic-contact .portfolio-label {
-  margin-bottom: 8px;
-}
 .academic-home .portfolio-section h2 {
-  font-size: clamp(2.15rem, 4.6vw, 3.45rem);
-  font-weight: 620;
-  letter-spacing: -0.055em;
-  line-height: 1.06;
-  margin-bottom: 24px;
+  margin: 0;
+  font-size: clamp(1.25rem, 2.7vw, 1.45rem);
+  font-weight: 550;
+  letter-spacing: -0.025em;
+  line-height: 1.24;
 }
-.portfolio-about {
-  display: grid;
-  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
-  gap: 24px 44px;
-  padding: clamp(24px, 4vw, 45px);
-  border: 1px solid var(--academic-line);
-  border-radius: 14px;
-  background: var(--portfolio-panel);
-}
-.academic-home .portfolio-about h2 {
-  margin-bottom: 0;
+.portfolio-section-heading .portfolio-affiliation {
+  margin-top: 4px;
 }
 .portfolio-about-copy > p {
-  max-width: 62ch;
-  font-size: clamp(1rem, 1.8vw, 1.22rem);
-  line-height: 1.7;
+  margin-bottom: 9px;
 }
 .academic-about-details {
-  border-top: 1px solid #c9d1c0;
-  margin-top: 22px;
-  padding-top: 12px;
+  font-size: 14px;
 }
 .academic-about-details summary {
+  display: list-item;
+  width: fit-content;
   color: var(--academic-accent);
   cursor: pointer;
-  font-weight: 750;
+}
+.academic-about-details summary:hover {
+  text-decoration: underline;
 }
 .project-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2.3vw, 26px);
+  gap: 26px 24px;
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
-.project-row[data-featured] {
-  grid-column: 1 / -1;
+.project-row:nth-child(n + 3) {
+  border-top: 1px solid var(--academic-line);
+  padding-top: 18px;
 }
-.portfolio-project-link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  border: 1px solid var(--academic-line);
-  border-radius: 13px;
-  background: #fff;
+.academic-home :is(.portfolio-project-link, .academic-note-list a) {
+  display: block;
   color: var(--academic-ink);
 }
-.academic-home .portfolio-project-link:hover {
-  border-color: #73866d;
+.academic-home :is(.portfolio-project-link, .academic-note-list a):hover {
   text-decoration: none;
 }
-.project-row[data-featured] .portfolio-project-link {
-  display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
+.portfolio-project-link:hover h3 > span:first-child,
+.academic-note-list a:hover h3 {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .project-figure {
-  position: relative;
-  min-width: 0;
-  margin: 0;
-  border-radius: 12px 12px 0 0;
-  background: #e9eee2;
+  margin: 0 0 9px;
 }
 .project-figure img {
   display: block;
@@ -218,223 +126,132 @@
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: contain;
-  padding: 10px;
+  object-position: left center;
 }
-.project-figure figcaption {
-  padding: 0 14px 10px;
-  font-size: 10px;
-}
-.project-row[data-featured] .project-figure {
-  align-content: center;
-  border-radius: 12px 0 0 12px;
-}
-.project-copy {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-width: 0;
-  padding: clamp(18px, 3vw, 30px);
-}
-.portfolio-project-meta,
-.portfolio-project-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px 14px;
-}
-.portfolio-project-meta {
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-.portfolio-project-meta .portfolio-label {
-  font-size: 11px;
-}
-.portfolio-project-status {
-  border-radius: 20px;
-  padding: 3px 9px;
-  background: #f0f2ed;
-  color: var(--academic-muted);
-  font-size: 11px;
-  font-weight: 750;
-}
-.portfolio-project-status[data-status='Ongoing'] {
-  background: #e0edcf;
-  color: #304b2c;
-}
-.academic-home .project-copy h3 {
-  font-size: clamp(1.38rem, 2.6vw, 2.05rem);
-  letter-spacing: -0.035em;
-  line-height: 1.14;
-  margin-bottom: 10px;
-}
-.academic-home .project-copy .project-summary {
-  color: var(--academic-muted);
-  font-size: 14px;
-  line-height: 1.62;
-  margin-bottom: 16px;
-}
-.portfolio-project-bottom {
-  margin-top: auto;
+.project-figure figcaption,
+.academic-home :is(.project-labels, .academic-note-meta) {
   color: var(--academic-muted);
   font-size: 13px;
+  line-height: 1.4;
+}
+.project-figure figcaption {
+  margin-top: 4px;
+}
+.academic-home
+  :is(.project-copy, .academic-note-list, .portfolio-activity-layout)
+  h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.academic-home .project-summary {
+  margin-bottom: 6px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.academic-home .project-labels {
+  margin: 0;
 }
 .portfolio-link-arrow {
-  display: grid;
-  flex: 0 0 34px;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--academic-line);
-  border-radius: 50%;
   color: var(--academic-accent);
-  font-size: 17px;
-}
-.portfolio-project-link:hover .portfolio-link-arrow {
-  background: var(--portfolio-panel);
-}
-.portfolio-journal {
-  display: grid;
-  grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
-  gap: 26px 44px;
-  padding: clamp(24px, 4.5vw, 51px);
-}
-.academic-home .portfolio-journal :is(h2, h3) {
-  color: var(--portfolio-light);
-}
-.portfolio-journal-intro > p:last-child {
-  max-width: 37ch;
-  margin-bottom: 0;
+  font:
+    400 0.82em/1.1 system-ui,
+    sans-serif;
 }
 .academic-note-list {
   list-style: none;
-  padding: 0;
   margin: 0;
-  min-width: 0;
+  padding: 0;
 }
 .academic-note-list li {
-  border-top: 1px solid #758b7155;
+  border-top: 1px solid var(--academic-line);
+  padding: 12px 0;
 }
 .academic-note-list li:last-child {
-  border-bottom: 1px solid #758b7155;
+  padding-bottom: 0;
 }
 .academic-home .academic-note-list a {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
   gap: 16px;
-  padding-block: 15px;
-  color: #d5dfd2;
-}
-.academic-home .academic-note-list a:hover {
-  text-decoration: none;
-}
-.academic-note-list a:hover h3 {
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 .academic-home .academic-note-list p {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
 }
 .academic-home .academic-note-list .academic-note-meta {
-  font-size: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
-.portfolio-journal .portfolio-link-arrow {
-  border-color: #b6e28a55;
-}
-.portfolio-activity-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(16px, 2.3vw, 26px);
-}
-.portfolio-activity-side {
-  display: grid;
-  gap: clamp(16px, 2.3vw, 26px);
-}
-.portfolio-activity-layout .academic-activity-group {
-  margin-top: 0;
-  padding: clamp(17px, 3vw, 29px);
-  border: 1px solid var(--academic-line);
-  border-radius: 13px;
-  background: #fff;
-  font-size: 14px;
+.portfolio-activity-layout .academic-activity-group + .academic-activity-group {
+  margin-top: 26px;
 }
 .portfolio-activity-layout .academic-activity-group > h3 {
-  margin-bottom: 15px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--academic-line);
-  font-size: 22px;
+  margin-bottom: 10px;
+}
+.portfolio-activity-layout .academic-experience {
+  padding-block: 10px 15px;
+  font-size: 15px;
 }
 .portfolio-activity-layout .academic-experience:last-child {
   padding-bottom: 0;
 }
 .portfolio-activity-layout .academic-recognition {
-  grid-template-columns: 1fr;
-  gap: 3px;
-  margin: 16px 0 0;
+  margin: 14px 0 18px;
+  font-size: 15px;
 }
-.academic-contact {
+.portfolio-activity-layout .academic-recognition:last-child,
+.portfolio-activity-layout .academic-recognition p {
+  margin-bottom: 0;
+}
+.portfolio-contact-links {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 20px;
-  padding-top: 25px;
-  border-top: 1px solid var(--academic-line);
-}
-.academic-home .academic-contact h2 {
-  margin-bottom: 8px;
+  align-items: center;
+  gap: 2px 24px;
 }
 .academic-contact .academic-social {
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 6px;
 }
 .academic-contact .academic-social a {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--academic-line);
-  border-radius: 50%;
-  background: #fff;
+  width: 34px;
+  height: 34px;
+  color: var(--academic-accent);
+}
+.academic-contact .academic-social a:hover {
+  background: #eef0f2;
 }
 .academic-contact .academic-social svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
-@media (max-width: 760px) {
-  .portfolio-hero,
-  .portfolio-about,
-  .portfolio-journal,
-  .portfolio-activity-layout {
+@media (max-width: 620px) {
+  .portfolio-hero {
+    grid-template-columns: minmax(0, 1fr) clamp(79px, 26vw, 110px);
+    grid-template-areas: 'identity portrait' 'intro intro';
+    align-items: center;
+    column-gap: 12px;
+  }
+  .academic-home .portfolio-identity h1 {
+    font-size: clamp(1.65rem, 7.5vw, 2.25rem);
+  }
+  .portfolio-section {
     grid-template-columns: minmax(0, 1fr);
+    margin-top: 28px;
+    padding-top: 20px;
   }
-  .portfolio-portrait {
-    min-height: 0;
-    aspect-ratio: 5 / 4;
-    border-radius: 0 0 18px 18px;
-  }
-  .portfolio-portrait img {
-    object-position: 82% bottom;
-  }
-  .academic-home .portfolio-journal h2 {
-    margin-bottom: 12px;
-  }
-}
-@media (max-width: 600px) {
-  .portfolio-hero-copy {
-    padding: 26px 22px 24px;
-  }
-  .project-list,
-  .project-row[data-featured] .portfolio-project-link {
+  .project-list {
     grid-template-columns: minmax(0, 1fr);
+    gap: 17px;
   }
-  .project-row[data-featured] .project-figure {
-    border-radius: 12px 12px 0 0;
+  .project-row:nth-child(n + 2) {
+    border-top: 1px solid var(--academic-line);
+    padding-top: 14px;
   }
-  .portfolio-activity-layout .academic-experience header {
-    display: block;
+  .project-figure {
+    max-width: 355px;
   }
 }

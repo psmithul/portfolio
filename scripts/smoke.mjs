@@ -254,9 +254,10 @@ assert.equal(health.status, 200);
 assert.equal((await health.json()).status, 'ok');
 console.log('PASS production health');
 for (const path of [
-  '/fonts/manrope-latin-variable.woff2',
+  '/fonts/amarna-regular.woff2',
+  '/fonts/amarna-bold.woff2',
+  '/fonts/amarna-italic.woff2',
   '/fonts/space-grotesk-latin-variable.woff2',
-  '/fonts/space-mono-latin-regular.woff2',
   '/favicon.svg',
 ]) {
   const response = await fetch(new URL(path, base));
