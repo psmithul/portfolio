@@ -37,7 +37,7 @@ export default async function Blog() {
                   <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                 </h3>
                 <p>{post.description}</p>
-                <p>
+                <p className="academic-note-meta">
                   {post.tags.join(' · ')} · {post.readingMinutes} min read
                 </p>
               </div>

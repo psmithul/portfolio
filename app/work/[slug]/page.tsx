@@ -66,6 +66,7 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </dl>
       </header>
+      <ReadingContents body={body} />
       {project.image && (
         <figure
           className={
@@ -121,7 +122,6 @@ export default async function ProjectPage({ params }: Props) {
           <p>{project.role}</p>
         </section>
       )}
-      <ReadingContents body={body} />
       <ArticleBody body={body} />
       <aside className="academic-status">
         <h2>Where the project stands</h2>
@@ -130,6 +130,9 @@ export default async function ProjectPage({ params }: Props) {
       <nav className="academic-next" aria-label="Next project">
         <p>Next project</p>
         <Link href={`/work/${next.slug}`}>{next.title} →</Link>
+        <div className="academic-inline-links">
+          <Link href="/work">All projects</Link>
+        </div>
       </nav>
     </main>
   );
