@@ -33,16 +33,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         <nav className="academic-header-inner" aria-label="Main navigation">
           {sections.map(({ id, label, detail }) => {
             const isHome = id === 'top';
-            const content = isHome ? (
-              <>
-                <span className="academic-brand-mark" aria-hidden="true">
-                  MS
-                </span>
-                <span>Mithul Sourav</span>
-              </>
-            ) : (
-              label
-            );
+            const content = isHome ? 'Mithul Sourav' : label;
             const brand = isHome
               ? { className: 'academic-brand', 'aria-label': 'Home' }
               : {};

@@ -8,8 +8,15 @@ import './academic.css';
 import './portfolio.css';
 
 const bodyFont = localFont({
-  src: '../public/fonts/manrope-latin-variable.woff2',
-  weight: '200 800',
+  src: [
+    { path: '../public/fonts/amarna-regular.woff2', weight: '400' },
+    { path: '../public/fonts/amarna-bold.woff2', weight: '700' },
+    {
+      path: '../public/fonts/amarna-italic.woff2',
+      weight: '400',
+      style: 'italic',
+    },
+  ],
   variable: '--font-portfolio-body',
   display: 'swap',
 });
@@ -17,11 +24,6 @@ const displayFont = localFont({
   src: '../public/fonts/space-grotesk-latin-variable.woff2',
   weight: '300 700',
   variable: '--font-portfolio-display',
-  display: 'swap',
-});
-const labelFont = localFont({
-  src: '../public/fonts/space-mono-latin-regular.woff2',
-  variable: '--font-portfolio-label',
   display: 'swap',
 });
 
@@ -40,10 +42,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        id="top"
-        className={`${bodyFont.variable} ${displayFont.variable} ${labelFont.variable}`}
-      >
+      <body id="top" className={`${bodyFont.variable} ${displayFont.variable}`}>
         <a className="skip-link" href="#main">
           Skip to content
         </a>
