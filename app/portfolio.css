@@ -24,7 +24,7 @@
 }
 .academic-home .portfolio-affiliation {
   color: var(--academic-muted);
-  font-size: 14px;
+  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
   margin: 0;
 }
 .portfolio-portrait {

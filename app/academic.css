@@ -46,6 +46,11 @@ body {
 .academic-site p {
   margin: 0 0 16px;
 }
+.academic-site .academic-handwritten {
+  font-family: var(--font-portfolio-handwritten), 'Segoe Print', cursive;
+  font-weight: 700;
+  line-height: 1.1;
+}
 .academic-site :is(h1, h2, h3) {
   color: var(--academic-ink);
   font-family: var(--font-portfolio-display), system-ui, sans-serif;
@@ -189,6 +194,9 @@ body {
   display: inline-block;
   margin-bottom: 28px;
   font-size: 14px;
+}
+.academic-back .academic-handwritten {
+  font-size: 1.25rem;
 }
 .academic-site .academic-case h1 {
   font-size: clamp(1.9rem, 4.7vw, 2.65rem);
