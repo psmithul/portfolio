@@ -24,7 +24,7 @@
 }
 .portfolio-portrait img {
   object-fit: cover;
-  object-position: 67% bottom;
+  object-position: 65% bottom;
 }
 .portfolio-intro-copy {
   grid-area: intro;
