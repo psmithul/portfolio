@@ -2,25 +2,25 @@
 // Equations describe the models; they do not stand in for experimental evidence.
 export const projectStudies: Record<string, string> = {
   'nitk-battle-bots': String.raw`
-## 3 kg bot
+## 3 lb flipper
 
-We took inspiration from Jelly Baby’s rear-hinged lifter when we designed our flipper. I designed the chassis to keep the front low enough to slide under an opponent and give the flipper room to rise. The chassis, flipper and drivetrain all had to fit within the 3 kg limit. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby).
+Jelly Baby’s rear-hinged lifter inspired us to build a flipper that could get underneath an opponent and lift it. We kept the front low and gave the flipper room to rise clear of the chassis. With just 3 lb for the chassis, drivetrain and weapon, we used a unibody structure to cut the number of parts we had to fabricate and assemble. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby)
 
 ## GN4RLY 2.5 (15 kg)
 
-Sponsorship let us use stronger chassis materials for GN4RLY 2.5. We co-designed an overhead hammer saw with a spinning head on a swinging arm, and I laid out the chassis around the pivot and the space the arm needed to swing.
+We built GN4RLY 2.5 around a hammer saw that could bring a spinning head down on an opponent from above. Sponsorship let us use stronger chassis materials. We laid out the chassis around the arm’s pivot and sweep, with the arm and mounts carrying impact loads back into the frame.
 
 ![GN4RLY 2.5 on a workbench with the central weapon assembly, side chain drives and wiring exposed.](/images/projects/gn4rly-2-5-assembly.jpg)
 
 _GN4RLY 2.5 during assembly. Photo from the NITK Battle-Bots club proposal._
 
-### What we had to rethink
+### Why GN4RLY 2.5 fell short
 
-Mounting the hammer saw took a different approach from packaging the flipper. Its arm, pivot and mounts had to carry the shock of an overhead strike into the chassis. I learned to follow that load path before deciding where stronger material mattered and how the parts should connect. The drive and wiring also had to fit around the weapon and remain accessible for repairs, a priority in the team’s proposal.
+We carried over a hammer design from two years earlier. The bot’s weight and the older hammer assembly held us back against competing robots, and we couldn’t advance to later rounds. We needed to redesign the assembly, but we didn’t have the funding to fabricate the revision.
 
-## Why we wanted a unibody chassis
+## Next GN4RLY (7 kg)
 
-We aimed for an integrated main structure with fewer separate pieces to make and join. That gave us a way to simplify fabrication and assembly while keeping costs down.
+We’re developing the next version of GN4RLY for the 7 kg class. The tighter weight budget gives us a reason to revisit the weapon and chassis together. We’re thinking through how much mass to allocate to the weapon, how impacts travel through the frame, and how to keep the drivetrain accessible for repairs.
 `,
   'uav-vibration-integration': String.raw`
 ## What I worked on at Vayu Aerospace
