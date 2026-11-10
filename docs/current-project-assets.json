@@ -2,6 +2,14 @@
   "review_date": "2026-11-09",
   "assets": [
     {
+      "path": "public/images/projects/a123-cell-estimator-replay.png",
+      "source": "D050_experimental_SOC.png, original MATLAB plot supplied by Mithul in Project Review, November 2026",
+      "width": 1811,
+      "height": 1130,
+      "sha256": "0a72ff2b6abb01252af89fa13bf44885bf19159e2a5d8a0a45a6146abdba28b3",
+      "role": "measured cell-data estimator replay with matched initial state of charge"
+    },
+    {
       "path": "public/images/projects/rover-assembly-cad.png",
       "source": "Complete Rover/Photos/Complete_Rover_Exterior.png",
       "width": 1800,

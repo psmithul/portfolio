@@ -11,7 +11,7 @@ const currentCases = [
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
-  ['/work', 200, 'completed studies', 'Projects'],
+  ['/work', 200, 'completed projects', 'Projects'],
   ['/activities', 200, 'leadership', 'Activities'],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
@@ -68,6 +68,13 @@ const currentCases = [
     'Variable-Stiffness Suspension',
   ],
   ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated Knee-Assistance'],
+  ['/work/nitk-battle-bots', 200, '50 kg', 'NITK Battle Bots'],
+  [
+    '/work/battery-control-and-estimation',
+    200,
+    '0.467 pp',
+    'Battery State Estimation',
+  ],
   ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-Bar'],
   ['/work/easy-access-wallet', 200, 'card access', 'Wallet'],
   ['/work/solar-smart-home', 200, 'photovoltaic', 'Arduino'],
@@ -77,7 +84,15 @@ const currentCases = [
   ['/this-page-does-not-exist', 404, 'here yet.', ''],
 ];
 const archivedCases = currentCases
-  .filter(([path]) => !['/work', '/activities'].includes(path))
+  .filter(
+    ([path]) =>
+      ![
+        '/work',
+        '/activities',
+        '/work/nitk-battle-bots',
+        '/work/battery-control-and-estimation',
+      ].includes(path),
+  )
   .map(([path, status, content, title]) => [
     path === '/' ? '/v1' : '/v1' + path,
     status,
