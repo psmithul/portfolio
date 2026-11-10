@@ -1,6 +1,6 @@
 # Current portfolio content review — 9 November 2026
 
-The current site keeps the academic layout and uses Mithul’s updated LinkedIn About text, pasted directly in the website conversation, as its voice and introduction. The public LinkedIn page independently lists the six main project names and dates. The downloaded CV remains unchanged. The `/v1` snapshot is preserved.
+The current site keeps the academic layout and uses Mithul’s updated LinkedIn About text, pasted directly in the website conversation, as its voice and introduction. The public LinkedIn page independently lists the six main project names and dates. The downloaded CV remains unchanged.
 
 ## Editorial decisions
 
@@ -22,6 +22,6 @@ The current site keeps the academic layout and uses Mithul’s updated LinkedIn 
 
 ## Imagery policy
 
-Current project covers are limited to original project documentation. NASA, TurtleBot, leaf-litter, commercial wallet, museum, Arduino, traffic-signal, and linkage reference photographs are removed from current routes. Projects without verified visual documentation use text entries with no image placeholder. Archived `/v1` content retains its own image list.
+Current project covers are limited to original project documentation. NASA, TurtleBot, leaf-litter, commercial wallet, museum, Arduino, traffic-signal, and linkage reference photographs are removed from current routes. Projects without verified visual documentation use text entries with no image placeholder.
 
 Asset source hashes and original dimensions are recorded in `current-project-assets.json`. All newly copied assets are byte-for-byte originals. No AI image generation, retouching, or fabricated response chart is used.

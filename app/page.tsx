@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { projects } from '@/content/projects';
 import { profile } from '@/content/profile';
-import { recentUpdates, selectedProjectSlugs } from '@/content/academic';
+import { selectedProjectSlugs } from '@/content/academic';
 import { ProjectList } from '@/components/academic/project-list';
 import { SocialLinks } from '@/components/academic/social-links';
 import { getPublicPosts } from '@/lib/journal-store';
@@ -19,39 +19,40 @@ export default async function Home() {
   );
   return (
     <main id="main" className="academic-content academic-home">
-      <header className="academic-post-header" id="about">
-        <h1>{profile.fullName}</h1>
-        <p className="academic-subtitle">
-          Mechanical Engineering | NITK Surathkal
-        </p>
-      </header>
-      <div className="academic-biography">
-        <figure className="academic-portrait">
-          <div className="academic-portrait-frame">
-            <Image
-              src="/images/mithul-courtyard.webp"
-              width={200}
-              height={238}
-              alt="Mithul Sourav, wearing glasses and a black shirt, outdoors"
-              priority
-            />
+      <header className="academic-intro academic-home-intro">
+        <div>
+          <p className="academic-kicker">
+            Mechanical Engineering · NITK Surathkal
+          </p>
+          <h1>{profile.fullName}</h1>
+          <p className="academic-lead">
+            I’m a fourth-year undergraduate interested in how control, dynamics,
+            and mechanics come together in robots that can move and adapt to the
+            world around them.
+          </p>
+          <div className="academic-inline-links">
+            <Link href="#research">Selected projects ↓</Link>
+            <a href="mailto:psmithul@gmail.com">Get in touch</a>
           </div>
-        </figure>
+        </div>
+        <Image
+          className="academic-home-photo"
+          src="/images/mithul-profile-photo.webp"
+          width={1672}
+          height={941}
+          alt="Portrait of Mithul Sourav"
+          preload
+        />
+      </header>
+      <section
+        className="academic-section"
+        id="about"
+        aria-labelledby="about-heading"
+      >
+        <h2 id="about-heading">About me</h2>
         <p>
-          Hey, I’m Mithul. I’m a fourth-year Mechanical Engineering
-          undergraduate at <a href="https://www.nitk.ac.in/">NITK Surathkal</a>,
-          graduating in June 2027.
-        </p>
-        <p>
-          I’m interested in building intelligent physical systems that can move,
-          adapt, and interact with the world in new ways. What excites me is
-          exploring how control, dynamics, mechanics, and computation can come
-          together to make things possible.
-        </p>
-        <p>
-          I enjoy developing the algorithms behind these systems as much as
-          designing and building their hardware, especially when a problem takes
-          me into unfamiliar territory. My current work includes a{' '}
+          I enjoy writing the algorithms behind these systems and building the
+          hardware that brings them to life. My current work includes a{' '}
           <Link href="/work/adaptive-suspension-rover">
             rough-terrain rover
           </Link>
@@ -61,26 +62,8 @@ export default async function Home() {
           .
         </p>
         <p>
-          You can read about my projects below, find my{' '}
-          <Link href="/about">background and experience</Link>, or{' '}
-          <a href="mailto:psmithul@gmail.com">get in touch</a>.
+          <Link href="/about">More about my background and experience →</Link>
         </p>
-      </div>
-      <section
-        className="academic-section academic-news"
-        aria-labelledby="updates-heading"
-      >
-        <h2 id="updates-heading">recent updates</h2>
-        <div className="news-list">
-          {recentUpdates.map((item) => (
-            <div className="news-row" key={item.href}>
-              <span>{item.date}</span>
-              <p>
-                <Link href={item.href}>{item.text}</Link>
-              </p>
-            </div>
-          ))}
-        </div>
       </section>
       <section
         className="academic-section"
@@ -89,7 +72,7 @@ export default async function Home() {
       >
         <span id="work" className="section-anchor" />
         <span id="publications" className="section-anchor" />
-        <h2 id="research-heading">selected projects</h2>
+        <h2 id="research-heading">Selected projects</h2>
         <ProjectList projects={selected} />
         <p className="section-more">
           <Link href="/work">All projects →</Link>
@@ -100,7 +83,7 @@ export default async function Home() {
         id="journal"
         aria-labelledby="journal-heading"
       >
-        <h2 id="journal-heading">journal</h2>
+        <h2 id="journal-heading">Journal</h2>
         <p>Notes on robots, AI, and the ideas I’m trying to understand.</p>
         <ul className="academic-note-list">
           {posts.map((post) => (

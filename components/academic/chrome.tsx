@@ -1,50 +1,51 @@
 'use client';
-/* oxlint-disable next/no-html-link-for-pages -- Version switches require a full document load to isolate the archived styles and scroll controller. */
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+const pages = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/work', label: 'Projects' },
+  { href: '/activities', label: 'Activities' },
+  { href: '/blog', label: 'Journal' },
+];
+
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const path = usePathname();
-  if (path === '/v1' || path.startsWith('/v1/')) return children;
   return (
     <div className="academic-site">
       <header className="academic-header">
         <div className="academic-header-inner">
           <nav aria-label="Main navigation">
-            <Link
-              href="/#about"
-              aria-current={
-                path === '/' || path === '/about' ? 'page' : undefined
-              }
-            >
-              about
-            </Link>
-            <Link
-              href="/work"
-              aria-current={path.startsWith('/work') ? 'page' : undefined}
-            >
-              projects
-            </Link>
-            <Link
-              href="/activities"
-              aria-current={path === '/activities' ? 'page' : undefined}
-            >
-              activities
-            </Link>
-            <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
-              résumé
-            </a>
+            {pages.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                aria-current={
+                  path === href
+                    ? 'page'
+                    : path.startsWith(`${href}/`)
+                      ? 'location'
+                      : undefined
+                }
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
         </div>
       </header>
       {children}
       <footer className="academic-footer">
         <div>
-          © {new Date().getFullYear()} Mithul Sourav.{' '}
-          <Link href="/blog">Journal</Link> ·{' '}
-          <a href="/v1">Minecraft portfolio (v1)</a> ·{' '}
-          <Link href="/write">Writing desk</Link>
+          <span>© {new Date().getFullYear()} Mithul Sourav</span>
+          <nav aria-label="Footer navigation">
+            <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">
+              Résumé
+            </a>
+            <Link href="/write">Writing desk</Link>
+          </nav>
         </div>
       </footer>
     </div>

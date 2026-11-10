@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { portfolioExperience, portfolioRecognition } from '@/content/profile';
 import { battleBots } from '@/content/projects';
+import { SectionNav } from '@/components/academic/section-nav';
 export const metadata: Metadata = {
   title: 'Activities',
   alternates: { canonical: '/activities' },
@@ -10,13 +11,21 @@ export const metadata: Metadata = {
 export default function Activities() {
   return (
     <main id="main" className="academic-content">
-      <h1 className="page-title">activities</h1>
+      <h1 className="page-title">Activities</h1>
       <p className="page-introduction">
         Internships, student leadership, and team competitions alongside my
         engineering studies.
       </p>
+      <SectionNav
+        links={[
+          { id: 'experience', label: 'Work experience' },
+          { id: 'leadership', label: 'Leadership' },
+          { id: 'student-teams', label: 'Student teams' },
+          { id: 'recognition', label: 'Awards & competitions' },
+        ]}
+      />
       <section className="academic-section" id="experience">
-        <h2>work experience</h2>
+        <h2>Work experience</h2>
         {portfolioExperience
           .filter((item) => item.category !== 'Leadership')
           .map((item) => (
@@ -25,18 +34,25 @@ export default function Activities() {
                 <h3>{item.company}</h3>
                 <span>{item.period}</span>
               </header>
-              <p className="academic-role">{item.role}</p>
+              <p className="academic-role">
+                {item.role}
+                {item.location && ` · ${item.location}`}
+              </p>
               <ul>
                 {item.highlights.map((text) => (
                   <li key={text}>{text}</li>
                 ))}
               </ul>
-              {item.href && <Link href={item.href}>What I worked on →</Link>}
+              {item.href && (
+                <Link href={item.href}>
+                  {item.link ?? 'Read the case study'} →
+                </Link>
+              )}
             </article>
           ))}
       </section>
-      <section className="academic-section">
-        <h2>leadership</h2>
+      <section className="academic-section" id="leadership">
+        <h2>Leadership</h2>
         {portfolioExperience
           .filter((item) => item.category === 'Leadership')
           .map((item) => (
@@ -55,7 +71,7 @@ export default function Activities() {
           ))}
       </section>
       <section className="academic-section" id="student-teams">
-        <h2>student teams</h2>
+        <h2>Student teams</h2>
         <article className="academic-experience">
           <h3>
             <Link href={`/work/${battleBots.slug}`}>{battleBots.title}</Link>
@@ -63,8 +79,8 @@ export default function Activities() {
           <p>{battleBots.summary}</p>
         </article>
       </section>
-      <section className="academic-section">
-        <h2>awards &amp; competitions</h2>
+      <section className="academic-section" id="recognition">
+        <h2>Awards &amp; competitions</h2>
         {portfolioRecognition.map((item) => (
           <div className="academic-recognition" key={item.title}>
             <span>{item.period}</span>
@@ -73,6 +89,7 @@ export default function Activities() {
               <p>
                 <strong>{item.result}</strong>. {item.detail}
               </p>
+              <Link href={item.href}>{item.link} →</Link>
             </div>
           </div>
         ))}

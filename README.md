@@ -1,20 +1,19 @@
 # Mithul Sourav · Portfolio & Mika’s Life
 
-An academic portfolio for mechanical engineering and robotics, with a personal journal and a private writing desk. The original Minecraft train journey is archived at `/v1`, including its project, journal, profile, and writing pages. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
+An academic portfolio for mechanical engineering and robotics, with a personal journal and a private writing desk. Academic and project facts come from the supplied CV. The journal includes four published student-voice notes on OpenAI models and control systems. Research dates and sources are recorded in `docs/journal-sources.md`.
 
 Public website: [psmithul.com](https://psmithul.com/). Vercel fallback: [psmithul-portfolio.vercel.app](https://psmithul-portfolio.vercel.app/).
 
 Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). Vercel is connected to this repository; pushes to `main` deploy production and other branches create previews.
 
-## Website versions
+## Website routes
 
-- `/`, `/about`, `/activities`, `/work`, `/work/[slug]`, `/blog`, and `/blog/[slug]` use the new academic design.
-- `/v1`, `/v1/about`, `/v1/work/[slug]`, `/v1/blog`, and `/v1/blog/[slug]` preserve the Minecraft design. Its phone homepage still uses the original portrait layout.
-- `/write` and `/v1/write` use the same owner-protected journal store. Versioned editor pages and API aliases preserve their own navigation prefix.
-- Archive project/profile copy is frozen in `content/v1/`; edit the top-level `content/` files for the current website. The archived résumé is at `/v1/Mithul-Sourav-CV.pdf`.
-- The new layout is in `app/academic.css` and `components/academic/`. The older styles are loaded by `app/v1/layout.tsx`. Version-switch links use full document navigation so the old styles and scene controller do not carry into the new site.
+- `/` introduces the portfolio and selected projects. `/about` has the full biography, and `/activities` covers experience, leadership, and team work.
+- `/work` lists all projects and `/work/[slug]` opens a case study.
+- `/blog` lists published notes, and `/write` is the private writing desk.
+- Old `/v1` links permanently redirect to the corresponding current paths.
 
-The academic layout follows [Mayank Mittal’s portfolio](https://mayankm96.github.io/): a centered 700px document, right-aligned navigation, biography with a right-hand portrait, dated recent updates, and compact image/text project rows. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License (`public/fonts/Amarna-OFL.txt`). Project summaries are visible directly. Covers use original project documentation, and entries without verified images use text. See `docs/content-review.md` for copy sources and `docs/current-project-assets.json` for image provenance.
+The layout uses `app/academic.css` and `components/academic/`. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License. Project covers use original documentation. Entries without a landscape project image are shown as text in the listings. Image sources are recorded in `docs/current-project-assets.json`.
 
 ## Run locally
 
@@ -59,7 +58,7 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 | Content                                                  | Location                       |
 | -------------------------------------------------------- | ------------------------------ |
 | Project facts, contribution, method, status, and results | `content/projects.ts`          |
-| Portfolio copy and chapter order                         | `content/v1/journey.ts`        |
+| Selected projects                                        | `content/academic.ts`          |
 | Education, experience, skills, and recognition           | `content/profile.ts`           |
 | Mobile portfolio and navigation                          | `components/academic/`         |
 | CV download                                              | `public/Mithul-Sourav-CV.pdf`  |
@@ -96,46 +95,9 @@ Vercel supplies `BLOB_READ_WRITE_TOKEN`, `JOURNAL_PASSWORD_HASH`, and `JOURNAL_S
 
 After a push, check that the Vercel deployment is Ready, its commit matches the pushed revision, and the public URL returns the current site without authentication. A successful Git push alone is not a successful deployment.
 
-## The train journey
-
-The desktop homepage is a scroll-driven Three.js voxel world with seven chapters: Welcome, About, Current Projects, Past Projects, Experience, Blog, and Contact. A copper locomotive follows curved rails through pixel-textured terrain and timber exhibits. Its flywheels and coupling rods move with distance. The guide stays in the cab through the ground chapters, then walks across the launch gangway and boards the rocket. On the moon, a rover parks beside one workshop. The guide visits five work bays around its circular interior, boards the rover, and continues to the library and contact chapter.
-
-Wheel input, keyboard scrolling, scrollbar drags, and navigation share one scroll controller. Each fresh gesture starts immediately at a gentle pace and builds to a moderate, viewport-scaled ceiling over about 600ms. Closely spaced wheel notches preserve that acceleration; release discards the short input runway and brakes promptly. Walking transfers additionally limit the guide to five world units per second, keeping the camera and character on the same scroll position. The train cruises continuously until its braking approach to the rocket gangway, and the journal rover follows a linear travel path. Reading-page transfers and gallery turns use continuous easing across wider intervals. Sidebar destinations and content anchors jump directly to their matching readable frame. There are no nested text scrollbars. Open dialogs pause travel.
-
-A red MITHUL loading screen waits for fonts, textures, and the first rendered frame. Its small travel selector offers manual or automatic exploration. Visitors can change camera view, daylight, and sound in the settings menu. Music starts only after a click. Phones, touch tablets, and small windows use a normal, vertical Minecraft-themed document with native scrolling; they do not load the desktop Three.js journey. If WebGL cannot start, desktop visitors can use that same lightweight version.
-
-Static voxel cuboids and rigid moving assemblies render only exposed surfaces: shared, buried, and overlapping faces are removed before upload. The station roof uses one joined voxel ring. Its camera crosses above that roof before descending into the viewing bay. World geometry and projected HTML share a depth compositor, so nearer objects consistently occlude text. Only one caption owns the visible aperture at a time. Page dimensions, backing frames, and apertures resize together after fonts or viewport changes. The sky includes stepped clouds and a square sun; space uses fixed stars and a galactic ribbon. Rocket exhaust follows the nozzle, flight phase, and full-particle clearance from both landing pads. Reduced-motion preferences suppress decorative motion; the complete HTML content remains available.
-
-Current Projects has the adaptive suspension rover, tensegrity joint, and leaf-collection robot. Each has a clickable mechanical exhibit on a grounded worktable, with wider spacing and longer reading intervals between projects. The rover responds to anchored terrain fixtures through a fixed-step spring–damper, the tensegrity assembly has supported base vertices and connected tension and compression members, and the leaf robot uses a closed four-bar linkage that clears its tabletop and tyres throughout its full revolution. Every project page also includes a 3D laboratory with orbit, animation, assembly separation, and model-specific controls. The rover and flight-controller isolation models use a fixed-step base-excited spring–mass–damper response; the four-bar model solves its closed geometry with circle intersections. These are illustrative concept models, not original CAD, measured results, or numerical validation of the projects.
-
-The journal appears once in the journey, with two recent entries and a “Read more in Journal” link to the two-dimensional journal and article pages. Bundled posts, published owner entries, private writing-desk routes, resume downloads, and project URLs retain their existing sources and behavior.
-
-| Change                                                  | Location                                                                                                                        |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Station order, names, and experience                    | `content/v1/journey.ts`                                                                                                         |
-| Journey content and navigation                          | `components/train-journey.tsx`                                                                                                  |
-| Voxel terrain, train, station buildings, camera         | `lib/voxel-world.ts`                                                                                                            |
-| Original procedural 16 × 16 block textures              | `lib/voxel-textures.ts`                                                                                                         |
-| Continuous actor/camera choreography and tests          | `lib/journey-choreography.ts`, `scripts/journey-choreography.test.ts`                                                           |
-| Reading alcove order and forward travel                 | `lib/journey-exhibits.ts`                                                                                                       |
-| Native scroll mapping                                   | `lib/journey-timeline.ts`, `scripts/journey-timeline.test.ts`                                                                   |
-| Input acceleration, speed ceiling and walking limits    | `lib/journey-scroll.ts`, `lib/journey-scroll-speed.ts`, `lib/journey-walking-motion.ts`, `scripts/journey-scroll-speed.test.ts` |
-| Original 53-second instrumental and reproducible source | `public/audio/railway-theme.wav`, `scripts/compose-journey.py`                                                                  |
-| World typography, colors, responsive layouts            | `app/minecraft.css`, `app/world.css`                                                                                            |
-| Interactive engineering models                          | `lib/engineering-scene.ts`                                                                                                      |
-| Spring response and tests                               | `lib/suspension-physics.ts`, `scripts/suspension-physics.test.ts`                                                               |
-
-On systems with restrictive file-watcher limits, use `WATCHPACK_POLLING=true npm run dev -- --webpack`. The production build uses the standard `npm run build` command.
-
 ## Design and credits
 
-Archived v1 visual references: [Andrew Woan’s Minecraft portfolio](https://github.com/andrewwoan/woan-minecraft-folio), [Arshad’s voxel house](https://www.arshadakl.in/projects/minecraft-portfolio), and [Create-style copper locomotives](https://createmod.com/schematics/copper-locomotive). The references informed the camera composition and block architecture. Geometry, pixel textures, and choreography here are original.
-
-In v1, portfolio text remains selectable semantic HTML, projected with CSS3DRenderer using the same camera and measured dimensions as the WebGL apertures. The About chapter includes the original portrait and favourite quote; the guide wears the requested Technoblade skin. Tests cover surface ownership, one-caption visibility, route continuity, cab and rover clearance, reversible travel, resumed-input acceleration, walking speed, braking, and equivalent motion at 30, 60, and 144 Hz.
-
-The original 16-bar tune uses synthesized piano, soft sustained chords, and circular echo tails. It is bundled locally, loops, starts only when the visitor enables it, and can be muted at any time. The composition can be regenerated with `python3 scripts/compose-journey.py`; no external recordings are used.
-
-The world and all its block geometry are generated locally in Three.js; no game textures or external 3D assets are required. The design uses pixel grass, timber, copper, blue daylight, and a starfield, and locally hosted Pixelify Sans for pixel display typography. The journal retains its reading typography and image credits. Font licenses are in `public/fonts/`, including the Pixelify Sans SIL Open Font License. The previous project photography remains credited in its case studies and in `docs/project-photo-assets.json`.
+The homepage photograph and About illustration were supplied by Mithul. The earlier designs are recorded in the repository history.
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).

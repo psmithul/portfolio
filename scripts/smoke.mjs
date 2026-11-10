@@ -11,7 +11,7 @@ const currentCases = [
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
-  ['/work', 200, 'completed projects', 'Projects'],
+  ['/work', 200, 'Completed projects', 'Projects'],
   ['/activities', 200, 'leadership', 'Activities'],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
   ['/about', 200, '7.37', 'About'],
@@ -83,38 +83,43 @@ const currentCases = [
   ['/blog/not-a-published-entry', 404, 'here yet.', ''],
   ['/this-page-does-not-exist', 404, 'here yet.', ''],
 ];
-const archivedCases = currentCases
-  .filter(
-    ([path]) =>
-      !['/work', '/activities', '/work/nitk-battle-bots'].includes(path),
-  )
-  .map(([path, status, content, title]) => [
-    path === '/' ? '/v1' : '/v1' + path,
-    status,
-    content,
-    path === '/' ? 'Minecraft portfolio' : title,
-  ]);
-const cases = [
-  ...currentCases.map(([path, status, content, title]) => [
-    path,
-    status,
-    status === 404 ? 'Page not found' : content,
-    title,
-  ]),
-  ...archivedCases,
-];
+const cases = currentCases.map(([path, status, content, title]) => [
+  path,
+  status,
+  status === 404 ? 'Page not found' : content,
+  title,
+]);
 const imagePaths = new Set();
 for (const [path, status, content, title] of cases) {
   const response = await fetch(new URL(path, base));
   const body = await response.text();
   assert.equal(response.status, status, path + ': HTTP status');
   assert.ok(body.includes(content), path + ': expected content');
-  if (!path.startsWith('/v1')) {
+  assert.doesNotMatch(
+    body,
+    /href="\/v1(?:[/?#"])/,
+    path + ': retired navigation',
+  );
+  assert.doesNotMatch(
+    body,
+    /src="\/images\/projects\/(?:photos\/|illustration-|reaction-wheel-reference-cad|tensegrity-(?:joint|leg)-cad)/,
+    path + ': project imagery must be original documentation',
+  );
+  if (path === '/') {
+    assert.match(body, /<h2 id="about-heading">About me<\/h2>/);
+    assert.match(body, /src="\/images\/mithul-profile-photo\.webp"/);
     assert.doesNotMatch(
       body,
-      /src="\/images\/projects\/(?:photos\/|illustration-|reaction-wheel-reference-cad|tensegrity-(?:joint|leg)-cad)/,
-      path + ': current project imagery must be original documentation',
+      /recent updates|mithul-profile-illustration\.webp/i,
     );
+  }
+  if (path === '/about') {
+    assert.match(body, /src="\/images\/mithul-profile-illustration\.webp"/);
+    assert.doesNotMatch(body, /mithul-profile-photo\.webp/);
+  }
+  if (path === '/' || path === '/work') {
+    assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
+    assert.doesNotMatch(body, /nitk-battle-bots-event\.jpeg/);
   }
   if (title) {
     const titles = [...body.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
@@ -157,30 +162,6 @@ for (const [path, status, content, title] of cases) {
   }
   if (path.endsWith('/write'))
     assert.match(body, /name="robots" content="noindex, nofollow"/);
-  if (status === 200 && path.startsWith('/v1/work/')) {
-    for (const className of [
-      'playground-stage',
-      'scene-loading',
-      'workbench-controls',
-      'mobile-model-illustration laboratory-mobile',
-    ])
-      assert.ok(
-        body.includes(`class="${className}"`),
-        path + ': reserved server-rendered laboratory frame',
-      );
-  }
-  if (path.startsWith('/v1')) {
-    for (const anchor of body.matchAll(/<a\b[^>]*>/gi)) {
-      const href = /href="([^"]+)"/.exec(anchor[0])?.[1];
-      if (!href || anchor[0].includes('legacy-version-link')) continue;
-      assert.ok(
-        !/^\/(?:about|blog|work|write)(?:[/?#]|$)/.test(href) &&
-          href !== '/' &&
-          !href.startsWith('/#'),
-        path + ': archived navigation escaped: ' + href,
-      );
-    }
-  }
   // Next streams the custom 404 through its server-component payload.
   // Its hydrated landmark is also checked in browser QA.
   assert.ok(
@@ -190,90 +171,27 @@ for (const [path, status, content, title] of cases) {
   );
   console.log('PASS ' + status + ' ' + path);
 }
-// The request must choose the right first paint, before client hydration.
-for (const [device, phone, userAgent] of [
-  [
-    'iPhone',
-    true,
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) Mobile/15E148 Safari/604.1',
-  ],
-  [
-    'iPad',
-    false,
-    'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X) Mobile/15E148 Safari/604.1',
-  ],
-  [
-    'Android phone',
-    true,
-    'Mozilla/5.0 (Linux; Android 15; Pixel 9) Chrome/131.0.0.0 Mobile Safari/537.36',
-  ],
-  [
-    'Android tablet',
-    false,
-    'Mozilla/5.0 (Linux; Android 14; SM-X710) Chrome/131.0.0.0 Safari/537.36',
-  ],
-  [
-    'iPad desktop mode / Mac',
-    false,
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) Version/18.0 Safari/605.1.15',
-  ],
+for (const path of [
+  '/',
+  '/about',
+  '/work',
+  '/work/tensegrity-joint',
+  '/blog',
+  '/blog/pid-versus-neural-network-control',
+  '/write',
+  '/write/example-entry',
+  '/api/journal',
+  '/health',
+  '/Mithul-Sourav-CV.pdf',
+  '/favicon.svg',
 ]) {
-  const currentResponse = await fetch(new URL('/', base), {
-    headers: { 'user-agent': userAgent },
-  });
-  const currentBody = await currentResponse.text();
-  assert.equal(currentResponse.status, 200, device + ': current homepage');
-  assert.ok(
-    currentBody.includes('class="academic-site"'),
-    device + ': academic first paint',
-  );
-  assert.ok(
-    !currentBody.includes('class="minecraft-loader'),
-    device + ': no 3D loader on current website',
-  );
-  const response = await fetch(new URL('/v1', base), {
-    headers: { 'user-agent': userAgent },
-  });
-  const body = await response.text();
-  assert.equal(response.status, 200, device);
-  assert.equal(
-    body.includes('class="classic-portfolio"'),
-    phone,
-    device + ': phone homepage',
-  );
-  assert.equal(
-    body.includes('class="minecraft-loader'),
-    !phone,
-    device + ': journey loader',
-  );
-  assert.ok(body.includes('id="main"'), device + ': content landmark');
-  if (phone) {
-    assert.ok(
-      body.includes('Open on a desktop or iPad'),
-      device + ': desktop note',
-    );
-    assert.ok(
-      body.includes('class="flow-statement shell"'),
-      device + ': original introduction',
-    );
-    for (const id of [
-      'about',
-      'work',
-      'completed-work',
-      'experience',
-      'accolades',
-      'tools',
-      'journal',
-      'contact',
-    ])
-      assert.ok(body.includes(`id="${id}"`), device + ': ' + id);
-    for (const match of body.matchAll(
-      /src="(\/[^"?]+\.(?:png|jpg|jpeg|webp|svg))"/gi,
-    ))
-      imagePaths.add(match[1]);
-  }
-  console.log('PASS current and v1 device homepages ' + device);
+  const oldPath = path === '/' ? '/v1' : '/v1' + path;
+  const response = await fetch(new URL(oldPath, base), { redirect: 'manual' });
+  assert.equal(response.status, 308, oldPath);
+  assert.equal(new URL(response.headers.get('location'), base).pathname, path);
+  await response.body?.cancel();
 }
+console.log('PASS retired archive redirects');
 for (const path of imagePaths) {
   const response = await fetch(new URL(path, base));
   assert.equal(response.status, 200, path + ': referenced image');
@@ -282,10 +200,10 @@ for (const path of imagePaths) {
 }
 console.log(`PASS ${imagePaths.size} referenced portfolio images`);
 const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text();
+assert.doesNotMatch(sitemap, /https:\/\/psmithul\.com\/v1/);
 for (const [path, status] of cases) {
   if (
     status === 200 &&
-    !path.startsWith('/v1') &&
     path !== '/write' &&
     path !== '/work/neoleg-knee-mechanism'
   )
@@ -293,7 +211,7 @@ for (const [path, status] of cases) {
       sitemap.includes(`https://psmithul.com${path}</loc>`),
       path + ': indexed',
     );
-  if (status === 404 || path.startsWith('/write') || path.startsWith('/v1'))
+  if (status === 404 || path.startsWith('/write'))
     assert.ok(
       !sitemap.includes(`https://psmithul.com${path}</loc>`),
       path + ': not indexed',
@@ -303,23 +221,16 @@ const robots = await (await fetch(new URL('/robots.txt', base))).text();
 assert.match(robots, /Sitemap: https:\/\/psmithul.com\/sitemap.xml/);
 assert.match(robots, /Disallow: \/write/);
 console.log('PASS published-only sitemap and robots');
-for (const path of [
-  '/api/journal',
-  '/api/journal/example-entry',
-  '/v1/api/journal',
-  '/v1/api/journal/example-entry',
-]) {
+for (const path of ['/api/journal', '/api/journal/example-entry']) {
   const response = await fetch(new URL(path, base));
   assert.equal(response.status, 401, path + ': owner access required');
   assert.match(response.headers.get('cache-control'), /no-store/);
 }
-for (const prefix of ['', '/v1']) {
-  const editor = await fetch(new URL(prefix + '/write/example-entry', base), {
-    redirect: 'manual',
-  });
-  assert.equal(editor.status, 307);
-  assert.ok(editor.headers.get('location')?.endsWith(prefix + '/write'));
-}
+const editor = await fetch(new URL('/write/example-entry', base), {
+  redirect: 'manual',
+});
+assert.equal(editor.status, 307);
+assert.ok(editor.headers.get('location')?.endsWith('/write'));
 console.log('PASS anonymous journal access denied');
 const health = await fetch(new URL('/health', base));
 assert.equal(health.status, 200);
@@ -327,18 +238,8 @@ assert.equal((await health.json()).status, 'ok');
 console.log('PASS production health');
 for (const path of [
   '/fonts/amarna-regular.woff2',
-  '/fonts/amarna-light.woff2',
   '/fonts/amarna-bold.woff2',
   '/fonts/amarna-italic.woff2',
-  '/fonts/manrope-latin-variable.woff2',
-  '/fonts/barlow-condensed-800.ttf',
-  '/fonts/fraunces-latin-variable.woff2',
-  '/fonts/space-mono-latin-regular.woff2',
-  '/fonts/pixelify-sans-700.ttf',
-  '/fonts/space-grotesk-latin-variable.woff2',
-  '/fonts/tanker-regular.woff2',
-  '/skins/technoblade.png',
-  '/audio/railway-theme.wav',
   '/favicon.svg',
 ]) {
   const response = await fetch(new URL(path, base));
@@ -346,19 +247,13 @@ for (const path of [
   assert.ok((await response.arrayBuffer()).byteLength > 100, path);
   console.log('PASS asset ' + path);
 }
-for (const prefix of ['', '/v1']) {
-  const cv = await fetch(new URL(prefix + '/Mithul-Sourav-CV.pdf', base));
-  assert.equal(cv.status, 200);
-  assert.ok(cv.headers.get('content-type')?.includes('application/pdf'));
-  const downloaded = Buffer.from(await cv.arrayBuffer());
-  const source = readFileSync('public/Mithul-Sourav-CV.pdf');
-  assert.equal(
-    createHash('sha256').update(downloaded).digest('hex'),
-    createHash('sha256').update(source).digest('hex'),
-  );
-  console.log(
-    'PASS ' +
-      (prefix || 'current') +
-      ' CV download matches the supplied document',
-  );
-}
+const cv = await fetch(new URL('/Mithul-Sourav-CV.pdf', base));
+assert.equal(cv.status, 200);
+assert.ok(cv.headers.get('content-type')?.includes('application/pdf'));
+const downloaded = Buffer.from(await cv.arrayBuffer());
+const source = readFileSync('public/Mithul-Sourav-CV.pdf');
+assert.equal(
+  createHash('sha256').update(downloaded).digest('hex'),
+  createHash('sha256').update(source).digest('hex'),
+);
+console.log('PASS CV download matches the supplied document');

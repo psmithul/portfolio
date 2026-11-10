@@ -52,11 +52,15 @@ export default async function Article({ params }: Props) {
       <ReadingContents body={post.body} />
       <ArticleBody body={post.body} />
       <footer className="academic-next">
-        <p>Thanks for reading. — Mithul</p>
-        {next && <Link href={`/blog/${next.slug}`}>{next.title} →</Link>}
-        <p>
+        {next && (
+          <>
+            <p>Next journal entry</p>
+            <Link href={`/blog/${next.slug}`}>{next.title} →</Link>
+          </>
+        )}
+        <div className="academic-inline-links">
           <Link href="/blog">All journal entries</Link>
-        </p>
+        </div>
       </footer>
     </main>
   );
