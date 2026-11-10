@@ -42,11 +42,11 @@
       "role": "native CAD render of one suspension module"
     },
     {
-      "path": "public/images/projects/tensegrity-knee-support-network.webp",
-      "source": "Mithul’s Femoral_Stem.STEP, tristar.STEP, and Tibial_Stem.STEP, posed using the Rev02 orthographic geometry and load-support drawing",
+      "path": "public/images/projects/tensegrity-knee-support-assembly.webp",
+      "source": "Mithul’s Femoral_Stem.STEP, tristar.STEP, and Tibial_Stem.STEP, posed using the Rev02 support drawing. Femoral stem shifted outward 5 mm along its axis for clearance, with illustrative collars and pin fittings added at the tendon ends.",
       "width": 1800,
       "height": 1012,
-      "sha256": "1d59f888b1a5f2e69aa4feb6ae25ad3b6cf84b4b15af0654c131efd9804ab43b",
+      "sha256": "48674228c6b095e13ac3720c1ca6782fb94159336372f62c4ec97e938ed859f5",
       "role": "two views of the assembled STEP parts and 12 load-support tendons"
     },
     {
