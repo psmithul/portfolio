@@ -23,7 +23,7 @@ export default async function Home() {
       <header className="portfolio-hero" id="about">
         <div className="portfolio-identity">
           <h1>{profile.fullName}</h1>
-          <p className="portfolio-affiliation">
+          <p className="portfolio-affiliation academic-handwritten">
             Mechanical Engineering · NITK Surathkal
           </p>
         </div>
@@ -67,7 +67,9 @@ export default async function Home() {
       >
         <header className="portfolio-section-heading">
           <h2 id="journal-heading">Journal</h2>
-          <p className="portfolio-affiliation">Mika’s Life</p>
+          <p className="portfolio-affiliation academic-handwritten">
+            Mika’s Life
+          </p>
         </header>
         <div className="portfolio-journal-content">
           <p>
