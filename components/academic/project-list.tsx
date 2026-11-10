@@ -6,16 +6,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <ul className="project-list">
       {projects.map(
-        ({
-          slug,
-          title,
-          shortTitle,
-          discipline,
-          period,
-          status,
-          summary,
-          image,
-        }) => {
+        ({ slug, title, discipline, period, status, summary, image }) => {
           const preview = image?.thumbnail ?? image;
           const landscape =
             preview && preview.width > preview.height ? preview : undefined;
@@ -43,7 +34,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                 )}
                 <div className="project-copy">
                   <h3 id={heading}>
-                    <span>{shortTitle ?? title}</span>{' '}
+                    <span>{title}</span>{' '}
                     <span className="portfolio-link-arrow" aria-hidden="true">
                       ↗
                     </span>
