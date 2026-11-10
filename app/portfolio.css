@@ -81,6 +81,17 @@
 .portfolio-about-copy > p {
   margin-bottom: 9px;
 }
+.portfolio-interests {
+  margin: 16px 0 12px;
+}
+.academic-home .portfolio-interests h3 {
+  margin-bottom: 4px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.academic-home .portfolio-interests p {
+  margin: 0;
+}
 .academic-about-details {
   font-size: 14px;
 }

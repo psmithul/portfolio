@@ -62,6 +62,10 @@ export default async function Home() {
         </header>
         <div className="portfolio-about-copy">
           <p>{profile.about[1]}</p>
+          <div className="portfolio-interests">
+            <h3>Current interests</h3>
+            <p>{profile.currentInterests}</p>
+          </div>
           <details className="academic-about-details">
             <summary>Education and skills</summary>
             <dl className="academic-skill-list">
