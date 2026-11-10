@@ -128,12 +128,11 @@ body:has(.academic-site) {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 5px;
 }
 .academic-intro .academic-home-photo {
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  object-position: 70% 50%;
+  object-position: 85% 50%;
 }
 .academic-intro .academic-about-portrait {
   max-width: 180px;
@@ -670,6 +669,7 @@ body:has(.academic-site) {
   }
   .academic-intro .academic-home-photo {
     aspect-ratio: 16 / 10;
+    object-position: right center;
   }
   .academic-intro .academic-about-portrait {
     max-width: 144px;

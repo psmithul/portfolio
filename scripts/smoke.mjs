@@ -107,15 +107,18 @@ for (const [path, status, content, title] of cases) {
   );
   if (path === '/') {
     assert.match(body, /<h2 id="about-heading">About me<\/h2>/);
-    assert.match(body, /src="\/images\/mithul-profile-photo\.webp"/);
+    assert.match(body, /src="\/images\/mithul-profile-photo-cutout\.webp"/);
     assert.doesNotMatch(
       body,
-      /recent updates|mithul-profile-illustration\.webp/i,
+      /recent updates|mithul-profile-illustration-cutout\.webp/i,
     );
   }
   if (path === '/about') {
-    assert.match(body, /src="\/images\/mithul-profile-illustration\.webp"/);
-    assert.doesNotMatch(body, /mithul-profile-photo\.webp/);
+    assert.match(
+      body,
+      /src="\/images\/mithul-profile-illustration-cutout\.webp"/,
+    );
+    assert.doesNotMatch(body, /mithul-profile-photo-cutout\.webp/);
   }
   if (path === '/' || path === '/work') {
     assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
