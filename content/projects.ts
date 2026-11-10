@@ -47,60 +47,34 @@ export const battleBots: Project = {
   title: 'NITK Battle Bots',
   discipline: 'Combat robotics',
   status: 'Completed',
-  context: 'Combat robot design at NITK Surathkal',
+  context: 'Team mechanical design · NITK Surathkal',
   tools: [],
+  image: projectImages['nitk-battle-bots'],
   summary:
-    'I designed combat robots for the 3 kg and 50 kg weight classes at NITK Surathkal.',
-  question: 'How do you lay out a combat robot around a defined mass budget?',
-  role: 'I developed the mechanical layout for each weight class.',
+    'Our NITK Battle Bots team designed combat robots for the 3 kg and 50 kg weight classes.',
+  question:
+    'How can we design a chassis and weapon around the weight limit while keeping the bot economical to build?',
+  role: 'I designed the chassis and co-designed the weapon with my teammates. We worked together on the individual parts and how they fit into each bot.',
   approach: [
     {
-      title: 'Design for two weight classes',
-      body: 'Develop separate layouts for the 3 kg and 50 kg mass budgets.',
+      title: 'Chassis and weapon layout',
+      body: 'Design separate layouts around the 3 kg and 50 kg weight limits.',
+    },
+    {
+      title: 'Unibody chassis approach',
+      body: 'Use an integrated main structure to simplify fabrication and keep costs down.',
     },
   ],
-  outcome: 'Mechanical designs for two combat robot weight classes.',
-  scope: 'Mechanical design stage complete.',
-  evidence: ['3 kg robot design', '50 kg robot design'],
+  outcome: 'The team completed mechanical designs for both weight classes.',
+  scope: 'Mechanical designs completed for the 3 kg and 50 kg bots.',
+  evidence: [
+    '3 kg mechanical design',
+    '50 kg mechanical design',
+    'Event photo',
+  ],
 };
 
 export const projects: Project[] = [
-  {
-    slug: 'battery-control-and-estimation',
-    number: '13',
-    title: 'Bidirectional Charging Control and Battery State Estimation',
-    shortTitle: 'Battery estimation and bidirectional charging',
-    discipline: 'Energy systems · Control and estimation',
-    period: 'Nov 2026',
-    status: 'Completed',
-    context: 'Control simulation and measured cell-data replay',
-    tools: ['MATLAB', 'Simulink and Simscape', 'Extended Kalman filtering'],
-    image: projectImages['battery-control-and-estimation'],
-    summary:
-      'I modeled a 3.3 kW bidirectional charging controller and compared two ways to estimate a battery cell’s state of charge using measured current and voltage.',
-    question:
-      'How well can a battery estimator track charge, and how does the controller use that estimate to manage power flow?',
-    role: 'I developed the simulated battery and supervisory control loop, then ran and checked the state-of-charge estimators in MATLAB and Simulink using recorded A123 cell measurements.',
-    approach: [
-      {
-        title: 'Simulate bidirectional power control',
-        body: 'Combine a Simscape battery circuit with a charge estimator and a supervisor for grid-to-vehicle and vehicle-to-grid operation.',
-      },
-      {
-        title: 'Replay recorded cell data',
-        body: 'Compare one- and two-RC extended Kalman filters against a processed state-of-charge reference with matched and offset initialization.',
-      },
-    ],
-    outcome:
-      'The control simulation passed all 22 checks. The two-RC estimator tracked the processed reference more closely with matched initialization, and a 10 percentage point initial offset remained difficult to correct.',
-    scope:
-      'Completed control simulation and single-cell measurement replay. The 3.3 kW result is from the simulated battery system, and the cell comparison uses recorded laboratory data.',
-    evidence: [
-      '22 of 22 integrated simulation checks passed',
-      'Measured current and voltage replay on A123 4.4 Ah cell data',
-      'MATLAB and Simulink estimator outputs matched on the tested replay',
-    ],
-  },
   battleBots,
   {
     slug: 'uav-vibration-integration',

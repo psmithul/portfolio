@@ -1,13 +1,13 @@
 {
-  "review_date": "2026-11-09",
+  "review_date": "2026-11-10",
   "assets": [
     {
-      "path": "public/images/projects/a123-cell-estimator-replay.png",
-      "source": "D050_experimental_SOC.png, original MATLAB plot supplied by Mithul in Project Review, November 2026",
-      "width": 1811,
-      "height": 1130,
-      "sha256": "0a72ff2b6abb01252af89fa13bf44885bf19159e2a5d8a0a45a6146abdba28b3",
-      "role": "measured cell-data estimator replay with matched initial state of charge"
+      "path": "public/images/projects/nitk-battle-bots-event.jpeg",
+      "source": "Event photograph supplied by Mithul",
+      "width": 2252,
+      "height": 4000,
+      "sha256": "1ebb4dd8705095938b10c7d0bb81770745d4bbc351bccabada1f6fe10b73e148",
+      "role": "team and robot at the event"
     },
     {
       "path": "public/images/projects/rover-assembly-cad.png",

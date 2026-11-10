@@ -68,13 +68,13 @@ const currentCases = [
     'Variable-Stiffness Suspension',
   ],
   ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated Knee-Assistance'],
-  ['/work/nitk-battle-bots', 200, '50 kg', 'NITK Battle Bots'],
   [
-    '/work/battery-control-and-estimation',
+    '/work/nitk-battle-bots',
     200,
-    '0.467 pp',
-    'Battery State Estimation',
+    'Why we wanted a unibody chassis',
+    'NITK Battle Bots',
   ],
+  ['/work/battery-control-and-estimation', 404, 'here yet.', ''],
   ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-Bar'],
   ['/work/easy-access-wallet', 200, 'card access', 'Wallet'],
   ['/work/solar-smart-home', 200, 'photovoltaic', 'Arduino'],
@@ -86,12 +86,7 @@ const currentCases = [
 const archivedCases = currentCases
   .filter(
     ([path]) =>
-      ![
-        '/work',
-        '/activities',
-        '/work/nitk-battle-bots',
-        '/work/battery-control-and-estimation',
-      ].includes(path),
+      !['/work', '/activities', '/work/nitk-battle-bots'].includes(path),
   )
   .map(([path, status, content, title]) => [
     path === '/' ? '/v1' : '/v1' + path,
