@@ -5,6 +5,17 @@ import type { Project } from '@/content/projects';
 export const projectImages: Partial<
   Record<string, NonNullable<Project['image']>>
 > = {
+  'battery-control-and-estimation': {
+    kind: 'documentation',
+    label: 'Measured cell-data replay',
+    src: '/images/projects/a123-cell-estimator-replay.png',
+    width: 1811,
+    height: 1130,
+    alt: 'Two plots comparing one-RC and two-RC estimates of state of charge against a processed reference and showing their errors over the recorded test.',
+    caption:
+      'Original MATLAB comparison of the one- and two-RC estimators on the recorded A123 cell data, with matched initial state of charge.',
+    fit: 'contain',
+  },
   'adaptive-suspension-rover': {
     kind: 'documentation',
     label: 'Rover CAD assembly',

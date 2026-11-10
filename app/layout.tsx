@@ -9,11 +9,6 @@ import './academic.css';
 const amarna = localFont({
   src: [
     {
-      path: '../public/fonts/amarna-light.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-    {
       path: '../public/fonts/amarna-regular.woff2',
       weight: '400',
       style: 'normal',

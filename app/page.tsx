@@ -2,8 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { projects } from '@/content/projects';
-import { recentUpdates, selectedResearchSlugs } from '@/content/academic';
-import { ResearchList } from '@/components/academic/research-list';
+import { profile } from '@/content/profile';
+import { recentUpdates, selectedProjectSlugs } from '@/content/academic';
+import { ProjectList } from '@/components/academic/project-list';
 import { SocialLinks } from '@/components/academic/social-links';
 import { getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
@@ -13,15 +14,13 @@ export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 export default async function Home() {
   const posts = (await getPublicPosts()).slice(0, 3);
-  const selected = selectedResearchSlugs.flatMap((slug) =>
+  const selected = selectedProjectSlugs.flatMap((slug) =>
     projects.filter((project) => project.slug === slug),
   );
   return (
     <main id="main" className="academic-content academic-home">
       <header className="academic-post-header" id="about">
-        <h1>
-          <strong>P S Mithul</strong> Sourav
-        </h1>
+        <h1>{profile.fullName}</h1>
         <p className="academic-subtitle">
           Mechanical Engineering | NITK Surathkal
         </p>
@@ -91,7 +90,7 @@ export default async function Home() {
         <span id="work" className="section-anchor" />
         <span id="publications" className="section-anchor" />
         <h2 id="research-heading">selected projects</h2>
-        <ResearchList projects={selected} />
+        <ProjectList projects={selected} />
         <p className="section-more">
           <Link href="/work">All projects →</Link>
         </p>

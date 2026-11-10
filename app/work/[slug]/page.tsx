@@ -48,18 +48,22 @@ export default async function ProjectPage({ params }: Props) {
         <h1>{project.title}</h1>
         <p className="academic-deck">{project.summary}</p>
         <dl className="academic-meta">
-          <div>
-            <dt>When</dt>
-            <dd>{project.period}</dd>
-          </div>
+          {project.period && (
+            <div>
+              <dt>When</dt>
+              <dd>{project.period}</dd>
+            </div>
+          )}
           <div>
             <dt>Type of work</dt>
             <dd>{project.context}</dd>
           </div>
-          <div>
-            <dt>Tools &amp; methods</dt>
-            <dd>{project.tools.join(' · ')}</dd>
-          </div>
+          {project.tools.length > 0 && (
+            <div>
+              <dt>Tools &amp; methods</dt>
+              <dd>{project.tools.join(' · ')}</dd>
+            </div>
+          )}
         </dl>
       </header>
       {project.image && (
@@ -102,6 +106,13 @@ export default async function ProjectPage({ params }: Props) {
           </figcaption>
         </figure>
       )}
+      <section
+        className="academic-status"
+        aria-labelledby="contribution-heading"
+      >
+        <h2 id="contribution-heading">My contribution</h2>
+        <p>{project.role}</p>
+      </section>
       <ReadingContents body={body} />
       <ArticleBody body={body} />
       <aside className="academic-status">

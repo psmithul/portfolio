@@ -5,8 +5,10 @@ export type Project = {
   number: string;
   title: string;
   discipline: string;
-  period: string;
+  period?: string;
   status: 'Ongoing' | 'Completed';
+  earlierWork?: boolean;
+  shortTitle?: string;
   context: string;
   tools: string[];
   summary: string;
@@ -29,16 +31,77 @@ export type Project = {
     caption: string;
     referenceUrl?: string;
   };
-  model:
+  model?:
     | ModelKind
     | 'navigation'
     | 'linkage'
     | 'electronics'
     | 'collection'
     | 'wallet';
-  visualLabel: string;
+  visualLabel?: string;
 };
+
+export const battleBots: Project = {
+  slug: 'nitk-battle-bots',
+  number: '12',
+  title: 'NITK Battle Bots',
+  discipline: 'Combat robotics',
+  status: 'Completed',
+  context: 'Combat robot design at NITK Surathkal',
+  tools: [],
+  summary:
+    'I designed combat robots for the 3 kg and 50 kg weight classes at NITK Surathkal.',
+  question: 'How do you lay out a combat robot around a defined mass budget?',
+  role: 'I developed the mechanical layout for each weight class.',
+  approach: [
+    {
+      title: 'Design for two weight classes',
+      body: 'Develop separate layouts for the 3 kg and 50 kg mass budgets.',
+    },
+  ],
+  outcome: 'Mechanical designs for two combat robot weight classes.',
+  scope: 'Mechanical design stage complete.',
+  evidence: ['3 kg robot design', '50 kg robot design'],
+};
+
 export const projects: Project[] = [
+  {
+    slug: 'battery-control-and-estimation',
+    number: '13',
+    title: 'Bidirectional Charging Control and Battery State Estimation',
+    shortTitle: 'Battery estimation and bidirectional charging',
+    discipline: 'Energy systems · Control and estimation',
+    period: 'Nov 2026',
+    status: 'Completed',
+    context: 'Control simulation and measured cell-data replay',
+    tools: ['MATLAB', 'Simulink and Simscape', 'Extended Kalman filtering'],
+    image: projectImages['battery-control-and-estimation'],
+    summary:
+      'I modeled a 3.3 kW bidirectional charging controller and compared two ways to estimate a battery cell’s state of charge using measured current and voltage.',
+    question:
+      'How well can a battery estimator track charge, and how does the controller use that estimate to manage power flow?',
+    role: 'I developed the simulated battery and supervisory control loop, then ran and checked the state-of-charge estimators in MATLAB and Simulink using recorded A123 cell measurements.',
+    approach: [
+      {
+        title: 'Simulate bidirectional power control',
+        body: 'Combine a Simscape battery circuit with a charge estimator and a supervisor for grid-to-vehicle and vehicle-to-grid operation.',
+      },
+      {
+        title: 'Replay recorded cell data',
+        body: 'Compare one- and two-RC extended Kalman filters against a processed state-of-charge reference with matched and offset initialization.',
+      },
+    ],
+    outcome:
+      'The control simulation passed all 22 checks. The two-RC estimator tracked the processed reference more closely with matched initialization, and a 10 percentage point initial offset remained difficult to correct.',
+    scope:
+      'Completed control simulation and single-cell measurement replay. The 3.3 kW result is from the simulated battery system, and the cell comparison uses recorded laboratory data.',
+    evidence: [
+      '22 of 22 integrated simulation checks passed',
+      'Measured current and voltage replay on A123 4.4 Ah cell data',
+      'MATLAB and Simulink estimator outputs matched on the tested replay',
+    ],
+  },
+  battleBots,
   {
     slug: 'uav-vibration-integration',
     number: '06',
@@ -85,6 +148,7 @@ export const projects: Project[] = [
     number: '01',
     title:
       'Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover',
+    shortTitle: 'Adaptive suspension for a rough-terrain rover',
     discipline: 'Field robotics · Suspension and control',
     period: 'Sep 2026 — Present',
     status: 'Ongoing',
@@ -131,6 +195,7 @@ export const projects: Project[] = [
     number: '03',
     title:
       'Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton',
+    shortTitle: 'Variable-stiffness tensegrity knee joint',
     discipline: 'Tensegrity · Knee exoskeletons',
     period: 'May 2026 — Present',
     status: 'Ongoing',
@@ -220,6 +285,7 @@ export const projects: Project[] = [
     number: '04',
     title:
       'Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter',
+    shortTitle: 'Spacecraft vibration and camera pointing',
     discipline: 'Spacecraft dynamics · Physics-informed machine learning',
     period: 'Aug — Oct 2026',
     status: 'Completed',
@@ -274,6 +340,7 @@ export const projects: Project[] = [
     number: '02',
     title:
       'Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain',
+    shortTitle: 'Leaf-collection robot for uneven terrain',
     discipline: 'Field robotics · Modular architecture',
     period: 'Jul 2026 — Present',
     status: 'Ongoing',
@@ -318,6 +385,7 @@ export const projects: Project[] = [
     slug: 'uncertainty-aware-navigation',
     number: '07',
     title: 'Uncertainty-Aware Navigation for an Indoor Mobile Robot',
+    shortTitle: 'Indoor robot navigation under uncertainty',
     discipline: 'State estimation & autonomy',
     period: 'Sep — Dec 2025',
     status: 'Completed',
@@ -359,6 +427,7 @@ export const projects: Project[] = [
     slug: 'four-bar-door-mechanism',
     number: '08',
     title: 'Four-Bar Linkage Door-Opening Mechanism',
+    earlierWork: true,
     discipline: 'Kinematics & fabrication',
     period: 'Feb — Apr 2024',
     status: 'Completed',
@@ -399,6 +468,7 @@ export const projects: Project[] = [
     slug: 'easy-access-wallet',
     number: '09',
     title: 'Wallet for Easier Card Access',
+    earlierWork: true,
     discipline: 'User-centred mechanical design',
     period: 'Sep — Nov 2023',
     status: 'Completed',
@@ -438,6 +508,7 @@ export const projects: Project[] = [
     slug: 'solar-smart-home',
     number: '10',
     title: 'Arduino-Based Smart Home with Solar Power',
+    earlierWork: true,
     discipline: 'Electronics & sensing',
     period: 'Sep 2019 — Jan 2020',
     status: 'Completed',
@@ -478,6 +549,7 @@ export const projects: Project[] = [
     slug: 'traffic-and-elevated-bus',
     number: '11',
     title: 'Smart Traffic Light System and Transit Elevated Bus Model',
+    earlierWork: true,
     discipline: 'Logic & working models',
     period: 'Sep 2018 — Jan 2019',
     status: 'Completed',
