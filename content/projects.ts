@@ -8,7 +8,6 @@ export type Project = {
   period?: string;
   status: 'Ongoing' | 'Completed';
   earlierWork?: boolean;
-  shortTitle?: string;
   context: string;
   tools: string[];
   summary: string;
@@ -133,7 +132,6 @@ export const projects: Project[] = [
     number: '01',
     title:
       'Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover',
-    shortTitle: 'Adaptive suspension for a rough-terrain rover',
     discipline: 'Field robotics · Suspension and control',
     period: 'Sep 2026 — Present',
     status: 'Ongoing',
@@ -180,7 +178,6 @@ export const projects: Project[] = [
     number: '03',
     title:
       'Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton',
-    shortTitle: 'Variable-stiffness tensegrity knee joint',
     discipline: 'Tensegrity · Knee exoskeletons',
     period: 'May 2026 — Present',
     status: 'Ongoing',
@@ -270,7 +267,6 @@ export const projects: Project[] = [
     number: '04',
     title:
       'Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter',
-    shortTitle: 'Spacecraft vibration and camera pointing',
     discipline: 'Spacecraft dynamics · Physics-informed machine learning',
     period: 'Aug — Oct 2026',
     status: 'Completed',
@@ -325,7 +321,6 @@ export const projects: Project[] = [
     number: '02',
     title:
       'Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain',
-    shortTitle: 'Leaf-collection robot for uneven terrain',
     discipline: 'Field robotics · Modular architecture',
     period: 'Jul 2026 — Present',
     status: 'Ongoing',
@@ -370,7 +365,6 @@ export const projects: Project[] = [
     slug: 'uncertainty-aware-navigation',
     number: '07',
     title: 'Uncertainty-Aware Navigation for an Indoor Mobile Robot',
-    shortTitle: 'Indoor robot navigation under uncertainty',
     discipline: 'State estimation & autonomy',
     period: 'Sep — Dec 2025',
     status: 'Completed',
