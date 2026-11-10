@@ -37,7 +37,7 @@ export default async function Home() {
         </div>
         <Image
           className="academic-home-photo"
-          src="/images/mithul-profile-photo.webp"
+          src="/images/mithul-profile-photo-cutout.webp"
           width={1672}
           height={941}
           alt="Portrait of Mithul Sourav"
