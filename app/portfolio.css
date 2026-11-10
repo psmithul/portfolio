@@ -7,9 +7,9 @@
 }
 .portfolio-hero {
   display: grid;
-  grid-template-columns: clamp(170px, 20vw, 218px) minmax(0, 1fr);
-  align-items: start;
-  gap: 16px var(--portfolio-gutter);
+  grid-template-columns: minmax(0, 39fr) minmax(0, 61fr);
+  grid-template-areas: 'portrait intro' '. actions';
+  gap: 14px var(--portfolio-gutter);
   scroll-margin-top: var(--academic-anchor-offset);
 }
 .academic-home .portfolio-affiliation {
@@ -18,15 +18,16 @@
   margin: 0;
 }
 .portfolio-portrait {
+  grid-area: portrait;
+  position: relative;
   margin: 0;
 }
 .portfolio-portrait img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1.12;
   object-fit: cover;
-  object-position: 78% bottom;
+  object-position: 67% bottom;
+}
+.portfolio-intro-copy {
+  grid-area: intro;
 }
 .academic-home .academic-lead {
   max-width: 66ch;
@@ -34,7 +35,11 @@
   font-size: clamp(1.125rem, 1.6vw, 1.25rem);
   line-height: 1.55;
 }
+.academic-home .academic-lead:last-child {
+  margin-bottom: 0;
+}
 .portfolio-actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   gap: 4px 20px;
@@ -200,14 +205,21 @@
   width: 18px;
   height: 18px;
 }
-@media (max-width: 620px) {
+@media (max-width: 820px) {
   .portfolio-hero {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'portrait' 'intro' 'actions';
   }
   .portfolio-portrait {
-    width: clamp(142px, 43vw, 190px);
+    width: min(100%, 430px);
+    aspect-ratio: 3 / 2;
     justify-self: center;
   }
+  .portfolio-portrait img {
+    object-position: right bottom;
+  }
+}
+@media (max-width: 620px) {
   .portfolio-section {
     grid-template-columns: minmax(0, 1fr);
     margin-top: 28px;
