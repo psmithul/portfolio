@@ -71,7 +71,7 @@ const currentCases = [
   [
     '/work/nitk-battle-bots',
     200,
-    'Why we wanted a unibody chassis',
+    'Jelly Baby’s rear-hinged lifter',
     'NITK Battle Bots',
   ],
   ['/work/battery-control-and-estimation', 404, 'here yet.', ''],
