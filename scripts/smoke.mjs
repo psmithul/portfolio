@@ -71,8 +71,8 @@ const currentCases = [
   [
     '/work/nitk-battle-bots',
     200,
-    'Jelly Baby’s rear-hinged lifter',
-    'NITK Battle Bots',
+    'GN4RLY 2.5 (15 kg)',
+    'Combat Robotics Development',
   ],
   ['/work/battery-control-and-estimation', 404, 'here yet.', ''],
   ['/work/four-bar-door-mechanism', 200, 'kinematic limits', 'Four-Bar'],
