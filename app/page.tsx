@@ -32,7 +32,7 @@ export default async function Home() {
             world around them.
           </p>
           <div className="academic-inline-links">
-            <Link href="#research">Selected projects ↓</Link>
+            <a href="#research">Selected projects ↓</a>
             <a href="mailto:psmithul@gmail.com">Get in touch</a>
           </div>
         </div>
