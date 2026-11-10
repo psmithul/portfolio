@@ -107,7 +107,7 @@ for (const [path, status, content, title] of cases) {
       /id="about-heading"[\s\S]*id="research-heading"[\s\S]*id="journal-heading"[\s\S]*id="activities-heading"/,
     );
     assert.match(body, /src="\/images\/mithul-profile-photo-cutout\.webp"/);
-    assert.match(
+    assert.doesNotMatch(
       body,
       /src="\/images\/mithul-profile-illustration-cutout\.webp"/,
     );
@@ -254,9 +254,9 @@ assert.equal(health.status, 200);
 assert.equal((await health.json()).status, 'ok');
 console.log('PASS production health');
 for (const path of [
-  '/fonts/amarna-regular.woff2',
-  '/fonts/amarna-bold.woff2',
-  '/fonts/amarna-italic.woff2',
+  '/fonts/manrope-latin-variable.woff2',
+  '/fonts/space-grotesk-latin-variable.woff2',
+  '/fonts/space-mono-latin-regular.woff2',
   '/favicon.svg',
 ]) {
   const response = await fetch(new URL(path, base));

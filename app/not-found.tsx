@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { HomeSectionLink } from '@/components/academic/home-section-link';
 export default function NotFound() {
   return (
     <main id="main" className="academic-content">
@@ -10,8 +11,8 @@ export default function NotFound() {
         <Link href="/">Back to the homepage →</Link>
       </p>
       <p>
-        <Link href="/#research">Browse projects</Link> ·{' '}
-        <Link href="/#journal">Read the journal</Link>
+        <HomeSectionLink section="research">Browse projects</HomeSectionLink> ·{' '}
+        <HomeSectionLink section="journal">Read the journal</HomeSectionLink>
       </p>
     </main>
   );
