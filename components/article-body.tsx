@@ -7,7 +7,6 @@ import { siteHref } from '@/lib/site-paths';
 const imageDimensions: Record<string, { width: number; height: number }> = {
   '/images/projects/gn4rly-2-5-assembly.jpg': { width: 768, height: 432 },
   '/images/projects/rover-interior-cad.png': { width: 2400, height: 1800 },
-  '/images/projects/tensegrity-knee-design.png': { width: 1600, height: 588 },
   '/images/projects/tensegrity-knee-geometry.png': {
     width: 3307,
     height: 2338,
