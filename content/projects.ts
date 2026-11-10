@@ -51,18 +51,18 @@ export const battleBots: Project = {
   tools: [],
   image: projectImages['nitk-battle-bots'],
   summary:
-    'Our NITK Battle Bots team designed combat robots for the 3 kg and 50 kg weight classes.',
+    'Our NITK Battle Bots team designed a 3 kg flipper inspired by Jelly Baby and a sponsored 50 kg bot with an overhead hammer saw.',
   question:
-    'How can we design a chassis and weapon around the weight limit while keeping the bot economical to build?',
-  role: 'I designed the chassis and co-designed the weapon with my teammates. We worked together on the individual parts and how they fit into each bot.',
+    'How do the weight limit and weapon change what a combat robot needs from its chassis?',
+  role: 'I designed the chassis for both bots and co-designed their weapons with my teammates.',
   approach: [
     {
-      title: 'Chassis and weapon layout',
-      body: 'Design separate layouts around the 3 kg and 50 kg weight limits.',
+      title: '3 kg flipper and chassis layout',
+      body: 'Fit the flipper and drivetrain within the 3 kg limit while leaving room for the flipper to lift clear of the chassis.',
     },
     {
-      title: 'Unibody chassis approach',
-      body: 'Use an integrated main structure to simplify fabrication and keep costs down.',
+      title: 'Sponsored 50 kg hammer saw bot',
+      body: 'Use stronger chassis materials and design the frame around the weapon arm’s motion and impact loads.',
     },
   ],
   outcome: 'The team completed mechanical designs for both weight classes.',

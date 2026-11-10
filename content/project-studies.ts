@@ -4,15 +4,19 @@ export const projectStudies: Record<string, string> = {
   'nitk-battle-bots': String.raw`
 ## 3 kg bot
 
-I designed the chassis around the 3 kg limit and worked with the team on the weapon design. The chassis and weapon had to share that weight allowance with the rest of the bot, so we designed the parts together around the overall layout.
+We took inspiration from Jelly Baby’s rear-hinged lifter when we designed our flipper. I designed the chassis to keep the front low enough to slide under an opponent and give the flipper room to rise. The chassis, flipper and drivetrain all had to fit within the 3 kg limit. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby).
 
 ## 50 kg bot
 
-I designed a separate chassis for the 50 kg class and co-designed the weapon with the team. The heavier class had its own layout, so we worked through how the individual parts would fit into that chassis.
+Sponsorship gave us room in the budget to use stronger materials for the 50 kg chassis. We co-designed an overhead hammer saw with a spinning head on a swinging arm. I laid out the chassis around the arm pivot and the space the arm needed to swing down onto an opponent.
+
+### What we had to rethink
+
+The hammer saw called for a different approach to mounting the weapon. The chassis had to take the reaction from a strike through the arm, pivot and mounts. I learned to trace that load path before deciding where stronger material mattered and how the parts should connect.
 
 ## Why we wanted a unibody chassis
 
-Our aim was to consolidate the main structure so there would be fewer separate pieces to make and join. That was a practical choice for our team: we wanted fabrication and assembly to be simpler and the bot to cost less to make.
+We aimed for an integrated main structure with fewer separate pieces to make and join. That gave us a way to simplify fabrication and assembly while keeping costs down.
 `,
   'uav-vibration-integration': String.raw`
 ## What I worked on at Vayu Aerospace
