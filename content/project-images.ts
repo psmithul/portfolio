@@ -5,15 +5,14 @@ import type { Project } from '@/content/projects';
 export const projectImages: Partial<
   Record<string, NonNullable<Project['image']>>
 > = {
-  'battery-control-and-estimation': {
+  'nitk-battle-bots': {
     kind: 'documentation',
-    label: 'Measured cell-data replay',
-    src: '/images/projects/a123-cell-estimator-replay.png',
-    width: 1811,
-    height: 1130,
-    alt: 'Two plots comparing one-RC and two-RC estimates of state of charge against a processed reference and showing their errors over the recorded test.',
-    caption:
-      'Original MATLAB comparison of the one- and two-RC estimators on the recorded A123 cell data, with matched initial state of charge.',
+    label: 'Team at the event',
+    src: '/images/projects/nitk-battle-bots-event.jpeg',
+    width: 2252,
+    height: 4000,
+    alt: 'Five NITK Battle Bots teammates stand behind a combat robot with black front wedges.',
+    caption: 'Our NITK Battle Bots team with one of our robots at the event.',
     fit: 'contain',
   },
   'adaptive-suspension-rover': {

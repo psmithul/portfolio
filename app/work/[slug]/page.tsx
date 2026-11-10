@@ -67,7 +67,13 @@ export default async function ProjectPage({ params }: Props) {
         </dl>
       </header>
       {project.image && (
-        <figure className="academic-cover">
+        <figure
+          className={
+            project.image.height > project.image.width
+              ? 'academic-cover academic-cover-portrait'
+              : 'academic-cover'
+          }
+        >
           <Image
             src={project.image.src}
             alt={project.image.alt}

@@ -1,17 +1,11 @@
 export const selectedProjectSlugs = [
   'adaptive-suspension-rover',
-  'battery-control-and-estimation',
   'nitk-battle-bots',
   'reaction-wheel-microvibrations',
   'tensegrity-joint',
   'kneeassist',
 ];
 export const recentUpdates = [
-  {
-    date: 'Nov 2026',
-    text: 'Checked a bidirectional charging simulation and compared two battery charge estimators using recorded A123 cell data.',
-    href: '/work/battery-control-and-estimation',
-  },
   {
     date: 'Oct 2026',
     text: 'Completed a computational pilot comparing spacecraft vibration models with neural response predictors over 5–20 Hz.',

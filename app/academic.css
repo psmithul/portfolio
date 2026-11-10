@@ -358,6 +358,13 @@ body:has(.academic-site) {
   object-fit: contain;
   background: #fafafa;
 }
+.academic-cover-portrait {
+  max-width: 330px;
+  margin-inline: auto;
+}
+.academic-cover-portrait img {
+  max-height: none;
+}
 .academic-cover figcaption {
   font-size: 13px;
   line-height: 1.45;
