@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
+import { HomeSectionLink } from '@/components/academic/home-section-link';
 import { getPublicPost, getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
 import { nextJournalPost } from '@/lib/journal-highlights';
@@ -34,16 +35,16 @@ export default async function Article({ params }: Props) {
   const next = nextJournalPost(await getPublicPosts(), slug);
   return (
     <main id="main" className="academic-content academic-case">
-      <Link className="academic-back" href="/#journal">
+      <HomeSectionLink className="academic-back" section="journal">
         ← All notes · Mika’s Life
-      </Link>
+      </HomeSectionLink>
       <header>
         <p className="academic-kicker">{post.tags.join(' / ')}</p>
         <h1>{post.title}</h1>
         <p className="academic-deck">{post.description}</p>
         <div className="academic-article-byline">
           <span>
-            By <Link href="/#about">Mithul Sourav</Link>
+            By <HomeSectionLink section="about">Mithul Sourav</HomeSectionLink>
           </span>
           <time dateTime={post.date}>{dateLabel(post.date)}</time>
           <span>{post.readingMinutes} min read</span>
@@ -59,7 +60,9 @@ export default async function Article({ params }: Props) {
           </>
         )}
         <div className="academic-inline-links">
-          <Link href="/#journal">All journal entries</Link>
+          <HomeSectionLink section="journal">
+            All journal entries
+          </HomeSectionLink>
         </div>
       </footer>
     </main>

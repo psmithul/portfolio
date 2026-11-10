@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import type { Metadata } from 'next';
 import { WritingDesk } from '@/components/writing-desk';
 import { getJournalOwner, journalLoginConfigured } from '@/lib/journal-auth';
 import { journalStorageConfigured } from '@/lib/journal-store';
 import { DeskLogin, DeskSignOut } from '@/components/desk-login';
+import { HomeSectionLink } from '@/components/academic/home-section-link';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -33,9 +33,9 @@ export default async function Write() {
             below.
           </p>
         )}
-        <Link href="/#journal" className="text-link">
+        <HomeSectionLink section="journal" className="text-link">
           Read Mika’s Life
-        </Link>
+        </HomeSectionLink>
       </main>
     );
   return (

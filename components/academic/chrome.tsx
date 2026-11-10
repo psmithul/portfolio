@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
 
@@ -22,6 +21,7 @@ const getServerFragment = () => 'top';
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  const onHomepage = path === '/';
   const fragment = useSyncExternalStore(
     subscribeToFragment,
     getFragment,
@@ -30,31 +30,45 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <div className="academic-site">
       <header className="academic-header">
-        <div className="academic-header-inner">
-          <nav aria-label="Main navigation">
-            {sections.map(({ id, label, detail }) =>
-              path === '/' ? (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  aria-current={fragment === id ? 'location' : undefined}
-                >
-                  {label}
-                </a>
-              ) : (
-                <Link
-                  key={id}
-                  href={`/#${id}`}
-                  aria-current={
-                    detail && path.startsWith(detail) ? 'location' : undefined
-                  }
-                >
-                  {label}
-                </Link>
-              ),
-            )}
-          </nav>
-        </div>
+        <nav className="academic-header-inner" aria-label="Main navigation">
+          {sections.map(({ id, label, detail }) => {
+            const isHome = id === 'top';
+            const content = isHome ? (
+              <>
+                <span className="academic-brand-mark" aria-hidden="true">
+                  MS
+                </span>
+                <span>Mithul Sourav</span>
+              </>
+            ) : (
+              label
+            );
+            const brand = isHome
+              ? { className: 'academic-brand', 'aria-label': 'Home' }
+              : {};
+            const current = onHomepage
+              ? fragment === id
+              : detail && path.startsWith(detail);
+            return (
+              <a
+                key={id}
+                href={`${onHomepage ? '' : '/'}#${id}`}
+                aria-current={current ? 'location' : undefined}
+                {...brand}
+              >
+                {content}
+              </a>
+            );
+          })}
+          <a
+            className="academic-resume"
+            href="/Mithul-Sourav-CV.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Résumé <span aria-hidden="true">↗</span>
+          </a>
+        </nav>
       </header>
       {children}
       <footer className="academic-footer">

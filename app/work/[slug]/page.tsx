@@ -6,6 +6,7 @@ import { projects } from '@/content/projects';
 import { projectStudies } from '@/content/project-studies';
 import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
+import { HomeSectionLink } from '@/components/academic/home-section-link';
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,9 +39,9 @@ export default async function ProjectPage({ params }: Props) {
   if (!body) throw new Error(`The project write-up is missing for ${slug}.`);
   return (
     <main id="main" className="academic-content academic-case">
-      <Link href="/#research" className="academic-back">
+      <HomeSectionLink section="research" className="academic-back">
         ← Selected projects
-      </Link>
+      </HomeSectionLink>
       <header>
         <p className="academic-kicker">
           {project.discipline} · {project.status}
@@ -131,7 +132,9 @@ export default async function ProjectPage({ params }: Props) {
         <p>Next project</p>
         <Link href={`/work/${next.slug}`}>{next.title} →</Link>
         <div className="academic-inline-links">
-          <Link href="/#research">Selected projects</Link>
+          <HomeSectionLink section="research">
+            Selected projects
+          </HomeSectionLink>
         </div>
       </nav>
     </main>
