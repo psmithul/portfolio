@@ -21,7 +21,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
               about
             </Link>
             <Link
-              href="/#research"
+              href="/work"
               aria-current={path.startsWith('/work') ? 'page' : undefined}
             >
               projects

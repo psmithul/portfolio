@@ -1,6 +1,33 @@
 // Project descriptions use the CV and original design/research material.
 // Equations describe the models; they do not stand in for experimental evidence.
 export const projectStudies: Record<string, string> = {
+  'battery-control-and-estimation': String.raw`
+## Bidirectional charging simulation
+
+I brought a Simscape battery circuit, an extended Kalman filter (EKF), and a supervisory controller together in one simulation. The supervisor selects charging or discharging, limits battery-port power to 3.3 kW, and latches a fault until a valid reset. I tested switching between grid-to-vehicle and vehicle-to-grid operation, the power limit, and fault recovery. All 22 checks passed in the integrated simulation.
+
+## State of charge from measured cell data
+
+I replayed recorded current and voltage for an A123 4.4 Ah lithium iron phosphate cell and compared equivalent-circuit estimators with one and two resistor-capacitor branches. The DATTES-processed state-of-charge trace was used for scoring. The MATLAB and Simulink implementations produced matching outputs on the tested resampled replay. [University Gustave Eiffel battery data collection](https://entrepot.recherche.data.gouv.fr/dataverse.xhtml?alias=battery_data).
+
+The table reports root-mean-square error in percentage points (pp) of state of charge.
+
+| Initial state-of-charge condition | One-RC RMSE | Two-RC RMSE |
+| --- | ---: | ---: |
+| Matched to the reference | 1.727 pp | 0.467 pp |
+| Started 10 percentage points too high | 56.540 pp | 10.074 pp |
+
+The two-RC estimator tracked the reference more closely when it started from the right state of charge. With an initial offset, its error stayed close to the original offset. These results describe the scored cell replay and point to initialization as the next issue to address.
+`,
+  'nitk-battle-bots': String.raw`
+## Design brief
+
+Each weight class set a different mass budget for the structure and components. I worked on a separate layout for each class.
+
+## Design outputs
+
+The work produced one mechanical design for the 3 kg class and another for the 50 kg class.
+`,
   'uav-vibration-integration': String.raw`
 ## What I worked on at Vayu Aerospace
 

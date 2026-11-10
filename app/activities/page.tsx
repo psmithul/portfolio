@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { portfolioExperience, portfolioRecognition } from '@/content/profile';
+import { battleBots } from '@/content/projects';
 export const metadata: Metadata = {
   title: 'Activities',
   alternates: { canonical: '/activities' },
@@ -52,6 +53,15 @@ export default function Activities() {
               </ul>
             </article>
           ))}
+      </section>
+      <section className="academic-section" id="student-teams">
+        <h2>student teams</h2>
+        <article className="academic-experience">
+          <h3>
+            <Link href={`/work/${battleBots.slug}`}>{battleBots.title}</Link>
+          </h3>
+          <p>{battleBots.summary}</p>
+        </article>
       </section>
       <section className="academic-section">
         <h2>awards &amp; competitions</h2>
