@@ -35,13 +35,13 @@ export const projectImages: Partial<
   },
   'tensegrity-joint': {
     kind: 'documentation',
-    label: 'Knee joint components',
-    src: '/images/projects/tensegrity-knee-step-parts.webp',
+    label: 'Assembled knee joint',
+    src: '/images/projects/tensegrity-knee-assembly.webp',
     width: 1800,
     height: 1012,
-    alt: 'Three CAD parts for the tensegrity knee: the femoral stem, floating tristar, and tibial stem.',
+    alt: 'Assembled tensegrity knee with red tendons connecting the blue femoral stem, amber tristar, and teal tibial stem.',
     caption:
-      'The femoral stem, floating tristar, and tibial stem rendered from their individual STEP files at the same scale. The drawings below show how the tendons connect them.',
+      'CAD illustration of the knee in its reference pose. The three solid parts come from the STEP files. The 12 support tendons and 12 torque tendons follow the drawing, with their mounts shown schematically.',
     fit: 'contain',
   },
   kneeassist: {

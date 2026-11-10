@@ -11,11 +11,11 @@ export const profile = {
     'I’m Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world.',
   about: [
     'Hey, I’m Mithul. I’m a fourth-year Mechanical Engineering undergraduate at NITK Surathkal, graduating in June 2027. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world in new ways.',
-    'What excites me is exploring how ideas from control, dynamics, mechanics, and computation can come together to make things possible. I enjoy both developing the algorithms behind these systems and designing and building the hardware that brings them to life, especially when the problems take me into unfamiliar territory.',
+    'Hey, I’m Mithul. I like figuring out how to make robots move and adapt. I enjoy designing and building the parts just as much as writing the code that controls them. My favourite projects are the ones that make me learn something I didn’t know before.',
     'My current projects explore variable-stiffness rover suspension, leaf collection on uneven terrain, and a tensegrity knee joint. I’ve also worked on spacecraft vibration models, indoor robot navigation, and an actuated knee-assistance system.',
   ],
   currentInterests:
-    'I’m interested in how a robot’s body and materials shape the way it moves and adapts. That draws me to embodied intelligence and to soft, compliant, and reconfigurable robotics. I’m also exploring bioelectronics, neural engineering, and brain interfaces, and how these ideas might inform biohybrid robotics.',
+    'I’m curious about how a robot’s shape and materials help it move. That’s what got me interested in embodied intelligence and in robots that are soft, flexible, or can change shape. I’m also learning about bioelectronics, neural engineering, and brain interfaces, and how they connect to biohybrid robotics.',
   skills: [
     {
       title: 'CAD & CAE',
