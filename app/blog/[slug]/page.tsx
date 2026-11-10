@@ -34,7 +34,7 @@ export default async function Article({ params }: Props) {
   const next = nextJournalPost(await getPublicPosts(), slug);
   return (
     <main id="main" className="academic-content academic-case">
-      <Link className="academic-back" href="/blog">
+      <Link className="academic-back" href="/#journal">
         ← All notes · Mika’s Life
       </Link>
       <header>
@@ -43,7 +43,7 @@ export default async function Article({ params }: Props) {
         <p className="academic-deck">{post.description}</p>
         <div className="academic-article-byline">
           <span>
-            By <Link href="/about">Mithul Sourav</Link>
+            By <Link href="/#about">Mithul Sourav</Link>
           </span>
           <time dateTime={post.date}>{dateLabel(post.date)}</time>
           <span>{post.readingMinutes} min read</span>
@@ -59,7 +59,7 @@ export default async function Article({ params }: Props) {
           </>
         )}
         <div className="academic-inline-links">
-          <Link href="/blog">All journal entries</Link>
+          <Link href="/#journal">All journal entries</Link>
         </div>
       </footer>
     </main>

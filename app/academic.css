@@ -144,23 +144,20 @@ body:has(.academic-site) {
 .academic-intro > div > p:last-child {
   margin-bottom: 0;
 }
-.academic-inline-links,
-.academic-section-nav ul {
+.academic-inline-links {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 18px;
-}
-.academic-inline-links {
   margin-top: 16px;
 }
-.academic-section-nav {
-  margin: 24px 0;
-  font-size: 14px;
+.academic-about-details {
+  border-top: 1px solid var(--academic-line);
+  margin-top: 24px;
+  padding-top: 12px;
 }
-.academic-section-nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+.academic-about-details summary {
+  color: var(--academic-accent);
+  cursor: pointer;
 }
 .academic-section {
   margin-top: 30px;
@@ -226,10 +223,6 @@ body:has(.academic-site) {
   margin-top: 5px;
   font-size: 12px;
   color: var(--academic-muted);
-}
-.section-more {
-  text-align: right;
-  margin-top: 10px;
 }
 .academic-note-list {
   list-style: none;
@@ -494,6 +487,17 @@ body:has(.academic-site) {
 }
 .academic-experience {
   padding-block: 12px 24px;
+}
+.academic-activity-group {
+  scroll-margin-top: 80px;
+}
+.academic-activity-group + .academic-activity-group {
+  margin-top: 20px;
+}
+.academic-activity-group h4 {
+  color: var(--academic-muted);
+  font-size: 17px;
+  margin: 0 0 6px;
 }
 .academic-experience + .academic-experience {
   border-top: 1px solid var(--academic-line);

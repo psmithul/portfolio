@@ -38,8 +38,8 @@ export default async function ProjectPage({ params }: Props) {
   if (!body) throw new Error(`The project write-up is missing for ${slug}.`);
   return (
     <main id="main" className="academic-content academic-case">
-      <Link href="/work" className="academic-back">
-        ← All projects
+      <Link href="/#research" className="academic-back">
+        ← Selected projects
       </Link>
       <header>
         <p className="academic-kicker">
@@ -131,7 +131,7 @@ export default async function ProjectPage({ params }: Props) {
         <p>Next project</p>
         <Link href={`/work/${next.slug}`}>{next.title} →</Link>
         <div className="academic-inline-links">
-          <Link href="/work">All projects</Link>
+          <Link href="/#research">Selected projects</Link>
         </div>
       </nav>
     </main>

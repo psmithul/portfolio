@@ -10,8 +10,8 @@ export default function NotFound() {
         <Link href="/">Back to the homepage →</Link>
       </p>
       <p>
-        <Link href="/work">Browse projects</Link> ·{' '}
-        <Link href="/blog">Read the journal</Link>
+        <Link href="/#research">Browse projects</Link> ·{' '}
+        <Link href="/#journal">Read the journal</Link>
       </p>
     </main>
   );

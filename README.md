@@ -8,9 +8,9 @@ Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). 
 
 ## Website routes
 
-- `/` introduces the portfolio and selected projects. `/about` has the full biography, and `/activities` covers experience, leadership, and team work.
-- `/work` lists all projects and `/work/[slug]` opens a case study.
-- `/blog` lists published notes, and `/write` is the private writing desk.
+- `/` has the introduction, About Me, selected projects, journal index, and activities and experience.
+- `/work/[slug]` opens a case study. `/blog/[slug]` opens a published note. `/write` is the private writing desk.
+- The former `/about`, `/work`, `/blog`, and `/activities` index routes redirect to their sections on `/`.
 - Old `/v1` links permanently redirect to the corresponding current paths.
 
 The layout uses `app/academic.css` and `components/academic/`. It uses [Amarna by Ishtar van Looy](https://github.com/ijvanl/Amarna), served locally under the included SIL Open Font License. Project covers use original documentation. Entries without a landscape project image are shown as text in the listings. Image sources are recorded in `docs/current-project-assets.json`.
@@ -62,7 +62,7 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 | Education, experience, skills, and recognition           | `content/profile.ts`           |
 | Mobile portfolio and navigation                          | `components/academic/`         |
 | CV download                                              | `public/Mithul-Sourav-CV.pdf`  |
-| Journal introduction                                     | `app/blog/page.tsx`            |
+| Journal introduction                                     | `app/page.tsx`                 |
 | Academic layout and reading-page styles                  | `app/academic.css`             |
 | Desktop journey and navigation                           | `components/train-journey.tsx` |
 | Base typography and reading layouts                      | `app/globals.css`              |
