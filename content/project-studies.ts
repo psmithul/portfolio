@@ -37,7 +37,7 @@ We tested the mounts through ground motor runs. I used MATLAB to compare IMU tim
 
 ## The mounting decision
 
-The team selected the elastomer-isolated modular tray using the simulation, integration, and ground-test evidence. My contribution covered mount modeling, integration, ground testing, and IMU analysis.
+The team selected the elastomer-isolated modular tray using the simulation, integration, and ground-test evidence.
 
 This work concerned flight-controller mounting and ground tests. It did not establish a flight-performance improvement or a general vibration reduction percentage.
 `,
