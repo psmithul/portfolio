@@ -7,7 +7,7 @@
 }
 .portfolio-hero {
   display: grid;
-  grid-template-columns: minmax(0, 39fr) minmax(0, 61fr);
+  grid-template-columns: clamp(180px, 22vw, 240px) minmax(0, 1fr);
   grid-template-areas: 'portrait intro' '. actions';
   gap: 14px var(--portfolio-gutter);
   scroll-margin-top: var(--academic-anchor-offset);
@@ -20,11 +20,14 @@
 .portfolio-portrait {
   grid-area: portrait;
   position: relative;
+  width: 100%;
+  aspect-ratio: 6 / 5;
+  align-self: center;
   margin: 0;
 }
 .portfolio-portrait img {
   object-fit: cover;
-  object-position: 65% bottom;
+  object-position: 80% bottom;
 }
 .portfolio-intro-copy {
   grid-area: intro;
@@ -211,12 +214,8 @@
     grid-template-areas: 'portrait' 'intro' 'actions';
   }
   .portfolio-portrait {
-    width: min(100%, 430px);
-    aspect-ratio: 3 / 2;
+    width: min(60%, 200px);
     justify-self: center;
-  }
-  .portfolio-portrait img {
-    object-position: right bottom;
   }
 }
 @media (max-width: 620px) {

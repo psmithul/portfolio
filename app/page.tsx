@@ -27,7 +27,7 @@ export default async function Home() {
             className="academic-home-photo"
             src="/images/mithul-profile-photo-cutout.webp"
             fill
-            sizes="(max-width: 462px) calc(100vw - 32px), (max-width: 820px) 430px, 330px"
+            sizes="(max-width: 820px) 200px, 240px"
             alt="Portrait of Mithul Sourav"
             preload
           />
