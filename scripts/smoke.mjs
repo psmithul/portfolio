@@ -11,11 +11,7 @@ const currentCases = [
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
-  ['/work', 200, 'Completed projects', 'Projects'],
-  ['/activities', 200, 'leadership', 'Activities'],
   ['/write', 200, 'MIKA’S LIFE / WRITING DESK', 'Writing desk'],
-  ['/about', 200, '7.37', 'About'],
-  ['/blog', 200, 'Mika’s', 'Mika’s Life'],
   [
     '/blog/gpt-5-6-sol-and-what-i-want-to-build',
     200,
@@ -106,23 +102,21 @@ for (const [path, status, content, title] of cases) {
     path + ': project imagery must be original documentation',
   );
   if (path === '/') {
-    assert.match(body, /<h2 id="about-heading">About me<\/h2>/);
-    assert.match(body, /src="\/images\/mithul-profile-photo-cutout\.webp"/);
-    assert.doesNotMatch(
+    assert.match(
       body,
-      /recent updates|mithul-profile-illustration-cutout\.webp/i,
+      /id="about-heading"[\s\S]*id="research-heading"[\s\S]*id="journal-heading"[\s\S]*id="activities-heading"/,
     );
-  }
-  if (path === '/about') {
+    assert.match(body, /src="\/images\/mithul-profile-photo-cutout\.webp"/);
     assert.match(
       body,
       /src="\/images\/mithul-profile-illustration-cutout\.webp"/,
     );
-    assert.doesNotMatch(body, /mithul-profile-photo-cutout\.webp/);
-  }
-  if (path === '/' || path === '/work') {
     assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
-    assert.doesNotMatch(body, /nitk-battle-bots-event\.jpeg/);
+    assert.match(body, /Vayu Aerospace.*ISTE/s);
+    assert.match(body, /© 2024–2026 Mithul Sourav/);
+    assert.match(body, /href="\/blog\/gpt-5-6-sol-and-what-i-want-to-build"/);
+    assert.doesNotMatch(body, /recent updates|nitk-battle-bots-event\.jpeg/i);
+    assert.doesNotMatch(body, /href="\/(?:about|work|blog|activities)"/);
   }
   if (title) {
     const titles = [...body.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
@@ -174,6 +168,21 @@ for (const [path, status, content, title] of cases) {
   );
   console.log('PASS ' + status + ' ' + path);
 }
+const sectionRedirects = [
+  ['/about', '#about'],
+  ['/work', '#research'],
+  ['/blog', '#journal'],
+  ['/activities', '#activities'],
+];
+for (const [path, hash] of sectionRedirects) {
+  const response = await fetch(new URL(path, base), { redirect: 'manual' });
+  assert.equal(response.status, 308, path);
+  const location = new URL(response.headers.get('location'), base);
+  assert.equal(location.pathname, '/');
+  assert.equal(location.hash, hash);
+  await response.body?.cancel();
+}
+console.log('PASS former index routes redirect to homepage sections');
 for (const path of [
   '/',
   '/about',
@@ -204,6 +213,11 @@ for (const path of imagePaths) {
 console.log(`PASS ${imagePaths.size} referenced portfolio images`);
 const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text();
 assert.doesNotMatch(sitemap, /https:\/\/psmithul\.com\/v1/);
+for (const [path] of sectionRedirects)
+  assert.ok(
+    !sitemap.includes(`https://psmithul.com${path}</loc>`),
+    path + ': retired index',
+  );
 for (const [path, status] of cases) {
   if (
     status === 200 &&
