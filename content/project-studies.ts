@@ -81,7 +81,7 @@ My MATLAB work compares these variables and helps narrow the configurations wort
 
 ![Side and front drawings of the femoral and tibial Y-frames, floating tristar, and support tendons at the reference pose.](/images/projects/tensegrity-knee-geometry.png)
 
-_Side and front views of the reference geometry and load-support network. [Open the full-size drawing](/images/projects/tensegrity-knee-geometry.png)._
+_Side and front views of the nominal geometry and load-support network. [Open the full-size drawing](/images/projects/tensegrity-knee-geometry.png)._
 
 ## Member-force analysis and rotational stiffness
 
