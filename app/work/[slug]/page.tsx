@@ -114,15 +114,6 @@ export default async function ProjectPage({ params }: Props) {
           </figcaption>
         </figure>
       )}
-      {project.role && (
-        <section
-          className="academic-status"
-          aria-labelledby="contribution-heading"
-        >
-          <h2 id="contribution-heading">My contribution</h2>
-          <p>{project.role}</p>
-        </section>
-      )}
       <ArticleBody body={body} />
       <aside className="academic-status">
         <h2>Where the project stands</h2>
