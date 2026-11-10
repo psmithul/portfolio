@@ -21,7 +21,7 @@ export default function About() {
         <div className="academic-intro academic-about-intro">
           <Image
             className="academic-about-portrait"
-            src="/images/mithul-profile-illustration.webp"
+            src="/images/mithul-profile-illustration-cutout.webp"
             width={1254}
             height={1254}
             alt="Illustrated portrait of Mithul Sourav"
