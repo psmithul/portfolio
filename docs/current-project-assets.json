@@ -74,6 +74,14 @@
       "role": "project documentation; not a hardware photograph"
     },
     {
+      "path": "public/images/projects/reaction-wheel-held-out-response.png",
+      "source": "5 to 20 Hz research report.pdf, Figure 3 (PDF page 8), extracted from the embedded image",
+      "width": 1800,
+      "height": 1800,
+      "sha256": "a211d5e7f6e8e0221ec45d927c0f65398602fae8e1d99004fa78e8921fe8b977",
+      "role": "original reduced-model and neural predictions for one held-out test configuration; not measured hardware data"
+    },
+    {
       "path": "public/images/projects/knee-assistance-cad.png",
       "source": "Original screenshot supplied by Mithul, 1 October 2026; existing asset provenance in assets.md",
       "width": 1718,

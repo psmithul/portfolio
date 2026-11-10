@@ -38,7 +38,7 @@ const currentCases = [
   ],
   ['/work/tensegrity-joint', 200, 'Member-force analysis', 'Tensegrity-Based'],
   ['/work/uncertainty-aware-navigation', 200, 'Monte Carlo', 'Uncertainty'],
-  ['/work/reaction-wheel-microvibrations', 200, '0.33%', 'Microvibration'],
+  ['/work/reaction-wheel-microvibrations', 200, '0.00589%', 'Microvibration'],
   [
     '/work/uav-vibration-integration',
     200,
@@ -60,7 +60,7 @@ const currentCases = [
   [
     '/work/adaptive-suspension-rover',
     200,
-    'mechanical lock',
+    '20% lower vertical chassis RMS acceleration',
     'Variable-Stiffness Suspension',
   ],
   ['/work/kneeassist', 200, 'top 5 of 70', 'Actuated Knee-Assistance'],
