@@ -3,9 +3,12 @@ export const profile = {
   fullName: 'P S Mithul Sourav',
   heroIntro:
     'I’m Mithul, a fourth-year Mechanical Engineering undergraduate at NITK Surathkal. I’m interested in building intelligent physical systems that can move, adapt, and interact with the world.',
-  bio: "Hey I'm Mithul. A fourth year undergraduate student at NITK. I'm interested in building intelligent physical systems that can move, adapt, and interact with the world in new ways. What excites me is exploring how ideas from control, dynamics, mechanics, and computation can come together to make things possible. I enjoy both developing the algorithms behind these systems and designing and building the hardware that brings them to life, especially when the problems take me into unfamiliar territory.",
-  interests:
-    "Lately, I've been thinking about how a robot's body helps it move and adapt. That's what got me interested in embodied intelligence and in soft, compliant, and reconfigurable robots. I'm also curious about how bioelectronics, neural engineering, and brain interfaces might come together in biohybrid robotics.",
+  bio: [
+    "Hey, I'm Mithul, a fourth-year Mechanical Engineering student at NITK Surathkal.",
+    "I've always been fascinated by machines that can move, learn, and adapt to unfamiliar environments, almost like living beings. What interests me most is figuring out how we can build robots that are as flexible as humans while having the intelligence to think, learn, and act independently.",
+    "I'm particularly drawn to embodied intelligence, soft robotics, and nature-inspired systems. I enjoy exploring both the mechanical side of robotics, like dynamics and design, and the control and algorithms that make everything work together.",
+    "Lately, I've also been curious about neural engineering and bioelectronics, especially how we can learn from biological systems to build more adaptive and intelligent robots.",
+  ],
 } as const;
 
 export type PortfolioExperience = {
