@@ -10,6 +10,14 @@
       "role": "team and robot at the event"
     },
     {
+      "path": "public/images/projects/gn4rly-2-5-assembly.jpg",
+      "source": "NITK_Battle_Bots_Club_Proposal_Final.pdf, page 13, GN4RLY 2.5 compact 15 kg integration photo",
+      "width": 768,
+      "height": 432,
+      "sha256": "ee53b56e88783b8759ebd126b9b45507b0c0d9422c469b8804a7e191e0febbe2",
+      "role": "GN4RLY 2.5 hardware assembly"
+    },
+    {
       "path": "public/images/projects/rover-assembly-cad.png",
       "source": "Complete Rover/Photos/Complete_Rover_Exterior.png",
       "width": 1800,
