@@ -13,7 +13,7 @@ export type Project = {
   tools: string[];
   summary: string;
   question: string;
-  role: string;
+  role?: string;
   approach: { title: string; body: string }[];
   outcome: string;
   scope: string;
@@ -44,32 +44,35 @@ export type Project = {
 export const battleBots: Project = {
   slug: 'nitk-battle-bots',
   number: '12',
-  title: 'Combat Robotics Development',
+  title: 'Combat Robot Development',
   discipline: 'Combat robotics',
-  status: 'Completed',
+  status: 'Ongoing',
   context: 'Team mechanical design · NITK Battle Bots',
   tools: [],
   image: projectImages['nitk-battle-bots'],
   summary:
-    'Chassis and weapon design for a 3 kg flipper inspired by Jelly Baby and GN4RLY 2.5, a sponsored 15 kg hammer saw bot.',
+    'A 3 lb unibody flipper inspired by Jelly Baby, the 15 kg GN4RLY 2.5 hammer saw, and a 7 kg successor in development.',
   question:
     'How do the weight limit and weapon change what a combat robot needs from its chassis?',
-  role: 'I designed the chassis for both bots and co-designed their weapons with my teammates.',
   approach: [
     {
-      title: '3 kg flipper and chassis layout',
-      body: 'Fit the flipper and drivetrain within the 3 kg limit while leaving room for the flipper to lift clear of the chassis.',
+      title: '3 lb Jelly Baby–inspired flipper',
+      body: 'Integrate the main chassis into one piece while keeping the front low and giving the flipper room to rise.',
     },
     {
       title: 'GN4RLY 2.5: sponsored 15 kg hammer saw bot',
       body: 'Use stronger chassis materials and design the frame around the weapon arm’s motion and impact loads.',
     },
+    {
+      title: 'Next GN4RLY (7 kg)',
+      body: 'Revisit the layout of the weapon, drivetrain and chassis for the lighter class.',
+    },
   ],
-  outcome: 'The team completed mechanical designs for both weight classes.',
+  outcome: 'We designed a unibody flipper and assembled the 15 kg GN4RLY 2.5.',
   scope:
-    'The team completed both mechanical designs and assembled GN4RLY 2.5 in the Robocon Lab.',
+    'We assembled GN4RLY 2.5 in the Robocon Lab and are developing its 7 kg successor.',
   evidence: [
-    '3 kg mechanical design',
+    '3 lb unibody flipper design',
     'GN4RLY 2.5 assembly photo from the team proposal',
     'Event photo',
   ],
