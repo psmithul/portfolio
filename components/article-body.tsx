@@ -7,6 +7,11 @@ import { siteHref } from '@/lib/site-paths';
 const imageDimensions: Record<string, { width: number; height: number }> = {
   '/images/projects/gn4rly-2-5-assembly.jpg': { width: 768, height: 432 },
   '/images/projects/rover-interior-cad.png': { width: 2400, height: 1800 },
+  '/images/projects/tensegrity-knee-design.png': { width: 1600, height: 588 },
+  '/images/projects/tensegrity-knee-geometry.png': {
+    width: 3307,
+    height: 2338,
+  },
   '/images/projects/tensegrity-leg-cad.webp': { width: 1200, height: 1067 },
   '/images/projects/reaction-wheel-cutaway.webp': { width: 1200, height: 900 },
   '/images/earthrise.jpg': { width: 3000, height: 3000 },

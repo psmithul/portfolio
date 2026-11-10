@@ -14,6 +14,8 @@ export const profile = {
     'What excites me is exploring how ideas from control, dynamics, mechanics, and computation can come together to make things possible. I enjoy both developing the algorithms behind these systems and designing and building the hardware that brings them to life, especially when the problems take me into unfamiliar territory.',
     'My current projects explore variable-stiffness rover suspension, leaf collection on uneven terrain, and a tensegrity knee joint. I’ve also worked on spacecraft vibration models, indoor robot navigation, and an actuated knee-assistance system.',
   ],
+  currentInterests:
+    'I’m interested in how a robot’s body and materials shape the way it moves and adapts. That draws me to embodied intelligence and to soft, compliant, and reconfigurable robotics. I’m also exploring bioelectronics, neural engineering, and brain interfaces, and how these ideas might inform biohybrid robotics.',
   skills: [
     {
       title: 'CAD & CAE',
@@ -21,11 +23,6 @@ export const profile = {
         'SolidWorks · PTC Creo · ANSYS Mechanical (modal and harmonic analysis) · COMSOL Multiphysics',
     },
     { title: 'Programming & computation', detail: 'MATLAB · Python · C · C++' },
-    {
-      title: 'Research interests',
-      detail:
-        'Intelligent physical systems · Robotics · Control and dynamics · Mechanical design · Computational modeling',
-    },
     { title: 'Languages', detail: 'English · Hindi · Tamil · French (basic)' },
   ],
 } as const;
