@@ -1,5 +1,5 @@
 {
-  "review_date": "2026-11-10",
+  "review_date": "2026-11-11",
   "assets": [
     {
       "path": "public/images/projects/nitk-battle-bots-event.jpeg",
@@ -32,6 +32,30 @@
       "height": 1800,
       "sha256": "0e57ce2d5eb0afca28eebf8ca9a27fc861305a8ac784f8128dd8df277b1c2e38",
       "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/rover-suspension-module-cad.png",
+      "source": "CY06_CAD_Package/Suspension_Mechanism_4K.png, resized proportionally for the web",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "13017986e4f343ed2ebe8409774ffe888b25455be6237260847108ceb8d8b805",
+      "role": "native CAD render of one suspension module"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-step-parts.webp",
+      "source": "Mithul’s Femoral_Stem.STEP, tristar.STEP, and Tibial_Stem.STEP; individually tessellated in Open Cascade and rendered at a common orthographic scale",
+      "width": 1800,
+      "height": 1012,
+      "sha256": "2399b8f14ae8b5adca85d4c5fdd4fb563ed0fc961de70732a6f7c98595a98d15",
+      "role": "three individual solid parts from the knee design, displayed side by side"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-geometry.png",
+      "source": "Tensegrity_Knee_2D_Illustration_Rev02.png",
+      "width": 3307,
+      "height": 2338,
+      "sha256": "d12b10033201bf692a8f8d112c9fea54e0f4c113e99c2ea0dc1dccee94055365",
+      "role": "preliminary orthographic geometry and load-support drawing"
     },
     {
       "path": "public/images/projects/tensegrity-knee-design.png",
