@@ -13,6 +13,10 @@ const imageDimensions: Record<string, { width: number; height: number }> = {
   },
   '/images/projects/tensegrity-leg-cad.webp': { width: 1200, height: 1067 },
   '/images/projects/reaction-wheel-cutaway.webp': { width: 1200, height: 900 },
+  '/images/projects/reaction-wheel-held-out-response.png': {
+    width: 1800,
+    height: 1800,
+  },
   '/images/earthrise.jpg': { width: 3000, height: 3000 },
   '/images/muybridge-plate-49.jpg': { width: 900, height: 1200 },
 };
