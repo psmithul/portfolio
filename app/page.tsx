@@ -21,19 +21,14 @@ export default async function Home() {
   return (
     <main id="main" className="academic-content academic-home">
       <header className="portfolio-hero" id="about">
-        <div className="portfolio-identity">
-          <h1>{profile.fullName}</h1>
-          <p className="portfolio-affiliation academic-handwritten">
-            Mechanical Engineering · NITK Surathkal
-          </p>
-        </div>
+        <h1 className="sr-only">About me</h1>
         <figure className="portfolio-portrait">
           <Image
             className="academic-home-photo"
             src="/images/mithul-profile-photo-cutout.webp"
             width={1672}
             height={941}
-            sizes="(max-width: 620px) 110px, 166px"
+            sizes="(max-width: 620px) 190px, 218px"
             alt="Portrait of Mithul Sourav"
             preload
           />
