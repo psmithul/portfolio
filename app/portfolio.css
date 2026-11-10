@@ -30,7 +30,7 @@
 .portfolio-portrait {
   grid-area: portrait;
   margin: 0;
-  align-self: center;
+  align-self: start;
 }
 .portfolio-portrait img {
   display: block;
@@ -44,9 +44,10 @@
   grid-area: intro;
 }
 .academic-home .academic-lead {
-  max-width: 61ch;
-  margin-bottom: 10px;
-  font-size: 17px;
+  max-width: 66ch;
+  margin-bottom: 14px;
+  font-size: clamp(1.125rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
 }
 .portfolio-actions {
   display: flex;
@@ -223,6 +224,9 @@
   }
   .academic-home .portfolio-identity h1 {
     font-size: clamp(1.65rem, 7.5vw, 2.25rem);
+  }
+  .portfolio-portrait {
+    align-self: center;
   }
   .portfolio-section {
     grid-template-columns: minmax(0, 1fr);
