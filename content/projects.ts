@@ -44,14 +44,14 @@ export type Project = {
 export const battleBots: Project = {
   slug: 'nitk-battle-bots',
   number: '12',
-  title: 'NITK Battle Bots',
+  title: 'Combat Robotics Development',
   discipline: 'Combat robotics',
   status: 'Completed',
-  context: 'Team mechanical design · NITK Surathkal',
+  context: 'Team mechanical design · NITK Battle Bots',
   tools: [],
   image: projectImages['nitk-battle-bots'],
   summary:
-    'Our NITK Battle Bots team designed a 3 kg flipper inspired by Jelly Baby and a sponsored 50 kg bot with an overhead hammer saw.',
+    'Chassis and weapon design for a 3 kg flipper inspired by Jelly Baby and GN4RLY 2.5, a sponsored 15 kg hammer saw bot.',
   question:
     'How do the weight limit and weapon change what a combat robot needs from its chassis?',
   role: 'I designed the chassis for both bots and co-designed their weapons with my teammates.',
@@ -61,15 +61,16 @@ export const battleBots: Project = {
       body: 'Fit the flipper and drivetrain within the 3 kg limit while leaving room for the flipper to lift clear of the chassis.',
     },
     {
-      title: 'Sponsored 50 kg hammer saw bot',
+      title: 'GN4RLY 2.5: sponsored 15 kg hammer saw bot',
       body: 'Use stronger chassis materials and design the frame around the weapon arm’s motion and impact loads.',
     },
   ],
   outcome: 'The team completed mechanical designs for both weight classes.',
-  scope: 'Mechanical designs completed for the 3 kg and 50 kg bots.',
+  scope:
+    'The team completed both mechanical designs and assembled GN4RLY 2.5 in the Robocon Lab.',
   evidence: [
     '3 kg mechanical design',
-    '50 kg mechanical design',
+    'GN4RLY 2.5 assembly photo from the team proposal',
     'Event photo',
   ],
 };

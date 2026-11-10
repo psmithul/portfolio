@@ -6,13 +6,17 @@ export const projectStudies: Record<string, string> = {
 
 We took inspiration from Jelly Baby’s rear-hinged lifter when we designed our flipper. I designed the chassis to keep the front low enough to slide under an opponent and give the flipper room to rise. The chassis, flipper and drivetrain all had to fit within the 3 kg limit. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby).
 
-## 50 kg bot
+## GN4RLY 2.5 (15 kg)
 
-Sponsorship gave us room in the budget to use stronger materials for the 50 kg chassis. We co-designed an overhead hammer saw with a spinning head on a swinging arm. I laid out the chassis around the arm pivot and the space the arm needed to swing down onto an opponent.
+Sponsorship let us use stronger chassis materials for GN4RLY 2.5. We co-designed an overhead hammer saw with a spinning head on a swinging arm, and I laid out the chassis around the pivot and the space the arm needed to swing.
+
+![GN4RLY 2.5 on a workbench with the central weapon assembly, side chain drives and wiring exposed.](/images/projects/gn4rly-2-5-assembly.jpg)
+
+_GN4RLY 2.5 during assembly. Photo from the NITK Battle-Bots club proposal._
 
 ### What we had to rethink
 
-The hammer saw called for a different approach to mounting the weapon. The chassis had to take the reaction from a strike through the arm, pivot and mounts. I learned to trace that load path before deciding where stronger material mattered and how the parts should connect.
+Mounting the hammer saw took a different approach from packaging the flipper. Its arm, pivot and mounts had to carry the shock of an overhead strike into the chassis. I learned to follow that load path before deciding where stronger material mattered and how the parts should connect. The drive and wiring also had to fit around the weapon and remain accessible for repairs, a priority in the team’s proposal.
 
 ## Why we wanted a unibody chassis
 
