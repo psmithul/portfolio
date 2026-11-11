@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Finite Element Analysis of Beams and Frames — P S Mithul Sourav</title>
+    <meta name="description" content="We assembled beam and plane-frame models in MATLAB and used ANSYS results to check displacements, mesh convergence, and vibration modes.">
+    <link rel="canonical" href="https://psmithul.com/work/finite-element-beams-and-frames">
+    <meta property="og:title" content="Finite Element Analysis of Beams and Frames">
+    <meta property="og:description" content="We assembled beam and plane-frame models in MATLAB and used ANSYS results to check displacements, mesh convergence, and vibration modes.">
+    <meta property="og:url" content="https://psmithul.com/work/finite-element-beams-and-frames">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Finite Element Analysis of Beams and Frames">
+    <meta name="twitter:description" content="We assembled beam and plane-frame models in MATLAB and used ANSYS results to check displacements, mesh convergence, and vibration modes.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Finite Element Analysis of Beams and Frames</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>ME311 Finite Element Method · NITK team coursework · Nov 2026</p>
+              <p>We assembled beam and plane-frame models in MATLAB and used ANSYS results to check displacements, mesh convergence, and vibration modes.</p>
+              <p>The report covers static beam bending, free vibration, and plane-frame analysis.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Two charts compare beam and frame displacement errors as element counts increase." data-framing="full-frame" width="2788" height="2022" decoding="async" src="/images/projects/fem-mesh-convergence.jpg">
+              <figcaption>The team’s MATLAB plots of displacement error from the ANSYS mesh-refinement runs.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="assembling-the-models">Assembling the models</h2>
+            <div class="project-stage-copy">
+              <p>We assembled the beam and frame systems from element matrices in MATLAB. We compared displacements and checked how the answers changed as we refined the mesh in ANSYS.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="checking-the-vibration-modes">Checking the vibration modes</h2>
+            <div class="project-stage-copy">
+              <p>We kept the beam span as a parameter in the modal calculation, then picked a 2 m span to compare the calculated modes with the ANSYS model.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/fem-ansys-mode.png" alt="ANSYS result showing the first vibration mode of the two-metre beam." width="1877" height="1410" loading="lazy" decoding="async">
+                </div>
+                <figcaption>First computed mode at 81.17 Hz for the 2 m check case. Figure 20 from the team report.</figcaption>
+              </figure>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · MATLAB · ANSYS</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/nameless-banner">The Nameless Banner →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

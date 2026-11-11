@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter — P S Mithul Sourav</title>
+    <meta name="description" content="I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.">
+    <link rel="canonical" href="https://psmithul.com/work/reaction-wheel-microvibrations">
+    <meta property="og:title" content="Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter">
+    <meta property="og:description" content="I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.">
+    <meta property="og:url" content="https://psmithul.com/work/reaction-wheel-microvibrations">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter">
+    <meta name="twitter:description" content="I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Computational study · 5–20 Hz reduced-model pilot · Aug — Oct 2026</p>
+              <p>I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.</p>
+              <p>Computational pilot over 5–20 Hz. Neural training uses reduced-model labels; selected full-FEM points provide a separate numerical check. Global convergence, measured wheel inputs, and experimental pointing validation remain open.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="COMSOL screenshot from the spacecraft vibration pilot, with the satellite structure and camera-support response visible." width="2036" height="1052" decoding="async" src="/images/projects/spacecraft-comsol-model.png">
+              <figcaption>COMSOL model screenshot from the project’s Reaction Wheel Vibration and Camera Pointing Jitter presentation. The displayed case is a 5 Hz unit-force response; it is a numerical result.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="following-the-vibration-to-the-camera">Following the vibration to the camera</h2>
+            <div class="project-stage-copy">
+              <p>I started with a free-floating spacecraft model in COMSOL. At each of four reaction wheels, I applied two transverse force inputs and two moment inputs, giving 16 inputs in all. For camera tilt, I compared the average motion at two stations on the camera support about 0.48 m apart and removed the spacecraft’s overall rotation. The resulting angle is a structural estimate of pointing motion.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="a-smaller-model-for-repeated-calculations">A smaller model for repeated calculations</h2>
+            <div class="project-stage-copy">
+              <p>The original mesh had about 1.01 million volume elements. To run many configurations over 5–20 Hz, I built a smaller model using 36 natural modes. I added 16 corrections for bending around the camera support that the first version missed. Those 52 coordinates became the reference for training and comparing the neural models.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/wheel-basis-enrichment.png" alt="Log-scale plot of response differences as more coordinates are retained in the reduced model." width="1420" height="652" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The basis-enrichment study compares smaller models with the 52-coordinate reference. Figure 2 from the 5–20 Hz report. <a href="/images/projects/wheel-basis-enrichment.png">Open the full-size plot</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="comparing-mlp-deeponet-and-physics-informed-models">Comparing MLP, DeepONet, and physics-informed models</h2>
+            <div class="project-stage-copy">
+              <p>I kept whole structural configurations together when splitting the data. A model that has seen one part of a frequency curve has already seen the structure behind the rest of the curve.</p>
+              <p>The multilayer perceptron (MLP) came closest to the 52-coordinate reference in the original comparison. The table reports mean frequency-integrated complex-response errors on three unseen configurations, with all 16 inputs tested on each.</p>
+              <section class="table-scroll" tabindex="0" aria-label="Article table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Response</th>
+                      <th style="text-align:right">MLP</th>
+                      <th style="text-align:right">DeepONet</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Camera displacement</td>
+                      <td style="text-align:right">0.139%</td>
+                      <td style="text-align:right">0.342%</td>
+                    </tr>
+                    <tr>
+                      <td>Optical bench displacement</td>
+                      <td style="text-align:right">0.171%</td>
+                      <td style="text-align:right">0.378%</td>
+                    </tr>
+                    <tr>
+                      <td>Structural tilt</td>
+                      <td style="text-align:right">0.261%</td>
+                      <td style="text-align:right">0.701%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </section>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/reaction-wheel-held-out-response.png" alt="Three response plots over 5–20 Hz showing near-overlapping reduced-model, MLP, and DeepONet curves for camera and bench displacement and a structural tilt peak just below 10 Hz." width="1800" height="1800" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The bottom panel shows the camera support’s tilt peaking just below 10 Hz in one unseen configuration. This is Figure 3 from the 5–20 Hz research report. <a href="/images/projects/reaction-wheel-held-out-response.png">Open the full-size plot</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="trying-a-different-way-to-train">Trying a different way to train</h2>
+            <div class="project-stage-copy">
+              <p>Starting with 36-coordinate training data helped when I had few 52-coordinate cases. The benefit went away with the largest training set. In a separate single-input experiment, adding an equilibrium term to the training loss lowered the balanced residual by 9.23%. The resonance results were mixed.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/wheel-training-comparison.png" alt="Two learning curves comparing reference-only training with pretraining and refinement at three training budgets." width="1601" height="665" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The learning curves show how pretraining changes the error as more reference cases become available. Figure 6 from the 5–20 Hz report. <a href="/images/projects/wheel-training-comparison.png">Open the full-size plot</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="why-i-kept-the-original-mount">Why I kept the original mount</h2>
+            <div class="project-stage-copy">
+              <p>I screened 17 mount stiffness settings. The neural model picked a 10% increase, so I checked that setting and the original against the 52-coordinate model on 36 separate scenarios. The worst response in that set changed by just <strong>0.00589%</strong>, while the largest neural peak error was <strong>7.61%</strong>. The difference was too small to justify changing the mount.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/wheel-mount-comparison.png" alt="Neural screening curve alongside two nearly equal bars from the separate reduced-model confirmation." width="1599" height="665" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The neural screen on the left suggested a stiffer mount. The confirmation on the right showed how little the response changed. Figure 11 from the 5–20 Hz report. <a href="/images/projects/wheel-mount-comparison.png">Open the full-size plot</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="checks-against-the-full-comsol-model">Checks against the full COMSOL model</h2>
+            <div class="project-stage-copy">
+              <p>I compared the predictions with 14 full-model points across six configurations. Four of those points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%. The current pilot still needs broader mesh and basis checks, measured wheel inputs and damping, and an experimental pointing test.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · COMSOL Multiphysics · Modal and harmonic-response analysis · Reduced-order models · MLP &amp; DeepONet · Physics-informed multi-fidelity learning</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/off-road-leaf-robot">Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UAV Vibration Analysis &amp; Isolation — P S Mithul Sourav</title>
+    <meta name="description" content="I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.">
+    <link rel="canonical" href="https://psmithul.com/work/uav-vibration-integration">
+    <meta property="og:title" content="UAV Vibration Analysis &amp; Isolation">
+    <meta property="og:description" content="I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.">
+    <meta property="og:url" content="https://psmithul.com/work/uav-vibration-integration">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="UAV Vibration Analysis &amp; Isolation">
+    <meta name="twitter:description" content="I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>UAV Vibration Analysis &amp; Isolation</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Product internship · Vayu Aerospace Pvt. Ltd., Bengaluru · Jun — Jul 2026</p>
+              <p>I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.</p>
+              <p>Internship work covering vibration-path modeling, hardware integration, and ground motor-run testing.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Three simplified sections showing a rigid mount, an elastomer-isolated tray, and a suspended controller." width="1280" height="660" decoding="async" src="/images/projects/process-uav-mounts.webp">
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="comparing-the-mounts-in-ansys">Comparing the mounts in ANSYS</h2>
+            <div class="project-stage-copy">
+              <p>At Vayu Aerospace, I followed the vibration from the motors, through the airframe, to the flight controller’s IMU. I compared three ways to mount the controller in ANSYS. The rigid mount gave me a baseline for the elastomer tray and the suspended mount. I looked at where each assembly might resonate and how much of that motion would reach the controller.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/process-uav-mounts.webp" alt="Three simplified sections showing a rigid mount, an elastomer-isolated tray, and a suspended controller." width="1280" height="660" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Design schematic of the three mounting arrangements. The rigid mount provided the baseline for the two isolation concepts.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="fitting-the-mounts-into-the-aircraft">Fitting the mounts into the aircraft</h2>
+            <div class="project-stage-copy">
+              <p>I checked the controller orientation, fasteners, and clearances on the shortlisted mounts. I checked cable slack too because a tight cable can carry vibration around the isolator.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="reading-the-ground-test-logs">Reading the ground-test logs</h2>
+            <div class="project-stage-copy">
+              <p>We ran the motors on the ground and recorded the IMU. I used MATLAB to compare equivalent portions of the runs. The RMS values gave me the overall vibration level, and the FFT spectra showed which peaks contributed to it. The team used those logs, the ANSYS results, and the installation checks to choose the elastomer-isolated modular tray.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · ANSYS Mechanical · MATLAB · IMU log analysis</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/adaptive-suspension-rover">Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
