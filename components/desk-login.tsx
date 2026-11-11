@@ -1,8 +1,9 @@
 'use client';
 import { useState, type SubmitEvent } from 'react';
-import { deskRequest } from './writing-desk';
+import { deskRequest } from '@/lib/desk-request';
+import { sitePages } from '@/lib/site-paths';
 
-export function DeskLogin({ basePath = '' }: { basePath?: string }) {
+export function DeskLogin() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   async function signIn(event: SubmitEvent<HTMLFormElement>) {
@@ -11,7 +12,7 @@ export function DeskLogin({ basePath = '' }: { basePath?: string }) {
     setError('');
     const password = new FormData(event.currentTarget).get('password');
     try {
-      await deskRequest(`${basePath}/api/journal/session`, 'POST', {
+      await deskRequest('/api/journal/session', 'POST', {
         password,
       });
       window.location.reload();
@@ -38,14 +39,14 @@ export function DeskLogin({ basePath = '' }: { basePath?: string }) {
     </form>
   );
 }
-export function DeskSignOut({ basePath = '' }: { basePath?: string }) {
+export function DeskSignOut() {
   const [error, setError] = useState('');
   async function signOut() {
     try {
-      await deskRequest(`${basePath}/api/journal/session`, 'POST', {
+      await deskRequest('/api/journal/session', 'POST', {
         action: 'signout',
       });
-      window.location.assign(`${basePath}/blog`);
+      window.location.assign(sitePages.buildLog);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Could not sign out.');
     }

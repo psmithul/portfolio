@@ -19,17 +19,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ArticleBody } from '@/components/article-body';
-import { deskRequest } from '@/components/writing-desk';
+import { deskRequest } from '@/lib/desk-request';
+import { postPath, sitePages } from '@/lib/site-paths';
 import type { Draft, Entry } from '@/lib/journal-model';
 
 type Action = 'save' | 'publish' | 'unpublish';
-export function PostEditor({
-  initialEntry,
-  basePath = '',
-}: {
-  initialEntry: Entry;
-  basePath?: string;
-}) {
+export function PostEditor({ initialEntry }: { initialEntry: Entry }) {
   const [entry, setEntry] = useState(initialEntry);
   const [draft, setDraft] = useState<Draft>(initialEntry.draft);
   const [saved, setSaved] = useState(JSON.stringify(initialEntry.draft));
@@ -72,7 +67,7 @@ export function PostEditor({
         );
         try {
           const result = await deskRequest<{ entry: Entry }>(
-            `${basePath}/api/journal/${initialEntry.id}`,
+            `/api/journal/${initialEntry.id}`,
             action === 'save' ? 'PATCH' : 'POST',
             { action, draft: snapshot, version: entryRef.current.version },
           );
@@ -108,7 +103,7 @@ export function PostEditor({
       queue.current = next.catch(() => {});
       return next;
     },
-    [initialEntry.id, basePath],
+    [initialEntry.id],
   );
 
   useEffect(() => {
@@ -272,12 +267,12 @@ export function PostEditor({
   return (
     <>
       <header className="editor-top">
-        <a href={`${basePath}/write`} className="back-link">
+        <a href="/write" className="back-link">
           <ArrowLeft size={16} /> Writing desk
         </a>
         <span className="eyebrow">MIKA’S LIFE</span>
         <a
-          href={`${basePath}/blog`}
+          href={sitePages.buildLog}
           className="text-link"
           target="_blank"
           rel="noreferrer"
@@ -357,7 +352,6 @@ export function PostEditor({
           </header>
           <ArticleBody
             body={draft.body || 'Your essay will appear here as you write.'}
-            basePath={basePath}
           />
         </div>
       ) : (
@@ -535,7 +529,7 @@ export function PostEditor({
       {entry.published && (
         <div className="published-tools">
           <a
-            href={`${basePath}/blog/${entry.slug}`}
+            href={postPath(entry.slug)}
             target="_blank"
             rel="noreferrer"
             className="text-link"

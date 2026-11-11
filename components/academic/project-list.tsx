@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Project } from '@/content/projects';
+import { projectPath } from '@/lib/site-paths';
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   return (
@@ -15,7 +16,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             <li className="project-row" key={slug}>
               <Link
                 className="portfolio-project-link"
-                href={`/work/${slug}`}
+                href={projectPath(slug)}
                 aria-labelledby={heading}
               >
                 {landscape && (
@@ -33,12 +34,12 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                   </figure>
                 )}
                 <div className="project-copy">
-                  <h3 id={heading}>
+                  <h2 id={heading}>
                     <span>{title}</span>{' '}
                     <span className="portfolio-link-arrow" aria-hidden="true">
                       ↗
                     </span>
-                  </h3>
+                  </h2>
                   <p className="project-summary">{summary}</p>
                   <p className="project-labels">
                     {[discipline, status, period].filter(Boolean).join(' · ')}

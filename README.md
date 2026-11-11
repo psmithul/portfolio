@@ -8,9 +8,10 @@ Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). 
 
 ## Website routes
 
-- `/` has the introduction, About Me, selected projects, journal index, and activities and experience.
-- `/work/[slug]` opens a case study. `/blog/[slug]` opens a published note. `/write` is the private writing desk.
-- The former `/about`, `/work`, `/blog`, and `/activities` index routes redirect to their sections on `/`.
+- `/` is About, with the introduction, activities, experience, and contact links.
+- `/projects` lists the selected projects. `/work/[slug]` opens a case study.
+- `/build-log` lists Recent Updates. `/blog/[slug]` opens a published note. `/write` is the private writing desk.
+- `/about` and `/activities` lead to About. `/work` and `/blog` redirect to the current listings. Old homepage bookmarks for projects and posts also open the new listings.
 - Old `/v1` links permanently redirect to the corresponding current paths.
 
 The shared site styles live in `app/academic.css` and the homepage design in `app/portfolio.css`. Amarna and Space Grotesk are served locally under their included SIL Open Font licenses. Project covers use original documentation. Entries without a landscape project image are shown as text in the listings. Image sources are recorded in `docs/current-project-assets.json`.
@@ -55,20 +56,21 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 
 ## Change the portfolio
 
-| Content                                                  | Location                       |
-| -------------------------------------------------------- | ------------------------------ |
-| Project facts, contribution, method, status, and results | `content/projects.ts`          |
-| Selected projects                                        | `content/academic.ts`          |
-| Education, experience, skills, and recognition           | `content/profile.ts`           |
-| Mobile portfolio and navigation                          | `components/academic/`         |
-| CV download                                              | `public/Mithul-Sourav-CV.pdf`  |
-| Journal introduction                                     | `app/page.tsx`                 |
-| Academic layout and reading-page styles                  | `app/academic.css`             |
-| Desktop journey and navigation                           | `components/train-journey.tsx` |
-| Base typography and reading layouts                      | `app/globals.css`              |
-| Owner authorization                                      | `lib/journal-model.ts`         |
+| Content                      | Location                                                             |
+| ---------------------------- | -------------------------------------------------------------------- |
+| Project records              | `content/projects.ts`                                                |
+| Case-study text and figures  | `content/project-studies.ts`                                         |
+| Cover and thumbnail copy     | `content/project-images.ts`                                          |
+| Project image dimensions     | `docs/current-project-assets.json`                                   |
+| Selected project order       | `content/academic.ts`                                                |
+| Biography and experience     | `content/profile.ts`                                                 |
+| About                        | `app/page.tsx`                                                       |
+| Projects and Build Log       | `app/projects/page.tsx`, `app/build-log/page.tsx`                    |
+| Navigation and footer        | `components/academic/site-nav.tsx`, `components/academic/chrome.tsx` |
+| Shared and case-study styles | `app/academic.css`, `app/project-page.css`                           |
+| Writing desk authorization   | `lib/journal-auth.ts`                                                |
 
-The eleven project records generate the portfolio listings and case studies. Keep individual contributions distinct from team work, and simulation results distinct from physical tests. Project images are optional: add an `image` object with `src`, `alt`, `width`, `height`, and an accurate `caption` only when the asset is verified. A `referenceUrl` may credit a paper. Current covers use credited reference photography where original project photographs are unavailable. References are labelled accurately and must not be described as personally built hardware. The source CV filename refers to an MIT application, not an MIT affiliation. The site correctly lists NITK Surathkal, CGPA 7.37/10, and the official Vayu role of Product Intern.
+Add a case study under the matching project slug. For a cover or thumbnail, register the file and its dimensions in the asset manifest, then add its path and description in `content/project-images.ts`. Case studies can use a documented figure from the write-up as the cover when there is no dedicated image.
 
 ## Verify changes
 
@@ -97,7 +99,7 @@ After a push, check that the Vercel deployment is Ready, its commit matches the 
 
 ## Design and credits
 
-The homepage photograph and About illustration were supplied by Mithul. The earlier designs are recorded in the repository history.
+The homepage photograph was supplied by Mithul. The retired Minecraft and 3D source is in the repository history, including commit `6ea2916`. Old public asset URLs and `/v1` redirects still work.
 
 - **Earthrise:** Bill Anders / NASA, Apollo 8, 24 December 1968. [NASA source](https://science.nasa.gov/resource/apollo-8s-iconic-earthrise/) and [media-use policy](https://www.nasa.gov/nasa-brand-center/images-and-media/). Used for editorial illustration; no NASA endorsement is implied.
 - **Animal Locomotion, Plate 49:** Eadweard Muybridge, 1880s. The Metropolitan Museum of Art, Rogers Fund, transferred from the Library, 1991.1135.7. [Collection record](https://www.metmuseum.org/art/collection/search/266437), public domain / [CC0 Open Access](https://www.metmuseum.org/hubs/open-access).

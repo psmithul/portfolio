@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { siteOrigin } from '@/lib/site-paths';
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/write', '/api/', '/health'],
     },
-    sitemap: 'https://psmithul.com/sitemap.xml',
+    sitemap: `${siteOrigin}/sitemap.xml`,
   };
 }

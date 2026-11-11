@@ -1,63 +1,40 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound, permanentRedirect } from 'next/navigation';
-import { projects } from '@/content/projects';
+import { notFound } from 'next/navigation';
+import { getProject, projects } from '@/content/projects';
+import { projectFigureDimensions } from '@/content/project-images';
 import { projectStudies } from '@/content/project-studies';
 import { ArticleBody } from '@/components/article-body';
 import { firstReadingImage } from '@/lib/reading';
+import { projectPath, sitePages } from '@/lib/site-paths';
 import '../../project-page.css';
-import { HomeSectionLink } from '@/components/academic/home-section-link';
-import projectAssets from '@/docs/current-project-assets.json';
-
-const projectFigures = Object.fromEntries(
-  projectAssets.assets.map(({ path, width, height }) => [
-    path.replace(/^public/, ''),
-    { width, height },
-  ]),
-);
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const project = projects.find(
-    (item) =>
-      item.slug === (slug === 'neoleg-knee-mechanism' ? 'kneeassist' : slug),
-  );
+  const project = getProject((await params).slug);
   return project
     ? {
         title: project.title,
         description: project.summary,
-        alternates: { canonical: `/work/${project.slug}` },
+        alternates: { canonical: projectPath(project.slug) },
         openGraph: {
           title: project.title,
           description: project.summary,
-          url: `/work/${project.slug}`,
+          url: projectPath(project.slug),
         },
       }
     : { title: 'Project not found' };
 }
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  if (slug === 'neoleg-knee-mechanism') permanentRedirect('/work/kneeassist');
-  const index = projects.findIndex((item) => item.slug === slug);
-  if (index < 0) notFound();
-  const project = projects[index];
-  const next = projects[(index + 1) % projects.length];
+  const project = getProject(slug);
+  if (!project) notFound();
+  const next = projects[(projects.indexOf(project) + 1) % projects.length];
   const body = projectStudies[slug];
   if (!body) throw new Error(`The project write-up is missing for ${slug}.`);
-  const cover =
-    slug === 'nitk-battle-bots'
-      ? {
-          src: '/images/projects/gn4rly-lab-assembly.jpg',
-          alt: 'NITK Battle Bots members assembling a robot at the Robocon Lab workbench.',
-        }
-      : (project.image ?? firstReadingImage(body));
-  const coverSize = cover && projectFigures[cover.src];
-  const coverCaption =
-    slug === 'nitk-battle-bots'
-      ? 'Assembly at the Robocon Lab. Photo from the NITK Battle-Bots club proposal.'
-      : project.image?.caption;
+  const cover = project.image ?? firstReadingImage(body);
+  const coverSize = cover && projectFigureDimensions[cover.src];
   const context = [project.context, project.period].filter(Boolean).join(' · ');
 
   return (
@@ -77,32 +54,25 @@ export default async function ProjectPage({ params }: Props) {
                 alt={cover.alt}
                 width={coverSize.width}
                 height={coverSize.height}
-                className={
-                  slug === 'nitk-battle-bots'
-                    ? 'project-cover-photo'
-                    : slug === 'fireworks-galaxy'
-                      ? 'project-cover-full-frame'
-                      : undefined
-                }
-                unoptimized
+                data-framing={project.image?.framing}
                 preload
               />
-              {coverCaption && <figcaption>{coverCaption}</figcaption>}
+              {project.image && (
+                <figcaption>{project.image.caption}</figcaption>
+              )}
             </figure>
           )}
         </div>
       </header>
-      <ArticleBody body={body} projectFigures={projectFigures} />
+      <ArticleBody body={body} projectFigures={projectFigureDimensions} />
       {project.tools.length > 0 && (
         <p className="project-tools">
           Tools &amp; methods · {project.tools.join(' · ')}
         </p>
       )}
       <nav className="project-next" aria-label="Project navigation">
-        <HomeSectionLink section="research">
-          ← Selected projects
-        </HomeSectionLink>
-        <Link href={`/work/${next.slug}`}>{next.title} →</Link>
+        <Link href={sitePages.projects}>← Selected projects</Link>
+        <Link href={projectPath(next.slug)}>{next.title} →</Link>
       </nav>
     </main>
   );

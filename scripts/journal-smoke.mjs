@@ -175,6 +175,12 @@ console.log(
   body: { action: 'publish', draft, version: entry.version },
 }));
 const publicPath = `/blog/${entry.slug}`;
+async function buildLogIncludesPost() {
+  const response = await request('/build-log', { authenticated: false });
+  assert.equal(response.status, 200);
+  return (await response.text()).includes('href="' + publicPath + '"');
+}
+assert.equal(await buildLogIncludesPost(), true, 'Build Log lists new posts');
 const publicResponse = await request(publicPath, { authenticated: false });
 assert.equal(publicResponse.status, 200);
 assert.ok(
@@ -204,6 +210,11 @@ assert.ok(
   body: { action: 'unpublish', version: entry.version },
 }));
 assert.equal((await request(publicPath, { authenticated: false })).status, 404);
+assert.equal(
+  await buildLogIncludesPost(),
+  false,
+  'Build Log removes withdrawn posts',
+);
 assert.equal((await json(path)).entry.draft.body, edited.body);
 console.log(
   'PASS publish, private revision, update, and unpublish with draft retained',
