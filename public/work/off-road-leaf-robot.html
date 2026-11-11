@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain — P S Mithul Sourav</title>
+    <meta name="description" content="I’m designing a robot to lift dry and wet leaves on uneven ground. The main challenge is keeping the pickup close enough to reach the leaves without pulling in too much soil.">
+    <link rel="canonical" href="https://psmithul.com/work/off-road-leaf-robot">
+    <meta property="og:title" content="Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain">
+    <meta property="og:description" content="I’m designing a robot to lift dry and wet leaves on uneven ground. The main challenge is keeping the pickup close enough to reach the leaves without pulling in too much soil.">
+    <meta property="og:url" content="https://psmithul.com/work/off-road-leaf-robot">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain">
+    <meta name="twitter:description" content="I’m designing a robot to lift dry and wet leaves on uneven ground. The main challenge is keeping the pickup close enough to reach the leaves without pulling in too much soil.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Modular Terrain-Adaptive Robot for Leaf Collection on Wet and Undulating Terrain</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Robot design &amp; subsystem architecture · Jul 2026 — Present</p>
+              <p>I’m designing a robot to lift dry and wet leaves on uneven ground. The main challenge is keeping the pickup close enough to reach the leaves without pulling in too much soil.</p>
+              <p>Architecture and mechanism selection are ongoing. Pickup and endurance tests are planned.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Flow diagram connecting terrain following to leaf pickup, then transfer and storage." width="1280" height="660" decoding="async" src="/images/projects/process-leaf-collection.webp">
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="keeping-the-pickup-close-to-the-ground">Keeping the pickup close to the ground</h2>
+            <div class="project-stage-copy">
+              <p>I started with a simple problem. Wet leaves need to come off uneven ground, but lowering the pickup too far brings soil in with them. I separated terrain following from locomotion so I could think about how the pickup meets the surface as well as how the robot keeps traction.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="getting-the-leaves-to-storage">Getting the leaves to storage</h2>
+            <div class="project-stage-copy">
+              <p>Lifting a leaf is only the first step. The mechanism has to fit between the other parts of the robot and pass what it collects to the storage system. I compared concepts against the space available beside the wheels, how the parts could be made, and how they would connect to the transfer mechanism. I used the practical options to build a parts list from the individual components.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/process-leaf-collection.webp" alt="Flow diagram connecting terrain following to leaf pickup, then transfer and storage." width="1280" height="660" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Design schematic showing where terrain following affects the pickup and how the leaves move to storage.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="comparing-the-options">Comparing the options</h2>
+            <div class="project-stage-copy">
+              <p>I plan to track traction, leaf pickup, soil pickup, and runtime. I’ll track the amount of leaf litter and soil separately so I can tell whether an option collects more leaves or just brings in more material.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Subsystem architecture · Mechanism selection · BOM &amp; test planning</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/uncertainty-aware-navigation">Uncertainty-Aware Navigation for an Indoor Mobile Robot →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

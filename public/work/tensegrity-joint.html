@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton — P S Mithul Sourav</title>
+    <meta name="description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <link rel="canonical" href="https://psmithul.com/work/tensegrity-joint">
+    <meta property="og:title" content="Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton">
+    <meta property="og:description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <meta property="og:url" content="https://psmithul.com/work/tensegrity-joint">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton">
+    <meta name="twitter:description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Joint modeling and preliminary mechanical design · May 2026 — Present</p>
+              <p>This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.</p>
+              <p>Ongoing computational and preliminary mechanical design. Static calculations do not establish whole-joint stability, fatigue life, or suitability for human use.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Two views of the assembled tensegrity knee with red support tendons fastened to collars on the amber tristar and pins on the blue and teal frames." width="1800" height="1012" decoding="async" src="/images/projects/tensegrity-knee-support-assembly.webp">
+              <figcaption>The 12 support tendons join collars on the floating tristar to pins at the Y-frame tips. The fittings are illustrative, and the femoral frame is set slightly outward to give the parts clearance.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="how-the-support-network-is-arranged">How the support network is arranged</h2>
+            <div class="project-stage-copy">
+              <p>I started with two Y-frames and a floating tristar. Each tristar tip connects to all four frame tips, giving 12 support tendons. The tristar’s arms are 120° apart, and the four frame tips sit on the intended flexion axis. The drawing shows where the tendons sit at 60° of knee flexion. I drew on a tensegrity leg study by Mortensen and colleagues for the layout. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/tensegrity-knee-step-parts.webp" alt="The two Y-frames and central tristar shown individually at a common CAD scale." width="1800" height="1012" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The three rigid parts rendered from my STEP files. Their connection points establish where the support tendons can attach.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/tensegrity-knee-geometry.png" alt="Side and front drawings of the femoral and tibial Y-frames, floating tristar, and support tendons at the reference pose." width="3307" height="2338" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The front view shows where each tendon attaches. The side view shows the two frames at the reference pose. <a href="/images/projects/tensegrity-knee-geometry.png">Open the full-size drawing</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="member-force-analysis">Member-force analysis</h2>
+            <div class="project-stage-copy">
+              <p>I used MATLAB to see how the tendons share a load as I change the geometry and preload. A tendon can only pull. If the calculation shows that one needs to push to hold the joint in position, that tendon would go slack.</p>
+              <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load in the model. The calculated tensions ranged from <strong>0.50 to 5.69 kN per support span</strong>. That spread is what I look for when I change preload. Adding tension helps keep the lightest-loaded span taut, but it also asks more of the tristar and frame connections before an external load is applied.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="checking-the-geometry-before-a-build">Checking the geometry before a build</h2>
+            <div class="project-stage-copy">
+              <p>I’m using those calculations to narrow the layouts worth building. The next fit check is to move the assembly through its intended flexion range and see where the tendons or fittings come close to the frames. On the bench, I plan to measure load and displacement and repeat the test to see how consistently the joint responds.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · MATLAB · Member-force modeling · Mechanism design</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/kneeassist">Actuated Knee-Assistance System →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
