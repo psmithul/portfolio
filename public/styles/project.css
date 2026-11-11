@@ -1,10 +1,5 @@
-.academic-site:has(> .project-page) {
-  --academic-paper: #fff;
-  --academic-anchor-offset: 84px;
-  color: #161616;
-}
-
 .project-page {
+  --academic-anchor-offset: 84px;
   width: 92%;
   max-width: 1600px;
   margin: 0 auto;

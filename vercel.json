@@ -12,6 +12,8 @@
     { "source": "/blog", "destination": "/build-log", "permanent": true },
     { "source": "/activities", "destination": "/#activities", "permanent": true },
     { "source": "/work/neoleg-knee-mechanism", "destination": "/work/kneeassist", "permanent": true },
+    { "source": "/work/briskfit", "destination": "/experience/briskfit", "permanent": true },
+    { "source": "/work/portfolio-website", "destination": "/projects", "permanent": true },
     { "source": "/write/:path*", "destination": "/build-log", "permanent": true },
     { "source": "/v1/:path*", "destination": "/:path*", "permanent": true }
   ],
