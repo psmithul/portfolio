@@ -45,9 +45,17 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
+            <h2 id="why-use-a-tension-network">Why use a tension network?</h2>
+            <div class="project-stage-copy">
+              <p>I wanted to understand whether the support structure of a wearable knee joint could contribute to its stiffness. In a tensegrity structure, rigid parts hold their shape and tensioned members carry loads between them. The layout made it possible to study the influence of geometry and internal tension together.</p>
+              <p>I focused on the support network around the floating centre piece. That gave me a specific problem to model: how an external load redistributes tension through the spans that hold the piece in place.</p>
+            </div>
+          </section>
+          <section class="project-stage">
             <h2 id="how-the-support-network-is-arranged">How the support network is arranged</h2>
             <div class="project-stage-copy">
               <p>I started with two Y-frames and a floating tristar. Each tristar tip connects to all four frame tips, giving 12 support tendons. The tristar’s arms are 120° apart, and the four frame tips sit on the intended flexion axis. The drawing shows where the tendons sit at 60° of knee flexion. I drew on a tensegrity leg study by Mortensen and colleagues for the layout. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
+              <p>I worked from the attachment points outward. The drawing identifies the endpoints of the support spans, and the STEP assembly shows how those points sit on the three rigid parts. Reading them together helped me check which connections belong to the support network and where each span crosses the joint.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -69,12 +77,14 @@
             <div class="project-stage-copy">
               <p>I used MATLAB to see how the tendons share a load as I change the geometry and preload. A tendon can only pull. If the calculation shows that one needs to push to hold the joint in position, that tendon would go slack.</p>
               <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load in the model. The calculated tensions ranged from <strong>0.50 to 5.69 kN per support span</strong>. That spread is what I look for when I change preload. Adding tension helps keep the lightest-loaded span taut, but it also asks more of the tristar and frame connections before an external load is applied.</p>
+              <p>In MATLAB, I compared the tension in each support span. The lowest tension tells me which part of the network is closest to going slack, and the highest tells me where the connection carries the greatest load in that case. The two values expose how unevenly the load is shared.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="checking-the-geometry-before-a-build">Checking the geometry before a build</h2>
+            <h2 id="checking-the-geometry-before-a-build">What I learned</h2>
             <div class="project-stage-copy">
-              <p>I’m using those calculations to narrow the layouts worth building. The next fit check is to move the assembly through its intended flexion range and see where the tendons or fittings come close to the frames. On the bench, I plan to measure load and displacement and repeat the test to see how consistently the joint responds.</p>
+              <p>I learned to read geometry and force results together. The assembly drawing shows where I put the anchors. The MATLAB model shows how those same anchors change the directions of the forces. Moving one point can redistribute load through several spans, even when the external load stays the same.</p>
+              <p>The static case made the role of preload clearer to me. More preload can keep a lightly loaded span in tension, and it also raises the load that the connections carry before the joint is externally loaded. The figures here describe a static model at a reference pose.</p>
             </div>
           </section>
         </article>

@@ -35,7 +35,7 @@
             <div class="project-intro-copy">
               <p>Mechanical design and control development · Sep 2026 — Present</p>
               <p>We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.</p>
-              <p>The complete rover is documented in CAD. The next step is a loaded test of one suspension module to measure its force–travel response and verify that the lock holds without power.</p>
+              <p>We developed the individual suspension module, assembled the six-wheel rover in CAD, and defined how the vibration and preload controls work together.</p>
             </div>
             <figure class="project-cover">
               <img alt="Isometric CAD view of one rover suspension module with its wheel, pivoting linkage, and spring preload assembly." width="1920" height="1080" decoding="async" src="/images/projects/rover-suspension-module-cad.png">
@@ -49,6 +49,7 @@
             <div class="project-stage-copy">
               <p>A rover on a rough inspection route can slow down to get steadier camera and sensor data. We wanted to see if it could keep more of its speed by changing how the suspension responds to bumps.</p>
               <p>In our first proposal, two coupled suspension units would shift a cable guide between three settings. Moving that guide changed the spring’s leverage. The later CAD uses a separate motor and preload carriage at each wheel. We kept the idea of locking a setting before moving again.</p>
+              <p>The inspection task gave us a specific reason to care about body motion. A wheel can follow the ground and keep the rover moving while the chassis still shakes enough to affect a camera or sensor. We treated wheel contact and body vibration as two separate parts of the same problem.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -64,6 +65,7 @@
             <div class="project-stage-copy">
               <p>As the wheel rises, the carrier pivots, three compression links change angle, and three elastic paths stretch and pull back. A separate damper helps the wheel settle after the bump.</p>
               <p>We put one geared motor on each module to adjust the tension already in those elastic paths. The motor turns a fine-pitch screw. The guide rails keep the carriage from rotating, so it slides along the screw and changes the preload. The CAD gives the carriage 6 mm of adjustment. Once the carriage is locked, the wheel moves passively.</p>
+              <p>I found it helpful to separate the parts that carry the wheel, the parts that pull it back toward its resting position, and the parts that change the preload. That made it easier to trace the load through the module and understand why the wheel can still move when the adjustment motor is idle.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -83,7 +85,8 @@
           <section class="project-stage">
             <h2 id="checking-wheel-travel-in-cad">Checking wheel travel in CAD</h2>
             <div class="project-stage-copy">
-              <p>We posed the same module at neutral and at +20° of bump to see what moved inside the joint. The wheel centre rises about 16 mm in that comparison. From −8° of droop to +20° of bump, the CAD shows about 21 mm of vertical wheel travel. The loaded fixture will show how that motion changes under real forces.</p>
+              <p>We posed the same module at neutral and at +20° of bump to see what moved inside the joint. The wheel centre rises about 16 mm in that comparison. From −8° of droop to +20° of bump, the CAD shows about 21 mm of vertical wheel travel.</p>
+              <p>Looking at the two CAD poses side by side made the motion easier to check. As the carrier rotates, the wheel follows an arc. The vertical travel comes from the change in wheel-centre height between the poses. These values describe the CAD geometry.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -104,6 +107,7 @@
             <h2 id="fitting-six-modules-around-the-chassis">Fitting six modules around the chassis</h2>
             <div class="project-stage-copy">
               <p>After designing the joint on its own, we placed six modules around the central deck. The roof-off view makes that layout visible. The closed view shows how the wheels and body fit together in the full assembly.</p>
+              <p>The full assembly let us review the suspension as part of the vehicle. The roof-off view shows the modules relative to the central deck and the available space for electronics. The closed view shows how the body encloses the deck while leaving the wheel assemblies outside it.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -123,15 +127,15 @@
           <section class="project-stage">
             <h2 id="what-the-controller-measures">What the controller measures</h2>
             <div class="project-stage-copy">
-              <p>We put accelerometers on the middle wheel carriers and the chassis in the sensor layout. The carrier readings tell us what the wheels are hitting. The chassis reading tells us how much of that movement reaches the body. Wheel encoders give us speed, and the chassis IMU tracks roll and pitch.</p>
-              <p>The planned sequence is to stop if vibration stays high, adjust the preload, and confirm the new position and lock before moving again. If the vibration stays high after the change, the rover can slow down.</p>
+              <p>In the sensor layout, accelerometers on the middle wheel carriers describe the input from the ground and the chassis accelerometer describes the response of the body. The wheel encoders provide speed, and the chassis IMU tracks roll and pitch. We kept those signals separate so a rough patch at the wheel and the movement that reaches the payload can be compared.</p>
+              <p>The control design uses sustained chassis vibration to decide when to pause and change preload. It checks the carriage position and lock before resuming. Speed reduction is a separate decision in the control logic, which lets us describe what each adjustment is meant to do.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="how-well-test-it">How we’ll test it</h2>
+            <h2 id="how-well-test-it">What I learned</h2>
             <div class="project-stage-copy">
-              <p>We’ll start with one loaded module and measure how much force it takes to move the wheel at different preload settings. We’ll also cut power under load to check that the lock holds.</p>
-              <p>For the rover trials, we’ll compare fixed preload, speed control, preload control, and the two controls together. We’ll use the same track and payload and repeat each setting at least three times. We’re aiming for <strong>at least 20% lower vertical chassis RMS acceleration</strong> in the 5–100 Hz band at the same speed as the fixed-preload run. We’ll also record route time and energy per metre.</p>
+              <p>Comparing the coupled concept with the individual module taught me how much the placement of an actuator changes the rest of the design. The early sketch helped us think about changing spring leverage. The later CAD forced us to account for the adjustment screw, its guides, and how the setting is held at each wheel.</p>
+              <p>Working through the wheel poses and sensor layout also helped me distinguish the questions a CAD model can answer. It shows travel, orientation, and how parts fit together. The force response and vibration of the rover depend on loads, damping, and contact with the ground.</p>
               <p><a href="https://github.com/psmithul/tensegrity-rover" rel="noreferrer">Rover CAD and project files</a>.</p>
             </div>
           </section>

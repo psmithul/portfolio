@@ -35,7 +35,7 @@
             <div class="project-intro-copy">
               <p>Computational study · 5–20 Hz reduced-model pilot · Aug — Oct 2026</p>
               <p>I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.</p>
-              <p>Computational pilot over 5–20 Hz. Neural training uses reduced-model labels; selected full-FEM points provide a separate numerical check. Global convergence, measured wheel inputs, and experimental pointing validation remain open.</p>
+              <p>Computational pilot over 5–20 Hz. Neural training uses reduced-model labels, with selected full-FEM points used for a separate numerical comparison.</p>
             </div>
             <figure class="project-cover">
               <img alt="COMSOL screenshot from the spacecraft vibration pilot, with the satellite structure and camera-support response visible." width="2036" height="1052" decoding="async" src="/images/projects/spacecraft-comsol-model.png">
@@ -44,6 +44,13 @@
           </div>
         </header>
         <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="why-study-the-pointing-response">Why study the pointing response?</h2>
+            <div class="project-stage-copy">
+              <p>I wanted to see how a disturbance at a reaction wheel shows up at a camera elsewhere on a spacecraft. The camera support can tilt as the structure flexes, even when the overall spacecraft motion has been accounted for. That makes the path through the mount and the rest of the structure part of the pointing problem.</p>
+              <p>The other question was whether I could compare many changes to the mount without solving the full finite-element model for each one. That gave the reduced model and the neural models a specific job: reproduce the structural response closely enough to screen mount settings.</p>
+            </div>
+          </section>
           <section class="project-stage">
             <h2 id="following-the-vibration-to-the-camera">Following the vibration to the camera</h2>
             <div class="project-stage-copy">
@@ -54,6 +61,7 @@
             <h2 id="a-smaller-model-for-repeated-calculations">A smaller model for repeated calculations</h2>
             <div class="project-stage-copy">
               <p>The original mesh had about 1.01 million volume elements. To run many configurations over 5–20 Hz, I built a smaller model using 36 natural modes. I added 16 corrections for bending around the camera support that the first version missed. Those 52 coordinates became the reference for training and comparing the neural models.</p>
+              <p>The enrichment comparison was how I checked what the smaller basis was leaving out. A set of modes can describe the large-scale motion well while missing local bending at the camera support. The added corrections mattered because the output I cared about was measured at that support.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -138,7 +146,15 @@
           <section class="project-stage">
             <h2 id="checks-against-the-full-comsol-model">Checks against the full COMSOL model</h2>
             <div class="project-stage-copy">
-              <p>I compared the predictions with 14 full-model points across six configurations. Four of those points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%. The current pilot still needs broader mesh and basis checks, measured wheel inputs and damping, and an experimental pointing test.</p>
+              <p>I compared the predictions with 14 full-model points across six configurations. Four of those points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%.</p>
+              <p>The 52-coordinate reference was what I used for training and most comparisons. The selected full COMSOL cases provided a separate numerical check. The tilt shown here is a modeled structural response, with the comparisons limited to the reported cases.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-i-learned">What I learned</h2>
+            <div class="project-stage-copy">
+              <p>Checking the suggested mount change against the reduced model taught me to compare the size of a design benefit with the error in the tool that suggested it. A low average response error helped the model screen options. The peak error mattered more when the two candidate settings were almost tied.</p>
+              <p>The training comparison also helped me see why it matters to hold out whole configurations. Keeping individual frequency points separate would still let a model learn the shape of the same structure from nearby points. The grouped split made the comparison closer to the way I was using the model.</p>
             </div>
           </section>
         </article>

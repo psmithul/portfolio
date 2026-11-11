@@ -45,15 +45,24 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
+            <h2 id="why-account-for-uncertainty">Why make the robot aware of uncertainty?</h2>
+            <div class="project-stage-copy">
+              <p>I wanted to see what happens when a robot follows a good route with a poor idea of where it is. On an indoor map, a route can look clear while a biased heading or a slipping wheel sends the real trajectory closer to a wall.</p>
+              <p>Simulation gave me a way to keep the map and goal fixed and change the quality of the observations. I could compare the robot’s estimate with the position and heading the simulator was actually using.</p>
+            </div>
+          </section>
+          <section class="project-stage">
             <h2 id="giving-the-robot-imperfect-sensors">Giving the robot imperfect sensors</h2>
             <div class="project-stage-copy">
               <p>I built a differential-drive robot in Python simulation. A* plans a route, and a heading controller steers along it using the robot’s estimated position and orientation. I added encoder noise, IMU drift, yaw bias, and wheel slip. With slip, the wheels can turn without moving the robot as far as the encoders suggest.</p>
+              <p>The simulator keeps the true motion separate from the data the controller receives. I used that separation to model two different problems: the wheels can behave differently from what their rotation implies, and an IMU reading can drift even when the physical motion is unchanged.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="using-the-pose-estimate-to-decide-when-to-slow-down">Using the pose estimate to decide when to slow down</h2>
             <div class="project-stage-copy">
               <p>An extended Kalman filter combines wheel encoder and IMU readings and tracks how uncertain the pose estimate is. I fed that uncertainty into the speed and recovery logic. If the estimate becomes less reliable, the simulated robot can slow down or try to recover before continuing.</p>
+              <p>The filter’s uncertainty is useful because two similar pose estimates can carry very different confidence. I used it to connect localization with motion decisions. The planner still provides a path, while the speed and recovery logic responds to the quality of the estimated pose.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -68,6 +77,7 @@
             <h2 id="monte-carlo-evaluation">Monte Carlo evaluation</h2>
             <div class="project-stage-copy">
               <p>I ran repeated trials and compared the estimated pose with the simulator’s true pose. I also recorded collisions, recovery events, whether the robot reached the goal, and how long it took. That let me compare speed with how often the robot reached the goal without a collision.</p>
+              <p>I looked at several measures together. Time to goal tells me how quickly a run finishes. Collision and completion counts tell me whether that speed came at the cost of getting through the route. Pose error and recovery events help explain what happened between the start and the outcome.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -76,6 +86,13 @@
                 </div>
                 <figcaption>A successful nominal run with the adaptive controller. <a href="/images/projects/navigation-trajectory.png">Full-size simulation figure</a> · <a href="https://github.com/psmithul/differential-drive-navigation" rel="noreferrer">Code and results</a>.</figcaption>
               </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-i-learned">What I learned</h2>
+            <div class="project-stage-copy">
+              <p>Using simulator ground truth taught me to look at the estimate, the actual path, and the decision the controller made at the same point in time. A single trajectory can look reasonable even when the pose estimate is drifting.</p>
+              <p>The repeated trials gave me a way to compare the behaviour across noisy runs. That made the trade-off between driving quickly and reacting to a less reliable estimate much easier to see.</p>
             </div>
           </section>
         </article>

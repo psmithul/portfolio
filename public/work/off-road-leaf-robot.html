@@ -35,7 +35,7 @@
             <div class="project-intro-copy">
               <p>NITK · Virtual Instrumentation team project · Jul 2026 — Present</p>
               <p>We are developing a cleaning module that mounts beneath a collection hopper. The goal is to pick up wet and dry leaves on uneven ground while limiting how much soil enters the collector.</p>
-              <p>We completed the six-unit CAD assembly and demonstrated a printed tiller unit outdoors. Pickup and endurance testing are planned.</p>
+              <p>We completed the six-unit CAD assembly and demonstrated a printed tiller unit outdoors.</p>
             </div>
             <figure class="project-cover">
               <img src="/images/projects/leaf-cleaning-module-cad.webp" alt="CAD render of six tiller units under a common mounting plate, with telescoping shafts and roller feet." data-framing="full-frame" width="1440" height="900" decoding="async">
@@ -45,27 +45,43 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
+            <h2 id="why-make-a-cleaning-module">Why make a separate cleaning module?</h2>
+            <div class="project-stage-copy">
+              <p>Wet leaves can sit close to the ground, especially in low spots on an uneven surface. A pickup set at a fixed height can pass over those leaves or dig into higher patches and bring in soil. We wanted the part that meets the ground to accommodate those height changes.</p>
+              <p>We focused on the cleaning module below the hopper. The mounting plate is the interface to the host platform, and the tiller units handle the contact with the surface across the pickup’s width.</p>
+            </div>
+          </section>
+          <section class="project-stage">
             <h2 id="keeping-the-pickup-close-to-the-ground">Keeping the pickup close to the ground</h2>
             <div class="project-stage-copy">
               <p>The mounting plate carries six identical tiller units. Each has a two-stage telescoping shaft, a guide collar, and a roller held in a yoke. The roller makes contact with the ground while the shaft can extend and retract vertically. This lets the pickup accommodate changes in surface height across its width.</p>
+              <p>Splitting the width into six units let us study the motion of one shaft and roller first. In the assembly view, I could then see how those units line up under the mounting plate and how much space each has around its neighbours.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="getting-the-leaves-to-storage">Designing for fabrication</h2>
             <div class="project-stage-copy">
-              <p>Repeating one tiller design keeps the number of unique parts down. We planned to print the structural parts in PETG and use purchased hardware for the rollers, springs, and rack-and-pinion lift. The design review included drawings for the single unit and the six-unit assembly. Lift motor sizing and the final rack, pinion, and spring specifications are still open.</p>
+              <p>We repeated one tiller design to reduce the number of unique parts. The design review identified the structural parts for PETG printing and the bought hardware, including the rollers, springs, and rack-and-pinion components. We used drawings of the single unit and the full assembly to make that breakdown clear.</p>
+              <p>The bill of materials also helped separate what had to be made to fit the module from parts that could be bought. That was useful when reviewing a design that repeats the same set of parts across its width.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="comparing-the-options">Prototype and next tests</h2>
+            <h2 id="comparing-the-options">Motion study and outdoor demonstration</h2>
             <div class="project-stage-copy">
-              <p>We checked the shaft’s vertical travel and roller contact in a CAD motion study, then demonstrated a printed unit outdoors. The next tests will measure leaf pickup and soil intake separately on wet and dry surfaces. We also plan to check whether the pickup clogs or binds over repeated runs.</p>
+              <p>In CAD, we followed the shaft through extension and retraction and checked where the roller reaches the ground line. We then demonstrated a printed tiller unit outdoors. The motion study shows the designed travel, and the demonstration shows one printed unit operating in a field setting.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
                 <img src="/images/projects/leaf-tiller-motion-study.webp" alt="Side view from the single-unit motion study showing the shaft extended and the roller reaching the ground line." width="430" height="466" loading="lazy" decoding="async">
                 <figcaption>Single-unit motion study from the team’s design review.</figcaption>
               </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-i-learned">What I learned</h2>
+            <div class="project-stage-copy">
+              <p>I learned to distinguish the behaviour of one repeated unit from what happens when several units sit under the same plate. The single-unit study made the lift motion visible, and the array assembly exposed the spacing and mounting questions that were easy to miss in isolation.</p>
+              <p>The outdoor demonstration also gave me a clearer distinction between demonstrating a mechanism and measuring cleaning performance. Leaf pickup, soil intake, and repeatability describe different parts of how a cleaning module performs.</p>
             </div>
           </section>
         </article>
