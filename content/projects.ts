@@ -87,6 +87,44 @@ export const battleBots: Project = {
 export const projects: Project[] = [
   battleBots,
   {
+    slug: 'fireworks-galaxy',
+    number: '13',
+    title: 'Exploring the Fireworks Galaxy',
+    discipline: 'Astronomy · Image analysis',
+    status: 'Completed',
+    earlierWork: true,
+    context: 'School project · CFAL Astronomy Club',
+    image: projectImages['fireworks-galaxy'],
+    tools: ['Python', 'Astropy', 'scikit-image', 'Matplotlib'],
+    summary:
+      'I started this project at school to explore the bright centre of NGC 6946 in a near-infrared Hubble image. I worked from the full detector frame down to the nucleus and compared what two ridge filters brought out.',
+    question:
+      'How much of the structure near the bright centre is visible in the calibrated image, and what changes when I filter it?',
+    approach: [
+      {
+        title: 'Inspect the calibrated Hubble exposure',
+        body: 'Read the FITS science and data-quality planes and compare usable pixel count rates.',
+      },
+      {
+        title: 'Find the centre in detector coordinates',
+        body: 'Map the SIMBAD infrared position into the image and measure the change in count rate with distance from it.',
+      },
+      {
+        title: 'Compare filters and display palettes',
+        body: 'Apply the Sato and Meijering ridge filters and compare them across five colormaps.',
+      },
+    ],
+    outcome:
+      'The brightest usable pixel falls about 0.41 arcseconds from the catalogued infrared centre. The count-rate profile shows a strong central rise before ridge filtering.',
+    scope:
+      'The restored notebook uses one Hubble exposure and includes a short literature survey of NGC 4826, the Black Eye Galaxy.',
+    evidence: [
+      'Public Hubble NICMOS F160W exposure n4k48nbsq',
+      'FITS quality mask and brightness profile',
+      'Executed notebook with filter and palette comparisons',
+    ],
+  },
+  {
     slug: 'uav-vibration-integration',
     number: '06',
     title: 'UAV Vibration Analysis & Isolation',

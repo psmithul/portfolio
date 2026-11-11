@@ -1,5 +1,40 @@
 // Project write-ups draw on the original reports, project records, and CV.
 export const projectStudies: Record<string, string> = {
+  'fireworks-galaxy': String.raw`
+## Choosing a comparison galaxy
+
+At CFAL Astronomy Club, I started with an exercise on the centres of nearby galaxies. The restored notebook uses NGC 4826, the Black Eye Galaxy, for the literature survey. It has a dark dust band across one side of its bright centre. Does that band have lower contrast in the near infrared than in visible light? That’s a question I could test with matched images. For the hands-on analysis, I worked with the Fireworks Galaxy, NGC 6946, from the same Hubble survey. [Hubble’s Black Eye Galaxy overview](https://science.nasa.gov/missions/hubble/hubble-looks-at-a-a-black-eye-galaxy/) · [NICMOS survey](https://arxiv.org/abs/astro-ph/9903307).
+
+## Reading the Hubble frame
+
+The original notebook pointed to one 256 × 256 F160W exposure taken on 19 January 1998. The science plane gives counts per second, and the data-quality plane records which pixels are flagged. I kept 65,045 usable pixels out of 65,536. Their count rates ranged widely, with a median of 1.96 counts/s and a 98th percentile of 11.24 counts/s. I applied a display stretch so I could see the fainter field around the bright centre. [Original FITS exposure from MAST](https://mast.stsci.edu/api/v0.1/Download/file?uri=mast%3AHST%2Fproduct%2Fn4k48nbsq_cal.fits).
+
+![A detector map marks the 491 excluded pixels and a histogram shows the usable count rates on a logarithmic frequency axis.](/images/projects/fireworks-quality.png)
+
+_The detector mask shows where data were excluded, including near the bright centre. The histogram shows the strong tail toward higher count rates. [Open the full-size figure](/images/projects/fireworks-quality.png)._
+
+## Finding the centre
+
+I mapped the catalogued infrared position onto the detector before drawing the cutouts. The brightest usable pixel landed about 0.41 arcseconds from that position. Before any ridge filtering, the median count rate was 55.58 counts/s within five pixels of the centre and 4.15 counts/s in the ring from 30 to 60 pixels. Those values describe the usable pixels in each region. [SIMBAD position for NGC 6946](https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=NGC+6946).
+
+![A line plot shows the median F160W count rate declining with distance from the catalogued galaxy centre.](/images/projects/fireworks-profile.png)
+
+_Median count rate in successive rings around the centre. The shaded area spans the 25th to 75th percentiles of usable pixels. [Open the full-size profile](/images/projects/fireworks-profile.png)._
+
+## Comparing the filters
+
+I ran Sato and Meijering on the full detector frame before taking the same 96-pixel cutout from each result. Sato gives a broader response around the centre, while Meijering concentrates the strongest response more tightly. Within each row, I kept the scaling fixed across grayscale, hot, magma, viridis, and cividis. I use the calibrated image and the quality mask to check features that stand out after filtering, especially near flagged pixels.
+
+![Fifteen panels compare the calibrated image and two ridge filter responses across five colormaps.](/images/projects/fireworks-filters.png)
+
+_The first row shows the F160W image. The next two show the Sato and Meijering responses. [Open the full-size comparison](/images/projects/fireworks-filters.png)._
+
+## Run the notebook
+
+The restored notebook includes the literature survey, data checks, and code for all four figures. It retrieves the original calibrated exposure from the public Hubble archive. [Open in Google Colab](https://colab.research.google.com/github/psmithul/portfolio/blob/main/public/notebooks/Astroclub_Fireworks_Galaxy.ipynb) · [Download the notebook](/notebooks/Astroclub_Fireworks_Galaxy.ipynb).
+
+Data credit goes to the NASA/ESA Hubble Space Telescope and the Mikulski Archive for Space Telescopes.
+`,
   'nitk-battle-bots': String.raw`
 ## 3 lb flipper
 
