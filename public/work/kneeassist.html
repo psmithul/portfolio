@@ -27,7 +27,8 @@
           <a href="/build-log">Build Log</a>
         </nav>
       </header>
-      <main id="main" class="project-page">
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-kneeassist">← Back to Projects</a>
         <header class="project-intro">
           <h1>Actuated Knee-Assistance System</h1>
           <div class="project-intro-grid">
@@ -73,7 +74,16 @@
           </section>
         </article>
         <p class="project-tools">Tools &amp; methods · SolidWorks · ANSYS · Angle sensing · Cable-and-spring drive</p>
-        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/reaction-wheel-microvibrations">Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter →</a></nav>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/reaction-wheel-microvibrations" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Physics-Informed Multi-Fidelity FEM Surrogate for Reaction-Wheel-Induced Spacecraft Microvibration and Payload Jitter</span>
+          </a>
+          <a href="/work/uav-vibration-integration" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>UAV Vibration Analysis &amp; Isolation</span>
+          </a>
+        </nav>
       </main>
       <footer class="academic-footer">
         <div>

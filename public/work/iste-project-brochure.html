@@ -27,7 +27,8 @@
           <a href="/build-log">Build Log</a>
         </nav>
       </header>
-      <main id="main" class="project-page">
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-iste-project-brochure">← Back to Projects</a>
         <header class="project-intro">
           <h1>ISTE NITK Website</h1>
           <div class="project-intro-grid">
@@ -57,7 +58,16 @@
           </section>
         </article>
         <p class="project-tools">Tools &amp; methods · React · TypeScript · Vite</p>
-        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/restia">Restia →</a></nav>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/finite-element-beams-and-frames" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Finite Element Analysis of Beams and Frames</span>
+          </a>
+          <a href="/work/restia" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Restia</span>
+          </a>
+        </nav>
       </main>
       <footer class="academic-footer">
         <div>

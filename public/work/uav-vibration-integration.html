@@ -27,7 +27,8 @@
           <a href="/build-log">Build Log</a>
         </nav>
       </header>
-      <main id="main" class="project-page">
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-uav-vibration-integration">← Back to Projects</a>
         <header class="project-intro">
           <h1>UAV Vibration Analysis &amp; Isolation</h1>
           <div class="project-intro-grid">
@@ -37,22 +38,29 @@
               <p>Internship work covering vibration-path modeling, hardware integration, and ground motor-run testing.</p>
             </div>
             <figure class="project-cover">
-              <img alt="Three simplified sections showing a rigid mount, an elastomer-isolated tray, and a suspended controller." width="1280" height="660" decoding="async" src="/images/projects/process-uav-mounts.webp">
+              <img src="/images/projects/uav-elastomer-hero.webp" alt="Isometric view of the flight controller on an aluminum tray above the airframe plate, supported by teal elastomer isolators." data-framing="full-frame" width="1440" height="900" decoding="async">
+              <figcaption>Concept rendering of the elastomer-isolated tray selected after ground testing.</figcaption>
             </figure>
           </div>
         </header>
         <article class="article-prose">
-          <section class="project-stage">
+          <section class="project-stage project-stage-wide">
             <h2 id="comparing-the-mounts-in-ansys">Comparing the mounts in ANSYS</h2>
             <div class="project-stage-copy">
               <p>At Vayu Aerospace, I followed the vibration from the motors, through the airframe, to the flight controller’s IMU. I compared three ways to mount the controller in ANSYS. The rigid mount gave me a baseline for the elastomer tray and the suspended mount. I looked at where each assembly might resonate and how much of that motion would reach the controller.</p>
             </div>
-            <div class="project-stage-figures">
+            <div class="project-stage-figures mount-comparison">
               <figure class="reading-figure">
-                <div>
-                  <img src="/images/projects/process-uav-mounts.webp" alt="Three simplified sections showing a rigid mount, an elastomer-isolated tray, and a suspended controller." width="1280" height="660" loading="lazy" decoding="async">
-                </div>
-                <figcaption>Design schematic of the three mounting arrangements. The rigid mount provided the baseline for the two isolation concepts.</figcaption>
+                <img src="/images/projects/uav-mount-rigid.webp" alt="The controller tray bolts to rigid metal standoffs on the airframe plate." width="840" height="620" loading="lazy" decoding="async">
+                <figcaption><strong>Rigid mount</strong> · Metal standoffs carry the tray. This was the comparison baseline.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/uav-mount-elastomer.webp" alt="Teal elastomer mounts support the controller tray above the airframe plate." width="840" height="620" loading="lazy" decoding="async">
+                <figcaption><strong>Elastomer-isolated tray</strong> · Compliant mounts sit between the tray and airframe.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/uav-mount-suspended.webp" alt="Angled purple links hang the controller tray from two side frames, leaving a gap underneath." width="840" height="620" loading="lazy" decoding="async">
+                <figcaption><strong>Suspended mount</strong> · Angled links hang the tray from a frame.</figcaption>
               </figure>
             </div>
           </section>
@@ -70,7 +78,16 @@
           </section>
         </article>
         <p class="project-tools">Tools &amp; methods · ANSYS Mechanical · MATLAB · IMU log analysis</p>
-        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/adaptive-suspension-rover">Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover →</a></nav>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/kneeassist" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Actuated Knee-Assistance System</span>
+          </a>
+          <a href="/work/uncertainty-aware-navigation" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Uncertainty-Aware Navigation for an Indoor Mobile Robot</span>
+          </a>
+        </nav>
       </main>
       <footer class="academic-footer">
         <div>
