@@ -132,6 +132,11 @@ for (const [path, status, content, title] of cases) {
   if (status === 200 && path.startsWith('/work/')) {
     assert.match(
       body,
+      /<main id="main" class="project-page"><header class="project-intro"><h1>[^<]+<\/h1><div class="project-intro-grid"><div class="project-intro-copy">[\s\S]*?<figure class="project-cover">/,
+      path + ': shared project opening with a title, introduction, and cover',
+    );
+    assert.match(
+      body,
       /<section class="project-stage">\s*<h2[^>]*>[\s\S]*?<div class="project-stage-copy">[\s\S]*?<div class="project-stage-figures">\s*<figure class="reading-figure">/,
       path + ': a project stage pairs its text with a captioned figure',
     );

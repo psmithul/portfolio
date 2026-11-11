@@ -46,6 +46,14 @@ export function readingHeadings(body: string) {
   return identifyHeadings(unified().use(remarkParse).parse(body));
 }
 
+export function firstReadingImage(body: string) {
+  for (const node of unified().use(remarkParse).parse(body).children) {
+    if (node.type !== 'paragraph' || node.children.length !== 1) continue;
+    const image = node.children[0];
+    if (image.type === 'image') return { src: image.url, alt: image.alt ?? '' };
+  }
+}
+
 // Keep author-written captions with their images instead of rendering them
 // as separate italic paragraphs. Raw HTML is still excluded by the renderer.
 export function remarkReading() {
@@ -127,24 +135,22 @@ export function rehypeProjectStages() {
 
   function stage(heading: Element, blocks: ElementContent[]): Element {
     const figures = blocks.filter(isFigure);
-    const children: ElementContent[] = [heading];
+    const children: ElementContent[] = [
+      heading,
+      {
+        type: 'element',
+        tagName: 'div',
+        properties: { className: ['project-stage-copy'] },
+        children: blocks.filter((block) => !isFigure(block)),
+      },
+    ];
     if (figures.length) {
-      children.push(
-        {
-          type: 'element',
-          tagName: 'div',
-          properties: { className: ['project-stage-copy'] },
-          children: blocks.filter((block) => !isFigure(block)),
-        },
-        {
-          type: 'element',
-          tagName: 'div',
-          properties: { className: ['project-stage-figures'] },
-          children: figures,
-        },
-      );
-    } else {
-      children.push(...blocks);
+      children.push({
+        type: 'element',
+        tagName: 'div',
+        properties: { className: ['project-stage-figures'] },
+        children: figures,
+      });
     }
     return {
       type: 'element',
