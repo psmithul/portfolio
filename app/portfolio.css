@@ -68,6 +68,9 @@
   letter-spacing: -0.025em;
   line-height: 1.24;
 }
+.projects-page .portfolio-section h2 {
+  scroll-margin-top: var(--academic-anchor-offset);
+}
 .portfolio-section-heading .portfolio-affiliation {
   margin-top: 4px;
 }
