@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Self-hosted AI workspace · 2026</p>
-              <p>A self-hosted workspace that brings model chat, projects, study tools, and documents together.</p>
-              <p>The public workspace grew out of separate web, desktop-style frontend, and Python service experiments.</p>
+              <p id="why-build-restia">I built Restia because I wanted model conversations to sit alongside the projects, files, and tasks they help with. I explored a web interface, a desktop-style dashboard, and Python services before combining them in a self-hosted workspace.</p>
             </div>
             <figure class="project-cover">
               <img alt="The Restia workspace showing connection and invitation options in Messages." data-framing="full-frame" width="1280" height="720" decoding="async" src="/images/projects/restia-v2.jpg">
@@ -45,31 +44,17 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-build-restia">Why build one workspace?</h2>
+            <h2 id="bringing-the-workspace-together">Workspace and model choices</h2>
             <div class="project-stage-copy">
-              <p>I wanted a place where a conversation with a model could sit next to the project, files, and tasks it was helping with. Switching between separate tools is easy for one question. It becomes harder to follow what has happened when the work continues across several sessions.</p>
-              <p>I tried separate web, desktop-style, and Python versions before bringing the pieces together. Each version gave me a different way to think about the interface, the services behind it, and where the work should be stored.</p>
+              <p id="what-i-learned">I gave projects their own boards and documents. The study area holds goals and focus sessions, and chat sits alongside that work. Building the early versions separately helped me see which things need to last beyond a conversation, such as a document or a decision saved to a project.</p>
+              <p>I kept model selection separate from the workspace layout. Restia can use a local model or a hosted provider while the project’s files and tasks stay in the same place.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="bringing-the-workspace-together">Bringing the workspace together</h2>
+            <h2 id="keeping-the-data-close">Self-hosting and collaboration</h2>
             <div class="project-stage-copy">
-              <p>In the combined workspace, a project can hold its own board and documents. The study area holds goals and focus sessions, while chat is available alongside the work. I kept those views distinct because they answer different questions about the same work: what I am discussing, what has been decided, and what I have actually saved.</p>
-              <p>I also separated model choice from the layout of the workspace. Restia supports a local model or a hosted provider through the same workspace, so the project and its documents have a place regardless of which model handles a conversation.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="keeping-the-data-close">Keeping the data close</h2>
-            <div class="project-stage-copy">
-              <p>The workspace is designed for self-hosting. Files and the database stay on the owner’s infrastructure. The published V2 screenshot shows the connection options between installations. <a href="https://github.com/psmithul/restia" rel="noreferrer">GitHub source</a>.</p>
-              <p>The self-hosted design also shaped how separate installations connect. An owner can share access to a project with another installation, and the project can distinguish between a viewer and an editor. That keeps collaboration tied to the project and the permissions its owner chose.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>Building the earlier versions separately taught me to decide which parts of the work need to last across sessions. A board, a document, or a study goal has a useful life beyond the chat that helped create it.</p>
-              <p>Working through connections between installations made data ownership a design decision. I had to think about where the file lives, which installation is serving it, and what the collaborator is allowed to do with it.</p>
+              <p>The files and database stay on the owner’s infrastructure. I also built a way to share a project between Restia installations. The owner can grant viewer or editor access, which let me handle collaboration at the project level.</p>
+              <p>Working through that connection meant deciding which installation serves a file and what the other person can do with it. The V2 screenshot shows the connection options. <a href="https://github.com/psmithul/restia" rel="noreferrer">GitHub source</a>.</p>
             </div>
           </section>
         </article>

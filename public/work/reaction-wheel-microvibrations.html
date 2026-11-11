@@ -34,8 +34,8 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Computational study · 5–20 Hz reduced-model pilot · Aug — Oct 2026</p>
-              <p>I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.</p>
-              <p>Computational pilot over 5–20 Hz. Neural training uses reduced-model labels, with selected full-FEM points used for a separate numerical comparison.</p>
+              <p>I wanted to see how vibration at a spacecraft reaction wheel reaches a camera elsewhere on the structure. I built a reduced finite-element model and tested whether neural surrogates could help me compare mount settings across 5–20 Hz.</p>
+              <p>I used the reduced model to train the surrogates and checked selected points against the full COMSOL model.</p>
             </div>
             <figure class="project-cover">
               <img alt="COMSOL screenshot from the spacecraft vibration pilot, with the satellite structure and camera-support response visible." width="2036" height="1052" decoding="async" src="/images/projects/spacecraft-comsol-model.png">
@@ -45,23 +45,22 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-study-the-pointing-response">Why study the pointing response?</h2>
+            <h2 id="why-study-the-pointing-response">Pointing problem</h2>
             <div class="project-stage-copy">
-              <p>I wanted to see how a disturbance at a reaction wheel shows up at a camera elsewhere on a spacecraft. The camera support can tilt as the structure flexes, even when the overall spacecraft motion has been accounted for. That makes the path through the mount and the rest of the structure part of the pointing problem.</p>
-              <p>The other question was whether I could compare many changes to the mount without solving the full finite-element model for each one. That gave the reduced model and the neural models a specific job: reproduce the structural response closely enough to screen mount settings.</p>
+              <p>A camera support can flex even after the spacecraft’s overall rotation is removed. I focused on the resulting structural tilt to see how much the wheel mounts and the structure contribute to pointing motion.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="following-the-vibration-to-the-camera">Following the vibration to the camera</h2>
+            <h2 id="following-the-vibration-to-the-camera">COMSOL model and response</h2>
             <div class="project-stage-copy">
-              <p>I started with a free-floating spacecraft model in COMSOL. At each of four reaction wheels, I applied two transverse force inputs and two moment inputs, giving 16 inputs in all. For camera tilt, I compared the average motion at two stations on the camera support about 0.48 m apart and removed the spacecraft’s overall rotation. The resulting angle is a structural estimate of pointing motion.</p>
+              <p>I modeled a free-floating spacecraft in COMSOL. At each of four wheels I applied two transverse force inputs and two moment inputs, for 16 inputs in total. I estimated camera tilt from the average motion at two stations on the support, about 0.48 m apart, after removing the spacecraft’s overall rotation.</p>
+              <p>I calculated the steady harmonic response one input and frequency at a time. That gave me a response for each load direction and let me compare the reduced model against the same camera and bench outputs.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="a-smaller-model-for-repeated-calculations">A smaller model for repeated calculations</h2>
+            <h2 id="a-smaller-model-for-repeated-calculations">Reduced-order model</h2>
             <div class="project-stage-copy">
-              <p>The original mesh had about 1.01 million volume elements. To run many configurations over 5–20 Hz, I built a smaller model using 36 natural modes. I added 16 corrections for bending around the camera support that the first version missed. Those 52 coordinates became the reference for training and comparing the neural models.</p>
-              <p>The enrichment comparison was how I checked what the smaller basis was leaving out. A set of modes can describe the large-scale motion well while missing local bending at the camera support. The added corrections mattered because the output I cared about was measured at that support.</p>
+              <p>The original mesh had about 1.01 million volume elements. I reduced the model to 36 natural modes for repeated calculations. The smaller basis missed some bending near the camera support, so I added 16 corrections and used the resulting 52-coordinate model as the training reference.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -73,10 +72,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="comparing-mlp-deeponet-and-physics-informed-models">Comparing MLP, DeepONet, and physics-informed models</h2>
+            <h2 id="comparing-mlp-deeponet-and-physics-informed-models">Surrogate comparison</h2>
             <div class="project-stage-copy">
-              <p>I kept whole structural configurations together when splitting the data. A model that has seen one part of a frequency curve has already seen the structure behind the rest of the curve.</p>
-              <p>The multilayer perceptron (MLP) came closest to the 52-coordinate reference in the original comparison. The table reports mean frequency-integrated complex-response errors on three unseen configurations, with all 16 inputs tested on each.</p>
+              <p>I held out whole structural configurations. Frequency points from one curve share the same structure, so splitting them across training and test sets would give the model information about the test configuration.</p>
+              <p>The multilayer perceptron (MLP) came closest to the 52-coordinate reference in this comparison. The table gives mean frequency-integrated complex-response errors on three unseen configurations, with all 16 inputs tested on each.</p>
               <section class="table-scroll" tabindex="0" aria-label="Article table">
                 <table>
                   <thead>
@@ -116,9 +115,9 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="trying-a-different-way-to-train">Trying a different way to train</h2>
+            <h2 id="trying-a-different-way-to-train">Pretraining and equilibrium loss</h2>
             <div class="project-stage-copy">
-              <p>Starting with 36-coordinate training data helped when I had few 52-coordinate cases. The benefit went away with the largest training set. In a separate single-input experiment, adding an equilibrium term to the training loss lowered the balanced residual by 9.23%. The resonance results were mixed.</p>
+              <p>Pretraining on the 36-coordinate model helped when I had few 52-coordinate cases. The benefit disappeared with the largest training set. In a separate single-input experiment, an equilibrium term in the training loss lowered the balanced residual by 9.23%. Its effect on resonance prediction was mixed.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -130,9 +129,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="why-i-kept-the-original-mount">Why I kept the original mount</h2>
+            <h2 id="why-i-kept-the-original-mount">Mount stiffness screening</h2>
             <div class="project-stage-copy">
-              <p>I screened 17 mount stiffness settings. The neural model picked a 10% increase, so I checked that setting and the original against the 52-coordinate model on 36 separate scenarios. The worst response in that set changed by just <strong>0.00589%</strong>, while the largest neural peak error was <strong>7.61%</strong>. The difference was too small to justify changing the mount.</p>
+              <p>I screened 17 mount stiffness settings. The surrogate suggested a 10% increase. I compared that setting with the original using the 52-coordinate model on 36 separate scenarios. The worst response in that set changed by only <strong>0.00589%</strong>, while the largest neural peak error was <strong>7.61%</strong>.</p>
+              <p id="what-i-learned">I kept the original stiffness. The comparison showed me why peak error matters when the candidate designs are close. The surrogate could narrow the search, and the separate numerical comparison established the size of the proposed benefit.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -144,17 +144,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="checks-against-the-full-comsol-model">Checks against the full COMSOL model</h2>
+            <h2 id="checks-against-the-full-comsol-model">Full-model comparison</h2>
             <div class="project-stage-copy">
-              <p>I compared the predictions with 14 full-model points across six configurations. Four of those points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%.</p>
-              <p>The 52-coordinate reference was what I used for training and most comparisons. The selected full COMSOL cases provided a separate numerical check. The tilt shown here is a modeled structural response, with the comparisons limited to the reported cases.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>Checking the suggested mount change against the reduced model taught me to compare the size of a design benefit with the error in the tool that suggested it. A low average response error helped the model screen options. The peak error mattered more when the two candidate settings were almost tied.</p>
-              <p>The training comparison also helped me see why it matters to hold out whole configurations. Keeping individual frequency points separate would still let a model learn the shape of the same structure from nearby points. The grouped split made the comparison closer to the way I was using the model.</p>
+              <p>I compared the surrogate predictions with 14 full-model points across six configurations. Four points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%.</p>
+              <p>The reported tilt is a modeled structural response. The full COMSOL comparisons cover the selected cases.</p>
             </div>
           </section>
         </article>

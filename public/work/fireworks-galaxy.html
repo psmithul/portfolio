@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>School project · CFAL Astronomy Club</p>
-              <p>I started this project at school to explore the bright centre of NGC 6946 in a near-infrared Hubble image. I worked from the full detector frame down to the nucleus and compared what two ridge filters brought out.</p>
-              <p>The restored notebook uses one Hubble exposure and includes a short literature survey of NGC 4826, the Black Eye Galaxy.</p>
+              <p>I started this project at CFAL Astronomy Club to look at the bright centre of the Fireworks Galaxy, NGC 6946. I used one near-infrared Hubble exposure and worked from the full detector frame down to the nucleus. I later restored the notebook and rechecked the data quality and display settings.</p>
             </div>
             <figure class="project-cover">
               <img alt="The full Hubble NICMOS detector frame, with the bright centre of NGC 6946 near the lower middle of the field." data-framing="full-frame" width="1776" height="1792" decoding="async" src="/images/projects/fireworks-original-frame.png">
@@ -45,16 +44,16 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="choosing-a-comparison-galaxy">Choosing a comparison galaxy</h2>
+            <h2 id="choosing-a-comparison-galaxy">Literature and image selection</h2>
             <div class="project-stage-copy">
-              <p>At CFAL Astronomy Club, I started with an exercise on the centres of nearby galaxies. The restored notebook uses NGC 4826, the Black Eye Galaxy, for the literature survey. It has a dark dust band across one side of its bright centre. Does that band have lower contrast in the near infrared than in visible light? That’s a question I could test with matched images. For the hands-on analysis, I worked with the Fireworks Galaxy, NGC 6946, from the same Hubble survey. <a href="https://science.nasa.gov/missions/hubble/hubble-looks-at-a-a-black-eye-galaxy/" rel="noreferrer">Hubble’s Black Eye Galaxy overview</a> · <a href="https://arxiv.org/abs/astro-ph/9903307" rel="noreferrer">NICMOS survey</a>.</p>
-              <p>I kept the two galaxies in different roles in the notebook. The Black Eye Galaxy gave me a way into the literature on how a galaxy centre looks across wavelengths. The Fireworks Galaxy gave me a single image I could work through from the detector data to the plots.</p>
+              <p>I used the Black Eye Galaxy, NGC 4826, for the literature survey. Its dark dust band crosses one side of a bright centre, which raised a question about how the band looks at different wavelengths. For the notebook analysis I used the Fireworks Galaxy from the same NICMOS survey. <a href="https://science.nasa.gov/missions/hubble/hubble-looks-at-a-a-black-eye-galaxy/" rel="noreferrer">Hubble’s Black Eye Galaxy overview</a> · <a href="https://arxiv.org/abs/astro-ph/9903307" rel="noreferrer">NICMOS survey</a>.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="reading-the-hubble-frame">Reading the Hubble frame</h2>
+            <h2 id="reading-the-hubble-frame">Calibrated exposure and pixel mask</h2>
             <div class="project-stage-copy">
-              <p>The original notebook pointed to one 256 × 256 F160W exposure taken on 19 January 1998. The science plane gives counts per second, and the data-quality plane records which pixels are flagged. I kept 65,045 usable pixels out of 65,536. Their count rates ranged widely, with a median of 1.96 counts/s and a 98th percentile of 11.24 counts/s. I applied a display stretch so I could see the fainter field around the bright centre. <a href="https://mast.stsci.edu/api/v0.1/Download/file?uri=mast%3AHST%2Fproduct%2Fn4k48nbsq_cal.fits" rel="noreferrer">Original FITS exposure from MAST</a>.</p>
+              <p>I used a 256 × 256 F160W exposure from 19 January 1998. The science plane gives count rates, and the data-quality plane flags unreliable pixels. After masking flagged data, 65,045 of 65,536 pixels remained. Their median was 1.96 counts/s, and their 98th percentile was 11.24 counts/s. <a href="https://mast.stsci.edu/api/v0.1/Download/file?uri=mast%3AHST%2Fproduct%2Fn4k48nbsq_cal.fits" rel="noreferrer">Original FITS exposure from MAST</a>.</p>
+              <p id="what-i-learned">Some flagged pixels sit beside the bright centre. Checking the mask first gave me a better basis for choosing a display stretch that also showed the fainter field.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -66,9 +65,9 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="zooming-in-on-the-nucleus">Zooming in on the nucleus</h2>
+            <h2 id="zooming-in-on-the-nucleus">Nucleus crops</h2>
             <div class="project-stage-copy">
-              <p>I started with the full detector frame and made three progressively tighter crops. The wide view helped me find the bright patch, and the tightest crop let me look at its shape. In the original plot, each panel uses its own colour scaling. When I revisited the notebook, I used a shared stretch and marked flagged pixels so I could compare the views more directly.</p>
+              <p>I made three progressively tighter crops. The wide view located the bright patch, and the tightest crop showed its shape. In the original plot each panel had its own colour scaling. In the restored notebook I applied a shared stretch and marked flagged pixels, which made it easier to compare the same feature across crops.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -80,9 +79,9 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="finding-the-centre">Finding the centre</h2>
+            <h2 id="finding-the-centre">Position and radial profile</h2>
             <div class="project-stage-copy">
-              <p>I mapped the catalogued infrared position onto the detector before drawing the cutouts. The brightest usable pixel landed about 0.41 arcseconds from that position. Before any ridge filtering, the median count rate was 55.58 counts/s within five pixels of the centre and 4.15 counts/s in the ring from 30 to 60 pixels. Those values describe the usable pixels in each region. <a href="https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=NGC+6946" rel="noreferrer">SIMBAD position for NGC 6946</a>.</p>
+              <p>I mapped the catalogued infrared position onto the detector before drawing the cutouts. The brightest usable pixel was about 0.41 arcseconds from that position. Before filtering, the median count rate was 55.58 counts/s within five pixels of the centre and 4.15 counts/s in the ring from 30 to 60 pixels. Measuring the calibrated data in rings gave me a way to describe how quickly the light falls off. <a href="https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=NGC+6946" rel="noreferrer">SIMBAD position for NGC 6946</a>.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -94,9 +93,9 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="trying-two-ridge-filters">Trying two ridge filters</h2>
+            <h2 id="trying-two-ridge-filters">Sato and Meijering filters</h2>
             <div class="project-stage-copy">
-              <p>I tried Sato and Meijering on each crop to see how they would pick up narrow features. Both filters were set to look for dark ridges in these first plots. The shapes around the bright patch changed with the filter, which gave me a reason to check the results against the original image and try the bright-ridge setting as well.</p>
+              <p>I first ran Sato and Meijering on each crop with both set to detect dark ridges. The apparent shapes around the bright patch changed with the filter. I checked them against the calibrated image and compared both filters in bright-ridge mode as well.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -114,9 +113,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="comparing-the-filters">Comparing the filters</h2>
+            <h2 id="comparing-the-filters">Filter comparison</h2>
             <div class="project-stage-copy">
-              <p>When I revisited the notebook, I ran both filters in bright-ridge mode on the full frame, then took the same 96-pixel cutout from each result. Sato gives a broader response around the centre, while Meijering concentrates the strongest response more tightly. Within each row, I kept the scaling fixed across grayscale, hot, magma, viridis, and cividis so I could see what the palette alone changed.</p>
+              <p>I ran both filters on the full frame and took the same 96-pixel cutout from each result. Sato gives a broader response around the centre, while Meijering concentrates the strongest response more tightly. Within each row I used the same scaling across the five colour palettes so I could see what the palette alone changed.</p>
+              <p>The central brightening is already visible in the calibrated exposure. The filters helped me see how the apparent shape depends on the method, and the radial profile gave me a separate measure of the light distribution in that infrared band.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -125,14 +125,6 @@
                 </div>
                 <figcaption>The first row shows the F160W image. The next two show the Sato and Meijering responses. <a href="/images/projects/fireworks-filters.png">Open the full-size comparison</a>.</figcaption>
               </figure>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>I used to start by changing the colours until I could see more detail. This project taught me to check which pixels I could trust first. Some flagged pixels sit right beside the bright centre, so the quality mask changed how I read the image.</p>
-              <p>Using a catalogued position gave me a way to check where the bright patch actually was. Measuring the light in rings around that position let me describe how quickly it fell off. I could already see the central brightening in the calibrated image, and the filters helped me decide where to look more closely. That left me with a description of how the light was distributed in this infrared exposure.</p>
-              <p>Revisiting my original crops taught me how much a display choice can affect a visual comparison. I worked back through the notebook and held the stretch or the cutout fixed where I could. That made it easier to see which differences came from the image and which came from the way I displayed or filtered it.</p>
             </div>
           </section>
           <section class="project-stage">

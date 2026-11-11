@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Team build · Feb — Apr 2024</p>
-              <p>We built a four-bar mechanism that opens a door. We chose the lengths and pivots of the links around the motion we wanted the door to follow.</p>
-              <p>An educational team build focused on mechanism geometry and coordinated motion.</p>
+              <p id="why-use-a-linkage">We built a four-bar door opener to see how one turning input could produce a particular door path. We worked back from the desired motion to the pivot positions and link lengths. I later used CAD to study a two-lid version driven by one crank.</p>
             </div>
             <figure class="project-cover">
               <img alt="CAD view of two raised lids linked to one shared crank by a blue rod and a green rod." width="1600" height="1150" decoding="async" src="/images/projects/four-bar-twin-lid-cad.png">
@@ -45,17 +44,9 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-use-a-linkage">Why use a linkage to open a door?</h2>
+            <h2 id="laying-out-the-links">Link geometry</h2>
             <div class="project-stage-copy">
-              <p>We started with the path we wanted the door to follow. A four-bar linkage gives you a way to get that motion from a single turning input, but the result depends on where the pivots sit and how long each link is.</p>
-              <p>I was interested in what changes when the same links move through the whole opening cycle. A layout can look reasonable at the closed position and still put the door somewhere unexpected as it opens.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="laying-out-the-links">Laying out the links</h2>
-            <div class="project-stage-copy">
-              <p>We started with the way we wanted the door to move, then chose the link lengths and pivot positions. Those decisions set the kinematic limits of the mechanism and how far the door could open.</p>
-              <p>We treated the fixed pivots as the reference for the whole mechanism. The two positions in the schematic show how the moving links have to fit together in both poses. That helped me read the shape of the mechanism as a path through several positions.</p>
+              <p>We started with the fixed pivots and compared how the moving links fit together in the closed and open positions. The link lengths and pivot positions determine how far the door opens and what path it takes between those positions.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -67,17 +58,15 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="trying-the-assembled-mechanism">Trying the assembled mechanism</h2>
+            <h2 id="trying-the-assembled-mechanism">Build and motion check</h2>
             <div class="project-stage-copy">
-              <p>We made the links and pivots and assembled a working door opener. Checking its motion on the build made it easier to see how the positions of the pivots changed the path of the door and where it stopped.</p>
-              <p>Building it meant we could turn the input and watch the door follow that path. The useful part was being able to compare the motion with the layout and see which changes came from the pivot placement.</p>
+              <p id="what-i-learned">We made the links and pivots, assembled the opener, and turned the input to see where the door moved and stopped. Watching the full motion made the effect of pivot placement easier to see than it had been in the layout drawing.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="revisiting-the-layout-in-cad">Revisiting the layout in CAD</h2>
+            <h2 id="revisiting-the-layout-in-cad">Two-lid CAD study</h2>
             <div class="project-stage-copy">
-              <p>I later reconstructed a twin-lid design with two connecting rods on one crank. The CAD study compared how far each lid opened, how much input effort was required, and how sensitive the design was to dimensional errors.</p>
-              <p>Putting two lids on one input added another question. Each rod has its own geometry, so I could use the reconstruction to see how two outputs share one motion and how small dimensional changes affect that coordination.</p>
+              <p>I reconstructed a version with two connecting rods on one crank. Each rod has its own geometry, so I compared how far the lids opened, how much input effort the motion required, and how sensitive the result was to small changes in dimensions.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -86,12 +75,6 @@
                 </div>
                 <figcaption>The later CAD reconstruction at 75° opening. <a href="/images/projects/four-bar-twin-lid-cad.png">Full-size CAD view</a> · <a href="https://github.com/psmithul/four-bar-door" rel="noreferrer">Design files and report</a>.</figcaption>
               </figure>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>I learned to judge a linkage over its full travel. Building the opener let me see the path directly, and reconstructing a different layout in CAD helped me connect that observation to link length, pivot location, and input effort.</p>
             </div>
           </section>
         </article>

@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Working electronic model · Sep 2019 — Jan 2020</p>
-              <p>I built a small Arduino smart-home model, wired its sensors, and tested it with a solar cell as a second power source.</p>
-              <p>A working model with integrated sensors and a solar-power option.</p>
+              <p id="why-build-a-model-house">I built a small Arduino model house to see how a sensor reading becomes an action in an automated system. I later added a photovoltaic cell as a second power source for the same model.</p>
             </div>
             <figure class="project-cover">
               <img alt="Block diagram of the solar cell and sensor inputs connected to the Arduino-controlled model." width="1280" height="660" decoding="async" src="/images/projects/process-solar-home.webp">
@@ -44,25 +43,16 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-build-a-model-house">Why build a model house?</h2>
+            <h2 id="getting-the-sensors-to-work-together">Wiring and control logic</h2>
             <div class="project-stage-copy">
-              <p>I wanted to see how a small automated system connects what it senses to what it does. A model house gave me a manageable way to put sensors, controller logic, and power in the same build.</p>
-              <p>I also wanted to understand what changes when the same circuit gets its power from a different source. That is where the photovoltaic cell came into the project.</p>
+              <p id="what-i-learned">I wired the sensors into the Arduino and wrote the logic that connects the inputs to the model’s responses. When the expected action did not happen, I traced the signal from the sensor to the controller and then to the output. Working through that path helped me locate whether the issue was in the connection or the code.</p>
+              <p>Once the inputs and outputs worked together, I could test the program by watching how the model responded to a sensor input.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="getting-the-sensors-to-work-together">Getting the sensors to work together</h2>
+            <h2 id="trying-solar-power">Solar supply</h2>
             <div class="project-stage-copy">
-              <p>I wired the sensors into an Arduino and wrote the logic for the model’s automated functions. I debugged the connections and code until the inputs and outputs worked together.</p>
-              <p>I worked through the signal path from each sensor to the Arduino and then to the model’s response. Keeping the connections and the program in mind together helped me narrow down which part of the path was responsible when a response did not appear.</p>
-              <p>Once the inputs and outputs worked together, I could check a control decision by watching the model respond to a sensor input.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="trying-solar-power">Trying solar power</h2>
-            <div class="project-stage-copy">
-              <p>I added a photovoltaic cell as a second way to power the model and tested it on that supply. It was an early chance for me to work through the power, wiring, and control of one system.</p>
-              <p>I kept the solar cell as a second supply option for the same model. Testing it with the sensors and controller connected brought the power source into the same system I was already debugging.</p>
+              <p>I connected the photovoltaic cell as a second supply and tested the model with the sensors and controller still connected. Changing the supply on a working circuit helped me see how power, wiring, and control come together in the same system.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -71,13 +61,6 @@
                 </div>
                 <figcaption>Design schematic showing the added solar supply alongside the sensor and control system.</figcaption>
               </figure>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>The build taught me to look at power, wiring, and software together. Debugging the Arduino by tracing what entered and left each part made it easier to tell whether I was dealing with a connection or a control decision.</p>
-              <p>Trying the second supply helped me think about a sensor and controller as a physical circuit that needs power as well as a program that needs to run.</p>
             </div>
           </section>
         </article>
