@@ -5,89 +5,53 @@ import { useCallback, useEffect, useState } from 'react';
 import { ArrowUpRight, Download, Plus, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { deskRequest } from '@/lib/desk-request';
 import type { Entry } from '@/lib/journal-model';
+import { sitePages } from '@/lib/site-paths';
 
-export async function deskRequest<T>(
-  url: string,
-  method = 'GET',
-  body?: unknown,
-): Promise<T> {
-  const options: RequestInit = { method, cache: 'no-store' };
-  if (body && method !== 'GET') {
-    options.headers = { 'Content-Type': 'application/json' };
-    options.body = JSON.stringify(body);
-  }
-  const response = await fetch(url, options);
-  const result = (await response.json()) as T & { error?: string };
-  if (!response.ok)
-    throw new Error(result.error || 'The request failed. Please try again.');
-  return result;
-}
-
-export function WritingDesk({ basePath = '' }: { basePath?: string }) {
+export function WritingDesk() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
-  const load = useCallback(async () => {
-    try {
-      const data = await deskRequest<{ entries: Entry[] }>(
-        `${basePath}/api/journal`,
-        'POST',
-        { action: 'initialize' },
-      );
-      setEntries(data.entries);
-      setError('');
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : 'Could not load your posts.',
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [basePath]);
-  useEffect(() => {
-    // Network completion updates state; this effect does not derive local state.
-    let active = true;
-    deskRequest<{ entries: Entry[] }>(`${basePath}/api/journal`, 'POST', {
-      action: 'initialize',
-    })
+  const load = useCallback((signal?: AbortSignal) => {
+    void deskRequest<{ entries: Entry[] }>(
+      '/api/journal',
+      'POST',
+      { action: 'initialize' },
+      signal,
+    )
       .then((data) => {
-        if (active) {
-          setEntries(data.entries);
-          setError('');
-        }
+        if (signal?.aborted) return;
+        setEntries(data.entries);
+        setError('');
       })
       .catch((error: unknown) => {
-        if (active)
-          setError(
-            error instanceof Error
-              ? error.message
-              : 'Could not load your posts.',
-          );
+        if (signal?.aborted) return;
+        setError(
+          error instanceof Error ? error.message : 'Could not load your posts.',
+        );
       })
       .finally(() => {
-        if (active) setLoading(false);
+        if (!signal?.aborted) setLoading(false);
       });
-    return () => {
-      active = false;
-    };
-  }, [basePath]);
+  }, []);
+  useEffect(() => {
+    const controller = new AbortController();
+    load(controller.signal);
+    return () => controller.abort();
+  }, [load]);
 
   async function newEntry() {
     setBusy(true);
     setError('');
     try {
-      const data = await deskRequest<{ entry: Entry }>(
-        `${basePath}/api/journal`,
-        'POST',
-        {
-          action: 'create',
-        },
-      );
-      window.location.assign(`${basePath}/write/${data.entry.id}`);
+      const data = await deskRequest<{ entry: Entry }>('/api/journal', 'POST', {
+        action: 'create',
+      });
+      window.location.assign(`/write/${data.entry.id}`);
     } catch (error) {
       setError(
         error instanceof Error ? error.message : 'Could not create a draft.',
@@ -179,7 +143,7 @@ export function WritingDesk({ basePath = '' }: { basePath?: string }) {
       {error && (
         <div className="desk-error" role="alert">
           <p>{error}</p>
-          <Button className="desk-button" onClick={load}>
+          <Button className="desk-button" onClick={() => load()}>
             Try again
           </Button>
         </div>
@@ -191,7 +155,7 @@ export function WritingDesk({ basePath = '' }: { basePath?: string }) {
           {visible.map((entry) => (
             <a
               className="desk-entry"
-              href={`${basePath}/write/${entry.id}`}
+              href={`/write/${entry.id}`}
               key={entry.id}
             >
               <div>
@@ -237,8 +201,8 @@ export function WritingDesk({ basePath = '' }: { basePath?: string }) {
         </div>
       )}
       <footer className="desk-bottom">
-        <Link className="text-link" href={`${basePath}/blog`}>
-          Visit the journal <ArrowUpRight size={16} />
+        <Link className="text-link" href={sitePages.buildLog}>
+          Visit the Build Log <ArrowUpRight size={16} />
         </Link>
         <Button
           className="desk-button"

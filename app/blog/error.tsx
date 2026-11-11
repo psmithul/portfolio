@@ -8,7 +8,7 @@ export default function JournalError({
 }) {
   return (
     <main id="main" className="academic-content">
-      <h1>The journal couldn’t load.</h1>
+      <h1>The Build Log couldn’t load.</h1>
       <p>Please try again in a moment.</p>
       <button onClick={reset}>Try again</button>
       <p>

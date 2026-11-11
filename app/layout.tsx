@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { SiteChrome } from '@/components/academic/chrome';
 import localFont from 'next/font/local';
 import { profile } from '@/content/profile';
+import { siteOrigin } from '@/lib/site-paths';
 
 import 'katex/dist/katex.min.css';
 import './academic.css';
@@ -35,7 +36,7 @@ const handwrittenFont = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://psmithul.com'),
+  metadataBase: new URL(siteOrigin),
   title: {
     default: `${profile.fullName} — Projects & Notes`,
     template: `%s — ${profile.fullName}`,
