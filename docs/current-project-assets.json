@@ -306,30 +306,6 @@
       "role": "three-by-five comparison of the calibrated image and Sato and Meijering responses"
     },
     {
-      "path": "public/images/projects/alive-workspace.jpg",
-      "source": "Mac browser capture of psmithul/alive-workspace at 5ec4cbc8 with local drawing-loop repairs",
-      "width": 1280,
-      "height": 800,
-      "sha256": "4b9bd5acfb3184ecb1293a33ca7f415af0087c9232ef9d321f1b6ad620cf6f7f",
-      "role": "p5.js animation preview"
-    },
-    {
-      "path": "public/images/projects/bondos.jpg",
-      "source": "Mac browser capture of https://bondos.vercel.app/",
-      "width": 1280,
-      "height": 720,
-      "sha256": "85fe4a88a67792882f1149f7bb6d86abf34131effa4e360767f8eb0692360770",
-      "role": "public sign-in screen"
-    },
-    {
-      "path": "public/images/projects/iste-industry-analysis.jpg",
-      "source": "Mac browser capture of https://isteproject.vercel.app/",
-      "width": 1272,
-      "height": 716,
-      "sha256": "abdbebba35db70834fdcd536d37a9bd81951a14e9377090b0772aa5260a5b0db",
-      "role": "public analysis dashboard"
-    },
-    {
       "path": "public/images/projects/iste-project-brochure.jpg",
       "source": "Mac browser capture of https://club-project-showcase.vercel.app/",
       "width": 1265,
@@ -338,44 +314,12 @@
       "role": "public project brochure"
     },
     {
-      "path": "public/images/projects/nh66-fund-website.jpg",
-      "source": "Mac browser capture of https://nh66.vercel.app/",
-      "width": 1272,
-      "height": 716,
-      "sha256": "1485cfc07eb66f3c0e8e26b328a2e9f0b2eddcb7ba2c9a5718b936f38f6e07ec",
-      "role": "public recruitment page"
-    },
-    {
       "path": "public/images/projects/portfolio-website.jpg",
       "source": "Mac browser capture of https://psmithul.com/",
       "width": 1265,
       "height": 712,
       "sha256": "3468d07039852435e53b1f29271ce7dc4b4a5d2dade223478b6740e6ddbde7ce",
       "role": "portfolio About page"
-    },
-    {
-      "path": "public/images/projects/thinkify-intake.jpg",
-      "source": "Mac browser capture of https://psmithul-github-io.vercel.app/",
-      "width": 1280,
-      "height": 720,
-      "sha256": "51849d95d773632d376c2f0fac0eae9b1af835e1275d02412d3e052fe2a1a705",
-      "role": "company or developer selection screen"
-    },
-    {
-      "path": "public/images/projects/thinkify-quiz.jpg",
-      "source": "Mac browser capture of https://thinkify-quiz.vercel.app/",
-      "width": 1272,
-      "height": 716,
-      "sha256": "c51c41d295e1544a7131b18dada3d91488e44e4dd965310b687eb39f9cbf7f73",
-      "role": "public quiz and course landing page"
-    },
-    {
-      "path": "public/images/projects/thinkify-website.jpg",
-      "source": "Mac browser capture of https://thinkify-2.vercel.app/",
-      "width": 1265,
-      "height": 712,
-      "sha256": "6ba36d908ab695f98facedc131f4c9619fcfdc865aedf715e0f9e8db9b2031f0",
-      "role": "public hiring website"
     },
     {
       "path": "public/images/projects/four-bar-twin-lid-cad.png",
@@ -416,6 +360,38 @@
       "height": 1410,
       "sha256": "49b4d1049d397be5a27a476890270c07acd1e0681aa1a732f56e66e8d537047a",
       "role": "first ANSYS beam mode at the 2 m verification span"
+    },
+    {
+      "path": "public/images/projects/dayfold-night-village.webp",
+      "source": "Dayfold project asset, public/almanac/night-village.webp",
+      "width": 1672,
+      "height": 941,
+      "sha256": "1cbe59df453bed34101bcaed059f96ea19da72b480c614ac8fca4095816e544b",
+      "role": "original night-mode illustration from Dayfold"
+    },
+    {
+      "path": "public/images/projects/mikaverse-archive.jpg",
+      "source": "Mikaverse 0.8.1 capture, archive-mural-in-game-0.8.1.png",
+      "width": 1440,
+      "height": 810,
+      "sha256": "c1cc5ccdc52c28b63871d57141309c2a7d71dc14fab6ab7dd646c669ff7f468e",
+      "role": "in-game screenshot of the archive mural"
+    },
+    {
+      "path": "public/images/projects/hermes-memory-workflow.png",
+      "source": "Portfolio diagram based on the Hermes memory and profile-cleanup records",
+      "width": 720,
+      "height": 405,
+      "sha256": "4a21297a0fe56df1bb34a1e2bdba87fc77219ec68c7b91e64199480fcad27cec",
+      "role": "diagram of daily and living notes, specialist handoffs, and the recorded cleanup count"
+    },
+    {
+      "path": "public/images/projects/briskfit-app-store.jpg",
+      "source": "Napses Technologies screenshots from https://apps.apple.com/in/app/brisk-fit/id6762797940",
+      "width": 720,
+      "height": 405,
+      "sha256": "d89f78bc28ea251883d704e778e4bf51a0e351bf3ea970ec841cae6672eba893",
+      "role": "App Store previews of the daily plan, activity tracking, and progress"
     }
   ]
 }
