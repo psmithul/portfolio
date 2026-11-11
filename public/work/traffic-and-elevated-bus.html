@@ -44,15 +44,24 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
+            <h2 id="why-build-the-two-models">Where the two models started</h2>
+            <div class="project-stage-copy">
+              <p>I was interested in how a model can move through a visible sequence using a circuit I had wired myself. At a traffic junction, I could see the order in which the lights changed. The bus model gave me another sequence to build and observe.</p>
+              <p>I made the two models with separate control circuits. That let me work through the order of events in each model and trace its wiring independently.</p>
+            </div>
+          </section>
+          <section class="project-stage">
             <h2 id="wiring-the-traffic-light-sequence">Wiring the traffic-light sequence</h2>
             <div class="project-stage-copy">
               <p>I built a model junction and used hand-wired logic gates to control the order of the signals. I traced the wiring until the signals followed the intended sequence.</p>
+              <p>I checked the output at each point in the sequence against the light that was supposed to be on. Because the result was visible on the model, a wrong output gave me a concrete place to start tracing a gate or connection.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="building-a-separate-bus-circuit">Building a separate bus circuit</h2>
             <div class="project-stage-copy">
               <p>The transit elevated-bus model had its own control circuit. I worked through wiring and logic faults on that build too, checking that the model could repeat its sequence.</p>
+              <p>For the bus, I used its own wiring and repeated the sequence after working through the faults. The two builds gave me practice translating an intended order into a circuit and checking it against what the model actually did.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -61,6 +70,13 @@
                 </div>
                 <figcaption>Design schematic showing the two independent control circuits and what each one sequences.</figcaption>
               </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-i-learned">What I learned</h2>
+            <div class="project-stage-copy">
+              <p>I learned to debug a sequence one transition at a time. Watching where it first went wrong gave me a smaller set of connections to inspect, and checking that it repeated gave me a better sense of whether the fix held up.</p>
+              <p>Working through the two circuits also helped me distinguish the intended behaviour, the logic that represents it, and the wiring that makes that logic run.</p>
             </div>
           </section>
         </article>

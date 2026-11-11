@@ -45,15 +45,25 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
+            <h2 id="why-solve-it-two-ways">Why solve the same structure two ways?</h2>
+            <div class="project-stage-copy">
+              <p>For our finite element coursework, we wanted to understand where a computed deflection or mode shape comes from. We assembled the systems ourselves in MATLAB and built matching cases in ANSYS so we could follow the assumptions from the element equations to the plotted result.</p>
+              <p>The static beam, free-vibration beam, and plane frame gave us three views of the method. One shows how a load bends a structure, one shows how it moves freely, and one shows how elements that meet at different angles act together.</p>
+            </div>
+          </section>
+          <section class="project-stage">
             <h2 id="assembling-the-models">Assembling the models</h2>
             <div class="project-stage-copy">
               <p>We assembled the beam and frame systems from element matrices in MATLAB. We compared displacements and checked how the answers changed as we refined the mesh in ANSYS.</p>
+              <p>We mapped each beam or frame element’s degrees of freedom into the global system, then applied the supports and loads. For the frame, the member equations start in each member’s own axes, so we transformed them before assembly. Matching the load and support definitions was necessary before the two solutions could be compared.</p>
+              <p>For the static cases, we checked deflections as the element size changed. Looking at a series of mesh sizes showed how the answer settled and gave us more information than agreement at one mesh size.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="checking-the-vibration-modes">Checking the vibration modes</h2>
             <div class="project-stage-copy">
               <p>We kept the beam span as a parameter in the modal calculation, then picked a 2 m span to compare the calculated modes with the ANSYS model.</p>
+              <p>For free vibration, we used the stiffness and mass matrices to solve for the natural frequencies and shapes. Keeping span as a parameter made the calculation reusable across beam lengths. The 2 m case gave us a fixed comparison in which we could examine both the numerical frequency and the shape of the first mode.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -62,6 +72,13 @@
                 </div>
                 <figcaption>First computed mode at 81.17 Hz for the 2 m check case. Figure 20 from the team report.</figcaption>
               </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-i-learned">What I learned</h2>
+            <div class="project-stage-copy">
+              <p>Assembling the equations by hand in MATLAB made it easier for me to spot how a support or a degree-of-freedom mapping changes the result. Comparing with ANSYS showed me how to check a model through the assumptions it shares with another calculation.</p>
+              <p>The convergence plots and the mode shape answered different questions. The plots showed how discretization affected the answer, and the mode shape helped me check that I was comparing the same physical motion.</p>
             </div>
           </section>
         </article>
