@@ -55,6 +55,13 @@
               <p>In MATLAB, we mapped the element degrees of freedom into the global system and then applied the supports and loads. The plane-frame members start in their own axes, so we transformed them into global coordinates before assembly.</p>
               <p id="what-i-learned">For the static cases, we compared displacements as we refined the mesh. The convergence curves showed how the discretisation affected the result. Assembling the equations ourselves made it easier to trace an unexpected displacement back to a support condition or a degree-of-freedom mapping.</p>
               <p>For the static beam in ANSYS, the linear-element model gave a centre displacement of about −20.25 mm with two elements and −33.06 mm with 64 elements. The algebraic reference was −33.08 mm. That series showed how strongly the coarse mesh affected this particular result.</p>
+              <p>We kept the support and loading definitions the same while changing mesh density. That made the displacement comparison easier to interpret: if the centre result moved closer to the reference as the mesh was refined, we could tie the change to the discretisation in that model.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/fem-mesh-convergence.jpg" alt="Two charts show how beam and frame displacement errors change as the mesh is refined." width="2788" height="2022" loading="lazy" decoding="async">
+                <figcaption>Displacement convergence from the team report, plotted in MATLAB from the ANSYS exports. <a href="/images/projects/fem-mesh-convergence.jpg">Full-size view</a>.</figcaption>
+              </figure>
             </div>
           </section>
           <section class="project-stage">

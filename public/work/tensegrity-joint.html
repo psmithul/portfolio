@@ -55,6 +55,7 @@
             <div class="project-stage-copy">
               <p>I started with two Y-frames and a floating tristar, drawing on a tensegrity leg study by Mortensen and colleagues. Each tristar tip connects to all four frame tips. The tristar arms are 120° apart, and the four frame tips sit on the intended flexion axis. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
               <p id="checking-the-geometry-before-a-build">I checked the attachment points in the STEP assembly against the drawing at 60° of knee flexion. Moving an anchor changes the line of pull through several tendons, so it can redistribute load even when the external force stays the same.</p>
+              <p>I used the 60° pose as a common reference for the STEP assembly and the force model. That matters because moving an anchor changes the direction of more than one tendon. Comparing the same pose keeps a change in the load distribution tied to the attachment geometry I was studying.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -76,6 +77,13 @@
             <div class="project-stage-copy">
               <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load. The model gave tensions from <strong>0.50 to 5.69 kN per support span</strong>.</p>
               <p>I compared the lowest and highest tensions when changing the preload. The lowest shows which span is closest to slack. The highest shows where the connection carries the largest load. Increasing preload helps keep the lightest span taut and also raises the load on the connections before an external force is applied.</p>
+              <p>The two frames did not share the load equally at every tip in that case. At P1, the model gave about 5.69 kN in each Frame A span and 0.50 kN in each Frame B span. That pair shows why I checked individual spans when choosing the initial tension. One connection is heavily loaded at the same tip where another span is closest to slack.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-static-span-loads.png" alt="Grouped bars show calculated tendon tension per span at the three tristar tips. P1 has 5.69 kN in Frame A and 0.50 kN in Frame B." width="1296" height="738" loading="lazy" decoding="async">
+                <figcaption>Calculated tensions for the static sizing case in the preliminary design review. Each bar represents one of two symmetric spans. <a href="/images/projects/tensegrity-static-span-loads.png">Full-size view</a>.</figcaption>
+              </figure>
             </div>
           </section>
         </article>
