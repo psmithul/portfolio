@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
-import { HomeSectionLink } from '@/components/academic/home-section-link';
 import { getPublicPost, getPublicPosts } from '@/lib/journal-store';
 import { dateLabel } from '@/lib/journal-model';
 import { nextJournalPost } from '@/lib/journal-highlights';
+import { postPath, sitePages } from '@/lib/site-paths';
 
 type Props = { params: Promise<{ slug: string }> };
 export const dynamic = 'force-dynamic';
@@ -16,12 +16,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? {
         title: `${post.title} — Mika’s Life`,
         description: post.description,
-        alternates: { canonical: `/blog/${post.slug}` },
+        alternates: { canonical: postPath(post.slug) },
         openGraph: {
           type: 'article',
           title: post.title,
           description: post.description,
-          url: `/blog/${post.slug}`,
+          url: postPath(post.slug),
           publishedTime: post.date,
           authors: ['Mithul Sourav'],
         },
@@ -35,16 +35,16 @@ export default async function Article({ params }: Props) {
   const next = nextJournalPost(await getPublicPosts(), slug);
   return (
     <main id="main" className="academic-content academic-case">
-      <HomeSectionLink className="academic-back" section="journal">
+      <Link className="academic-back" href={sitePages.buildLog}>
         ← All notes · <span className="academic-handwritten">Mika’s Life</span>
-      </HomeSectionLink>
+      </Link>
       <header>
         <p className="academic-kicker">{post.tags.join(' / ')}</p>
         <h1>{post.title}</h1>
         <p className="academic-deck">{post.description}</p>
         <div className="academic-article-byline">
           <span>
-            By <HomeSectionLink section="about">Mithul Sourav</HomeSectionLink>
+            By <Link href={sitePages.about}>Mithul Sourav</Link>
           </span>
           <time dateTime={post.date}>{dateLabel(post.date)}</time>
           <span>{post.readingMinutes} min read</span>
@@ -55,14 +55,12 @@ export default async function Article({ params }: Props) {
       <footer className="academic-next">
         {next && (
           <>
-            <p>Next journal entry</p>
-            <Link href={`/blog/${next.slug}`}>{next.title} →</Link>
+            <p>Next post</p>
+            <Link href={postPath(next.slug)}>{next.title} →</Link>
           </>
         )}
         <div className="academic-inline-links">
-          <HomeSectionLink section="journal">
-            All journal entries
-          </HomeSectionLink>
+          <Link href={sitePages.buildLog}>All updates</Link>
         </div>
       </footer>
     </main>

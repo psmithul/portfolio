@@ -6,7 +6,7 @@ import {
   readingRehypePlugins,
   rehypeProjectStages,
 } from '@/lib/reading';
-import { siteHref } from '@/lib/site-paths';
+import type { projectFigureDimensions } from '@/content/project-images';
 
 const imageDimensions: Record<string, { width: number; height: number }> = {
   '/images/projects/gn4rly-2-5-assembly.jpg': { width: 768, height: 432 },
@@ -27,12 +27,10 @@ const imageDimensions: Record<string, { width: number; height: number }> = {
 
 export function ArticleBody({
   body,
-  basePath = '',
   projectFigures,
 }: {
   body: string;
-  basePath?: string;
-  projectFigures?: typeof imageDimensions;
+  projectFigures?: typeof projectFigureDimensions;
 }) {
   return (
     <article className="article-prose">
@@ -64,7 +62,7 @@ export function ArticleBody({
           },
           a: ({ href, children }) => (
             <a
-              href={siteHref(href, basePath)}
+              href={href}
               rel={href?.startsWith('http') ? 'noreferrer' : undefined}
             >
               {children}

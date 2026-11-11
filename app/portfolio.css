@@ -1,4 +1,4 @@
-.academic-home {
+.portfolio-page {
   --portfolio-column: clamp(143px, 18vw, 166px);
   --portfolio-gutter: clamp(22px, 4vw, 38px);
   width: var(--academic-shell);
@@ -12,7 +12,7 @@
   gap: 14px var(--portfolio-gutter);
   scroll-margin-top: var(--academic-anchor-offset);
 }
-.academic-home .portfolio-affiliation {
+.portfolio-page .portfolio-affiliation {
   color: var(--academic-muted);
   font-size: clamp(1.25rem, 2.8vw, 1.5rem);
   margin: 0;
@@ -32,13 +32,13 @@
 .portfolio-intro-copy {
   grid-area: intro;
 }
-.academic-home .academic-lead {
+.portfolio-page .academic-lead {
   max-width: 66ch;
   margin-bottom: 14px;
   font-size: clamp(1.125rem, 1.6vw, 1.25rem);
   line-height: 1.55;
 }
-.academic-home .academic-lead:last-child {
+.portfolio-page .academic-lead:last-child {
   margin-bottom: 0;
 }
 .portfolio-actions {
@@ -48,22 +48,20 @@
   gap: 4px 20px;
   font-size: 14px;
 }
-.portfolio-section {
-  position: relative;
+:is(.portfolio-section, .portfolio-index) {
   display: grid;
   grid-template-columns: var(--portfolio-column) minmax(0, 1fr);
   gap: 10px var(--portfolio-gutter);
+  align-items: start;
+}
+.portfolio-section {
   margin-top: 34px;
   padding-top: 24px;
   border-top: 1px solid var(--academic-line);
   scroll-margin-top: var(--academic-anchor-offset);
 }
-.section-anchor {
-  position: absolute;
-  inset-block-start: 0;
-  scroll-margin-top: var(--academic-anchor-offset);
-}
-.academic-home .portfolio-section h2 {
+.portfolio-page .portfolio-section h2,
+.academic-site .portfolio-index h1 {
   margin: 0;
   font-size: clamp(1.25rem, 2.7vw, 1.45rem);
   font-weight: 550;
@@ -85,15 +83,15 @@
   border-top: 1px solid var(--academic-line);
   padding-top: 18px;
 }
-.academic-home :is(.portfolio-project-link, .academic-note-list a) {
+.portfolio-page :is(.portfolio-project-link, .academic-note-list a) {
   display: block;
   color: var(--academic-ink);
 }
-.academic-home :is(.portfolio-project-link, .academic-note-list a):hover {
+.portfolio-page :is(.portfolio-project-link, .academic-note-list a):hover {
   text-decoration: none;
 }
-.portfolio-project-link:hover h3 > span:first-child,
-.academic-note-list a:hover h3 {
+.portfolio-project-link:hover h2 > span:first-child,
+.academic-note-list a:hover h2 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -109,7 +107,7 @@
   object-position: left center;
 }
 .project-figure figcaption,
-.academic-home :is(.project-labels, .academic-note-meta) {
+.portfolio-page :is(.project-labels, .academic-note-meta) {
   color: var(--academic-muted);
   font-size: 13px;
   line-height: 1.4;
@@ -117,20 +115,19 @@
 .project-figure figcaption {
   margin-top: 4px;
 }
-.academic-home
-  :is(.project-copy, .academic-note-list, .portfolio-activity-layout)
-  h3 {
+.portfolio-page :is(.project-copy, .academic-note-list) h2,
+.portfolio-page .portfolio-activity-layout h3 {
   margin: 0 0 4px;
   font-size: 17px;
   font-weight: 600;
   line-height: 1.3;
 }
-.academic-home .project-summary {
+.portfolio-page .project-summary {
   margin-bottom: 6px;
   font-size: 15px;
   line-height: 1.5;
 }
-.academic-home .project-labels {
+.portfolio-page .project-labels {
   margin: 0;
 }
 .portfolio-link-arrow {
@@ -151,16 +148,16 @@
 .academic-note-list li:last-child {
   padding-bottom: 0;
 }
-.academic-home .academic-note-list a {
+.portfolio-page .academic-note-list a {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
 }
-.academic-home .academic-note-list p {
+.portfolio-page .academic-note-list p {
   margin: 0;
 }
-.academic-home .academic-note-list .academic-note-meta {
+.portfolio-page .academic-note-list .academic-note-meta {
   margin-bottom: 4px;
 }
 .portfolio-activity-layout .academic-activity-group + .academic-activity-group {
@@ -219,8 +216,10 @@
   }
 }
 @media (max-width: 620px) {
-  .portfolio-section {
+  :is(.portfolio-section, .portfolio-index) {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .portfolio-section {
     margin-top: 28px;
     padding-top: 20px;
   }

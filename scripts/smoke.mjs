@@ -8,6 +8,8 @@ if (!base) {
 }
 const currentCases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
+  ['/projects', 200, 'Selected projects', 'Projects'],
+  ['/build-log', 200, 'Recent Updates', 'Build Log'],
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
   ['/blog/leave-room-for-the-unfinished', 404, 'here yet.', ''],
@@ -50,12 +52,6 @@ const currentCases = [
     200,
     'elastomer-isolated modular tray',
     'UAV Vibration',
-  ],
-  [
-    '/work/neoleg-knee-mechanism',
-    200,
-    'passive spring-assisted',
-    'Actuated Knee-Assistance',
   ],
   [
     '/work/off-road-leaf-robot',
@@ -107,10 +103,27 @@ for (const [path, status, content, title] of cases) {
     /src="\/images\/projects\/(?:photos\/|illustration-|reaction-wheel-reference-cad|tensegrity-(?:joint|leg)-cad)/,
     path + ': legacy placeholder images are hidden',
   );
+  if (status === 200) {
+    const nav = body.match(
+      /<nav[^>]+aria-label="Main navigation"[^>]*>([\s\S]*?)<\/nav>/,
+    )?.[1];
+    assert.ok(nav, path + ': main navigation');
+    assert.deepEqual(
+      [...nav.matchAll(/<a[^>]+href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map(
+        ([, href, label]) => [href, label],
+      ),
+      [
+        ['/', 'About'],
+        ['/projects', 'Projects'],
+        ['/build-log', 'Build Log'],
+      ],
+      path + ': three page links in order',
+    );
+  }
   if (path === '/') {
     assert.match(
       body,
-      /class="portfolio-hero" id="about"[\s\S]*id="research-heading"[\s\S]*id="journal-heading"[\s\S]*id="activities-heading"/,
+      /class="portfolio-hero" id="about"[\s\S]*id="activities-heading"/,
     );
     assert.doesNotMatch(
       body,
@@ -121,13 +134,24 @@ for (const [path, status, content, title] of cases) {
       body,
       /src="\/images\/mithul-profile-illustration-cutout\.webp"/,
     );
-    assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
     assert.match(body, /Vayu Aerospace.*ISTE/s);
     assert.match(body, /© 2024–2026 Mithul Sourav/);
-    assert.match(body, /href="\/blog\/gpt-5-6-sol-and-what-i-want-to-build"/);
-    assert.match(body, /href="\/work\/fireworks-galaxy"/);
-    assert.doesNotMatch(body, /recent updates|nitk-battle-bots-event\.jpeg/i);
+    assert.doesNotMatch(
+      body,
+      /class="project-list"|class="academic-note-list"/,
+    );
     assert.doesNotMatch(body, /href="\/(?:about|work|blog|activities)"/);
+  }
+  if (path === '/projects') {
+    assert.match(body, /<h1>Selected projects<\/h1>/);
+    assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
+    assert.match(body, /href="\/work\/fireworks-galaxy"/);
+    assert.doesNotMatch(body, /nitk-battle-bots-event\.jpeg/i);
+  }
+  if (path === '/build-log') {
+    assert.match(body, /<h1>Recent Updates<\/h1>/);
+    assert.match(body, /href="\/blog\/gpt-5-6-sol-and-what-i-want-to-build"/);
+    assert.doesNotMatch(body, /class="project-list"/);
   }
   if (title) {
     const titles = [...body.matchAll(/<title>([\s\S]*?)<\/title>/gi)];
@@ -170,9 +194,7 @@ for (const [path, status, content, title] of cases) {
     }
   }
   if (status === 200 && !path.includes('/write')) {
-    const canonicalPath = path.endsWith('/work/neoleg-knee-mechanism')
-      ? path.replace('/neoleg-knee-mechanism', '/kneeassist')
-      : path;
+    const canonicalPath = path;
     assert.ok(
       body.includes(
         `<link rel="canonical" href="https://psmithul.com${canonicalPath === '/' ? '' : canonicalPath}"`,
@@ -192,20 +214,29 @@ for (const [path, status, content, title] of cases) {
   console.log('PASS ' + status + ' ' + path);
 }
 const sectionRedirects = [
-  ['/about', '#about'],
-  ['/work', '#research'],
-  ['/blog', '#journal'],
-  ['/activities', '#activities'],
+  ['/about', '/#about'],
+  ['/work', '/projects'],
+  ['/blog', '/build-log'],
+  ['/activities', '/#activities'],
 ];
-for (const [path, hash] of sectionRedirects) {
+for (const [path, destination] of sectionRedirects) {
   const response = await fetch(new URL(path, base), { redirect: 'manual' });
   assert.equal(response.status, 308, path);
   const location = new URL(response.headers.get('location'), base);
-  assert.equal(location.pathname, '/');
-  assert.equal(location.hash, hash);
+  assert.equal(location.pathname + location.hash, destination);
   await response.body?.cancel();
 }
-console.log('PASS former index routes redirect to homepage sections');
+console.log('PASS former index routes redirect to the current pages');
+const kneeAlias = await fetch(new URL('/work/neoleg-knee-mechanism', base), {
+  redirect: 'manual',
+});
+assert.equal(kneeAlias.status, 308);
+assert.equal(
+  new URL(kneeAlias.headers.get('location'), base).pathname,
+  '/work/kneeassist',
+);
+await kneeAlias.body?.cancel();
+console.log('PASS former NeoLeg route redirects to KneeAssist');
 for (const path of [
   '/',
   '/about',
@@ -236,17 +267,14 @@ for (const path of imagePaths) {
 console.log(`PASS ${imagePaths.size} referenced portfolio images`);
 const sitemap = await (await fetch(new URL('/sitemap.xml', base))).text();
 assert.doesNotMatch(sitemap, /https:\/\/psmithul\.com\/v1/);
+assert.doesNotMatch(sitemap, /neoleg-knee-mechanism/);
 for (const [path] of sectionRedirects)
   assert.ok(
     !sitemap.includes(`https://psmithul.com${path}</loc>`),
     path + ': retired index',
   );
 for (const [path, status] of cases) {
-  if (
-    status === 200 &&
-    path !== '/write' &&
-    path !== '/work/neoleg-knee-mechanism'
-  )
+  if (status === 200 && path !== '/write')
     assert.ok(
       sitemap.includes(`https://psmithul.com${path}</loc>`),
       path + ': indexed',

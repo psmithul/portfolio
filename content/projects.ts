@@ -1,5 +1,5 @@
-import { projectImages } from '@/content/project-images';
-import type { ModelKind } from '@/lib/engineering-scene';
+import { projectImages, type ProjectImage } from '@/content/project-images';
+import { selectedProjectSlugs } from '@/content/academic';
 export type Project = {
   slug: string;
   number: string;
@@ -17,37 +17,10 @@ export type Project = {
   outcome: string;
   scope: string;
   evidence: string[];
-  image?: {
-    kind?: 'documentation' | 'illustration' | 'stock' | 'reference';
-    label?: string;
-    referenceLabel?: string;
-    licenseUrl?: string;
-    fit?: 'cover' | 'contain';
-    src: string;
-    alt: string;
-    width: number;
-    height: number;
-    caption: string;
-    referenceUrl?: string;
-    thumbnail?: {
-      src: string;
-      alt: string;
-      width: number;
-      height: number;
-      label: string;
-    };
-  };
-  model?:
-    | ModelKind
-    | 'navigation'
-    | 'linkage'
-    | 'electronics'
-    | 'collection'
-    | 'wallet';
-  visualLabel?: string;
+  image?: ProjectImage;
 };
 
-export const battleBots: Project = {
+const battleBots: Project = {
   slug: 'nitk-battle-bots',
   number: '12',
   title: 'Combat Robot Development',
@@ -132,9 +105,6 @@ export const projects: Project[] = [
     period: 'Jun — Jul 2026',
     status: 'Completed',
     context: 'Product internship · Vayu Aerospace Pvt. Ltd., Bengaluru',
-    model: 'electronics',
-    visualLabel: 'FLIGHT CONTROLLER / MOUNTING STUDY',
-    image: projectImages['uav-vibration-integration'],
     tools: ['ANSYS Mechanical', 'MATLAB', 'IMU log analysis'],
     summary:
       'I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.',
@@ -174,8 +144,6 @@ export const projects: Project[] = [
     period: 'Sep 2026 — Present',
     status: 'Ongoing',
     context: 'Mechanical design and control development',
-    model: 'rover',
-    visualLabel: 'SIX-WHEEL ROVER / CONCEPT STUDY',
     image: projectImages['adaptive-suspension-rover'],
     tools: [
       'Variable-stiffness suspension',
@@ -220,8 +188,6 @@ export const projects: Project[] = [
     period: 'May 2026 — Present',
     status: 'Ongoing',
     context: 'Joint modeling and preliminary mechanical design',
-    model: 'tensegrity',
-    visualLabel: 'KNEE JOINT / GEOMETRY / INTERNAL FORCE / STIFFNESS',
     image: projectImages['tensegrity-joint'],
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
@@ -262,8 +228,6 @@ export const projects: Project[] = [
     period: 'Oct 2025 — Sep 2026',
     status: 'Completed',
     context: 'Passive concept to actuated brace · Team project',
-    model: 'knee',
-    visualLabel: 'PASSIVE MECHANISM / ACTUATED ASSISTANCE',
     image: projectImages['kneeassist'],
     tools: ['SolidWorks', 'ANSYS', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
@@ -309,8 +273,6 @@ export const projects: Project[] = [
     period: 'Aug — Oct 2026',
     status: 'Completed',
     context: 'Computational study · 5–20 Hz reduced-model pilot',
-    model: 'satellite',
-    visualLabel: 'REACTION WHEEL / SPACECRAFT / PAYLOAD JITTER',
     image: projectImages['reaction-wheel-microvibrations'],
     tools: [
       'COMSOL Multiphysics',
@@ -363,9 +325,6 @@ export const projects: Project[] = [
     period: 'Jul 2026 — Present',
     status: 'Ongoing',
     context: 'Robot design & subsystem architecture',
-    model: 'collection',
-    visualLabel: 'PICKUP / TRANSFER / TERRAIN FOLLOWING',
-    image: projectImages['off-road-leaf-robot'],
     tools: [
       'Subsystem architecture',
       'Mechanism selection',
@@ -407,9 +366,6 @@ export const projects: Project[] = [
     period: 'Sep — Dec 2025',
     status: 'Completed',
     context: 'Differential-drive simulation project',
-    model: 'navigation',
-    visualLabel: 'PLANNING / LOCALIZATION / RECOVERY',
-    image: projectImages['uncertainty-aware-navigation'],
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
       'I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.',
@@ -449,9 +405,6 @@ export const projects: Project[] = [
     period: 'Feb — Apr 2024',
     status: 'Completed',
     context: 'Team build',
-    model: 'linkage',
-    visualLabel: 'LINK LENGTHS / PIVOTS / DOOR MOTION',
-    image: projectImages['four-bar-door-mechanism'],
     tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
     summary:
       'We built a four-bar mechanism that opens a door. We chose the lengths and pivots of the links around the motion we wanted the door to follow.',
@@ -490,9 +443,6 @@ export const projects: Project[] = [
     period: 'Sep — Nov 2023',
     status: 'Completed',
     context: 'Design project',
-    model: 'wallet',
-    visualLabel: 'USER PROBLEM / MECHANICAL RESPONSE',
-    image: projectImages['easy-access-wallet'],
     tools: ['Problem framing', 'Mechanical design', 'Layout development'],
     summary:
       'I designed a compact wallet concept around the motion of getting a finger under a card and lifting it out of the stack.',
@@ -530,9 +480,6 @@ export const projects: Project[] = [
     period: 'Sep 2019 — Jan 2020',
     status: 'Completed',
     context: 'Working electronic model',
-    model: 'solar',
-    visualLabel: 'SENSORS / LOGIC / SOLAR POWER',
-    image: projectImages['solar-smart-home'],
     tools: ['Arduino', 'Sensor integration', 'Circuit debugging'],
     summary:
       'I built a small Arduino smart-home model, wired its sensors, and tested it with a solar cell as a second power source.',
@@ -571,9 +518,6 @@ export const projects: Project[] = [
     period: 'Sep 2018 — Jan 2019',
     status: 'Completed',
     context: 'Two electronic model builds',
-    model: 'transit',
-    visualLabel: 'LOGIC GATES / SIGNALS / SEQUENCING',
-    image: projectImages['traffic-and-elevated-bus'],
     tools: ['Logic gates', 'Circuit wiring', 'Fault tracing'],
     summary:
       'I built a model traffic junction and a separate elevated-bus model. I wired the circuits by hand and used logic gates to control their sequences.',
@@ -603,3 +547,17 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+const projectsBySlug = new Map(
+  projects.map((project) => [project.slug, project]),
+);
+
+export function getProject(slug: string) {
+  return projectsBySlug.get(slug);
+}
+
+export const selectedProjects = selectedProjectSlugs.map((slug) => {
+  const project = getProject(slug);
+  if (!project) throw new Error(`Missing selected project: ${slug}`);
+  return project;
+});
