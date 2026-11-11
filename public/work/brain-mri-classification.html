@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brain MRI Classification — P S Mithul Sourav</title>
+    <meta name="description" content="We preprocessed and augmented brain MRI images, trained a convolutional neural network, and used it to classify images. Our team placed second at NITK EngiConnect.">
+    <link rel="canonical" href="https://psmithul.com/work/brain-mri-classification">
+    <meta property="og:title" content="Brain MRI Classification">
+    <meta property="og:description" content="We preprocessed and augmented brain MRI images, trained a convolutional neural network, and used it to classify images. Our team placed second at NITK EngiConnect.">
+    <meta property="og:url" content="https://psmithul.com/work/brain-mri-classification">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Brain MRI Classification">
+    <meta name="twitter:description" content="We preprocessed and augmented brain MRI images, trained a convolutional neural network, and used it to classify images. Our team placed second at NITK EngiConnect.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a class="academic-header-logo" href="/" aria-label="Mithul Sourav home"><img src="/images/mithul-logo.png" alt="" width="480" height="160"></a>
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-brain-mri-classification">← Back to Projects</a>
+        <header class="project-intro">
+          <h1>Brain MRI Classification</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Python · Machine learning · 2021</p>
+              <p>We worked on classifying brain MRI images in Python. We prepared the images, trained a convolutional neural network, and used it to classify individual images. We presented the project at NITK EngiConnect, where our team placed second.</p>
+            </div>
+            <figure class="project-cover">
+              <img src="/images/projects/brain-mri-demo-images.webp" alt="Eight abstract grayscale images show the horizontal and vertical shapes used in the code demo." width="1440" height="810" data-framing="full-frame" decoding="async">
+              <figcaption>Synthetic shapes used to demonstrate the pipeline</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="preprocessing-and-augmentation">Preprocessing and augmentation</h2>
+            <div class="project-stage-copy">
+              <p>The classifier takes grayscale images resized to a fixed shape. It scales pixel values before the first convolution and applies small shifts and rotations during training. I use those transforms to vary image placement and orientation while keeping the label fixed.</p>
+              <p>Validation and test images go through the same resizing and scaling. They skip the random transforms. For MRI data, I would keep all slices from the same person together when splitting the dataset so nearby slices cannot end up on both sides of the evaluation.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="training-and-classification">Training and classification</h2>
+            <div class="project-stage-copy">
+              <p>The network uses three convolution layers to learn image features and returns a score for each folder label. The prediction command loads the saved model and label order, prepares one image, and prints the scores.</p>
+              <p>I ran the training and prediction commands on abstract shapes to check the full pipeline. The plot records how loss and accuracy changed during that run. The project was an educational classifier. It has no clinical validation.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/brain-mri-demo-training.webp" alt="Training and validation curves show loss and accuracy over twelve epochs on abstract sample images." width="1440" height="750" loading="lazy" decoding="async">
+                <figcaption>Loss and accuracy from the sample run on synthetic shapes.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="run-the-classifier">Run the classifier</h2>
+            <div class="project-stage-copy">
+              <p>Use <code>demo-data</code> to generate the example images, <code>train</code> to fit and evaluate the CNN, and <code>predict</code> to classify one image with the saved model.</p>
+              <p><a href="/code/brain-mri-classification/mri_classifier.py" download>Download Python script</a> · <a href="/code/brain-mri-classification/requirements.txt" download>Requirements</a> · <a href="/code/brain-mri-classification/README.txt">Setup and usage</a></p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Python · TensorFlow · Keras · Image preprocessing</p>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/hands-free-cursor-control" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Hands-free Cursor Control</span>
+          </a>
+          <a href="/work/solar-smart-home" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Arduino-Based Smart Home with Solar Power</span>
+          </a>
+        </nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

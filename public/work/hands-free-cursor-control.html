@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hands-free Cursor Control — P S Mithul Sourav</title>
+    <meta name="description" content="I built a Python prototype that processed camera frames in real time and translated hand gestures and eye movements into cursor movement.">
+    <link rel="canonical" href="https://psmithul.com/work/hands-free-cursor-control">
+    <meta property="og:title" content="Hands-free Cursor Control">
+    <meta property="og:description" content="I built a Python prototype that processed camera frames in real time and translated hand gestures and eye movements into cursor movement.">
+    <meta property="og:url" content="https://psmithul.com/work/hands-free-cursor-control">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Hands-free Cursor Control">
+    <meta name="twitter:description" content="I built a Python prototype that processed camera frames in real time and translated hand gestures and eye movements into cursor movement.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a class="academic-header-logo" href="/" aria-label="Mithul Sourav home"><img src="/images/mithul-logo.png" alt="" width="480" height="160"></a>
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-hands-free-cursor-control">← Back to Projects</a>
+        <header class="project-intro">
+          <h1>Hands-free Cursor Control</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Python · Computer vision · 2023</p>
+              <p>I built a Python prototype to move the cursor without a mouse. I tried pointing with a finger and moving my eyes to control the same pointer.</p>
+            </div>
+            <figure class="project-cover">
+              <img src="/images/projects/hands-free-cursor-tracking.webp" alt="Two plots show a synthetic fingertip trace and the smoother path produced by the cursor filter." width="1440" height="708" data-framing="full-frame" decoding="async">
+              <figcaption>Cursor path from a sample input trace</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="tracking-the-finger">Tracking the index finger</h2>
+            <div class="project-stage-copy">
+              <p>In hand mode, the script takes the index fingertip from each frame and maps a rectangle in the camera view to the screen. Using an inner rectangle means the pointer can reach the edges without the hand leaving the frame.</p>
+              <p>Small shifts in the detected fingertip can make the cursor jitter. The filter moves the cursor partway toward each new target. In the example trace, the cursor moves more steadily and lags slightly when the input changes direction.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="tracking-eye-movement">Calibrating eye movement</h2>
+            <div class="project-stage-copy">
+              <p>The eye mode measures each iris relative to the corners of its eye. Measuring the position within the eye helps distinguish a change in gaze from the whole face shifting in the image.</p>
+              <p>The script records two reference points while the user looks toward opposite screen corners. It pauses movement if tracking is lost or the eyes close. Head motion and lighting still affect the result, so the preview shows where the cursor would go before desktop control is enabled.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="run-the-prototype">Run the prototype</h2>
+            <div class="project-stage-copy">
+              <p>Run the script with a webcam to move a dot in the preview. Press H for hand input or E for eye input. Start it with <code>--move</code> and use Space in the preview when you want the script to move the desktop cursor.</p>
+              <p><a href="/code/hands-free-cursor/cursor_control.py" download>Download Python script</a> · <a href="/code/hands-free-cursor/requirements.txt" download>Requirements</a> · <a href="/code/hands-free-cursor/README.txt">Setup and usage</a></p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Python · OpenCV · MediaPipe · PyAutoGUI</p>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/easy-access-wallet" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Wallet for Easier Card Access</span>
+          </a>
+          <a href="/work/brain-mri-classification" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Brain MRI Classification</span>
+          </a>
+        </nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

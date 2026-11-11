@@ -456,6 +456,30 @@
       "height": 810,
       "sha256": "253bcd26a443639dd233cdf0aee95d474fb00a1e0161c7839e409c2d119ca7b8",
       "role": "in-game sign key opened in the archive"
+    },
+    {
+      "path": "public/images/projects/hands-free-cursor-tracking.webp",
+      "source": "cursor_control.py mapping and smoothing functions run on a seeded synthetic coordinate sequence",
+      "width": 1440,
+      "height": 708,
+      "sha256": "d1aa5dce2ac77e3e5fc1dcb19fa27200bc63ae7c654132da28a483f258c2bb30",
+      "role": "sample input and smoothed cursor path"
+    },
+    {
+      "path": "public/images/projects/brain-mri-demo-images.webp",
+      "source": "mri_classifier.py demo-data command, test split",
+      "width": 1440,
+      "height": 810,
+      "sha256": "afe083f713dbc50f7bb2e7c3c5f3e4ce05b2b0a16600ed9c6c99a78beecd23eb",
+      "role": "synthetic examples for the classification demo"
+    },
+    {
+      "path": "public/images/projects/brain-mri-demo-training.webp",
+      "source": "mri_classifier.py training history after 12 epochs on its synthetic demo data",
+      "width": 1440,
+      "height": 750,
+      "sha256": "d875184c9407e9767917be1005d5627dc8d218ff66330fc85335bfbcf661f1a8",
+      "role": "example learning curves from the demo run"
     }
   ]
 }
