@@ -7,6 +7,14 @@ import { projectStudies } from '@/content/project-studies';
 import { ArticleBody } from '@/components/article-body';
 import { ReadingContents } from '@/components/reading-contents';
 import { HomeSectionLink } from '@/components/academic/home-section-link';
+import projectAssets from '@/docs/current-project-assets.json';
+
+const projectFigures = Object.fromEntries(
+  projectAssets.assets.map(({ path, width, height }) => [
+    path.replace(/^public/, ''),
+    { width, height },
+  ]),
+);
 
 type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,79 +50,81 @@ export default async function ProjectPage({ params }: Props) {
       <HomeSectionLink section="research" className="academic-back">
         ← Selected projects
       </HomeSectionLink>
-      <header>
-        <p className="academic-kicker">
-          {project.discipline} · {project.status}
-        </p>
-        <h1>{project.title}</h1>
-        <p className="academic-deck">{project.summary}</p>
-        <dl className="academic-meta">
-          {project.period && (
+      <header className="project-intro">
+        <div className="project-intro-copy">
+          <p className="academic-kicker">
+            {project.discipline} · {project.status}
+          </p>
+          <h1>{project.title}</h1>
+          <p className="academic-deck">{project.summary}</p>
+          <dl className="academic-meta">
+            {project.period && (
+              <div>
+                <dt>When</dt>
+                <dd>{project.period}</dd>
+              </div>
+            )}
             <div>
-              <dt>When</dt>
-              <dd>{project.period}</dd>
+              <dt>Type of work</dt>
+              <dd>{project.context}</dd>
             </div>
-          )}
-          <div>
-            <dt>Type of work</dt>
-            <dd>{project.context}</dd>
-          </div>
-          {project.tools.length > 0 && (
-            <div>
-              <dt>Tools &amp; methods</dt>
-              <dd>{project.tools.join(' · ')}</dd>
-            </div>
-          )}
-        </dl>
+            {project.tools.length > 0 && (
+              <div>
+                <dt>Tools &amp; methods</dt>
+                <dd>{project.tools.join(' · ')}</dd>
+              </div>
+            )}
+          </dl>
+        </div>
+        {project.image && (
+          <figure
+            className={
+              project.image.height > project.image.width
+                ? 'academic-cover academic-cover-portrait'
+                : 'academic-cover'
+            }
+          >
+            <Image
+              src={project.image.src}
+              alt={project.image.alt}
+              width={project.image.width}
+              height={project.image.height}
+              unoptimized
+              priority
+            />
+            <figcaption>
+              {project.image.caption}
+              {project.image.referenceUrl && (
+                <>
+                  {' '}
+                  <a
+                    href={project.image.referenceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {project.image.referenceLabel ?? 'Image source'}
+                  </a>
+                </>
+              )}
+              {project.image.licenseUrl && (
+                <>
+                  {' '}
+                  ·{' '}
+                  <a
+                    href={project.image.licenseUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    License
+                  </a>
+                </>
+              )}
+            </figcaption>
+          </figure>
+        )}
       </header>
       <ReadingContents body={body} />
-      {project.image && (
-        <figure
-          className={
-            project.image.height > project.image.width
-              ? 'academic-cover academic-cover-portrait'
-              : 'academic-cover'
-          }
-        >
-          <Image
-            src={project.image.src}
-            alt={project.image.alt}
-            width={project.image.width}
-            height={project.image.height}
-            unoptimized
-            priority
-          />
-          <figcaption>
-            {project.image.caption}
-            {project.image.referenceUrl && (
-              <>
-                {' '}
-                <a
-                  href={project.image.referenceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {project.image.referenceLabel ?? 'Image source'}
-                </a>
-              </>
-            )}
-            {project.image.licenseUrl && (
-              <>
-                {' '}
-                ·{' '}
-                <a
-                  href={project.image.licenseUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  License
-                </a>
-              </>
-            )}
-          </figcaption>
-        </figure>
-      )}
-      <ArticleBody body={body} />
+      <ArticleBody body={body} projectFigures={projectFigures} />
       <aside className="academic-status">
         <h2>Where the project stands</h2>
         <p>{project.scope}</p>
