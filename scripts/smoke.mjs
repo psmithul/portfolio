@@ -99,7 +99,7 @@ for (const [path, status, content, title] of cases) {
   assert.doesNotMatch(
     body,
     /src="\/images\/projects\/(?:photos\/|illustration-|reaction-wheel-reference-cad|tensegrity-(?:joint|leg)-cad)/,
-    path + ': project imagery must be original documentation',
+    path + ': legacy placeholder images are hidden',
   );
   if (path === '/') {
     assert.match(
@@ -127,6 +127,13 @@ for (const [path, status, content, title] of cases) {
     assert.ok(
       titles.some((match) => match[1].includes(title)),
       path + ': page-specific title',
+    );
+  }
+  if (status === 200 && path.startsWith('/work/')) {
+    assert.match(
+      body,
+      /<section class="project-stage">\s*<h2[^>]*>[\s\S]*?<div class="project-stage-copy">[\s\S]*?<div class="project-stage-figures">\s*<figure class="reading-figure">/,
+      path + ': a project stage pairs its text with a captioned figure',
     );
   }
   for (const match of body.matchAll(

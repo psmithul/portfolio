@@ -293,6 +293,105 @@ body {
   font-size: 13px;
   line-height: 1.5;
 }
+.academic-content.academic-case {
+  width: min(1130px, calc(100% - 64px));
+}
+.academic-case .project-intro {
+  padding-top: 28px;
+}
+.project-intro-copy {
+  max-width: 710px;
+}
+.project-intro .academic-cover {
+  margin: 0;
+  min-width: 0;
+}
+.project-intro .academic-cover-portrait {
+  width: min(100%, 340px);
+  justify-self: center;
+}
+.project-intro .academic-cover img {
+  max-height: 470px;
+  background: transparent;
+}
+.academic-case .reading-contents {
+  margin: 36px 0 0;
+  border-bottom: 0;
+}
+.academic-case .reading-contents ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  list-style: none;
+  padding: 0;
+}
+.academic-site .project-stage {
+  border-top: 1px solid var(--academic-line);
+  padding: clamp(26px, 4vw, 48px) 0;
+}
+.academic-site .project-stage h2 {
+  margin-top: 0;
+}
+.project-stage:not(:has(.project-stage-figures)) > :not(h2) {
+  max-width: 68ch;
+}
+.project-stage-copy {
+  min-width: 0;
+}
+.project-stage-copy > :last-child,
+.project-stage > :last-child {
+  margin-bottom: 0;
+}
+.project-stage-figures {
+  min-width: 0;
+  display: grid;
+  gap: 22px;
+  align-items: start;
+}
+.academic-site .project-stage-figures .reading-figure {
+  min-width: 0;
+  margin: 0;
+}
+.academic-site .project-stage-figures img {
+  max-height: none;
+}
+.academic-case .academic-status {
+  max-width: 710px;
+}
+@media (min-width: 800px) {
+  .project-intro:has(.academic-cover) {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 4.5vw, 64px);
+  }
+  .academic-site .project-stage:has(.project-stage-figures) {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(28px, 5vw, 70px);
+    align-items: start;
+  }
+  .project-stage-copy {
+    grid-column: 1;
+  }
+  .project-stage-figures {
+    grid-area: 1 / 2 / span 2;
+  }
+}
+@media (min-width: 1000px) {
+  .project-stage-figures:has(> figure + figure) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 799px) {
+  .academic-content.academic-case {
+    width: min(710px, calc(100% - 32px));
+  }
+  .project-stage-figures {
+    margin-top: 22px;
+  }
+}
 .academic-site .article-prose p a {
   text-decoration: underline;
 }

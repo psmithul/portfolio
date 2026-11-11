@@ -1,7 +1,11 @@
 /* oxlint-disable next/no-img-element -- Markdown images have author-defined dimensions. */
 /* oxlint-disable jsx-a11y/no-noninteractive-tabindex -- Wide tables need a keyboard-accessible scroll container. */
 import Markdown from 'react-markdown';
-import { readingRemarkPlugins, readingRehypePlugins } from '@/lib/reading';
+import {
+  readingRemarkPlugins,
+  readingRehypePlugins,
+  rehypeProjectStages,
+} from '@/lib/reading';
 import { siteHref } from '@/lib/site-paths';
 
 const imageDimensions: Record<string, { width: number; height: number }> = {
@@ -24,21 +28,29 @@ const imageDimensions: Record<string, { width: number; height: number }> = {
 export function ArticleBody({
   body,
   basePath = '',
+  projectFigures,
 }: {
   body: string;
   basePath?: string;
+  projectFigures?: typeof imageDimensions;
 }) {
   return (
     <article className="article-prose">
       <Markdown
         remarkPlugins={readingRemarkPlugins}
-        rehypePlugins={readingRehypePlugins}
+        rehypePlugins={
+          projectFigures
+            ? [...readingRehypePlugins, rehypeProjectStages]
+            : readingRehypePlugins
+        }
         skipHtml
         components={{
           h1: ({ children, id }) => <h2 id={id}>{children}</h2>,
           img: ({ src, alt }) => {
             const dimensions =
-              typeof src === 'string' ? imageDimensions[src] : undefined;
+              typeof src === 'string'
+                ? (projectFigures?.[src] ?? imageDimensions[src])
+                : undefined;
             return (
               <img
                 src={src}
