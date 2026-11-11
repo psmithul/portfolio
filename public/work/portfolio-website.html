@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Personal Portfolio — P S Mithul Sourav</title>
+    <meta name="description" content="I built this site to keep my project write-ups, original figures, and notes in one place.">
+    <link rel="canonical" href="https://psmithul.com/work/portfolio-website">
+    <meta property="og:title" content="Personal Portfolio">
+    <meta property="og:description" content="I built this site to keep my project write-ups, original figures, and notes in one place.">
+    <meta property="og:url" content="https://psmithul.com/work/portfolio-website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Personal Portfolio">
+    <meta name="twitter:description" content="I built this site to keep my project write-ups, original figures, and notes in one place.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Personal Portfolio</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Personal project</p>
+              <p>I built this site to keep my project write-ups, original figures, and notes in one place.</p>
+              <p>About, Projects, and Build Log are separate HTML pages that share one stylesheet.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="The About page with a portrait, biography, and three navigation links." data-framing="full-frame" width="1265" height="712" decoding="async" src="/images/projects/portfolio-website.jpg">
+              <figcaption>The portfolio’s About page after the three-page redesign.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="how-it-changed">How it changed</h2>
+            <div class="project-stage-copy">
+              <p>Earlier versions used an interactive 3D journey. I moved to a simpler layout so the original CAD, photos, and results could do more of the work. Older project links still point to the current write-ups.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="how-i-publish">How I publish</h2>
+            <div class="project-stage-copy">
+              <p>Earlier versions used Next.js and a private writing desk. I now edit posts and case studies as HTML, and a push to the main branch publishes them on Vercel. <a href="https://github.com/psmithul/portfolio" rel="noreferrer">GitHub source</a>.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · HTML · CSS · Vercel</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/dayfold">Dayfold →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Uncertainty-Aware Navigation for an Indoor Mobile Robot — P S Mithul Sourav</title>
+    <meta name="description" content="I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.">
+    <link rel="canonical" href="https://psmithul.com/work/uncertainty-aware-navigation">
+    <meta property="og:title" content="Uncertainty-Aware Navigation for an Indoor Mobile Robot">
+    <meta property="og:description" content="I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.">
+    <meta property="og:url" content="https://psmithul.com/work/uncertainty-aware-navigation">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Uncertainty-Aware Navigation for an Indoor Mobile Robot">
+    <meta name="twitter:description" content="I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Uncertainty-Aware Navigation for an Indoor Mobile Robot</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Differential-drive simulation project · Sep — Dec 2025</p>
+              <p>I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.</p>
+              <p>Simulation and Monte Carlo evaluation.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Four simulation plots showing the route, localisation error, commanded speed, and gyro bias." width="1920" height="1440" decoding="async" src="/images/projects/navigation-trajectory.png">
+              <figcaption>One successful nominal adaptive run from the project’s simulation.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="giving-the-robot-imperfect-sensors">Giving the robot imperfect sensors</h2>
+            <div class="project-stage-copy">
+              <p>I built a differential-drive robot in Python simulation. A* plans a route, and a heading controller steers along it using the robot’s estimated position and orientation. I added encoder noise, IMU drift, yaw bias, and wheel slip. With slip, the wheels can turn without moving the robot as far as the encoders suggest.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="using-the-pose-estimate-to-decide-when-to-slow-down">Using the pose estimate to decide when to slow down</h2>
+            <div class="project-stage-copy">
+              <p>An extended Kalman filter combines wheel encoder and IMU readings and tracks how uncertain the pose estimate is. I fed that uncertainty into the speed and recovery logic. If the estimate becomes less reliable, the simulated robot can slow down or try to recover before continuing.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/process-robot-navigation.webp" alt="Flow diagram showing the route and pose uncertainty feeding the robot’s heading, speed, and recovery logic." width="1280" height="660" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Design schematic of the simulator. The planned route and the confidence in the pose both inform how the robot moves.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="monte-carlo-evaluation">Monte Carlo evaluation</h2>
+            <div class="project-stage-copy">
+              <p>I ran repeated trials and compared the estimated pose with the simulator’s true pose. I also recorded collisions, recovery events, whether the robot reached the goal, and how long it took. That let me compare speed with how often the robot reached the goal without a collision.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/navigation-trajectory.png" alt="Four charts show the route, position error and uncertainty, commanded speed, and gyroscope bias for one simulated run." width="1920" height="1440" loading="lazy" decoding="async">
+                </div>
+                <figcaption>A successful nominal run with the adaptive controller. <a href="/images/projects/navigation-trajectory.png">Full-size simulation figure</a> · <a href="https://github.com/psmithul/differential-drive-navigation" rel="noreferrer">Code and results</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Python · A* &amp; EKF · Monte Carlo</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/four-bar-door-mechanism">Four-Bar Linkage Door-Opening Mechanism →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

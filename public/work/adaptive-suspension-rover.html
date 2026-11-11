@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover — P S Mithul Sourav</title>
+    <meta name="description" content="We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.">
+    <link rel="canonical" href="https://psmithul.com/work/adaptive-suspension-rover">
+    <meta property="og:title" content="Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover">
+    <meta property="og:description" content="We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.">
+    <meta property="og:url" content="https://psmithul.com/work/adaptive-suspension-rover">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover">
+    <meta name="twitter:description" content="We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" class="project-page">
+        <header class="project-intro">
+          <h1>Variable-Stiffness Suspension and Vibration-Aware Control for a Rough-Terrain Rover</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Mechanical design and control development · Sep 2026 — Present</p>
+              <p>We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.</p>
+              <p>The complete rover is documented in CAD. The next step is a loaded test of one suspension module to measure its force–travel response and verify that the lock holds without power.</p>
+            </div>
+            <figure class="project-cover">
+              <img alt="Isometric CAD view of one rover suspension module with its wheel, pivoting linkage, and spring preload assembly." width="1920" height="1080" decoding="async" src="/images/projects/rover-suspension-module-cad.png">
+              <figcaption>One suspension module from the CY06 rover CAD, shown apart from the chassis so the wheel carrier, linkage, and spring preload assembly are visible.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="why-change-the-suspension">Why change the suspension?</h2>
+            <div class="project-stage-copy">
+              <p>A rover on a rough inspection route can slow down to get steadier camera and sensor data. We wanted to see if it could keep more of its speed by changing how the suspension responds to bumps.</p>
+              <p>In our first proposal, two coupled suspension units would shift a cable guide between three settings. Moving that guide changed the spring’s leverage. The later CAD uses a separate motor and preload carriage at each wheel. We kept the idea of locking a setting before moving again.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-proposal-whiteboard.webp" alt="The team’s September whiteboard with suspension sketches and notes on vibration and control." width="1600" height="900" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Our September concept notes, before we developed the individual wheel modules. Photo from the CY06 design submission. <a href="/images/projects/rover-proposal-whiteboard.webp">Open the full-size whiteboard photo</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="how-one-suspension-module-works">How one suspension module works</h2>
+            <div class="project-stage-copy">
+              <p>As the wheel rises, the carrier pivots, three compression links change angle, and three elastic paths stretch and pull back. A separate damper helps the wheel settle after the bump.</p>
+              <p>We put one geared motor on each module to adjust the tension already in those elastic paths. The motor turns a fine-pitch screw. The guide rails keep the carriage from rotating, so it slides along the screw and changes the preload. The CAD gives the carriage 6 mm of adjustment. Once the carriage is locked, the wheel moves passively.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-suspension-exploded.webp" alt="Exploded CAD of the wheel, carrier, tension and compression mechanism, and preload assembly." width="1600" height="1067" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Exploded module. The wheel carrier, elastic core, and preload assembly are shown apart. <a href="/images/projects/rover-suspension-exploded.webp">Open the CAD view</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-preload-carriage.webp" alt="CAD detail of the rover’s preload carriage with transparent sides and an orange top." width="1600" height="1067" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The carriage detail exposes the screw and guides that turn motor rotation into linear travel. <a href="/images/projects/rover-preload-carriage.webp">Open the CAD detail</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="checking-wheel-travel-in-cad">Checking wheel travel in CAD</h2>
+            <div class="project-stage-copy">
+              <p>We posed the same module at neutral and at +20° of bump to see what moved inside the joint. The wheel centre rises about 16 mm in that comparison. From −8° of droop to +20° of bump, the CAD shows about 21 mm of vertical wheel travel. The loaded fixture will show how that motion changes under real forces.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-motion-neutral.webp" alt="Original CAD motion study showing the suspension in the neutral position." width="1600" height="1067" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Neutral position at 0°. <a href="/images/projects/rover-motion-neutral.webp">Open the neutral view</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-motion-bump.webp" alt="Original CAD motion study showing the same suspension in the raised position." width="1600" height="1067" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The same module at +20° of bump. <a href="/images/projects/rover-motion-bump.webp">Open the bump view</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="fitting-six-modules-around-the-chassis">Fitting six modules around the chassis</h2>
+            <div class="project-stage-copy">
+              <p>After designing the joint on its own, we placed six modules around the central deck. The roof-off view makes that layout visible. The closed view shows how the wheels and body fit together in the full assembly.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-interior-cad.png" alt="Interior CAD view of the six-wheel rover with the roof hidden to expose the mechanical assembly." width="2400" height="1800" loading="lazy" decoding="async">
+                </div>
+                <figcaption>Full assembly with the roof hidden. <a href="/images/projects/rover-interior-cad.png">Open the interior view</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <div>
+                  <img src="/images/projects/rover-assembly-cad.png" alt="Exterior CAD of the six-wheel rover with the roof installed." width="1800" height="1350" loading="lazy" decoding="async">
+                </div>
+                <figcaption>The same rover with the roof installed. <a href="/images/projects/rover-assembly-cad.png">Open the exterior view</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="what-the-controller-measures">What the controller measures</h2>
+            <div class="project-stage-copy">
+              <p>We put accelerometers on the middle wheel carriers and the chassis in the sensor layout. The carrier readings tell us what the wheels are hitting. The chassis reading tells us how much of that movement reaches the body. Wheel encoders give us speed, and the chassis IMU tracks roll and pitch.</p>
+              <p>The planned sequence is to stop if vibration stays high, adjust the preload, and confirm the new position and lock before moving again. If the vibration stays high after the change, the rover can slow down.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="how-well-test-it">How we’ll test it</h2>
+            <div class="project-stage-copy">
+              <p>We’ll start with one loaded module and measure how much force it takes to move the wheel at different preload settings. We’ll also cut power under load to check that the lock holds.</p>
+              <p>For the rover trials, we’ll compare fixed preload, speed control, preload control, and the two controls together. We’ll use the same track and payload and repeat each setting at least three times. We’re aiming for <strong>at least 20% lower vertical chassis RMS acceleration</strong> in the 5–100 Hz band at the same speed as the fixed-preload run. We’ll also record route time and energy per metre.</p>
+              <p><a href="https://github.com/psmithul/tensegrity-rover" rel="noreferrer">Rover CAD and project files</a>.</p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Variable-stiffness suspension · IMU &amp; encoders · Control design</p>
+        <nav class="project-next" aria-label="Project navigation"><a href="/projects">← All projects</a><a href="/work/tensegrity-joint">Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton →</a></nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

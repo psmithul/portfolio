@@ -1,5 +1,22 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "buildCommand": "npm run build"
+  "framework": null,
+  "buildCommand": "",
+  "installCommand": "",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/about", "destination": "/#about", "permanent": true },
+    { "source": "/work", "destination": "/projects", "permanent": true },
+    { "source": "/blog", "destination": "/build-log", "permanent": true },
+    { "source": "/activities", "destination": "/#activities", "permanent": true },
+    { "source": "/work/neoleg-knee-mechanism", "destination": "/work/kneeassist", "permanent": true },
+    { "source": "/write/:path*", "destination": "/build-log", "permanent": true },
+    { "source": "/v1/:path*", "destination": "/:path*", "permanent": true }
+  ],
+  "rewrites": [{ "source": "/health", "destination": "/health.json" }],
+  "headers": [
+    { "source": "/health", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+  ]
 }
