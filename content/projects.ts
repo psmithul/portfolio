@@ -57,7 +57,7 @@ export const battleBots: Project = {
   tools: [],
   image: projectImages['nitk-battle-bots'],
   summary:
-    'We designed a 3 lb unibody flipper inspired by Jelly Baby and built the sponsored 15 kg GN4RLY 2.5. Its weight and older hammer design are driving the redesign for a 7 kg successor.',
+    'At NITK Battle Bots, we designed a 3 lb flipper with a one-piece chassis and built the 15 kg GN4RLY 2.5. We’re using what we learned in competition to design a 7 kg successor.',
   question:
     'How do the weight limit and weapon change what a combat robot needs from its chassis?',
   approach: [
@@ -99,7 +99,7 @@ export const projects: Project[] = [
     image: projectImages['uav-vibration-integration'],
     tools: ['ANSYS Mechanical', 'MATLAB', 'IMU log analysis'],
     summary:
-      'Modeled and integrated three flight-controller mounts, then used ground motor runs and IMU analysis to compare their vibration isolation.',
+      'I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.',
     question:
       'Which mounting arrangement keeps motor vibration away from the flight controller?',
     role: 'As a Product Intern at Vayu Aerospace Pvt. Ltd., I investigated vibration transmission from the motors through the airframe to the flight-controller IMU, compared three mounts in ANSYS, and integrated and ground-tested the shortlisted designs.',
@@ -145,7 +145,7 @@ export const projects: Project[] = [
       'Control design',
     ],
     summary:
-      'Each wheel has a guided tensegrity suspension with motor-adjusted preload. We’re designing it to reduce chassis vibration at the same driving speed. Testing starts with one suspension module.',
+      'We designed a six-wheel inspection rover with a motor that can adjust the spring preload at each wheel. The goal is to keep the rover’s body steadier over rough ground at the same speed.',
     question:
       'Can a rover reduce vibration by changing its suspension before it has to slow down?',
     role: 'I’m developing a six-wheel rover with one motor-driven preload carriage per suspension module. The carriage holds the selected preload while wheel travel remains passive.',
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     image: projectImages['tensegrity-joint'],
     tools: ['MATLAB', 'Member-force modeling', 'Mechanism design'],
     summary:
-      'Twelve support tendons connect two Y-frames to a floating tristar. I’m using MATLAB to see how the geometry and preload affect which tendons carry the load and which might go slack.',
+      'This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.',
     question:
       'How can geometry and internal forces make the same joint respond differently to a load?',
     role: 'I’m modeling the joint’s force and stiffness response in MATLAB and developing a support network with two Y-frames and a floating tristar.',
@@ -229,7 +229,7 @@ export const projects: Project[] = [
     image: projectImages['kneeassist'],
     tools: ['SolidWorks', 'ANSYS', 'Angle sensing', 'Cable-and-spring drive'],
     summary:
-      'We turned a passive spring mechanism into a motor-driven brace with knee-angle sensing and a manual release. Our team placed in the top 5 of 70 nationally. Procurement and bench testing are next.',
+      'We developed a passive spring mechanism into a brace that uses a motor and cable to assist knee extension. Our team placed in the top five at the Incubate X Prosthetic Challenge.',
     question:
       'How can a knee mechanism assist movement while the user continues to extend actively?',
     role: 'I worked on the passive spring-assisted mechanism, refined the assembly in SolidWorks, and checked its motion in ANSYS. We then extended it into an actuated brace and defined a procurement-ready system with drive, sensing, power protection, and an independent manual release.',
@@ -282,7 +282,7 @@ export const projects: Project[] = [
       'Physics-informed multi-fidelity learning',
     ],
     summary:
-      'I used a 52-coordinate COMSOL-derived model to predict how four reaction wheels affect a spacecraft camera over 5–20 Hz. The model comparison and stiffness study supported keeping the original mount.',
+      'I built a faster model of how vibration from four reaction wheels reaches a spacecraft camera. I used it to test whether a stiffer mount would improve the simulated pointing response over 5–20 Hz.',
     question:
       'Can a multi-fidelity surrogate preserve resonance and physics while predicting spacecraft microvibration and payload jitter efficiently?',
     role: 'I worked on the spacecraft structural model, wheel-to-camera response calculations, reduced equations, and comparisons between neural predictors. The current pilot uses a 52-coordinate reduced model and separates complete structural configurations for training, validation, and testing.',
@@ -334,7 +334,7 @@ export const projects: Project[] = [
       'BOM & test planning',
     ],
     summary:
-      'I’m developing a robot to collect dry and wet leaves on uneven ground while limiting soil pickup. Current work covers subsystem layout, mechanism selection, a bill of materials, and a validation plan.',
+      'I’m designing a robot to lift dry and wet leaves on uneven ground. The main challenge is keeping the pickup close enough to reach the leaves without pulling in too much soil.',
     question: 'How do you pick up the leaves without picking up the ground?',
     role: 'I broke the robot into locomotion, pickup, transfer, storage, and terrain-following systems, then compared mechanisms against space, manufacturing, and integration limits.',
     approach: [
@@ -374,7 +374,7 @@ export const projects: Project[] = [
     image: projectImages['uncertainty-aware-navigation'],
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
-      'I built a differential-drive robot simulator combining A* planning and EKF localization, then added sensor noise and wheel slip to test confidence-aware speed and recovery logic through Monte Carlo trials.',
+      'I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.',
     question:
       'What should a robot do when it no longer trusts its position estimate?',
     role: 'I built a differential-drive simulator with A* planning, heading control, encoders, an IMU, and extended Kalman filter localization.',
@@ -416,7 +416,7 @@ export const projects: Project[] = [
     image: projectImages['four-bar-door-mechanism'],
     tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
     summary:
-      'A team-built door-opening mechanism, developed through link-length and pivot-position studies.',
+      'We built a four-bar mechanism that opens a door. We chose the lengths and pivots of the links around the motion we wanted the door to follow.',
     question:
       'Which link lengths and pivot positions produce the door motion we want?',
     role: 'I worked with my team to build a four-bar mechanism and choose link lengths and pivot locations within its kinematic limits.',
@@ -457,7 +457,7 @@ export const projects: Project[] = [
     image: projectImages['easy-access-wallet'],
     tools: ['Problem framing', 'Mechanical design', 'Layout development'],
     summary:
-      'A compact card-holder concept designed to make cards easier to reach and remove.',
+      'I designed a compact wallet concept around the motion of getting a finger under a card and lifting it out of the stack.',
     question:
       'How can a compact card holder make its contents easier to reach?',
     role: 'I developed a wallet layout around easier card access and turned that observation into a tangible mechanical design idea.',
@@ -497,7 +497,7 @@ export const projects: Project[] = [
     image: projectImages['solar-smart-home'],
     tools: ['Arduino', 'Sensor integration', 'Circuit debugging'],
     summary:
-      'An Arduino smart-home model with connected sensors, control logic, and a photovoltaic power option.',
+      'I built a small Arduino smart-home model, wired its sensors, and tested it with a solar cell as a second power source.',
     question:
       'How do several sensors and automated functions work reliably as one system?',
     role: 'I designed the wiring and control logic, debugged the connections and code, and added a photovoltaic cell power source.',
@@ -538,7 +538,7 @@ export const projects: Project[] = [
     image: projectImages['traffic-and-elevated-bus'],
     tools: ['Logic gates', 'Circuit wiring', 'Fault tracing'],
     summary:
-      'Hand-wired traffic-light and transit elevated-bus models, with repeatable control sequences built from logic gates.',
+      'I built a model traffic junction and a separate elevated-bus model. I wired the circuits by hand and used logic gates to control their sequences.',
     question: 'How can a wired circuit create a reliable operating sequence?',
     role: 'I built both models, wired the circuits by hand, and used logic gates to control their operating sequences.',
     approach: [
