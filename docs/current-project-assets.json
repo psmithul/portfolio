@@ -224,6 +224,38 @@
       "height": 660,
       "sha256": "d95f57aa6e410a851276b87b9b577a01b06dc2d25531c846bb9600d4f224b893",
       "role": "independent control circuits for the two models"
+    },
+    {
+      "path": "public/images/projects/fireworks-field.png",
+      "source": "Executed Astroclub_Fireworks_Galaxy.ipynb using NASA/ESA HST NICMOS F160W exposure n4k48nbsq_cal.fits (MAST, program 7919)",
+      "width": 1682,
+      "height": 616,
+      "sha256": "4f685e43a62bc177f1a67691a0941862740036fa7446541dc0e90c734a592d4c",
+      "role": "F160W detector image and two catalogue-centred cutouts, all under the same display stretch"
+    },
+    {
+      "path": "public/images/projects/fireworks-quality.png",
+      "source": "Executed Astroclub_Fireworks_Galaxy.ipynb using NASA/ESA HST NICMOS F160W exposure n4k48nbsq_cal.fits (MAST, program 7919)",
+      "width": 1479,
+      "height": 594,
+      "sha256": "2660178789941cb3b0f23e4508de3b98244b9b0b1a9136febd9410a9956cc305",
+      "role": "quality mask and usable pixel count-rate histogram"
+    },
+    {
+      "path": "public/images/projects/fireworks-profile.png",
+      "source": "Executed Astroclub_Fireworks_Galaxy.ipynb using NASA/ESA HST NICMOS F160W exposure n4k48nbsq_cal.fits (MAST, program 7919)",
+      "width": 1058,
+      "height": 565,
+      "sha256": "872602915586f96a4722c78e971052446825af1df0ebec2baf2b200ac0f18734",
+      "role": "median calibrated count rates in annuli around the SIMBAD centre"
+    },
+    {
+      "path": "public/images/projects/fireworks-filters.png",
+      "source": "Executed Astroclub_Fireworks_Galaxy.ipynb using NASA/ESA HST NICMOS F160W exposure n4k48nbsq_cal.fits (MAST, program 7919)",
+      "width": 1711,
+      "height": 1109,
+      "sha256": "bfb3d46cd5d53f27404bef10aa4aa08e3bbfbea2a56f587e78f2112a70fd3b51",
+      "role": "three-by-five comparison of the calibrated image and Sato and Meijering responses"
     }
   ]
 }

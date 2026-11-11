@@ -4,4 +4,5 @@ export const selectedProjectSlugs = [
   'reaction-wheel-microvibrations',
   'tensegrity-joint',
   'kneeassist',
+  'fireworks-galaxy',
 ];
