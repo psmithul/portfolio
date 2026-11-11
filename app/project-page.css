@@ -1,0 +1,222 @@
+.academic-site:has(> .project-page) {
+  --academic-paper: #fff;
+  --academic-anchor-offset: 84px;
+  color: #161616;
+}
+
+.academic-site:has(> .project-page) > .academic-header {
+  border-bottom: 0;
+}
+
+.academic-site:has(> .project-page) .academic-header-inner {
+  width: 92%;
+  min-height: 68px;
+}
+
+.academic-site:has(> .project-page) .academic-brand {
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.project-page {
+  width: 92%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.project-page .project-intro {
+  width: 83.333%;
+  margin: 23px auto 40px;
+}
+
+.academic-site .project-page :is(h1, h2) {
+  color: #111;
+  font-weight: 650;
+  letter-spacing: -0.035em;
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.academic-site .project-page h1 {
+  margin: 0 0 23px;
+  font-size: clamp(1.55rem, 2.28vw, 2.5rem);
+  line-height: 1.13;
+}
+
+.project-intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.37fr) minmax(0, 0.63fr);
+  align-items: start;
+  gap: 4.167%;
+}
+
+.project-intro-copy,
+.academic-site .project-page .article-prose {
+  color: #494949;
+  font-size: clamp(0.9rem, 0.5vw + 0.51rem, 1.02rem);
+  line-height: 1.42;
+}
+
+.project-intro-copy > :last-child,
+.project-stage-copy > :last-child {
+  margin-bottom: 0;
+}
+
+.project-cover {
+  min-width: 0;
+  margin: 0;
+}
+
+.project-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2.45;
+  object-fit: contain;
+}
+
+.project-cover img.project-cover-photo {
+  object-fit: cover;
+  object-position: center 53%;
+}
+
+.project-cover figcaption,
+.academic-site .project-page .reading-figure figcaption {
+  margin-top: 8px;
+  color: #595959;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.project-page .project-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.355fr) minmax(0, 0.645fr);
+  grid-template-areas: 'heading gallery' 'copy gallery';
+  grid-template-rows: auto 1fr;
+  column-gap: 4.167%;
+  align-items: start;
+  padding: 20px 0 36px 4.167%;
+  border-top: 1px solid #333;
+}
+
+.academic-site .project-page .project-stage h2 {
+  grid-area: heading;
+  margin: 0 0 24px;
+  font-size: clamp(1.4rem, 2.35vw, 2.65rem);
+  line-height: 1.14;
+}
+
+.project-page .project-stage-copy {
+  grid-area: copy;
+  min-width: 0;
+}
+
+.academic-site .project-page .project-stage-copy h3 {
+  margin: 20px 0 8px;
+  color: #111;
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.project-page .project-stage-figures {
+  grid-area: gallery;
+  display: grid;
+  align-self: center;
+  align-items: start;
+  gap: clamp(14px, 2.65vw, 42px);
+  min-width: 0;
+}
+
+.project-page .project-stage-figures:has(> figure + figure) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.academic-site .project-page .project-stage-figures .reading-figure {
+  min-width: 0;
+  margin: 0;
+}
+
+.academic-site .project-page .project-stage-figures img {
+  max-height: min(56vh, 530px);
+}
+
+.project-page .project-stage:not(:has(.project-stage-figures)) {
+  grid-template-areas: 'heading copy';
+  grid-template-rows: auto;
+}
+
+.project-page
+  .project-stage:not(:has(.project-stage-figures))
+  .project-stage-copy {
+  max-width: 65ch;
+}
+
+.academic-site .project-page .project-tools {
+  padding: 18px 0;
+  margin: 0;
+  border-top: 1px solid #333;
+  color: #595959;
+  font-size: 0.86rem;
+}
+
+.project-next {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 26px;
+  padding: 22px 0 64px;
+  border-top: 1px solid #333;
+  font-size: 0.9rem;
+}
+
+.project-next > a:last-child {
+  max-width: 52ch;
+}
+
+@media (max-width: 760px) {
+  .academic-site:has(> .project-page) {
+    --academic-anchor-offset: 118px;
+  }
+
+  .academic-site:has(> .project-page) .academic-header-inner {
+    min-height: 0;
+  }
+
+  .project-page .project-intro {
+    width: 100%;
+    margin: 24px 0 28px;
+  }
+
+  .project-intro-grid,
+  .project-page .project-stage,
+  .project-page .project-stage:not(:has(.project-stage-figures)) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'heading' 'copy' 'gallery';
+    grid-template-rows: auto;
+    row-gap: 14px;
+  }
+
+  .project-page .project-stage:not(:has(.project-stage-figures)) {
+    grid-template-areas: 'heading' 'copy';
+  }
+
+  .project-cover img {
+    aspect-ratio: 1.85;
+  }
+
+  .project-page .project-stage {
+    padding: 22px 0 26px;
+  }
+
+  .academic-site .project-page .project-stage h2 {
+    margin: 0;
+  }
+
+  .project-page .project-stage-figures:has(> figure + figure) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
