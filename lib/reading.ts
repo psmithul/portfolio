@@ -8,6 +8,7 @@ import type { Root, RootContent, PhrasingContent } from 'mdast';
 import type {
   Root as HtmlRoot,
   Element,
+  ElementContent,
   RootContent as HtmlContent,
 } from 'hast';
 
@@ -117,6 +118,59 @@ export function rehypeReadingEquations() {
       }
     }
     wrap(tree.children);
+  };
+}
+
+export function rehypeProjectStages() {
+  const isFigure = (node: HtmlContent) =>
+    node.type === 'element' && node.tagName === 'figure';
+
+  function stage(heading: Element, blocks: ElementContent[]): Element {
+    const figures = blocks.filter(isFigure);
+    const children: ElementContent[] = [heading];
+    if (figures.length) {
+      children.push(
+        {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['project-stage-copy'] },
+          children: blocks.filter((block) => !isFigure(block)),
+        },
+        {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['project-stage-figures'] },
+          children: figures,
+        },
+      );
+    } else {
+      children.push(...blocks);
+    }
+    return {
+      type: 'element',
+      tagName: 'section',
+      properties: { className: ['project-stage'] },
+      children,
+    };
+  }
+
+  return (tree: HtmlRoot) => {
+    const children: HtmlContent[] = [];
+    let heading: Element | undefined;
+    let blocks: ElementContent[] = [];
+    for (const node of tree.children) {
+      if (node.type === 'element' && node.tagName === 'h2') {
+        if (heading) children.push(stage(heading, blocks));
+        heading = node;
+        blocks = [];
+      } else if (heading && node.type !== 'doctype') {
+        blocks.push(node);
+      } else {
+        children.push(node);
+      }
+    }
+    if (heading) children.push(stage(heading, blocks));
+    tree.children = children;
   };
 }
 

@@ -88,6 +88,142 @@
       "height": 1268,
       "sha256": "5052aeec15a0a2df9e0a102ca911f7b45e39f19a56d658a07340031a6d6f0b1b",
       "role": "project documentation; not a hardware photograph"
+    },
+    {
+      "path": "public/images/projects/rover-proposal-whiteboard.webp",
+      "source": "Vishwakarma_Stage2_CY06_Final (1).pptx, slide 10; embedded image resized proportionally for the web",
+      "width": 1600,
+      "height": 900,
+      "sha256": "e9a992538043b7fab9eb6934118de22e4913a3ca6b049ed055b8e32d6a6f6649",
+      "role": "team whiteboard photograph from the September concept stage"
+    },
+    {
+      "path": "public/images/projects/rover-suspension-exploded.webp",
+      "source": "Vishwakarma_Stage2_CY06_Final (1).pptx, slide 6; embedded image resized proportionally for the web",
+      "width": 1600,
+      "height": 1067,
+      "sha256": "f969e7ef589bb65eb5d92886bd7af983d4326cef59c162528a56bd123caf0c7f",
+      "role": "original exploded CAD of the suspension module"
+    },
+    {
+      "path": "public/images/projects/rover-motion-neutral.webp",
+      "source": "Vishwakarma_Stage2_CY06_Final (1).pptx, slide 19; embedded image resized proportionally for the web",
+      "width": 1600,
+      "height": 1067,
+      "sha256": "49f64c148fe50903dbc79d2d8859d89dac5a654e26beda7aef81070ef1f5c094",
+      "role": "original CAD motion study, neutral position at 0 degrees"
+    },
+    {
+      "path": "public/images/projects/rover-motion-bump.webp",
+      "source": "Vishwakarma_Stage2_CY06_Final (1).pptx, slide 19; embedded image resized proportionally for the web",
+      "width": 1600,
+      "height": 1067,
+      "sha256": "e640b4c0e511a4c5418b5f6288b6ce77ff45be6706e20670c3c3777e2b6a1523",
+      "role": "original CAD motion study, wheel at +20 degrees"
+    },
+    {
+      "path": "public/images/projects/rover-preload-carriage.webp",
+      "source": "Vishwakarma_Stage2_CY06_Final (1).pptx, slide 21; embedded image resized proportionally for the web",
+      "width": 1600,
+      "height": 1067,
+      "sha256": "b5acdfd6997892658ca4425d238a7f0b42ddcf622a57091f8f2c895e82c68ed4",
+      "role": "original CAD showing the motor-driven preload carriage"
+    },
+    {
+      "path": "public/images/projects/wheel-basis-enrichment.png",
+      "source": "5 to 20 Hz research report.pdf, Figure 2, PDF page 7; embedded image",
+      "width": 1420,
+      "height": 652,
+      "sha256": "3579d1fde2953c1a9433cedb5d84d8bf545829130f5b7342c3680183f519923a",
+      "role": "basis-enrichment comparison against the reduced reference"
+    },
+    {
+      "path": "public/images/projects/wheel-training-comparison.png",
+      "source": "5 to 20 Hz research report.pdf, Figure 6, PDF page 10; embedded image",
+      "width": 1601,
+      "height": 665,
+      "sha256": "763e276296e987b64819498a6861f61d729e2c5033ba5be1bdaf1f24a25c982f",
+      "role": "original learning curves for the two training strategies"
+    },
+    {
+      "path": "public/images/projects/wheel-mount-comparison.png",
+      "source": "5 to 20 Hz research report.pdf, Figure 11, PDF page 14; embedded image",
+      "width": 1599,
+      "height": 665,
+      "sha256": "c78ced74316df9e0b34df85406cb1d4a9f028126a53547709277cae7bca59e75",
+      "role": "original neural screen and reduced-model mount confirmation plot"
+    },
+    {
+      "path": "public/images/projects/gn4rly-lab-assembly.jpg",
+      "source": "NITK_Battle_Bots_Club_Proposal_Final.pdf, page 5; embedded image",
+      "width": 896,
+      "height": 504,
+      "sha256": "2e90c39e0396b30b74c8e61e047439ff43b57b5b01baf14d6409d9cb136858f4",
+      "role": "club-proposal photograph of assembly work at the Robocon Lab"
+    },
+    {
+      "path": "public/images/projects/process-uav-mounts.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "600803fa249e70b278e7db76ee91f0884c041ee8b91981a20222ab9cb5cb49d7",
+      "role": "rigid, elastomer-isolated and suspended mount concepts"
+    },
+    {
+      "path": "public/images/projects/process-knee-assist.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "cad31afdd07fe6f2e6a41f3e8efebb71451d60f481855e69d21e2b0a2c5a3305",
+      "role": "passive spring and motor-assisted brace concepts"
+    },
+    {
+      "path": "public/images/projects/process-leaf-collection.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "3c416092bc557db07d12b149828a811acffb6c863bdeb1e5baf79920af8b902f",
+      "role": "pickup, transfer, storage, and terrain-following architecture"
+    },
+    {
+      "path": "public/images/projects/process-robot-navigation.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "1fafbd79b0bd5747565f3c3c0bb49d870b31b97ec33ebe11e2d451efdef99bfe",
+      "role": "route planning, sensor fusion, and confidence-aware control"
+    },
+    {
+      "path": "public/images/projects/process-four-bar.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "a1b057acd8c58e04dba8ebf9a47c30787699a37b4da2229da3c5e60a70966055",
+      "role": "two positions of a generic four-bar linkage"
+    },
+    {
+      "path": "public/images/projects/process-card-access.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "ac447e03dcf9300e7086997632b912800f3628fbc41f3eb90ceddd21328b0b12",
+      "role": "finger clearance at the card stack"
+    },
+    {
+      "path": "public/images/projects/process-solar-home.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "19d0e3ba773e2b4ff09c47169b54ab86d0057342f41efb96981af70c13af40e1",
+      "role": "power, sensors, and Arduino control"
+    },
+    {
+      "path": "public/images/projects/process-traffic-and-bus.webp",
+      "source": "Original schematic drawn for this site from the documented project description",
+      "width": 1280,
+      "height": 660,
+      "sha256": "d95f57aa6e410a851276b87b9b577a01b06dc2d25531c846bb9600d4f224b893",
+      "role": "independent control circuits for the two models"
     }
   ]
 }
