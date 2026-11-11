@@ -84,6 +84,20 @@
               </figure>
             </div>
           </section>
+          <section class="project-stage project-stage-wide">
+            <h2 id="fixed-speed-versus-adaptive-control">Fixed speed versus adaptive control</h2>
+            <div class="project-stage-copy">
+              <p>I ran the same simulated conditions with a fixed-speed controller and one that slows when the pose estimate becomes uncertain. In the slip runs, the adaptive version finished 22 of 50 trials versus 3 for fixed speed. Collisions fell from 35 to 6. Successful adaptive runs averaged 55.4 seconds, compared with 32.3 seconds for the few fixed-speed runs that finished. Under nominal conditions, both had zero collisions. The fixed controller finished 40 trials and the adaptive controller finished 42, so the extra time bought much less there.</p>
+              <p>I also revised the simulator after reviewing individual failures. I checked start poses in continuous space, checked the path between simulation steps for corner contacts, and left more room for position error when deciding whether the robot had arrived. In a separate set of seeds, the revised adaptive controller finished 21 slip trials out of 50, up from 10, but recorded eight collisions instead of seven. That made the revision useful without making it a clean win on every measure.</p>
+              <p><a href="https://github.com/psmithul/differential-drive-navigation/blob/main/docs/results.md" rel="noreferrer">Simulation results and revision notes</a>.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/navigation-policy-comparison.png" alt="Grouped bars compare success rates and position error for fixed and adaptive controllers under four simulated conditions." width="2080" height="640" loading="lazy" decoding="async">
+                <figcaption>Fixed and adaptive policies on the same original simulation seeds. The separate rerun with fresh seeds is discussed in the text. <a href="/images/projects/navigation-policy-comparison.png">Full-size view</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
         </article>
         <p class="project-tools">Tools &amp; methods · Python · A* &amp; EKF · Monte Carlo</p>
         <nav class="detail-pagination" aria-label="Project navigation">

@@ -56,6 +56,7 @@
               <p>I modeled the tray, supports, and frame attachments in ANSYS Mechanical. I kept the electronics mass and its position comparable across concepts. I represented fastened joints and compliant supports separately to keep the intended isolation path in each model.</p>
               <p>The rigid mount was the baseline. The elastomer tray added compliance and damping in a compact package. The suspended mount allowed more relative motion, so I paid particular attention to rocking and clearance. Modal analysis showed the motion each arrangement allowed, and the response comparison showed how excitation from the frame could reach the tray.</p>
               <p>The modes gave me a way to distinguish vertical motion from rocking or twisting. That mattered for the clearance check because a tray can move towards a nearby part at one corner as it rotates.</p>
+              <p>The concept renders show what changed: rigid standoffs give the tray a direct path to the frame, the elastomer mount adds a compliant layer underneath, and the suspended concept supports it from the sides. Keeping the electronics location comparable let me focus on how those support paths changed translation and rocking.</p>
             </div>
             <figure class="project-stage-figures mount-comparison">
               <figure class="reading-figure">
@@ -87,12 +88,13 @@
               <p>I compared root-mean-square (RMS) vibration by axis and used the fast Fourier transform (FFT) to see which frequencies contributed to it. RMS gave me an overall level for the selected window, and the spectra showed whether the change was concentrated at particular frequencies. Both isolation mounts reduced measured IMU vibration relative to the rigid baseline.</p>
               <p>When reading the spectra, I considered that a peak could come from motor excitation, structural motion, or both. Comparing the same sensor axes across the mounts helped me focus on changes associated with the mounting arrangement.</p>
               <p>The actual vibration measurements are confidential under the NDA.</p>
+              <p>The comparison depended on matching the part of each run I analysed. A startup peak can raise the RMS value and make it harder to compare how the mounts behave during steadier motor operation. Reviewing the time traces before the spectra gave me a consistent basis for the qualitative comparison.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="why-we-selected-the-elastomer-tray">Mount selection</h2>
             <div class="project-stage-copy">
-              <p>We selected the elastomer-isolated tray after comparing the ground tests, ANSYS results, and installation checks. It kept the electronics together in a compact package and was easier to install consistently than the suspended arrangement. The model explained how the mounts could move, and the logs showed what reached the sensor in the aircraft.</p>
+              <p>We selected the elastomer-isolated tray after comparing the ground tests, ANSYS results, and installation checks. It kept the electronics together in a compact package and was easier to install consistently than the suspended arrangement. The model explained how the mounts could move, the logs showed what reached the sensor, and the installation check showed which layout was easier to fit and service.</p>
             </div>
           </section>
         </article>
