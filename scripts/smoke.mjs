@@ -8,7 +8,7 @@ if (!base) {
 }
 const currentCases = [
   ['/', 200, 'Mithul', 'Projects &amp; Notes'],
-  ['/projects', 200, 'Selected projects', 'Projects'],
+  ['/projects', 200, 'Ongoing projects', 'Projects'],
   ['/build-log', 200, 'Recent Updates', 'Build Log'],
   ['/blog/the-small-blue-thing', 404, 'here yet.', ''],
   ['/blog/a-walk-in-twenty-four-pictures', 404, 'here yet.', ''],
@@ -143,9 +143,22 @@ for (const [path, status, content, title] of cases) {
     assert.doesNotMatch(body, /href="\/(?:about|work|blog|activities)"/);
   }
   if (path === '/projects') {
-    assert.match(body, /<h1>Selected projects<\/h1>/);
-    assert.match(body, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
-    assert.match(body, /href="\/work\/fireworks-galaxy"/);
+    assert.match(body, /<h1>Projects<\/h1>/);
+    assert.match(
+      body,
+      /id="ongoing">Ongoing projects[\s\S]*id="past">Past projects/,
+    );
+    const ongoing =
+      body.match(/aria-labelledby="ongoing">([\s\S]*?)<\/section>/)?.[1] ?? '';
+    const past =
+      body.match(/aria-labelledby="past">([\s\S]*?)<\/section>/)?.[1] ?? '';
+    assert.match(ongoing, /href="\/work\/adaptive-suspension-rover"/);
+    assert.match(ongoing, /src="\/images\/projects\/gn4rly-2-5-assembly\.jpg"/);
+    assert.doesNotMatch(past, /href="\/work\/adaptive-suspension-rover"/);
+    assert.match(past, /href="\/work\/fireworks-galaxy"/);
+    assert.match(past, /src="\/images\/projects\/four-bar-twin-lid-cad\.png"/);
+    assert.match(past, /src="\/images\/projects\/iste-project-brochure\.jpg"/);
+    assert.match(past, /href="\/work\/health-sync"/);
     assert.doesNotMatch(body, /nitk-battle-bots-event\.jpeg/i);
   }
   if (path === '/build-log') {

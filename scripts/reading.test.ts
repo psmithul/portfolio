@@ -12,6 +12,7 @@ import {
   readingRehypePlugins,
 } from '../lib/reading.ts';
 import { projectStudies } from '../content/project-studies.ts';
+import { additionalProjects } from '../content/additional-projects.ts';
 import {
   journalHighlights,
   journalTopics,
@@ -74,6 +75,7 @@ await test('every project has a write-up and every equation compiles strictly', 
   const slugs = [...projectSource.matchAll(/slug: '([^']+)'/g)].map(
     (match) => match[1],
   );
+  slugs.push(...additionalProjects.map(({ slug }) => slug));
   assert.deepEqual(Object.keys(projectStudies).sort(), slugs.sort());
   for (const [slug, body] of Object.entries(projectStudies)) {
     assert.ok(readingHeadings(body).length >= 2, slug + ': document sections');

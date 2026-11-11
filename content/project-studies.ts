@@ -1,5 +1,10 @@
+import { additionalProjects } from './additional-projects.ts';
+
 // Project write-ups draw on the original reports, project records, and CV.
 export const projectStudies: Record<string, string> = {
+  ...Object.fromEntries(
+    additionalProjects.map(({ slug, study }) => [slug, study]),
+  ),
   'fireworks-galaxy': String.raw`
 ## Choosing a comparison galaxy
 
@@ -171,6 +176,8 @@ The planned sequence is to stop if vibration stays high, adjust the preload, and
 We’ll start with one loaded module and measure how much force it takes to move the wheel at different preload settings. We’ll also cut power under load to check that the lock holds.
 
 For the rover trials, we’ll compare fixed preload, speed control, preload control, and the two controls together. We’ll use the same track and payload and repeat each setting at least three times. We’re aiming for **at least 20% lower vertical chassis RMS acceleration** in the 5–100 Hz band at the same speed as the fixed-preload run. We’ll also record route time and energy per metre.
+
+[Rover CAD and project files](https://github.com/psmithul/tensegrity-rover).
 `,
   'tensegrity-joint': String.raw`
 ## How the support network is arranged
@@ -298,6 +305,10 @@ _Design schematic of the simulator. The planned route and the confidence in the 
 ## Monte Carlo evaluation
 
 I ran repeated trials and compared the estimated pose with the simulator’s true pose. I also recorded collisions, recovery events, whether the robot reached the goal, and how long it took. That let me compare speed with how often the robot reached the goal without a collision.
+
+![Four charts show the route, position error and uncertainty, commanded speed, and gyroscope bias for one simulated run.](/images/projects/navigation-trajectory.png)
+
+_A successful nominal run with the adaptive controller. [Full-size simulation figure](/images/projects/navigation-trajectory.png) · [Code and results](https://github.com/psmithul/differential-drive-navigation)._
 `,
   'four-bar-door-mechanism': String.raw`
 ## Laying out the links
@@ -311,6 +322,14 @@ _Design schematic showing two positions of a four-bar linkage. The fixed pivots 
 ## Trying the assembled mechanism
 
 We made the links and pivots and assembled a working door opener. Checking its motion on the build made it easier to see how the positions of the pivots changed the path of the door and where it stopped.
+
+## Revisiting the layout in CAD
+
+I later reconstructed a twin-lid design with two connecting rods on one crank. The CAD study compared how far each lid opened, how much input effort was required, and how sensitive the design was to dimensional errors.
+
+![Parametric CAD of the twin-lid assembly with both lids open and two rods meeting at the shared crank.](/images/projects/four-bar-twin-lid-cad.png)
+
+_The later CAD reconstruction at 75° opening. [Full-size CAD view](/images/projects/four-bar-twin-lid-cad.png) · [Design files and report](https://github.com/psmithul/four-bar-door)._
 `,
   'easy-access-wallet': String.raw`
 ## Starting with the card stack
