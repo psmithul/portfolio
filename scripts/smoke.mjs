@@ -40,6 +40,12 @@ const currentCases = [
   ['/work/uncertainty-aware-navigation', 200, 'Monte Carlo', 'Uncertainty'],
   ['/work/reaction-wheel-microvibrations', 200, '0.00589%', 'Microvibration'],
   [
+    '/work/fireworks-galaxy',
+    200,
+    '0.41 arcseconds',
+    'Exploring the Fireworks Galaxy',
+  ],
+  [
     '/work/uav-vibration-integration',
     200,
     'elastomer-isolated modular tray',
@@ -119,6 +125,7 @@ for (const [path, status, content, title] of cases) {
     assert.match(body, /Vayu Aerospace.*ISTE/s);
     assert.match(body, /© 2024–2026 Mithul Sourav/);
     assert.match(body, /href="\/blog\/gpt-5-6-sol-and-what-i-want-to-build"/);
+    assert.match(body, /href="\/work\/fireworks-galaxy"/);
     assert.doesNotMatch(body, /recent updates|nitk-battle-bots-event\.jpeg/i);
     assert.doesNotMatch(body, /href="\/(?:about|work|blog|activities)"/);
   }
@@ -291,3 +298,13 @@ assert.equal(
   createHash('sha256').update(source).digest('hex'),
 );
 console.log('PASS CV download matches the supplied document');
+const notebookPath = '/notebooks/Astroclub_Fireworks_Galaxy.ipynb';
+const notebook = await fetch(new URL(notebookPath, base));
+assert.equal(notebook.status, 200, notebookPath);
+assert.ok(
+  Buffer.from(await notebook.arrayBuffer()).equals(
+    readFileSync('public' + notebookPath),
+  ),
+  'The notebook download matches the executed copy',
+);
+console.log('PASS Fireworks Galaxy notebook download');

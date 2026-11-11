@@ -5,6 +5,17 @@ import type { Project } from '@/content/projects';
 export const projectImages: Partial<
   Record<string, NonNullable<Project['image']>>
 > = {
+  'fireworks-galaxy': {
+    kind: 'documentation',
+    label: 'Hubble NICMOS · NGC 6946',
+    src: '/images/projects/fireworks-field.png',
+    width: 1682,
+    height: 616,
+    alt: 'The near-infrared Hubble detector image of NGC 6946 next to two nested crops of its bright centre.',
+    caption:
+      'Three views of the same F160W exposure. Blue-grey pixels mark detector samples excluded by the quality mask. Data from NASA/ESA Hubble via MAST.',
+    fit: 'contain',
+  },
   'nitk-battle-bots': {
     kind: 'documentation',
     label: 'Team at the event',
