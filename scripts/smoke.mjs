@@ -54,7 +54,7 @@ const currentCases = [
   [
     '/work/off-road-leaf-robot',
     200,
-    'bottom-up BOM',
+    'space available beside the wheels',
     'Modular Terrain-Adaptive',
   ],
   [
