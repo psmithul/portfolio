@@ -41,6 +41,9 @@
 }
 
 /* Shared layout and article typography */
+html {
+  scrollbar-gutter: stable;
+}
 body {
   margin: 0;
 }
@@ -378,7 +381,8 @@ body {
 .academic-experience {
   padding-block: 12px 24px;
 }
-.academic-activity-group {
+.academic-activity-group,
+.academic-experience[id] {
   scroll-margin-top: var(--academic-anchor-offset);
 }
 .academic-activity-group + .academic-activity-group {

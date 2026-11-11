@@ -45,10 +45,18 @@
           </div>
         </header>
         <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="tracing-the-vibration-path">Tracing the vibration path</h2>
+            <div class="project-stage-copy">
+              <p>I started by getting familiar with the airframe, flight controller, and onboard logs. The controller uses accelerometer and gyroscope readings from its inertial measurement unit (IMU) to estimate how the aircraft is moving. When vibration travels from the motors through the airframe and into the controller mount, it also appears in those readings.</p>
+              <p>I focused on the mechanical path between the airframe and the controller tray. The mount had to reduce the vibration reaching the sensor while holding the controller in a repeatable orientation and leaving room to connect and service the electronics.</p>
+            </div>
+          </section>
           <section class="project-stage project-stage-wide">
             <h2 id="comparing-the-mounts-in-ansys">Comparing the mounts in ANSYS</h2>
             <div class="project-stage-copy">
-              <p>I traced the vibration from the motors through the airframe to the flight controller’s IMU. In ANSYS Mechanical, I used modal analysis to see where each assembly might resonate, then compared how motion from the airframe could reach the tray. The rigid mount provided a baseline for the elastomer-isolated and suspended concepts.</p>
+              <p>I modeled the tray, its supports, and the frame-side attachments in ANSYS Mechanical. I kept the electronics mass and its location comparable across concepts and represented fastened joints and compliant supports separately. Treating a flexible support as a rigid bond would remove the isolation path I was trying to compare.</p>
+              <p>The modal analysis showed where each mount could resonate and how the tray moved in those modes, including whether it translated or rocked. I then compared how excitation on the airframe side reached the tray. The rigid mount provided a baseline. The elastomer tray added compliance and damping in a compact package, while the suspended mount allowed more relative motion and made clearance and rocking more important.</p>
             </div>
             <figure class="project-stage-figures mount-comparison">
               <figure class="reading-figure">
@@ -69,15 +77,24 @@
           <section class="project-stage">
             <h2 id="fitting-the-mounts-into-the-aircraft">Fitting the mounts into the aircraft</h2>
             <div class="project-stage-copy">
-              <p>After shortlisting the two isolation mounts, I checked the manufactured parts for fit, connector access, and fastener clearance. I kept the controller orientation consistent so we could compare the same IMU axes across mounts. I also checked cable slack because a tight cable can carry vibration around the isolator.</p>
+              <p>We shortlisted the elastomer and suspended concepts for hardware testing. I checked the manufactured parts against the installation space, including fastener fit and access to the connectors. I kept the controller orientation consistent across the assemblies so the same IMU axes could be compared.</p>
+              <p>I also checked that the tray had room to move and that the wiring had enough slack. A taut cable or contact with nearby structure can create a parallel path for vibration, so these checks were part of verifying that the assembled mount behaved like the design we had analyzed.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="reading-the-ground-test-logs">Ground-test results</h2>
             <div class="project-stage-copy">
-              <p>We logged the flight controller’s IMU during ground motor runs. In MATLAB, I selected comparable steady portions of each run and compared the overall vibration level using RMS. I used FFT spectra to see which frequencies contributed to it.</p>
-              <p>Both isolation mounts reduced measured IMU vibration relative to the rigid baseline. The team selected the elastomer-isolated modular tray after weighing the test results and ANSYS analysis alongside fit, wiring, and assembly.</p>
+              <p>We ran the motors with the aircraft on the ground and logged the controller’s IMU for the rigid baseline and both isolation mounts. In MATLAB, I reviewed the time histories and selected comparable steady portions of each run so startup and other transients would not skew the comparison.</p>
+              <p>I compared root-mean-square (RMS) vibration by axis to see how much overall motion reached the controller in each configuration. I then used the fast Fourier transform (FFT) to compare the dominant peaks in the spectra. The two views let me distinguish changes in overall vibration from changes concentrated at particular frequencies.</p>
+              <p>Both isolation mounts reduced measured IMU vibration relative to the rigid baseline. The ANSYS models helped explain how the mounts could move, and the IMU logs showed what reached the sensor in the assembled hardware.</p>
               <p>The actual vibration measurements are confidential under the NDA.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="why-we-selected-the-elastomer-tray">Why we selected the elastomer tray</h2>
+            <div class="project-stage-copy">
+              <p>The team selected the elastomer-isolated modular tray after weighing the ground-test results and ANSYS analysis alongside fit, wiring, and assembly. The tray kept the electronics together in a compact package and was easier to install consistently than the more freely suspended arrangement.</p>
+              <p>The report recommends repeating the ground runs at several motor operating points and adding a second accelerometer on the frame. Measuring the frame and controller simultaneously would show how much of the input vibration passes through the mount. Repeated runs would show how much that response varies before moving to flight validation.</p>
             </div>
           </section>
         </article>

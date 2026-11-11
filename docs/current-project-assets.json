@@ -218,12 +218,20 @@
       "role": "passive spring and motor-assisted brace concepts"
     },
     {
-      "path": "public/images/projects/process-leaf-collection.webp",
-      "source": "Original schematic drawn for this site from the documented project description",
-      "width": 1280,
-      "height": 660,
-      "sha256": "3c416092bc557db07d12b149828a811acffb6c863bdeb1e5baf79920af8b902f",
-      "role": "pickup, transfer, storage, and terrain-following architecture"
+      "path": "public/images/projects/leaf-cleaning-module-cad.webp",
+      "source": "Blender render of the supplied Sweeper one (2).step assembly, tessellated using Open CASCADE",
+      "width": 1440,
+      "height": 900,
+      "sha256": "911ce3afabef1c0787b608ef8ad81160da370ce0d408b250d72a8a99a5de285b",
+      "role": "CAD view of the six-unit cleaning module"
+    },
+    {
+      "path": "public/images/projects/leaf-tiller-motion-study.webp",
+      "source": "Virtual_Instrumentation.pptx, slide 4, single-unit CAD motion study still",
+      "width": 430,
+      "height": 466,
+      "sha256": "5c946ab5e686700d8fd1ce0b9ed166b4aa9bfd926270692e8128875e034ac3aa",
+      "role": "Side view of the tiller reaching the ground"
     },
     {
       "path": "public/images/projects/process-robot-navigation.webp",
@@ -336,14 +344,6 @@
       "height": 712,
       "sha256": "f7c73a9473e43e337e4afb864cb1a0d1f4f6474ce090a9ce201516c2d391214e",
       "role": "public project brochure"
-    },
-    {
-      "path": "public/images/projects/portfolio-website.jpg",
-      "source": "Mac browser capture of https://psmithul.com/",
-      "width": 1265,
-      "height": 712,
-      "sha256": "3468d07039852435e53b1f29271ce7dc4b4a5d2dade223478b6740e6ddbde7ce",
-      "role": "portfolio About page"
     },
     {
       "path": "public/images/projects/four-bar-twin-lid-cad.png",
