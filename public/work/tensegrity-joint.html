@@ -34,8 +34,8 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Joint modeling and preliminary mechanical design · May 2026 — Present</p>
-              <p>This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.</p>
-              <p>Ongoing computational and preliminary mechanical design. Static calculations do not establish whole-joint stability, fatigue life, or suitability for human use.</p>
+              <p>I used a tensegrity support network to explore how a wearable knee joint’s geometry and internal tension affect its stiffness. In the design, 12 tendons suspend a floating centre piece between two rigid frames.</p>
+              <p>The assembly and the MATLAB results describe a preliminary mechanical design and a static load case at a reference pose.</p>
             </div>
             <figure class="project-cover">
               <img alt="Two views of the assembled tensegrity knee with red support tendons fastened to collars on the amber tristar and pins on the blue and teal frames." width="1800" height="1012" decoding="async" src="/images/projects/tensegrity-knee-support-assembly.webp">
@@ -45,17 +45,16 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-use-a-tension-network">Why use a tension network?</h2>
+            <h2 id="why-use-a-tension-network">Tension network</h2>
             <div class="project-stage-copy">
-              <p>I wanted to understand whether the support structure of a wearable knee joint could contribute to its stiffness. In a tensegrity structure, rigid parts hold their shape and tensioned members carry loads between them. The layout made it possible to study the influence of geometry and internal tension together.</p>
-              <p>I focused on the support network around the floating centre piece. That gave me a specific problem to model: how an external load redistributes tension through the spans that hold the piece in place.</p>
+              <p>I wanted to see how an external load redistributes tension through the spans holding the centre piece in place. The rigid parts define the attachment geometry, while the tendons can only pull. A span that needs to push in the model would go slack.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="how-the-support-network-is-arranged">How the support network is arranged</h2>
+            <h2 id="how-the-support-network-is-arranged">Attachment geometry</h2>
             <div class="project-stage-copy">
-              <p>I started with two Y-frames and a floating tristar. Each tristar tip connects to all four frame tips, giving 12 support tendons. The tristar’s arms are 120° apart, and the four frame tips sit on the intended flexion axis. The drawing shows where the tendons sit at 60° of knee flexion. I drew on a tensegrity leg study by Mortensen and colleagues for the layout. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
-              <p>I worked from the attachment points outward. The drawing identifies the endpoints of the support spans, and the STEP assembly shows how those points sit on the three rigid parts. Reading them together helped me check which connections belong to the support network and where each span crosses the joint.</p>
+              <p>I started with two Y-frames and a floating tristar, drawing on a tensegrity leg study by Mortensen and colleagues. Each tristar tip connects to all four frame tips. The tristar arms are 120° apart, and the four frame tips sit on the intended flexion axis. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
+              <p id="checking-the-geometry-before-a-build">I checked the attachment points in the STEP assembly against the drawing at 60° of knee flexion. Moving an anchor changes the line of pull through several tendons, so it can redistribute load even when the external force stays the same.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -73,18 +72,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="member-force-analysis">Member-force analysis</h2>
+            <h2 id="member-force-analysis">Tendon loads in MATLAB</h2>
             <div class="project-stage-copy">
-              <p>I used MATLAB to see how the tendons share a load as I change the geometry and preload. A tendon can only pull. If the calculation shows that one needs to push to hold the joint in position, that tendon would go slack.</p>
-              <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load in the model. The calculated tensions ranged from <strong>0.50 to 5.69 kN per support span</strong>. That spread is what I look for when I change preload. Adding tension helps keep the lightest-loaded span taut, but it also asks more of the tristar and frame connections before an external load is applied.</p>
-              <p>In MATLAB, I compared the tension in each support span. The lowest tension tells me which part of the network is closest to going slack, and the highest tells me where the connection carries the greatest load in that case. The two values expose how unevenly the load is shared.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="checking-the-geometry-before-a-build">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>I learned to read geometry and force results together. The assembly drawing shows where I put the anchors. The MATLAB model shows how those same anchors change the directions of the forces. Moving one point can redistribute load through several spans, even when the external load stays the same.</p>
-              <p>The static case made the role of preload clearer to me. More preload can keep a lightly loaded span in tension, and it also raises the load that the connections carry before the joint is externally loaded. The figures here describe a static model at a reference pose.</p>
+              <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load. The model gave tensions from <strong>0.50 to 5.69 kN per support span</strong>.</p>
+              <p>I compared the lowest and highest tensions when changing the preload. The lowest shows which span is closest to slack. The highest shows where the connection carries the largest load. Increasing preload helps keep the lightest span taut and also raises the load on the connections before an external force is applied.</p>
             </div>
           </section>
         </article>

@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Passive concept to actuated brace · Team project · Oct 2025 — Sep 2026</p>
-              <p>We developed a passive spring mechanism into a brace that uses a motor and cable to assist knee extension. Our team placed in the top five at the Incubate X Prosthetic Challenge.</p>
-              <p>We developed the mechanism in CAD and defined the drive, sensing, power, and manual-release architecture.</p>
+              <p>We started with a passive spring mechanism to assist knee extension. As the knee bends, the spring stretches and its line of pull changes. We used the passive design to see how those two effects shape the assistance before adding a motor.</p>
             </div>
             <figure class="project-cover">
               <img alt="Original CAD screenshot of the actuated knee-assistance design, showing the brace, rails, cuffs, motor, spring, and cable drive." width="1718" height="1268" decoding="async" src="/images/projects/knee-assistance-cad.png">
@@ -45,18 +44,16 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="what-prompted-the-design">What prompted the design</h2>
+            <h2 id="what-prompted-the-design">Spring geometry</h2>
             <div class="project-stage-copy">
-              <p>We started with the idea of using a spring to help someone straighten their knee. As we worked through the mechanism, it became clear that the amount of help changes with the joint angle. The spring stretches by a different amount and pulls at a different angle as the knee bends.</p>
-              <p>That led us to look at both the geometry of the mechanism and how to control the assistance. The passive version gave us a way to understand the spring and its leverage before we added a drive.</p>
+              <p>Spring force increases with stretch. The torque it applies at the knee also depends on how far its line of pull passes from the pivot. We moved the spring attachment points in SolidWorks and ANSYS to compare those effects at different angles.</p>
+              <p>We also checked clearance around the pivot and attachments through the intended range of motion. A position with useful leverage still had to leave room for the mechanism to move.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="from-a-spring-to-a-motor-driven-brace">From a spring to a motor-driven brace</h2>
+            <h2 id="from-a-spring-to-a-motor-driven-brace">Actuated brace design</h2>
             <div class="project-stage-copy">
-              <p>We started with a passive spring-assisted knee mechanism. We moved the spring attachment points in SolidWorks and ANSYS to see what happened as the knee bent. Two things mattered in each position. The spring needed enough leverage to assist the knee, and the parts needed room to move through the full range.</p>
-              <p>The later design adds a motor-driven cable to load the spring and a sensor to track the knee angle. The thigh and shank cuffs sit on adjustable rails, with the drive and spring on one side. The user still extends their knee actively, and the cable and spring add assistance.</p>
-              <p>I used the changing poses in SolidWorks and ANSYS to look for interference around the pivot, spring, and attachments. The work separated two decisions that are easy to mix together: where the linkage needs to move and where the cable needs to pull to get useful leverage.</p>
+              <p>The actuated CAD uses a motor-driven cable to load the spring and an angle sensor to measure the brace position. The wearer supplies the knee motion, and the cable and spring add extension assistance. Adjustable rails position the thigh and shank cuffs around the knee, with the drive and spring mounted on one side.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -68,24 +65,15 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="how-the-brace-helps-the-knee-extend">How the brace helps the knee extend</h2>
+            <h2 id="how-the-brace-helps-the-knee-extend">Manual release</h2>
             <div class="project-stage-copy">
-              <p>As the spring stretches, it pulls harder. The angle of the cable also changes as the knee moves, which changes its leverage about the pivot. That’s why the spring force alone couldn’t tell us how much assistance the brace would provide throughout the motion.</p>
-              <p>We also designed an independent manual release. If the drive jams, the user needs a way to release the mechanism without moving the motor.</p>
-              <p>In the actuated design, the angle sensor gives the drive a measure of the brace position. The motor changes the load on the spring through the cable. We treated the cuffs and rails as part of the mechanism because their position determines how the device sits relative to the knee.</p>
+              <p id="what-i-learned">We designed a manual release with its own mechanical path. A jammed drive is one of the cases where a person would need to release the brace, so the release cannot rely on movement from the motor.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="taking-the-design-to-the-bench">What we completed</h2>
+            <h2 id="taking-the-design-to-the-bench">Design outcome</h2>
             <div class="project-stage-copy">
-              <p>We took the design from the passive spring concept to an actuated CAD assembly and defined how the drive, sensing, power, and release fit together. The team presented that work at the Incubate X Prosthetic Challenge and placed in the top 5 of 70 teams nationwide.</p>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>The sequence of working on the passive design first helped me understand what the motor actually controls. Spring force and extension assistance are related through the cable’s changing leverage. Looking at the same mechanism at several angles made that relationship easier to see.</p>
-              <p>Working through the jam case taught me to account for how someone releases a mechanism as part of the design. The manual release had to have its own path because the drive might be the part that had stopped moving.</p>
+              <p>We completed the actuated CAD assembly and defined the drive, sensing, power, and release architecture. We presented the design at the Incubate X Prosthetic Challenge and placed in the top 5 out of 70 teams nationwide.</p>
             </div>
           </section>
         </article>
