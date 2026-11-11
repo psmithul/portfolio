@@ -13,9 +13,9 @@ Sponsorship gave us room to use stronger materials on GN4RLY 2.5. The workbench 
 
 _GN4RLY 2.5 during assembly. Photo from the NITK Battle-Bots club proposal._
 
-![NITK Battle Bots members working on a robot together at a crowded lab bench.](/images/projects/gn4rly-lab-assembly.jpg)
+![NITK Battle Bots members with one of their robots at a competition.](/images/projects/nitk-battle-bots-event.jpeg)
 
-_Assembly work in the Robocon Lab. Photo from the NITK Battle-Bots club proposal._
+_Our NITK Battle Bots team at the event._
 
 ### Why GN4RLY 2.5 fell short
 
