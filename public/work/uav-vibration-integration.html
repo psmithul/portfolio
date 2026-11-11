@@ -33,14 +33,14 @@
           <h1>UAV Vibration Analysis &amp; Isolation</h1>
           <div class="project-intro-grid">
             <div class="project-intro-copy">
-              <p>Product internship · Vayu Aerospace Pvt. Ltd., Bengaluru · Jun — Jul 2026</p>
+              <p>Product Intern · Vayu Aerospace Pvt. Ltd., Bengaluru · 1 June – 15 July 2026</p>
               <p>I compared three ways to mount a UAV flight controller at Vayu Aerospace. Ground motor tests helped us choose an elastomer-isolated tray.</p>
-              <p>Internship work covering vibration-path modeling, hardware integration, and ground motor-run testing.</p>
+              <p>The goal was to reduce the motor vibration reaching the flight controller’s inertial measurement unit (IMU) while keeping the electronics accessible.</p>
               <p>Original project images and measured vibration values are redacted under a nondisclosure agreement (NDA). The 3D renders illustrate the mounting concepts.</p>
             </div>
             <figure class="project-cover">
               <img src="/images/projects/uav-elastomer-hero.webp" alt="Isometric view of the flight controller on an aluminum tray above the airframe plate, supported by teal elastomer isolators." data-framing="full-frame" width="1440" height="900" decoding="async">
-              <figcaption>Concept rendering of the elastomer-isolated tray selected after ground testing.</figcaption>
+              <figcaption>3D concept render of the elastomer-isolated tray selected after ground testing. The original project images are confidential under an NDA.</figcaption>
             </figure>
           </div>
         </header>
@@ -48,9 +48,9 @@
           <section class="project-stage project-stage-wide">
             <h2 id="comparing-the-mounts-in-ansys">Comparing the mounts in ANSYS</h2>
             <div class="project-stage-copy">
-              <p>At Vayu Aerospace, I followed the vibration from the motors, through the airframe, to the flight controller’s IMU. I compared three ways to mount the controller in ANSYS. The rigid mount gave me a baseline for the elastomer tray and the suspended mount. I looked at where each assembly might resonate and how much of that motion would reach the controller.</p>
+              <p>I traced the vibration from the motors through the airframe to the flight controller’s IMU. In ANSYS Mechanical, I used modal analysis to see where each assembly might resonate, then compared how motion from the airframe could reach the tray. The rigid mount provided a baseline for the elastomer-isolated and suspended concepts.</p>
             </div>
-            <div class="project-stage-figures mount-comparison">
+            <figure class="project-stage-figures mount-comparison">
               <figure class="reading-figure">
                 <img src="/images/projects/uav-mount-rigid.webp" alt="The controller tray bolts to rigid metal standoffs on the airframe plate." width="840" height="620" loading="lazy" decoding="async">
                 <figcaption><strong>Rigid mount</strong> · Metal standoffs carry the tray. This was the comparison baseline.</figcaption>
@@ -63,18 +63,21 @@
                 <img src="/images/projects/uav-mount-suspended.webp" alt="Angled purple links hang the controller tray from two side frames, leaving a gap underneath." width="840" height="620" loading="lazy" decoding="async">
                 <figcaption><strong>Suspended mount</strong> · Angled links hang the tray from a frame.</figcaption>
               </figure>
-            </div>
+              <figcaption class="mount-comparison-note">These images are 3D concept renders. The original project images are confidential under an NDA.</figcaption>
+            </figure>
           </section>
           <section class="project-stage">
             <h2 id="fitting-the-mounts-into-the-aircraft">Fitting the mounts into the aircraft</h2>
             <div class="project-stage-copy">
-              <p>I checked the controller orientation, fasteners, and clearances on the shortlisted mounts. I checked cable slack too because a tight cable can carry vibration around the isolator.</p>
+              <p>After shortlisting the two isolation mounts, I checked the manufactured parts for fit, connector access, and fastener clearance. I kept the controller orientation consistent so we could compare the same IMU axes across mounts. I also checked cable slack because a tight cable can carry vibration around the isolator.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="reading-the-ground-test-logs">Reading the ground-test logs</h2>
+            <h2 id="reading-the-ground-test-logs">Ground-test results</h2>
             <div class="project-stage-copy">
-              <p>We ran the motors on the ground and recorded the IMU. I used MATLAB to compare equivalent portions of the runs. The RMS values gave me the overall vibration level, and the FFT spectra showed which peaks contributed to it. The team used those logs, the ANSYS results, and the installation checks to choose the elastomer-isolated modular tray.</p>
+              <p>We logged the flight controller’s IMU during ground motor runs. In MATLAB, I selected comparable steady portions of each run and compared the overall vibration level using RMS. I used FFT spectra to see which frequencies contributed to it.</p>
+              <p>Both isolation mounts reduced measured IMU vibration relative to the rigid baseline. The team selected the elastomer-isolated modular tray after weighing the test results and ANSYS analysis alongside fit, wiring, and assembly.</p>
+              <p>The actual vibration measurements are confidential under the NDA.</p>
             </div>
           </section>
         </article>
