@@ -83,6 +83,14 @@
   object-position: center 53%;
 }
 
+.project-cover:has(.project-cover-full-frame) {
+  width: min(100%, 520px);
+}
+
+.project-cover img.project-cover-full-frame {
+  aspect-ratio: auto;
+}
+
 .project-cover figcaption,
 .academic-site .project-page .reading-figure figcaption {
   margin-top: 8px;
