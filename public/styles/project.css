@@ -48,6 +48,10 @@
   margin-bottom: 0;
 }
 
+.project-page p[id] {
+  scroll-margin-top: var(--academic-anchor-offset);
+}
+
 .project-cover {
   min-width: 0;
   margin: 0;

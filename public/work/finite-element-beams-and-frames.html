@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>ME311 Finite Element Method · NITK team coursework · Nov 2026</p>
-              <p>We assembled beam and plane-frame models in MATLAB and used ANSYS results to check displacements, mesh convergence, and vibration modes.</p>
-              <p>The report covers static beam bending, free vibration, and plane-frame analysis.</p>
+              <p>For our finite element coursework, we solved static beam bending, free vibration, and plane-frame problems in MATLAB. We built matching models in ANSYS to check the results and see how they changed with the mesh.</p>
             </div>
             <figure class="project-cover">
               <img alt="Two charts compare beam and frame displacement errors as element counts increase." data-framing="full-frame" width="2788" height="2022" decoding="async" src="/images/projects/fem-mesh-convergence.jpg">
@@ -45,25 +44,23 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-solve-it-two-ways">Why solve the same structure two ways?</h2>
+            <h2 id="why-solve-it-two-ways">Model setup</h2>
             <div class="project-stage-copy">
-              <p>For our finite element coursework, we wanted to understand where a computed deflection or mode shape comes from. We assembled the systems ourselves in MATLAB and built matching cases in ANSYS so we could follow the assumptions from the element equations to the plotted result.</p>
-              <p>The static beam, free-vibration beam, and plane frame gave us three views of the method. One shows how a load bends a structure, one shows how it moves freely, and one shows how elements that meet at different angles act together.</p>
+              <p>We wanted to trace the result from the element equations to the plotted displacement or mode shape. Before comparing the two programs, we matched the geometry, support conditions, and loads for each case.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="assembling-the-models">Assembling the models</h2>
+            <h2 id="assembling-the-models">Assembly and mesh convergence</h2>
             <div class="project-stage-copy">
-              <p>We assembled the beam and frame systems from element matrices in MATLAB. We compared displacements and checked how the answers changed as we refined the mesh in ANSYS.</p>
-              <p>We mapped each beam or frame element’s degrees of freedom into the global system, then applied the supports and loads. For the frame, the member equations start in each member’s own axes, so we transformed them before assembly. Matching the load and support definitions was necessary before the two solutions could be compared.</p>
-              <p>For the static cases, we checked deflections as the element size changed. Looking at a series of mesh sizes showed how the answer settled and gave us more information than agreement at one mesh size.</p>
+              <p>In MATLAB, we mapped the element degrees of freedom into the global system and then applied the supports and loads. The plane-frame members start in their own axes, so we transformed them into global coordinates before assembly.</p>
+              <p id="what-i-learned">For the static cases, we compared displacements as we refined the mesh. The convergence curves showed how the discretisation affected the result. Assembling the equations ourselves made it easier to trace an unexpected displacement back to a support condition or a degree-of-freedom mapping.</p>
+              <p>For the static beam in ANSYS, the linear-element model gave a centre displacement of about −20.25 mm with two elements and −33.06 mm with 64 elements. The algebraic reference was −33.08 mm. That series showed how strongly the coarse mesh affected this particular result.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="checking-the-vibration-modes">Checking the vibration modes</h2>
+            <h2 id="checking-the-vibration-modes">Free-vibration comparison</h2>
             <div class="project-stage-copy">
-              <p>We kept the beam span as a parameter in the modal calculation, then picked a 2 m span to compare the calculated modes with the ANSYS model.</p>
-              <p>For free vibration, we used the stiffness and mass matrices to solve for the natural frequencies and shapes. Keeping span as a parameter made the calculation reusable across beam lengths. The 2 m case gave us a fixed comparison in which we could examine both the numerical frequency and the shape of the first mode.</p>
+              <p>We used the mass and stiffness matrices to calculate natural frequencies and mode shapes. Keeping the span as a parameter let us run the same calculation for different lengths. For the 2 m case, we compared the first frequency and the corresponding deformation in ANSYS to check that both models described the same motion.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -72,13 +69,6 @@
                 </div>
                 <figcaption>First computed mode at 81.17 Hz for the 2 m check case. Figure 20 from the team report.</figcaption>
               </figure>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>Assembling the equations by hand in MATLAB made it easier for me to spot how a support or a degree-of-freedom mapping changes the result. Comparing with ANSYS showed me how to check a model through the assumptions it shares with another calculation.</p>
-              <p>The convergence plots and the mode shape answered different questions. The plots showed how discretization affected the answer, and the mode shape helped me check that I was comparing the same physical motion.</p>
             </div>
           </section>
         </article>

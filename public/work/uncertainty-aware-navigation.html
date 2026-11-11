@@ -34,8 +34,7 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Differential-drive simulation project · Sep — Dec 2025</p>
-              <p>I built a robot simulator to see how a robot should react when wheel slip or noisy sensors make its position uncertain. I tested when it would slow down or try to recover.</p>
-              <p>Simulation and Monte Carlo evaluation.</p>
+              <p>I built a differential-drive simulator to see how an indoor robot behaves when its position estimate becomes unreliable. I used the estimate’s uncertainty to control speed and recovery and compared the behaviour over repeated simulated runs.</p>
             </div>
             <figure class="project-cover">
               <img alt="Four simulation plots showing the route, localisation error, commanded speed, and gyro bias." width="1920" height="1440" decoding="async" src="/images/projects/navigation-trajectory.png">
@@ -45,24 +44,21 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-account-for-uncertainty">Why make the robot aware of uncertainty?</h2>
+            <h2 id="why-account-for-uncertainty">Simulation setup</h2>
             <div class="project-stage-copy">
-              <p>I wanted to see what happens when a robot follows a good route with a poor idea of where it is. On an indoor map, a route can look clear while a biased heading or a slipping wheel sends the real trajectory closer to a wall.</p>
-              <p>Simulation gave me a way to keep the map and goal fixed and change the quality of the observations. I could compare the robot’s estimate with the position and heading the simulator was actually using.</p>
+              <p>I wanted to keep the map and goal fixed while changing the quality of the observations. A clear route on the map can still send the physical robot too close to a wall if its heading is biased or a wheel slips. Simulation gave me the true path as a reference for those cases.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="giving-the-robot-imperfect-sensors">Giving the robot imperfect sensors</h2>
+            <h2 id="giving-the-robot-imperfect-sensors">Planning and sensor errors</h2>
             <div class="project-stage-copy">
-              <p>I built a differential-drive robot in Python simulation. A* plans a route, and a heading controller steers along it using the robot’s estimated position and orientation. I added encoder noise, IMU drift, yaw bias, and wheel slip. With slip, the wheels can turn without moving the robot as far as the encoders suggest.</p>
-              <p>The simulator keeps the true motion separate from the data the controller receives. I used that separation to model two different problems: the wheels can behave differently from what their rotation implies, and an IMU reading can drift even when the physical motion is unchanged.</p>
+              <p>I used A* to plan a route and a heading controller to follow it from the estimated position and orientation. I added encoder noise, IMU drift, yaw bias, and wheel slip to the Python simulator. A slipping wheel can turn without moving the robot as far as the encoder suggests, so I kept the simulated motion and the reported sensor reading separate.</p>
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="using-the-pose-estimate-to-decide-when-to-slow-down">Using the pose estimate to decide when to slow down</h2>
+            <h2 id="using-the-pose-estimate-to-decide-when-to-slow-down">Localisation and motion control</h2>
             <div class="project-stage-copy">
-              <p>An extended Kalman filter combines wheel encoder and IMU readings and tracks how uncertain the pose estimate is. I fed that uncertainty into the speed and recovery logic. If the estimate becomes less reliable, the simulated robot can slow down or try to recover before continuing.</p>
-              <p>The filter’s uncertainty is useful because two similar pose estimates can carry very different confidence. I used it to connect localization with motion decisions. The planner still provides a path, while the speed and recovery logic responds to the quality of the estimated pose.</p>
+              <p>An extended Kalman filter combines wheel encoder and IMU measurements and tracks uncertainty in the estimated pose. I passed that uncertainty to the speed and recovery logic. The planner still provides the route. The controller can slow down or try to recover when confidence falls.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -76,8 +72,8 @@
           <section class="project-stage">
             <h2 id="monte-carlo-evaluation">Monte Carlo evaluation</h2>
             <div class="project-stage-copy">
-              <p>I ran repeated trials and compared the estimated pose with the simulator’s true pose. I also recorded collisions, recovery events, whether the robot reached the goal, and how long it took. That let me compare speed with how often the robot reached the goal without a collision.</p>
-              <p>I looked at several measures together. Time to goal tells me how quickly a run finishes. Collision and completion counts tell me whether that speed came at the cost of getting through the route. Pose error and recovery events help explain what happened between the start and the outcome.</p>
+              <p>I ran repeated trials and compared the estimated pose with the simulator’s true pose. I recorded collisions, recovery events, completion, and time to goal so I could compare speed with the reliability of getting through the route.</p>
+              <p id="what-i-learned">Looking at the estimated pose, true path, and controller decision at the same point in a run helped me explain what had happened. Repeating the trials showed how that behaviour varied with noisy observations.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -86,13 +82,6 @@
                 </div>
                 <figcaption>A successful nominal run with the adaptive controller. <a href="/images/projects/navigation-trajectory.png">Full-size simulation figure</a> · <a href="https://github.com/psmithul/differential-drive-navigation" rel="noreferrer">Code and results</a>.</figcaption>
               </figure>
-            </div>
-          </section>
-          <section class="project-stage">
-            <h2 id="what-i-learned">What I learned</h2>
-            <div class="project-stage-copy">
-              <p>Using simulator ground truth taught me to look at the estimate, the actual path, and the decision the controller made at the same point in time. A single trajectory can look reasonable even when the pose estimate is drifting.</p>
-              <p>The repeated trials gave me a way to compare the behaviour across noisy runs. That made the trade-off between driving quickly and reacting to a less reliable estimate much easier to see.</p>
             </div>
           </section>
         </article>
