@@ -13,6 +13,14 @@ The original notebook pointed to one 256 × 256 F160W exposure taken on 19 Janua
 
 _The detector mask shows where data were excluded, including near the bright centre. The histogram shows the strong tail toward higher count rates. [Open the full-size figure](/images/projects/fireworks-quality.png)._
 
+## Zooming in on the nucleus
+
+I started with the full detector frame and made three progressively tighter crops. The wide view helped me find the bright patch, and the tightest crop let me look at its shape. In the original plot, each panel uses its own colour scaling. When I revisited the notebook, I used a shared stretch and marked flagged pixels so I could compare the views more directly.
+
+![Three panels from the original notebook show the wide, zoomed, and nucleus crops in the same blue-to-yellow palette.](/images/projects/fireworks-original-crops.png)
+
+_The three crops from my original notebook. [Open the full-size plot](/images/projects/fireworks-original-crops.png) or [see the crops with a shared stretch and quality mask](/images/projects/fireworks-field.png)._
+
 ## Finding the centre
 
 I mapped the catalogued infrared position onto the detector before drawing the cutouts. The brightest usable pixel landed about 0.41 arcseconds from that position. Before any ridge filtering, the median count rate was 55.58 counts/s within five pixels of the centre and 4.15 counts/s in the ring from 30 to 60 pixels. Those values describe the usable pixels in each region. [SIMBAD position for NGC 6946](https://simbad.cds.unistra.fr/simbad/sim-basic?Ident=NGC+6946).
@@ -21,13 +29,31 @@ I mapped the catalogued infrared position onto the detector before drawing the c
 
 _Median count rate in successive rings around the centre. The shaded area spans the 25th to 75th percentiles of usable pixels. [Open the full-size profile](/images/projects/fireworks-profile.png)._
 
+## Trying two ridge filters
+
+I tried Sato and Meijering on each crop to see how they would pick up narrow features. Both filters were set to look for dark ridges in these first plots. The shapes around the bright patch changed with the filter, which gave me a reason to check the results against the original image and try the bright-ridge setting as well.
+
+![Three crops from the original notebook show the Sato dark-ridge response in the hot palette.](/images/projects/fireworks-original-sato.png)
+
+_My first Sato comparison. [Open the full-size plot](/images/projects/fireworks-original-sato.png)._
+
+![The same three crops show the Meijering dark-ridge response in the hot palette.](/images/projects/fireworks-original-meijering.png)
+
+_My first Meijering comparison. [Open the full-size plot](/images/projects/fireworks-original-meijering.png)._
+
 ## Comparing the filters
 
-I ran Sato and Meijering on the full detector frame before taking the same 96-pixel cutout from each result. Sato gives a broader response around the centre, while Meijering concentrates the strongest response more tightly. Within each row, I kept the scaling fixed across grayscale, hot, magma, viridis, and cividis. I use the calibrated image and the quality mask to check features that stand out after filtering, especially near flagged pixels.
+When I revisited the notebook, I ran both filters in bright-ridge mode on the full frame, then took the same 96-pixel cutout from each result. Sato gives a broader response around the centre, while Meijering concentrates the strongest response more tightly. Within each row, I kept the scaling fixed across grayscale, hot, magma, viridis, and cividis so I could see what the palette alone changed.
 
 ![Fifteen panels compare the calibrated image and two ridge filter responses across five colormaps.](/images/projects/fireworks-filters.png)
 
 _The first row shows the F160W image. The next two show the Sato and Meijering responses. [Open the full-size comparison](/images/projects/fireworks-filters.png)._
+
+## What I learned
+
+I used to start by changing the colours until I could see more detail. This project taught me to check which pixels I could trust first. Some flagged pixels sit right beside the bright centre, so the quality mask changed how I read the image.
+
+Using a catalogued position gave me a way to check where the bright patch actually was. Measuring the light in rings around that position let me describe how quickly it fell off. I could already see the central brightening in the calibrated image, and the filters helped me decide where to look more closely. To find out what produces that light, I’d need observations at other wavelengths.
 
 ## Run the notebook
 

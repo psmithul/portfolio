@@ -80,7 +80,9 @@ export default async function ProjectPage({ params }: Props) {
                 className={
                   slug === 'nitk-battle-bots'
                     ? 'project-cover-photo'
-                    : undefined
+                    : slug === 'fireworks-galaxy'
+                      ? 'project-cover-full-frame'
+                      : undefined
                 }
                 unoptimized
                 preload

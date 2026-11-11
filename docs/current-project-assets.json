@@ -226,6 +226,38 @@
       "role": "independent control circuits for the two models"
     },
     {
+      "path": "public/images/projects/fireworks-original-frame.png",
+      "source": "Saved full-frame gnuplot2 output in Mithul’s original Astroclub_Fireworks_Galaxy.ipynb",
+      "width": 1776,
+      "height": 1792,
+      "sha256": "f6b7ed5e835a8913e4f2d30c1220955b8b158778f51449bc00690b665fb8f54a",
+      "role": "uncropped full-detector cover"
+    },
+    {
+      "path": "public/images/projects/fireworks-original-crops.png",
+      "source": "Saved gnuplot2 cutout output in Mithul’s original Astroclub_Fireworks_Galaxy.ipynb",
+      "width": 1404,
+      "height": 465,
+      "sha256": "34fe48ddf3b65803ac424c80a2465548e3d6ff9dff15bf9ad73314f98062fc38",
+      "role": "initial wide, zoomed, and nucleus cutouts"
+    },
+    {
+      "path": "public/images/projects/fireworks-original-sato.png",
+      "source": "Saved Sato hot palette output in Mithul’s original Astroclub_Fireworks_Galaxy.ipynb",
+      "width": 1417,
+      "height": 520,
+      "sha256": "ed5ec056dfbf140e35fdc1d6c868f26954a83aeccc4a75d63d0259fd602e1518",
+      "role": "initial Sato dark-ridge experiment"
+    },
+    {
+      "path": "public/images/projects/fireworks-original-meijering.png",
+      "source": "Saved Meijering hot palette output in Mithul’s original Astroclub_Fireworks_Galaxy.ipynb",
+      "width": 1417,
+      "height": 522,
+      "sha256": "33102d6e310f2d322b2e6e853863f44562f3ed643c372c87ec5ee017aec86951",
+      "role": "initial Meijering dark-ridge experiment"
+    },
+    {
       "path": "public/images/projects/fireworks-field.png",
       "source": "Executed Astroclub_Fireworks_Galaxy.ipynb using NASA/ESA HST NICMOS F160W exposure n4k48nbsq_cal.fits (MAST, program 7919)",
       "width": 1682,
