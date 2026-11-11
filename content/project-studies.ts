@@ -1,14 +1,13 @@
-// Project descriptions use the CV and original design/research material.
-// Equations describe the models; they do not stand in for experimental evidence.
+// Project write-ups draw on the original reports, project records, and CV.
 export const projectStudies: Record<string, string> = {
   'nitk-battle-bots': String.raw`
 ## 3 lb flipper
 
-We took inspiration from [Jelly Baby](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby), an NHRL robot with a rear-hinged lifter. For our 3 lb flipper, we made the main chassis as a unibody. That choice kept the number of separate parts down, which made the chassis simpler and cheaper for us to make. The flipper was a team design, and we worked on the chassis and lifter together.
+For the 3 lb class, we designed the chassis and flipper together. We liked the rear-hinged lifter on Jelly Baby and used it as a starting point. At that weight, every separate part was another piece we had to make and fit, so we went with a one-piece chassis. That kept the build simpler and cheaper for the team. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby).
 
 ## GN4RLY 2.5 (15 kg)
 
-GN4RLY 2.5 was our sponsored 15 kg build. We used stronger chassis materials and had to make room for a hammer saw, the drivetrain, and the wiring in the same frame. The assembly photo from the NITK Battle Bots club proposal shows that packaging problem clearly: the hammer saw sits in the centre, the drives run along the sides, and the wiring still needs to be reachable during assembly.
+Sponsorship gave us room to use stronger materials on GN4RLY 2.5. The workbench photo shows what had to fit in the frame. The hammer saw sits in the centre, the chain drives run along the sides, and the wiring is still exposed during assembly.
 
 ![GN4RLY 2.5 on a workbench with the central weapon assembly, side chain drives and wiring exposed.](/images/projects/gn4rly-2-5-assembly.jpg)
 
@@ -16,123 +15,102 @@ _GN4RLY 2.5 during assembly. Photo from the NITK Battle-Bots club proposal._
 
 ### Why GN4RLY 2.5 fell short
 
-We reused a hammer design from two years earlier. The robot’s weight and the older hammer assembly held us back against competing robots, and we couldn’t advance to later rounds. Sponsorship helped with the original build, but we didn’t have enough funding to fabricate the redesign. We learned that a design can save time on the drawing board and still cost us once its weight and layout have to work with the rest of the robot.
+We carried over a hammer design we had made two years earlier. At the event, the weight of the robot and the older assembly held us back, and we couldn’t advance to later rounds. We needed a redesign, but the money left after the build wouldn’t cover fabrication.
 
 ## Next GN4RLY (7 kg)
 
-We’re working on a 7 kg successor. The new weight limit means revisiting how we divide the mass between the frame, drivetrain, and hammer assembly, and how we keep parts accessible for repairs. It’s still in development.
+We’re working on a 7 kg successor. This time we’re thinking about how the whole robot fits together early in the design, including how much of the weight each assembly takes up and what we’ll need to reach for repairs.
 `,
   'uav-vibration-integration': String.raw`
-## What I worked on at Vayu Aerospace
+## Comparing the mounts in ANSYS
 
-During my product internship at Vayu Aerospace, I traced the vibration path from the motors through the airframe to the flight-controller IMU. I used the rigid mount as a baseline and compared it with an elastomer-isolated modular tray and a suspended mount in ANSYS. Natural frequencies and mode shapes showed where the assembly might resonate and which parts would move; the response analysis showed how much motion reached the controller in the model.
+At Vayu Aerospace, I followed the vibration from the motors, through the airframe, to the flight controller’s IMU. I compared three ways to mount the controller in ANSYS. The rigid mount gave me a baseline for the elastomer tray and the suspended mount. I looked at where each assembly might resonate and how much of that motion would reach the controller.
 
-## From simulation to ground tests
+## Fitting the mounts into the aircraft
 
-I helped integrate the shortlisted mounts and checked fit, fasteners, controller orientation, clearances, and cable slack. A cable pulled tight across an isolated mount can provide another vibration path, so the surrounding assembly mattered too.
+I checked the controller orientation, fasteners, and clearances on the shortlisted mounts. I checked cable slack too because a tight cable can carry vibration around the isolator.
 
-We tested the shortlisted mounts in ground motor runs. I compared equivalent operating windows in MATLAB: time histories showed how the signal changed during a run, RMS gave a single level for each window, and FFT spectra showed whether a mount changed the dominant vibration peaks. That let us check the isolation in the assembled aircraft, where the cables and fasteners can change the result.
+## Reading the ground-test logs
 
-## The mounting decision
-
-The team selected the elastomer-isolated modular tray using the simulation, integration, and ground-test evidence.
-
-This work concerned flight-controller mounting and ground tests. It did not establish a flight-performance improvement or a general vibration reduction percentage.
+We ran the motors on the ground and recorded the IMU. I used MATLAB to compare equivalent portions of the runs. The RMS values gave me the overall vibration level, and the FFT spectra showed which peaks contributed to it. The team used those logs, the ANSYS results, and the installation checks to choose the elastomer-isolated modular tray.
 `,
   'adaptive-suspension-rover': String.raw`
 ## Why change the suspension?
 
-On a rough inspection route, vibration can make camera and sensor data hard to use. Slowing down helps, but it also makes the route take longer. We’re designing a six-wheel rover to see whether changing suspension preload can reduce chassis vibration at the same driving speed.
+A rover on a rough inspection route can slow down to get steadier camera and sensor data. We wanted to see if it could keep more of its speed by changing how the suspension responds to bumps.
 
 ## How one suspension module works
 
-Each wheel carrier pivots against three compression links and three elastic tension paths. As the wheel rises over a bump, the links change angle and the tension paths stretch, creating a restoring moment. A separate damper controls how the wheel settles. The links are guided by a pivot and bearings, so the wheel still has a defined path through bump and droop.
+Follow the wheel carrier in the CAD view above. As the wheel rises, the carrier pivots, three compression links change angle, and three elastic paths stretch and pull back. A separate damper helps the wheel settle after the bump.
 
-One geared motor per wheel turns a fine-pitch screw. Guide rails stop the nut and carriage from rotating, so the screw moves the carriage and adjusts the initial tension in all three elastic paths. The CAD allows 6 mm of preload adjustment and shows about 21 mm of vertical wheel travel from −8° of droop to +20° of bump. The preload changes how strongly the joint resists a small movement; it does not change the spring material. The wheel still moves passively once the setting is held.
+We put one geared motor on each module to adjust the tension already in those elastic paths. The motor turns a fine-pitch screw. The guide rails keep the carriage from rotating, so it slides along the screw and changes the preload. There’s 6 mm of preload adjustment in the CAD. The wheel can move vertically by about 21 mm between −8° of droop and +20° of bump. Once the carriage is locked, the wheel moves passively.
 
 ![Interior CAD view of the six-wheel rover with the roof hidden to expose the mechanical assembly.](/images/projects/rover-interior-cad.png)
 
-_The six suspension modules in the rover assembly, with the roof hidden to show how they fit around the central deck._
-
-[View the rover CAD with the roof installed](/images/projects/rover-assembly-cad.png).
+_With the roof off, you can see how all six modules fit around the central deck. [See the rover with the roof installed](/images/projects/rover-assembly-cad.png)._
 
 ## What the controller measures
 
-The sensor plan puts one accelerometer on the chassis and one on each middle wheel carrier. The carrier readings track the disturbance entering the suspension; the chassis reading tracks what reaches the body. Wheel encoders measure speed and a chassis IMU tracks roll and pitch. If vibration stays high, the rover is meant to stop, change preload, confirm the carriage position and lock, then resume and check vibration again. It can reduce travel speed if the new setting is insufficient.
+We put accelerometers on the middle wheel carriers and the chassis in the sensor layout. The carrier readings tell us what the wheels are hitting. The chassis reading tells us how much of that movement reaches the body. Wheel encoders give us speed, and the chassis IMU tracks roll and pitch.
+
+The planned sequence is to stop if vibration stays high, adjust the preload, and confirm the new position and lock before moving again. If the vibration stays high after the change, the rover can slow down.
 
 ## How we’ll test it
 
-The first test is a single module on a loaded fixture. We’ll measure force versus travel at different preload settings and check that the mechanism holds when power is cut. The rover trials then compare fixed preload, speed-only control, preload-only control, and combined control on the same track and payload, with at least three repeat runs per setting.
+We’ll start with one loaded module and measure how much force it takes to move the wheel at different preload settings. We’ll also cut power under load to check that the lock holds.
 
-The target is at least **20% lower vertical chassis RMS acceleration** in the 5–100 Hz band against fixed preload at matched speed. The trials will also record route time and energy per metre. The target comes from the test plan; there are no terrain-test results yet.
+For the rover trials, we’ll compare fixed preload, speed control, preload control, and the two controls together. We’ll use the same track and payload and repeat each setting at least three times. We’re aiming for **at least 20% lower vertical chassis RMS acceleration** in the 5–100 Hz band at the same speed as the fixed-preload run. We’ll also record route time and energy per metre.
 `,
   'tensegrity-joint': String.raw`
 ## How the support network is arranged
 
-I’m studying how the geometry and initial tension of a tensegrity joint affect the way it carries load. The layout uses two Y-frames and a floating tristar. Each of the tristar’s three tips connects to both tips on each Y-frame, giving 12 support tendons. The tristar arms are spaced 120° apart, and the four frame tips lie on the intended flexion axis. The drawing shows the support network at 60° of flexion.
+I started with two Y-frames and a floating tristar. Each tristar tip connects to all four frame tips, giving 12 support tendons. The tristar’s arms are 120° apart, and the four frame tips sit on the intended flexion axis. The drawing shows where the tendons sit at 60° of knee flexion. I drew on a tensegrity leg study by Mortensen and colleagues for the layout. [Read the study](https://arxiv.org/abs/2504.19685).
 
 ![Side and front drawings of the femoral and tibial Y-frames, floating tristar, and support tendons at the reference pose.](/images/projects/tensegrity-knee-geometry.png)
 
-_Side and front views of the nominal geometry and load-support network. [Open the full-size drawing](/images/projects/tensegrity-knee-geometry.png)._
+_The front view shows where each tendon attaches. The side view shows the two frames at the reference pose. [Open the full-size drawing](/images/projects/tensegrity-knee-geometry.png)._
 
 ## Member-force analysis
 
-At a chosen configuration, the member forces must balance the external load:
+I used MATLAB to see how the tendons share a load as I change the geometry and preload. A tendon can only pull. If the calculation shows that one needs to push to hold the joint in position, that tendon would go slack.
 
-$$
-A(q)t+f_{\mathrm{ext}}=0
-$$
+In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load in the model. The calculated tensions ranged from **0.50 to 5.69 kN per support span**. That spread is what I look for when I change preload. Adding tension helps keep the lightest-loaded span taut, but it also asks more of the tristar and frame connections before an external load is applied.
 
-The geometry matrix A(q) describes how each tendon’s pull contributes to the force balance. A tendon can only pull, so I check for spans going slack as well as spans carrying high tension. In one static sizing case from the design review, an assumed 3.2 kN horizontal and 5.25 kN vertical load gave about **0.50–5.69 kN of calculated tension per support span**. Those are model results for that load case, not a measured load capacity.
+## Checking the geometry before a build
 
-## Current design and next steps
-
-Increasing preload can keep the least-loaded span in tension, but it also increases the load on the tristar, frame roots, and connections before any external force is applied. That trade-off is why I’m narrowing the geometry in MATLAB before choosing what to build. The layout draws on [Mortensen and colleagues’ tensegrity leg study](https://arxiv.org/abs/2504.19685).
-
-The next checks are tendon and fitting clearance through the intended flexion range, followed by bench measurements of load, displacement, and repeatability. The preliminary sizing does not establish fatigue life or suitability for human use.
+I’m using those calculations to narrow the layouts worth building. The next fit check is to move the assembly through its intended flexion range and see where the tendons or fittings come close to the frames. On the bench, I plan to measure load and displacement and repeat the test to see how consistently the joint responds.
 `,
   kneeassist: String.raw`
-## From a passive concept to an actuated design
+## From a spring to a motor-driven brace
 
-We started with a passive spring-assisted knee mechanism. In SolidWorks and ANSYS, we compared spring attachment positions and checked for interference as the knee bent. An attachment that looks good in one pose can give the spring very little leverage elsewhere or cause a collision before the joint reaches the end of its travel.
+We started with a passive spring-assisted knee mechanism. We moved the spring attachment points in SolidWorks and ANSYS to see what happened as the knee bent. Two things mattered in each position. The spring needed enough leverage to assist the knee, and the parts needed room to move through the full range.
 
-The actuated design adds a motor-driven cable and a knee-angle sensor. The cable loads the spring to assist extension while the user still supplies part of the effort. The CAD above shows the thigh and shank cuffs on adjustable rails, with the drive and spring assembly on one side of the knee.
+The design above adds a motor-driven cable to load the spring and a sensor to track the knee angle. The thigh and shank cuffs sit on adjustable rails, with the drive and spring on one side. The user still extends their knee actively, and the cable and spring add assistance.
 
-## Spring force and assistance torque
+## How the brace helps the knee extend
 
-The basic design relationship is:
+As the spring stretches, it pulls harder. The angle of the cable also changes as the knee moves, which changes its leverage about the pivot. That’s why the spring force alone couldn’t tell us how much assistance the brace would provide throughout the motion.
 
-$$
-F_s=k_s\Delta\ell,\qquad
-\tau_a(\theta)=F_s r_\perp(\theta)
-$$
+We also designed an independent manual release. If the drive jams, the user needs a way to release the mechanism without moving the motor.
 
-Spring extension sets the force, and the perpendicular distance from the cable’s line of pull to the knee pivot sets its leverage. Both matter: even at the same spring force, changing the cable angle can change the assistance. We defined power protection and an independent manual release so a jammed drive would not have to move for the user to release the mechanism.
+## Taking the design to the bench
 
-## Design status and team recognition
-
-Our team placed in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge. We reached a design ready for procurement. The bench plan starts by comparing the angle reading and spring force with independent measurements, then checks assisted motion, manual release under a jam, fault response, and cycle life. Procurement and testing are still pending.
+Our team placed in the top 5 of 70 teams nationwide in the Incubate X Prosthetic Challenge. The design is ready for procurement. We’ll start bench testing by comparing the sensor’s angle reading and the spring force with independent measurements. Then we’ll check assisted motion, manual release under a jam, fault response, and repeated cycles.
 `,
   'reaction-wheel-microvibrations': String.raw`
-## From reaction-wheel forces to camera motion
+## Following the vibration to the camera
 
-I wanted to find out how a reaction wheel’s vibration reaches a spacecraft camera, and whether a faster model can still tell us enough to make a design decision. The 5–20 Hz pilot starts from a free-floating COMSOL model with about 1.01 million volume elements. At each of four wheels, I modelled two transverse force inputs and the corresponding moment inputs, giving 16 transfer channels. Force and moment responses keep their own units.
+I started with a free-floating spacecraft model in COMSOL. At each of four reaction wheels, I applied two transverse force inputs and two moment inputs, giving 16 inputs in all. For camera tilt, I compared the average motion at two stations on the camera support about 0.48 m apart and removed the spacecraft’s overall rotation. The resulting angle is a structural estimate of pointing motion.
 
 ## A smaller model for repeated calculations
 
-The pilot reduces the structural equations to 52 coordinates: 36 natural modes and 16 corrections for bending at the camera support that the smaller basis missed.
-
-For each frequency and structural configuration, the reduced system solves:
-
-$$
-A(f,p)q_j=b_j,\qquad u_j=Cq_j
-$$
-
-Here p contains the structural settings, q is the complex reduced state, and C maps it to the outputs. To estimate tilt, I compared the surface-averaged displacements at two camera-support stations about 0.48 m apart and removed the spacecraft’s whole-body rotation. That gives a structural pointing proxy; the study did not measure optical jitter.
+The original mesh had about 1.01 million volume elements. To run many configurations over 5–20 Hz, I built a smaller model using 36 natural modes. I added 16 corrections for bending around the camera support that the first version missed. Those 52 coordinates became the reference for training and comparing the neural models.
 
 ## Comparing MLP, DeepONet, and physics-informed models
 
-I kept each structural configuration entirely within training, validation, or testing. That matters because a model trained on one part of a frequency curve has already seen the structure behind the rest of that curve. In the original test, the multilayer perceptron (MLP) had lower mean frequency-integrated complex-response error than DeepONet against the 52-coordinate reference. These averages cover three held-out configurations, each with all 16 input channels.
+I kept whole structural configurations together when splitting the data. A model that has seen one part of a frequency curve has already seen the structure behind the rest of the curve.
+
+The multilayer perceptron (MLP) came closest to the 52-coordinate reference in the original comparison. The table reports mean frequency-integrated complex-response errors on three unseen configurations, with all 16 inputs tested on each.
 
 | Response | MLP | DeepONet |
 | --- | ---: | ---: |
@@ -142,105 +120,78 @@ I kept each structural configuration entirely within training, validation, or te
 
 ![Three response plots over 5–20 Hz showing near-overlapping reduced-model, MLP, and DeepONet curves for camera and bench displacement and a structural tilt peak just below 10 Hz.](/images/projects/reaction-wheel-held-out-response.png)
 
-_One held-out example for a transverse force at wheel 1. Figure 3 from the 5–20 Hz research report. [Open the full-size plot](/images/projects/reaction-wheel-held-out-response.png)._
+_The bottom panel shows the camera support’s tilt peaking just below 10 Hz in one unseen configuration. This is Figure 3 from the 5–20 Hz research report. [Open the full-size plot](/images/projects/reaction-wheel-held-out-response.png)._
 
-I also tried pretraining on the 36-coordinate model before refining on 52-coordinate data. It helped when reference training cases were scarce, but the benefit did not hold at the largest budget. In a separate one-input experiment, adding the equilibrium residual to the training loss reduced the balanced residual by 9.23% on fresh in-range configurations. It did not improve every resonance metric.
+Starting with 36-coordinate training data helped when I had few 52-coordinate cases. The benefit went away with the largest training set. In a separate single-input experiment, adding an equilibrium term to the training loss lowered the balanced residual by 9.23%. The resonance results were mixed.
 
-## Numerical checks and the design decision
+## Why I kept the original mount
 
-The detailed FEM checks were separate from training: 14 COMSOL points across six configurations, with four points in configurations held out of the original comparison. They are spot checks, not evidence of agreement at every resonance.
+I screened 17 mount stiffness settings. The neural model picked a 10% increase, so I checked that setting and the original against the 52-coordinate model on 36 separate scenarios. The worst response in that set changed by just **0.00589%**, while the largest neural peak error was **7.61%**. The difference was too small to justify changing the mount.
 
-An earlier native-FEM study found a response near 5,800 rpm with about 0.33% local mesh sensitivity in peak amplitude. That figure belongs to that earlier mesh comparison. It is not a neural prediction error, an experimental accuracy figure, or evidence that the current pilot covers that frequency range.
+## Checks against the full COMSOL model
 
-I screened 17 mount-stiffness settings. The neural screen picked a 10% increase in equivalent mount stiffness, so I ran the nominal and candidate settings through the reduced model on 36 separate scenarios. The worst sampled reference response changed by only **0.00589%**; the largest neural peak error on those scenarios was **7.61%**. That was too little evidence to justify a mount change, so I kept the nominal design.
-
-## What the work establishes
-
-The deliverables include structural response calculations, trained models, tests on unseen configurations, selected full-FEM comparisons, and an interactive demonstration. The current claim is a computational pilot over 5–20 Hz.
-
-Global mesh and basis convergence, measured wheel spectra and damping, and experimental pointing validation remain open. The study does not establish flight qualification or a validated design surrogate across the spacecraft’s full operating range.
+I compared the predictions with 14 full-model points across six configurations. Four of those points came from configurations held out of the original comparison. In a separate wheel-speed study, changing the mesh shifted the peak amplitude near 5,800 rpm by 0.33%. The current pilot still needs broader mesh and basis checks, measured wheel inputs and damping, and an experimental pointing test.
 `,
   'off-road-leaf-robot': String.raw`
-## Collecting leaves without collecting the soil
+## Keeping the pickup close to the ground
 
-I’m developing a robot for collecting dry and wet leaves on uneven ground. The pickup mechanism needs to stay close enough to the surface to collect leaves without drawing in too much soil, even as terrain and traction change.
+I started with a simple problem. Wet leaves need to come off uneven ground, but lowering the pickup too far brings soil in with them. I separated terrain following from locomotion so I could think about how the pickup meets the surface as well as how the robot keeps traction.
 
-I split the design into locomotion, pickup, transfer, storage, and terrain following. In that order, the rover has to keep traction, lift the leaves, move them away from the pickup point, hold them, and keep the pickup close to the ground as the surface changes. Separating those jobs helped me see which parts have to work together: a pickup concept is only useful if it fits beside the drive and can hand material off to storage.
+## Getting the leaves to storage
 
-## Mechanism selection and integration
+Lifting a leaf is only the first step. The mechanism has to fit between the other parts of the robot and pass what it collects to the storage system. I compared concepts against the space available beside the wheels, how the parts could be made, and how they would connect to the transfer mechanism. I used the practical options to build a parts list from the individual components.
 
-I screened pickup concepts against space, manufacturing, and integration constraints. A promising pickup mechanism still needs to fit alongside the wheels, move material into storage, and tolerate changes in ground height.
+## Comparing the options
 
-I built a bottom-up BOM, or bill of materials, around the practical options. I defined four things to compare in testing: whether the rover keeps traction on uneven ground, how much of the available leaf litter it collects, how much soil comes with it, and how long the machine can run. Measuring leaf pickup and soil contamination separately will make it possible to see when a design is collecting more material without actually doing a better job.
-
-## Current stage
-
-Subsystem architecture and mechanism selection are ongoing. The performance tests are planned, and no pickup-efficiency or endurance results are claimed yet.
+I plan to track traction, leaf pickup, soil pickup, and runtime. I’ll track the amount of leaf litter and soil separately so I can tell whether an option collects more leaves or just brings in more material.
 `,
   'uncertainty-aware-navigation': String.raw`
-## Planning with an uncertain position estimate
+## Giving the robot imperfect sensors
 
-I built a differential-drive simulator in Python. A* finds a path through the map, the heading controller follows it using the estimated pose, and an extended Kalman filter (EKF) combines the wheel encoder and IMU readings. I injected encoder noise, IMU drift, yaw bias, and wheel slip so the estimated pose could diverge from the simulator’s true pose while the robot was trying to follow the path.
+I built a differential-drive robot in Python simulation. A* plans a route, and a heading controller steers along it using the robot’s estimated position and orientation. I added encoder noise, IMU drift, yaw bias, and wheel slip. With slip, the wheels can turn without moving the robot as far as the encoders suggest.
 
-## Motion, localization, and recovery
+## Using the pose estimate to decide when to slow down
 
-For an ideal differential drive with equal wheel radii:
-
-$$
-v=\frac{r}{2}(\omega_R+\omega_L),\qquad
-\dot{\psi}=\frac{r}{b}(\omega_R-\omega_L)
-$$
-
-Wheel radius r and separation b connect wheel speeds to forward and angular motion. Slip means the actual motion can differ from this prediction. The EKF combines the motion model with measurements and tracks uncertainty alongside its state estimate.
-
-I used the filter’s estimate of uncertainty in the speed and recovery logic. This gave the robot a way to slow down or attempt recovery when it was less certain where it was, instead of always following the same speed policy.
+An extended Kalman filter combines wheel encoder and IMU readings and tracks how uncertain the pose estimate is. I fed that uncertainty into the speed and recovery logic. If the estimate becomes less reliable, the simulated robot can slow down or try to recover before continuing.
 
 ## Monte Carlo evaluation
 
-I evaluated the stack over repeated Monte Carlo trials. Localization error compared the filter’s estimate with the simulator’s true pose; collisions and recovery events showed what happened along the way; success and time to goal showed whether the run finished and how long it took. A run can reach its goal and still reveal a trade-off between travel time and reliable localization.
-
-The completed work is a simulation and evaluation workflow. It does not represent tests on a physical robot.
+I ran repeated trials and compared the estimated pose with the simulator’s true pose. I also recorded collisions, recovery events, whether the robot reached the goal, and how long it took. That let me compare speed with how often the robot reached the goal without a collision.
 `,
   'four-bar-door-mechanism': String.raw`
-## Designing the door motion
+## Laying out the links
 
-I worked with my team to build a planar four-bar linkage door-opening mechanism. We chose link lengths and pivot positions around the intended door motion and the mechanism’s kinematic limits.
+We started with the way we wanted the door to move, then chose the link lengths and pivot positions. Those decisions set the kinematic limits of the mechanism and how far the door could open.
 
-## Building and checking the linkage
+## Trying the assembled mechanism
 
-We made the links, pivots, and joints, assembled the mechanism, and checked its motion. The build made it easier to see how a small change in pivot position could change the door’s path or limit its travel.
-
-The completed result was a working team-built mechanism. This was an early practical project in mechanism design and assembly.
+We made the links and pivots and assembled a working door opener. Checking its motion on the build made it easier to see how the positions of the pivots changed the path of the door and where it stopped.
 `,
   'easy-access-wallet': String.raw`
-## Making cards easier to reach
+## Starting with the card stack
 
-I developed a compact wallet concept around a simple access problem: removing a card from a tightly packed holder.
+When cards are packed closely together, it’s hard to get a finger far enough in to lift one. I used that motion as the starting point for a compact wallet concept.
 
-## Working through the layout
+## Leaving room to get a grip
 
-I considered how the stack would be supported, how much clearance it needed, and where the user’s fingers could reach. The layout followed those requirements rather than starting with a preferred mechanism.
-
-The completed work was a mechanical design concept. It was not a manufactured product or a formal user study.
+I worked out where the stack needed support and where to leave clearance for a finger to reach a card. The resulting layout makes room for that motion while keeping the stack supported.
 `,
   'solar-smart-home': String.raw`
-## Connecting sensors and control logic
+## Getting the sensors to work together
 
-I built an Arduino-based smart-home model with several sensor inputs and automated functions. My work covered circuit wiring, control logic, and debugging the connections and code so the functions operated together.
+I wired the sensors into an Arduino and wrote the logic for the model’s automated functions. I debugged the connections and code until the inputs and outputs worked together.
 
-## Adding a solar-power option
+## Trying solar power
 
-I added a photovoltaic cell as a power-source option and tested the model with that supply. This was a model-scale electronics project and an early introduction to integrating sensing, control, and power.
+I added a photovoltaic cell as a second way to power the model and tested it on that supply. It was an early chance for me to work through the power, wiring, and control of one system.
 `,
   'traffic-and-elevated-bus': String.raw`
-## Two early electronic builds
+## Wiring the traffic-light sequence
 
-I built a smart traffic-light system and a separate transit elevated-bus model. Both used hand-wired circuits and logic gates to control repeatable operating sequences.
+I built a model junction and used hand-wired logic gates to control the order of the signals. I traced the wiring until the signals followed the intended sequence.
 
-## Wiring and fault tracing
+## Building a separate bus circuit
 
-For the traffic-light model, I connected the signals into a junction sequence. The elevated-bus model used its own control circuit. I traced wiring and logic faults until each model followed its intended sequence.
-
-These were working model-scale builds and early practice in circuit wiring, sequencing, and debugging.
+The transit elevated-bus model had its own control circuit. I worked through wiring and logic faults on that build too, checking that the model could repeat its sequence.
 `,
 };
