@@ -475,10 +475,10 @@
     },
     {
       "path": "public/images/projects/brain-mri-demo-training.webp",
-      "source": "mri_classifier.py training history after 12 epochs on its synthetic demo data",
+      "source": "mri_classifier.py training history after 12 epochs on synthetic demo data using TensorFlow 2.7.0",
       "width": 1440,
       "height": 750,
-      "sha256": "d875184c9407e9767917be1005d5627dc8d218ff66330fc85335bfbcf661f1a8",
+      "sha256": "ff411fcdc4bdef04a20b84e2d2e606fde3cdcb9c0b30b48ae0f6d913862c84db",
       "role": "example learning curves from the demo run"
     }
   ]
