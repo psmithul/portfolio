@@ -1,5 +1,3 @@
-"""Move a preview cursor with an index finger or calibrated eye movement."""
-
 import argparse
 from collections import deque
 from math import hypot
@@ -29,7 +27,6 @@ def eye_offset(points, corners, lids, iris, width, height):
     if span < 1:
         return None
 
-    # Use the eye's own horizontal and vertical axes.
     ux, uy = dx / span, dy / span
     upper, lower = (position(index) for index in lids)
     lid_gap = -(lower[0] - upper[0]) * uy + (lower[1] - upper[1]) * ux
@@ -61,7 +58,7 @@ def index_position(points, width, height):
     return tip.x, tip.y
 
 
-def run(camera_index, move_mouse):
+def run(source, move_mouse, mode):
     import cv2
     import mediapipe as mp
 
@@ -73,8 +70,8 @@ def run(camera_index, move_mouse):
             raise RuntimeError("The desktop is too small for cursor control.")
         pyautogui.PAUSE = 0
 
-    camera = cv2.VideoCapture(camera_index)
-    mode = "hand"
+    camera = cv2.VideoCapture(source)
+    from_video = isinstance(source, str)
     armed = False
     position = None
     samples = deque(maxlen=12)
@@ -83,12 +80,18 @@ def run(camera_index, move_mouse):
 
     try:
         if not camera.isOpened():
+            if from_video:
+                raise RuntimeError(f"Could not open video: {source}")
             raise RuntimeError("Could not open the camera. Check permissions and the camera index.")
         with mp.solutions.hands.Hands(max_num_hands=1) as hands, \
                 mp.solutions.face_mesh.FaceMesh(max_num_faces=1, refine_landmarks=True) as face:
+            frame_rate = camera.get(cv2.CAP_PROP_FPS) if from_video else 0
+            frame_delay = max(1, round(1000 / frame_rate)) if frame_rate > 0 else 1
             while True:
                 ok, frame = camera.read()
                 if not ok:
+                    if from_video:
+                        break
                     raise RuntimeError("The camera stopped returning frames.")
 
                 frame = cv2.flip(frame, 1)
@@ -149,9 +152,9 @@ def run(camera_index, move_mouse):
                     cv2.putText(frame, line, (10, y), cv2.FONT_HERSHEY_SIMPLEX, 0.48,
                                 (245, 245, 245), 1, cv2.LINE_AA)
                 cv2.imshow(window, frame)
-                key = cv2.waitKey(1) & 0xFF
+                key = cv2.waitKey(frame_delay) & 0xFF
 
-                if key in (ord("q"), 27) or cv2.getWindowProperty(window, cv2.WND_PROP_VISIBLE) < 1:
+                if key in (ord("q"), 27) or cv2.getWindowProperty(window, cv2.WND_PROP_VISIBLE) == 0:
                     break
                 if key == ord(" ") and move_mouse:
                     armed = not armed
@@ -179,12 +182,17 @@ def run(camera_index, move_mouse):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--camera", type=int, default=0, help="Camera index (default: 0)")
+    parser = argparse.ArgumentParser(description="Move a cursor with a finger or with eye movement.")
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--camera", type=int, default=0, help="Camera index (default: 0)")
+    source.add_argument("--video", help="Play a local video in the preview window")
+    parser.add_argument("--mode", choices=("hand", "eyes"), default="hand")
     parser.add_argument("--move", action="store_true", help="Allow the Space key to enable desktop movement")
     args = parser.parse_args()
+    if args.video and args.move:
+        parser.error("Desktop pointer control requires a live camera.")
     try:
-        run(args.camera, args.move)
+        run(args.video or args.camera, args.move, args.mode)
     except (RuntimeError, ImportError) as error:
         parser.exit(1, f"{error}\n")
 
