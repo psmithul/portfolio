@@ -67,6 +67,8 @@
             <h2 id="revisiting-the-layout-in-cad">Two-lid CAD study</h2>
             <div class="project-stage-copy">
               <p>I reconstructed a version with two connecting rods on one crank. Each rod has its own geometry, so I compared how far the lids opened, how much input effort the motion required, and how sensitive the result was to small changes in dimensions.</p>
+              <p>With the first short crank, both lids opened less than I wanted, and their final angles differed by 14°. I tried giving that layout more travel, but one lid started to reverse before the sweep ended. I changed the linkage geometry and the range of crank travel together. In the revised CAD motion both lids reached 75°.</p>
+              <p><a href="https://github.com/psmithul/four-bar-door/blob/main/docs/twin_lid_analysis.md" rel="noreferrer">Two-lid analysis</a>.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -74,6 +76,20 @@
                   <img src="/images/projects/four-bar-twin-lid-cad.png" alt="Parametric CAD of the twin-lid assembly with both lids open and two rods meeting at the shared crank." width="1600" height="1150" loading="lazy" decoding="async">
                 </div>
                 <figcaption>The later CAD reconstruction at 75° opening. <a href="/images/projects/four-bar-twin-lid-cad.png">Full-size CAD view</a> · <a href="https://github.com/psmithul/four-bar-door" rel="noreferrer">Design files and report</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="comparing-two-lid-layouts">Comparing layouts at the same opening angle</h2>
+            <div class="project-stage-copy">
+              <p>Once both lids could reach 75°, I compared layouts on two things I still cared about: how far apart the lid angles got during the stroke, and how much torque the crank needed. In one CAD study, one candidate peaked at about 7.0 N·m with a 7.0° maximum mismatch. Another narrowed that gap to 6.7° but raised the torque to about 8.7 N·m. That small improvement in synchronisation came at a noticeable cost in input torque.</p>
+              <p>I checked the three shortlisted layouts for interference at 361 positions across the stroke. None showed unintended interference at those sampled positions. The torque and angle figures came from the model, and the interference check was limited to the sampled CAD positions.</p>
+              <p><a href="https://github.com/psmithul/four-bar-door/blob/main/docs/design_tradeoffs.md" rel="noreferrer">Candidate comparison and CAD checks</a>.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/four-bar-design-frontier.png" alt="Scatter plot compares candidate twin-lid linkages by peak quasistatic input torque and maximum lid mismatch." width="1530" height="990" loading="lazy" decoding="async">
+                <figcaption>Design comparison from the v2.1 study. Each candidate reached 75° on both lids. <a href="/images/projects/four-bar-design-frontier.png">Full-size view</a>.</figcaption>
               </figure>
             </div>
           </section>

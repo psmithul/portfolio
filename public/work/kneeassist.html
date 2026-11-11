@@ -48,12 +48,14 @@
             <div class="project-stage-copy">
               <p>Spring force increases with stretch. The torque it applies at the knee also depends on how far its line of pull passes from the pivot. We moved the spring attachment points in SolidWorks and ANSYS to compare those effects at different angles.</p>
               <p>We also checked clearance around the pivot and attachments through the intended range of motion. A position with useful leverage still had to leave room for the mechanism to move.</p>
+              <p>I compared attachment positions across several poses because the spring could have useful leverage in one pose and interfere with another part in the next. The CAD checks narrowed the layout based on both the available moment arm and the space around the pivot.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="from-a-spring-to-a-motor-driven-brace">Actuated brace design</h2>
             <div class="project-stage-copy">
               <p>The actuated CAD uses a motor-driven cable to load the spring and an angle sensor to measure the brace position. The wearer supplies the knee motion, and the cable and spring add extension assistance. Adjustable rails position the thigh and shank cuffs around the knee, with the drive and spring mounted on one side.</p>
+              <p>The passive layout used the knee motion to load the spring. Adding the cable and motor gave the design a separate way to change spring load, and the angle sensor gave the drive a position reference. This changed the assembly as well as the assistance: the drive, cable route, and cuffs all had to fit around the same moving joint.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -61,6 +63,10 @@
                   <img src="/images/projects/process-knee-assist.webp" alt="Block diagram comparing a spring loaded by knee motion with a spring loaded by a motor and cable." width="1280" height="660" loading="lazy" decoding="async">
                 </div>
                 <figcaption>Design schematic of the change from the passive spring concept to the actuated layout shown in the CAD above.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/knee-assistance-cad.png" alt="CAD view of the actuated brace with the adjustable cuffs and side-mounted drive." width="1718" height="1268" loading="lazy" decoding="async">
+                <figcaption>Actuated brace CAD. The schematic shows the change from the passive spring concept to the cable-driven layout. <a href="/images/projects/knee-assistance-cad.png">Full-size view</a>.</figcaption>
               </figure>
             </div>
           </section>
@@ -74,6 +80,7 @@
             <h2 id="taking-the-design-to-the-bench">Design outcome</h2>
             <div class="project-stage-copy">
               <p>We completed the actuated CAD assembly and defined the drive, sensing, power, and release architecture. We presented the design at the Incubate X Prosthetic Challenge and placed in the top 5 out of 70 teams nationwide.</p>
+              <p>The clearance review shows how the modeled parts fit through the intended motion. The competition evaluated the design submission, so the placement does not measure assistance on a wearer.</p>
             </div>
           </section>
         </article>

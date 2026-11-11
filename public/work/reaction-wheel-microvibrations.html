@@ -60,7 +60,7 @@
           <section class="project-stage">
             <h2 id="a-smaller-model-for-repeated-calculations">Reduced-order model</h2>
             <div class="project-stage-copy">
-              <p>The original mesh had about 1.01 million volume elements. I reduced the model to 36 natural modes for repeated calculations. The smaller basis missed some bending near the camera support, so I added 16 corrections and used the resulting 52-coordinate model as the training reference.</p>
+              <p>The original mesh had about 1.01 million volume elements. I reduced the model to 36 natural modes for repeated calculations. The smaller basis missed some bending near the camera support. That matters for pointing, even if the rest of the structure moves similarly. I added 16 corrections, compared the bases on the same camera, bench, and tilt outputs, and used the resulting 52-coordinate model as the training reference.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -118,6 +118,7 @@
             <h2 id="trying-a-different-way-to-train">Pretraining and equilibrium loss</h2>
             <div class="project-stage-copy">
               <p>Pretraining on the 36-coordinate model helped when I had few 52-coordinate cases. The benefit disappeared with the largest training set. In a separate single-input experiment, an equilibrium term in the training loss lowered the balanced residual by 9.23%. Its effect on resonance prediction was mixed.</p>
+              <p>The learning curves make the data trade-off visible. With fewer reference cases, the cheaper 36-coordinate data gave pretraining something useful to learn. At 64 reference training cases, the model trained directly on the reference data did better. In the single-input equilibrium-loss comparison, camera error changed from 1.327% to 1.264% and structural-tilt error from 5.135% to 5.103%. Those are different measures from the change in equation balance.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -133,6 +134,7 @@
             <div class="project-stage-copy">
               <p>I screened 17 mount stiffness settings. The surrogate suggested a 10% increase. I compared that setting with the original using the 52-coordinate model on 36 separate scenarios. The worst response in that set changed by only <strong>0.00589%</strong>, while the largest neural peak error was <strong>7.61%</strong>.</p>
               <p id="what-i-learned">I kept the original stiffness. The comparison showed me why peak error matters when the candidate designs are close. The surrogate could narrow the search, and the separate numerical comparison established the size of the proposed benefit.</p>
+              <p>The neural model helped me choose which setting to check in more detail. I made the mount decision from the separate numerical runs because the predicted improvement was smaller than the model’s peak error.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">

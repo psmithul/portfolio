@@ -49,6 +49,7 @@
             <div class="project-stage-copy">
               <p>Our first concept coupled two suspension units. A cable guide moved between three positions to change the leverage of the spring. We sketched how to lock the chosen setting before the rover moved again.</p>
               <p id="how-well-test-it">In the later CAD, we gave each wheel its own motor and preload carriage. Moving the adjustment to the wheel meant packaging a screw, guides, and a lock in every module. We kept the lock so the suspension could work passively after an adjustment.</p>
+              <p>The cable-guide sketch changed the leverage of a coupled pair. In the individual-wheel version, the motor changes the initial tension in the elastic paths on that wheel. That gives each module its own setting and keeps the adjustment hardware within the wheel assembly.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -57,6 +58,10 @@
                 </div>
                 <figcaption>Our September concept notes, before we developed the individual wheel modules. Photo from the CY06 design submission. <a href="/images/projects/rover-proposal-whiteboard.webp">Open the full-size whiteboard photo</a>.</figcaption>
               </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/rover-suspension-module-cad.png" alt="Later CAD with an individual motor and preload carriage beside the wheel." width="1920" height="1080" loading="lazy" decoding="async">
+                <figcaption>Individual wheel module from the October CAD. The whiteboard shows the earlier coupled concept. <a href="/images/projects/rover-suspension-module-cad.png">Full-size view</a>.</figcaption>
+              </figure>
             </div>
           </section>
           <section class="project-stage">
@@ -64,6 +69,7 @@
             <div class="project-stage-copy">
               <p>As the wheel rises, the carrier pivots, three compression links change angle, and three elastic paths stretch. Those elastic paths pull the carrier back. A separate damper helps the wheel settle after a bump.</p>
               <p>A geared motor turns a fine-pitch screw. Guide rails prevent the carriage from rotating, so it slides along the screw and changes the starting tension in the elastic paths. The CAD provides 6 mm of carriage travel. Once the carriage is locked, the carrier can still pivot as the wheel follows the ground.</p>
+              <p>I separated the part that sets preload from the part that moves over a bump. With the carriage held in place, the wheel can respond to the ground without the motor having to turn at every bump.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -85,6 +91,7 @@
             <div class="project-stage-copy">
               <p>We posed the module at neutral and at +20° of bump. In the model, the wheel centre rises about 16 mm between those poses. From −8° of droop to +20° of bump, the model gives about 21 mm of vertical travel.</p>
               <p>Comparing the poses made the carrier’s path clear. The wheel centre follows an arc, so vertical travel is measured from the change in its height. These are geometric values from the assembly.</p>
+              <p>I read wheel travel and adjuster travel from different parts of the model. The roughly 21 mm figure is the vertical range of the wheel centre. The 6 mm figure is the movement of the preload carriage. That check establishes the motion envelope in CAD. The force response under load is a separate question.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">

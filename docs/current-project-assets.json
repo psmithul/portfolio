@@ -1,5 +1,5 @@
 {
-  "review_date": "2026-11-11",
+  "review_date": "2026-11-12",
   "assets": [
     {
       "path": "public/images/projects/3-lb-flipper-chassis.jpg",
@@ -416,6 +416,46 @@
       "height": 405,
       "sha256": "d89f78bc28ea251883d704e778e4bf51a0e351bf3ea970ec841cae6672eba893",
       "role": "App Store previews of the daily plan, activity tracking, and progress"
+    },
+    {
+      "path": "public/images/projects/navigation-policy-comparison.png",
+      "source": "psmithul/differential-drive-navigation, docs/comparison.png",
+      "width": 2080,
+      "height": 640,
+      "sha256": "e52491df49f9b90a51de65c88d9a01ff672fb0a0529a2ea8a15c220cc2e41431",
+      "role": "simulation comparison on the original November seeds"
+    },
+    {
+      "path": "public/images/projects/four-bar-design-frontier.png",
+      "source": "psmithul/four-bar-door, results/comparison/frontier.png",
+      "width": 1530,
+      "height": 990,
+      "sha256": "57a6f079156c2b50baf3bbc0e5c905f9ffcb68438716c70719ab81a10c01fce9",
+      "role": "original v2.1 CAD study plot of torque and synchronisation"
+    },
+    {
+      "path": "public/images/projects/tensegrity-static-span-loads.png",
+      "source": "Compound Tensegrity Knee: Preliminary Design Review, slide 6; plotted from the per-span support tension values",
+      "width": 1296,
+      "height": 738,
+      "sha256": "8ca7621cea25a4c8d81e513b575288b9c3d970e796c60a8b24c2b1040d8c0dd9",
+      "role": "calculated static tendon loads in one sizing case"
+    },
+    {
+      "path": "public/images/projects/leaf-cleaning-module-rear.webp",
+      "source": "Sweeper one (2).step; rear view rendered from the supplied CAD geometry",
+      "width": 1440,
+      "height": 900,
+      "sha256": "5896fe580c5d284889ef6df5df7da9ee5619852b1ea14655bb81b5838f368fcd",
+      "role": "rear view of the cleaning module CAD"
+    },
+    {
+      "path": "public/images/projects/mikaverse-crossing-inscription.webp",
+      "source": "Mikaverse play-through capture, archive-decipher-in-game-0.8.1.png",
+      "width": 1440,
+      "height": 810,
+      "sha256": "253bcd26a443639dd233cdf0aee95d474fb00a1e0161c7839e409c2d119ca7b8",
+      "role": "in-game sign key opened in the archive"
     }
   ]
 }

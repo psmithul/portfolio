@@ -46,12 +46,14 @@
             <h2 id="wiring-the-traffic-light-sequence">Traffic-light logic</h2>
             <div class="project-stage-copy">
               <p id="what-i-learned">I used logic gates to control the order of the lights and checked the output at each point in the sequence. The first light that came on out of order gave me a place to start tracing the wiring. That helped me debug one transition at a time.</p>
+              <p>When an output came on at the wrong time, it was easier to check the gate feeding that lamp than to trace every wire at once. Once each transition made sense on its own, I could watch the full sequence repeat and check that the lights came back to the starting state.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="building-a-separate-bus-circuit">Elevated-bus circuit</h2>
             <div class="project-stage-copy">
               <p>I wired a separate circuit for the bus model and checked whether it could repeat its sequence after I corrected the faults. The two builds gave me practice moving from the order I wanted, to the logic that represents it, to the connections that make it work.</p>
+              <p>The bus model gave me a second kind of sequence to build. I kept its circuit independent because a change to the traffic-light timing would otherwise make it harder to tell which part of the bus logic was producing an unexpected output. The schematic puts both control paths beside each other.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">

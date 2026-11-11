@@ -47,12 +47,14 @@
             <div class="project-stage-copy">
               <p id="what-i-learned">I wired the sensors into the Arduino and wrote the logic that connects the inputs to the model’s responses. When the expected action did not happen, I traced the signal from the sensor to the controller and then to the output. Working through that path helped me locate whether the issue was in the connection or the code.</p>
               <p>Once the inputs and outputs worked together, I could test the program by watching how the model responded to a sensor input.</p>
+              <p>Checking one input and output at a time gave me a working reference before I added the solar cell. If the same action stopped working after a change to the supply, I had a known input and response to compare against.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="trying-solar-power">Solar supply</h2>
             <div class="project-stage-copy">
               <p>I connected the photovoltaic cell as a second supply and tested the model with the sensors and controller still connected. Changing the supply on a working circuit helped me see how power, wiring, and control come together in the same system.</p>
+              <p>I kept the Arduino control path the same and treated the solar cell as a change to the supply. The useful check was whether the model still responded to the same inputs with the supply connected. That was a functional check of the model. I did not measure power output or run time.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
