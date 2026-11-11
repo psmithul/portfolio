@@ -2,6 +2,22 @@
   "review_date": "2026-11-11",
   "assets": [
     {
+      "path": "public/images/projects/3-lb-flipper-chassis.jpg",
+      "source": "3 lb flipper photograph supplied by Mithul",
+      "width": 900,
+      "height": 1600,
+      "sha256": "083ff0386acfa32b057dfe5eab19347b606fddb4210e7ed15ca0bcddeacec544",
+      "role": "one-piece chassis before assembly"
+    },
+    {
+      "path": "public/images/projects/3-lb-flipper-assembly.jpg",
+      "source": "3 lb flipper photograph supplied by Mithul",
+      "width": 1600,
+      "height": 1200,
+      "sha256": "9d93595ac023dab36f0db99e23f159ad6bec725283b9c31f3d0f1f48cd7ed135",
+      "role": "chassis with battery and electronics during assembly"
+    },
+    {
       "path": "public/images/projects/nitk-battle-bots-event.jpeg",
       "source": "Event photograph supplied by Mithul",
       "width": 2252,

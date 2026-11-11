@@ -66,6 +66,14 @@ Data credit goes to the NASA/ESA Hubble Space Telescope and the Mikulski Archive
 
 For the 3 lb class, we designed the chassis and flipper together. We liked the rear-hinged lifter on Jelly Baby and used it as a starting point. At that weight, every separate part was another piece we had to make and fit, so we went with a one-piece chassis. That kept the build simpler and cheaper for the team. [Jelly Baby’s NHRL profile](https://wiki.nhrl.io/wiki/index.php?title=Jelly_Baby).
 
+![The bare black chassis of the 3 lb flipper on a wooden table.](/images/projects/3-lb-flipper-chassis.jpg)
+
+_The one-piece chassis before assembly. [Full-size photo](/images/projects/3-lb-flipper-chassis.jpg)._
+
+![The open 3 lb robot chassis held above the workbench with the battery and wiring visible.](/images/projects/3-lb-flipper-assembly.jpg)
+
+_The same chassis during assembly, with the battery and electronics fitted. [Full-size photo](/images/projects/3-lb-flipper-assembly.jpg)._
+
 ## GN4RLY 2.5 (15 kg)
 
 Sponsorship gave us room to use stronger materials on GN4RLY 2.5. The workbench photo shows what had to fit in the frame. The hammer saw sits in the centre, the chain drives run along the sides, and the wiring is still exposed during assembly.
