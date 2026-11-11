@@ -1,9 +1,11 @@
 BRAIN MRI CLASSIFICATION
 
-Use Python 3.11 or 3.12.
+Use Python 3.9.
 
-    python -m venv .venv
-    # Activate the virtual environment for your shell.
+On macOS or Linux:
+
+    python3.9 -m venv .venv
+    source .venv/bin/activate
     python -m pip install -r requirements.txt
 
 Run the training and prediction steps with abstract sample images:
@@ -24,6 +26,9 @@ training. This script assumes you have already made that split.
     python mri_classifier.py train your-dataset output-model
     python mri_classifier.py predict output-model path/to/image.png
 
-The output directory contains the Keras model, class labels, and training
+The output directory contains model.h5, the class labels, and the training
 history. Reported scores depend on the supplied data. The project is
 for education and has no clinical validation.
+
+On Windows, create the environment with py -3.9 -m venv .venv and run
+.venv\Scripts\activate.bat in Command Prompt before installing requirements.

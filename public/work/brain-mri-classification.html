@@ -46,7 +46,7 @@
           <section class="project-stage">
             <h2 id="preprocessing-and-augmentation">Preprocessing and augmentation</h2>
             <div class="project-stage-copy">
-              <p>The classifier takes grayscale images resized to a fixed shape. It scales pixel values before the first convolution and applies small shifts and rotations during training. I use those transforms to vary image placement and orientation while keeping the label fixed.</p>
+              <p>The Keras image generator resizes each grayscale image and scales its pixel values. During training, it applies small shifts and rotations to vary image placement and orientation while keeping the label fixed.</p>
               <p>Validation and test images go through the same resizing and scaling. They skip the random transforms. For MRI data, I would keep all slices from the same person together when splitting the dataset so nearby slices cannot end up on both sides of the evaluation.</p>
             </div>
           </section>
@@ -66,12 +66,12 @@
           <section class="project-stage">
             <h2 id="run-the-classifier">Run the classifier</h2>
             <div class="project-stage-copy">
-              <p>Use <code>demo-data</code> to generate the example images, <code>train</code> to fit and evaluate the CNN, and <code>predict</code> to classify one image with the saved model.</p>
-              <p><a href="/code/brain-mri-classification/mri_classifier.py" download>Download Python script</a> · <a href="/code/brain-mri-classification/requirements.txt" download>Requirements</a> · <a href="/code/brain-mri-classification/README.txt">Setup and usage</a></p>
+              <p>Use Python 3.9 and TensorFlow 2.7. Run <code>demo-data</code> to generate the example images, <code>train</code> to fit and save the CNN, and <code>predict</code> to classify one image with the saved HDF5 model.</p>
+              <p><a href="/code/brain-mri-classification.zip" download>Download project</a> · <a href="/code/brain-mri-classification/mri_classifier.py">Python source</a> · <a href="/code/brain-mri-classification/README.txt">Setup and usage</a></p>
             </div>
           </section>
         </article>
-        <p class="project-tools">Tools &amp; methods · Python · TensorFlow · Keras · Image preprocessing</p>
+        <p class="project-tools">Tools &amp; methods · Python 3.9 · TensorFlow 2.7 · Keras · Image preprocessing</p>
         <nav class="detail-pagination" aria-label="Project navigation">
           <a href="/work/hands-free-cursor-control" rel="prev">
             <span class="detail-pagination-label">← Previous project</span>
