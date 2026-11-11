@@ -1,22 +1,27 @@
-import { projectImages, type ProjectImage } from '@/content/project-images';
-import { selectedProjectSlugs } from '@/content/academic';
+import {
+  additionalProjectImages,
+  projectImages,
+  type ProjectImage,
+} from '@/content/project-images';
+import { additionalProjects } from '@/content/additional-projects';
+import { featuredProjectSlugs } from '@/content/academic';
 export type Project = {
   slug: string;
-  number: string;
+  number?: string;
   title: string;
   discipline: string;
   period?: string;
-  status: 'Ongoing' | 'Completed';
+  status: 'Ongoing' | 'Completed' | 'Past';
   earlierWork?: boolean;
   context: string;
   tools: string[];
   summary: string;
-  question: string;
+  question?: string;
   role?: string;
-  approach: { title: string; body: string }[];
-  outcome: string;
+  approach?: { title: string; body: string }[];
+  outcome?: string;
   scope: string;
-  evidence: string[];
+  evidence?: string[];
   image?: ProjectImage;
 };
 
@@ -365,6 +370,7 @@ export const projects: Project[] = [
     discipline: 'State estimation & autonomy',
     period: 'Sep — Dec 2025',
     status: 'Completed',
+    image: projectImages['uncertainty-aware-navigation'],
     context: 'Differential-drive simulation project',
     tools: ['Python', 'A* & EKF', 'Monte Carlo'],
     summary:
@@ -404,6 +410,7 @@ export const projects: Project[] = [
     discipline: 'Kinematics & fabrication',
     period: 'Feb — Apr 2024',
     status: 'Completed',
+    image: projectImages['four-bar-door-mechanism'],
     context: 'Team build',
     tools: ['Linkage design', 'Kinematics', 'Team fabrication'],
     summary:
@@ -546,6 +553,10 @@ export const projects: Project[] = [
       'Logic-gate control sequences',
     ],
   },
+  ...additionalProjects.map(({ study: _study, ...project }) => ({
+    ...project,
+    image: additionalProjectImages[project.slug],
+  })),
 ];
 
 const projectsBySlug = new Map(
@@ -556,8 +567,18 @@ export function getProject(slug: string) {
   return projectsBySlug.get(slug);
 }
 
-export const selectedProjects = selectedProjectSlugs.map((slug) => {
+const featuredProjects = featuredProjectSlugs.map((slug) => {
   const project = getProject(slug);
-  if (!project) throw new Error(`Missing selected project: ${slug}`);
+  if (!project) throw new Error(`Missing featured project: ${slug}`);
   return project;
 });
+
+const otherProjects = projects.filter(
+  (project) => !featuredProjects.includes(project),
+);
+
+export const projectDirectory = [
+  ...featuredProjects,
+  ...otherProjects.filter((project) => !project.earlierWork),
+  ...otherProjects.filter((project) => project.earlierWork),
+];

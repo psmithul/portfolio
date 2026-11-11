@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }: Props) {
         </p>
       )}
       <nav className="project-next" aria-label="Project navigation">
-        <Link href={sitePages.projects}>← Selected projects</Link>
+        <Link href={sitePages.projects}>← All projects</Link>
         <Link href={projectPath(next.slug)}>{next.title} →</Link>
       </nav>
     </main>

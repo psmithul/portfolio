@@ -72,31 +72,38 @@
   margin-top: 4px;
 }
 .project-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 26px 24px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.project-row:nth-child(n + 3) {
+.project-row + .project-row {
   border-top: 1px solid var(--academic-line);
+  margin-top: 18px;
   padding-top: 18px;
 }
-.portfolio-page :is(.portfolio-project-link, .academic-note-list a) {
+.portfolio-page .portfolio-project-link {
+  display: grid;
+  gap: 12px 24px;
+  align-items: start;
+  color: var(--academic-ink);
+}
+.portfolio-project-link:has(.project-figure) {
+  grid-template-columns: minmax(0, 1fr) clamp(140px, 19vw, 215px);
+}
+.portfolio-page .academic-note-list a {
   display: block;
   color: var(--academic-ink);
 }
 .portfolio-page :is(.portfolio-project-link, .academic-note-list a):hover {
   text-decoration: none;
 }
-.portfolio-project-link:hover h2 > span:first-child,
+.portfolio-project-link:hover h3 > span:first-child,
 .academic-note-list a:hover h2 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 .project-figure {
-  margin: 0 0 9px;
+  margin: 0;
 }
 .project-figure img {
   display: block;
@@ -104,7 +111,6 @@
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: contain;
-  object-position: left center;
 }
 .project-figure figcaption,
 .portfolio-page :is(.project-labels, .academic-note-meta) {
@@ -115,7 +121,8 @@
 .project-figure figcaption {
   margin-top: 4px;
 }
-.portfolio-page :is(.project-copy, .academic-note-list) h2,
+.portfolio-page .project-copy h3,
+.portfolio-page .academic-note-list h2,
 .portfolio-page .portfolio-activity-layout h3 {
   margin: 0 0 4px;
   font-size: 17px;
@@ -123,12 +130,13 @@
   line-height: 1.3;
 }
 .portfolio-page .project-summary {
-  margin-bottom: 6px;
+  max-width: 64ch;
+  margin: 0;
   font-size: 15px;
   line-height: 1.5;
 }
 .portfolio-page .project-labels {
-  margin: 0;
+  margin: 0 0 6px;
 }
 .portfolio-link-arrow {
   color: var(--academic-accent);
@@ -223,13 +231,8 @@
     margin-top: 28px;
     padding-top: 20px;
   }
-  .project-list {
+  .portfolio-project-link:has(.project-figure) {
     grid-template-columns: minmax(0, 1fr);
-    gap: 17px;
-  }
-  .project-row:nth-child(n + 2) {
-    border-top: 1px solid var(--academic-line);
-    padding-top: 14px;
   }
   .project-figure {
     max-width: 355px;

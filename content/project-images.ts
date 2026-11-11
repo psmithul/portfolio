@@ -81,4 +81,102 @@ export const projectImages = {
     caption:
       'COMSOL model screenshot from the project’s Reaction Wheel Vibration and Camera Pointing Jitter presentation. The displayed case is a 5 Hz unit-force response; it is a numerical result.',
   }),
+  'four-bar-door-mechanism': withDimensions({
+    label: 'Twin-lid mechanism CAD',
+    src: '/images/projects/four-bar-twin-lid-cad.png',
+    alt: 'CAD view of two raised lids linked to one shared crank by a blue rod and a green rod.',
+    caption:
+      'The later parametric CAD reconstruction with both lids open to 75°.',
+  }),
+  'uncertainty-aware-navigation': withDimensions({
+    label: 'Navigation simulation output',
+    src: '/images/projects/navigation-trajectory.png',
+    alt: 'Four simulation plots showing the route, localisation error, commanded speed, and gyro bias.',
+    caption:
+      'One successful nominal adaptive run from the project’s simulation.',
+  }),
 } satisfies Record<string, ProjectImage>;
+
+function demoImage(
+  filename: string,
+  label: string,
+  alt: string,
+  caption: string,
+): ProjectImage {
+  return withDimensions({
+    src: `/images/projects/${filename}.jpg`,
+    label,
+    alt,
+    caption,
+    framing: 'full-frame',
+  });
+}
+
+export const additionalProjectImages: Partial<Record<string, ProjectImage>> = {
+  'finite-element-beams-and-frames': demoImage(
+    'fem-mesh-convergence',
+    'MATLAB convergence plots',
+    'Two charts compare beam and frame displacement errors as element counts increase.',
+    'The team’s MATLAB plots of displacement error from the ANSYS mesh-refinement runs.',
+  ),
+  'portfolio-website': demoImage(
+    'portfolio-website',
+    'Portfolio screenshot',
+    'The About page with a portrait, biography, and three navigation links.',
+    'The portfolio’s About page after the three-page redesign.',
+  ),
+  'iste-project-brochure': demoImage(
+    'iste-project-brochure',
+    'Live brochure',
+    'The ISTE NITK project brochure landing page with the project count and eight tracks.',
+    'Screenshot of the published ISTE NITK project brochure.',
+  ),
+  restia: demoImage(
+    'restia-v2',
+    'Restia V2 screenshot',
+    'The Restia workspace showing connection and invitation options in Messages.',
+    'The Messages screen from the public Restia V2 documentation.',
+  ),
+  'alive-workspace': demoImage(
+    'alive-workspace',
+    'Local sketch preview',
+    'A small lit house and desk with drifting particles against a dark background.',
+    'The p5.js sketch running locally after repairs to the drawing loop.',
+  ),
+  'iste-industry-analysis': demoImage(
+    'iste-industry-analysis',
+    'Live research site',
+    'The Indian Liquor Industry Disruption Analysis dashboard with navigation for market, policy, and risks.',
+    'Screenshot of the published ISTE research site.',
+  ),
+  bondos: demoImage(
+    'bondos',
+    'Public sign-in screen',
+    'The BondOS public entry screen with sign-in and account creation tabs.',
+    'The public BondOS entry screen.',
+  ),
+  'thinkify-website': demoImage(
+    'thinkify-website',
+    'Live hiring site',
+    'Thinkify’s hiring website with navigation for companies and developers.',
+    'The later Thinkify hiring website as deployed.',
+  ),
+  'thinkify-intake': demoImage(
+    'thinkify-intake',
+    'Live intake flow',
+    'Thinkify’s first intake screen with company and developer choices.',
+    'The role-selection screen at the start of the intake flow.',
+  ),
+  'nh66-fund-website': demoImage(
+    'nh66-fund-website',
+    'Live recruitment page',
+    'The NH66 Fund recruitment page introducing the student fund.',
+    'The public NH66 Fund recruitment page.',
+  ),
+  'thinkify-quiz': demoImage(
+    'thinkify-quiz',
+    'Live quiz platform',
+    'The Thinkify Quiz landing page with options to start learning or browse content.',
+    'The public landing page of the later Thinkify Quiz platform.',
+  ),
+};
