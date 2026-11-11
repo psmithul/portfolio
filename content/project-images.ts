@@ -7,14 +7,21 @@ export const projectImages: Partial<
 > = {
   'fireworks-galaxy': {
     kind: 'documentation',
-    label: 'Hubble NICMOS · NGC 6946',
-    src: '/images/projects/fireworks-field.png',
-    width: 1682,
-    height: 616,
-    alt: 'The near-infrared Hubble detector image of NGC 6946 next to two nested crops of its bright centre.',
+    label: 'Full Hubble detector frame',
+    src: '/images/projects/fireworks-original-frame.png',
+    width: 1776,
+    height: 1792,
+    alt: 'The full Hubble NICMOS detector frame, with the bright centre of NGC 6946 near the lower middle of the field.',
     caption:
-      'Three views of the same F160W exposure. Blue-grey pixels mark detector samples excluded by the quality mask. Data from NASA/ESA Hubble via MAST.',
+      'The full F160W detector frame from my original notebook. This exposure covers the central region of NGC 6946. Data from NASA/ESA Hubble via MAST.',
     fit: 'contain',
+    thumbnail: {
+      src: '/images/projects/fireworks-field.png',
+      width: 1682,
+      height: 616,
+      alt: 'The near-infrared Hubble detector image of NGC 6946 next to two nested crops of its bright centre.',
+      label: 'Hubble NICMOS · NGC 6946',
+    },
   },
   'nitk-battle-bots': {
     kind: 'documentation',
