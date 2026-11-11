@@ -139,6 +139,17 @@
   max-height: min(56vh, 530px);
 }
 
+.project-page .mount-comparison {
+  margin: 0;
+}
+
+.mount-comparison-note {
+  grid-column: 1 / -1;
+  color: #595959;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
 .project-page .project-stage:not(:has(.project-stage-figures)) {
   grid-template-areas: 'heading copy';
   grid-template-rows: auto;
