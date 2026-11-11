@@ -178,12 +178,36 @@
       "role": "club-proposal photograph of assembly work at the Robocon Lab"
     },
     {
-      "path": "public/images/projects/process-uav-mounts.webp",
-      "source": "Original schematic drawn for this site from the documented project description",
-      "width": 1280,
-      "height": 660,
-      "sha256": "600803fa249e70b278e7db76ee91f0884c041ee8b91981a20222ab9cb5cb49d7",
-      "role": "rigid, elastomer-isolated and suspended mount concepts"
+      "path": "public/images/projects/uav-elastomer-hero.webp",
+      "source": "Blender concept render from the original UAV mount schematic, docs/asset-sources/uav_mounts.py",
+      "width": 1440,
+      "height": 900,
+      "sha256": "f917271d636908c0c2919c211750ae4085e5f7edca56cb238cfbf7cd8db24feb",
+      "role": "close view of the elastomer-isolated flight-controller tray"
+    },
+    {
+      "path": "public/images/projects/uav-mount-rigid.webp",
+      "source": "Blender concept render from the original UAV mount schematic, docs/asset-sources/uav_mounts.py",
+      "width": 840,
+      "height": 620,
+      "sha256": "256b7cda24fbeb22a3276e8808dc91b57702ee4ac25c91c8d23c1954516ddce4",
+      "role": "rigid controller mount with metal standoffs"
+    },
+    {
+      "path": "public/images/projects/uav-mount-elastomer.webp",
+      "source": "Blender concept render from the original UAV mount schematic, docs/asset-sources/uav_mounts.py",
+      "width": 840,
+      "height": 620,
+      "sha256": "573efe0832863b0aab523523ec4a77be9ec54f21f211c45843d68dfa777d8df3",
+      "role": "matched comparison view of the elastomer-isolated tray"
+    },
+    {
+      "path": "public/images/projects/uav-mount-suspended.webp",
+      "source": "Blender concept render from the original UAV mount schematic, docs/asset-sources/uav_mounts.py",
+      "width": 840,
+      "height": 620,
+      "sha256": "2e8585d887d99472011437d0bf571505828182d904816ccb7979c8429da86de5",
+      "role": "suspended controller mount with angled links"
     },
     {
       "path": "public/images/projects/process-knee-assist.webp",
