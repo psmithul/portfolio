@@ -304,6 +304,118 @@
       "height": 1109,
       "sha256": "bfb3d46cd5d53f27404bef10aa4aa08e3bbfbea2a56f587e78f2112a70fd3b51",
       "role": "three-by-five comparison of the calibrated image and Sato and Meijering responses"
+    },
+    {
+      "path": "public/images/projects/alive-workspace.jpg",
+      "source": "Mac browser capture of psmithul/alive-workspace at 5ec4cbc8 with local drawing-loop repairs",
+      "width": 1280,
+      "height": 800,
+      "sha256": "4b9bd5acfb3184ecb1293a33ca7f415af0087c9232ef9d321f1b6ad620cf6f7f",
+      "role": "p5.js animation preview"
+    },
+    {
+      "path": "public/images/projects/bondos.jpg",
+      "source": "Mac browser capture of https://bondos.vercel.app/",
+      "width": 1280,
+      "height": 720,
+      "sha256": "85fe4a88a67792882f1149f7bb6d86abf34131effa4e360767f8eb0692360770",
+      "role": "public sign-in screen"
+    },
+    {
+      "path": "public/images/projects/iste-industry-analysis.jpg",
+      "source": "Mac browser capture of https://isteproject.vercel.app/",
+      "width": 1272,
+      "height": 716,
+      "sha256": "abdbebba35db70834fdcd536d37a9bd81951a14e9377090b0772aa5260a5b0db",
+      "role": "public analysis dashboard"
+    },
+    {
+      "path": "public/images/projects/iste-project-brochure.jpg",
+      "source": "Mac browser capture of https://club-project-showcase.vercel.app/",
+      "width": 1265,
+      "height": 712,
+      "sha256": "f7c73a9473e43e337e4afb864cb1a0d1f4f6474ce090a9ce201516c2d391214e",
+      "role": "public project brochure"
+    },
+    {
+      "path": "public/images/projects/nh66-fund-website.jpg",
+      "source": "Mac browser capture of https://nh66.vercel.app/",
+      "width": 1272,
+      "height": 716,
+      "sha256": "1485cfc07eb66f3c0e8e26b328a2e9f0b2eddcb7ba2c9a5718b936f38f6e07ec",
+      "role": "public recruitment page"
+    },
+    {
+      "path": "public/images/projects/portfolio-website.jpg",
+      "source": "Mac browser capture of https://psmithul.com/",
+      "width": 1265,
+      "height": 712,
+      "sha256": "3468d07039852435e53b1f29271ce7dc4b4a5d2dade223478b6740e6ddbde7ce",
+      "role": "portfolio About page"
+    },
+    {
+      "path": "public/images/projects/thinkify-intake.jpg",
+      "source": "Mac browser capture of https://psmithul-github-io.vercel.app/",
+      "width": 1280,
+      "height": 720,
+      "sha256": "51849d95d773632d376c2f0fac0eae9b1af835e1275d02412d3e052fe2a1a705",
+      "role": "company or developer selection screen"
+    },
+    {
+      "path": "public/images/projects/thinkify-quiz.jpg",
+      "source": "Mac browser capture of https://thinkify-quiz.vercel.app/",
+      "width": 1272,
+      "height": 716,
+      "sha256": "c51c41d295e1544a7131b18dada3d91488e44e4dd965310b687eb39f9cbf7f73",
+      "role": "public quiz and course landing page"
+    },
+    {
+      "path": "public/images/projects/thinkify-website.jpg",
+      "source": "Mac browser capture of https://thinkify-2.vercel.app/",
+      "width": 1265,
+      "height": 712,
+      "sha256": "6ba36d908ab695f98facedc131f4c9619fcfdc865aedf715e0f9e8db9b2031f0",
+      "role": "public hiring website"
+    },
+    {
+      "path": "public/images/projects/four-bar-twin-lid-cad.png",
+      "source": "psmithul/four-bar-door at 2abc221b, results/drive_design/open_preview.png",
+      "width": 1600,
+      "height": 1150,
+      "sha256": "05c0c020d19fd87c5996a37e8d0ae5f3151f5e115209197fdd64d4814898aa5b",
+      "role": "original CAD view of the reconstructed twin-lid mechanism at 75°"
+    },
+    {
+      "path": "public/images/projects/navigation-trajectory.png",
+      "source": "psmithul/differential-drive-navigation at 550409d6, docs/trajectory.png",
+      "width": 1920,
+      "height": 1440,
+      "sha256": "5ae515e241796eb1228fd2e4deb418de8e5d766840946de913d5985963a6d178",
+      "role": "original navigation simulation trajectory, state estimate, commanded speed and gyro-bias plots"
+    },
+    {
+      "path": "public/images/projects/restia-v2.jpg",
+      "source": "psmithul/restia public dev branch, docs/restia-v2.jpg",
+      "width": 1280,
+      "height": 720,
+      "sha256": "39a9cdc84503bfdac81649bfaf21f999a2850860cafcbb0995e1d949d4e18298",
+      "role": "published Restia V2 messages screenshot"
+    },
+    {
+      "path": "public/images/projects/fem-mesh-convergence.jpg",
+      "source": "Group_5_Final_Submission.pdf, page 20; original embedded image",
+      "width": 2788,
+      "height": 2022,
+      "sha256": "6748889b6d3e9ab88bb4f759e1dddc9489f7c1fbf87c127c57c0ff2aca020567",
+      "role": "MATLAB displacement convergence from ANSYS exports"
+    },
+    {
+      "path": "public/images/projects/fem-ansys-mode.png",
+      "source": "Group_5_Final_Submission.pdf, page 23; original embedded image",
+      "width": 1877,
+      "height": 1410,
+      "sha256": "49b4d1049d397be5a27a476890270c07acd1e0681aa1a732f56e66e8d537047a",
+      "role": "first ANSYS beam mode at the 2 m verification span"
     }
   ]
 }

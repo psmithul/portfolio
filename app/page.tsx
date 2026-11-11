@@ -34,7 +34,7 @@ export default function AboutPage() {
         </div>
         <div className="portfolio-actions">
           <Link href={sitePages.projects}>
-            Selected projects <span aria-hidden="true">→</span>
+            View projects <span aria-hidden="true">→</span>
           </Link>
           <a href="#contact">Get in touch</a>
         </div>

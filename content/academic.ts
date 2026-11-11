@@ -1,8 +1,7 @@
-export const selectedProjectSlugs = [
+export const featuredProjectSlugs = [
   'adaptive-suspension-rover',
   'nitk-battle-bots',
   'reaction-wheel-microvibrations',
   'tensegrity-joint',
   'kneeassist',
-  'fireworks-galaxy',
 ];

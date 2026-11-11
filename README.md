@@ -9,7 +9,7 @@ Source repository: [psmithul/portfolio](https://github.com/psmithul/portfolio). 
 ## Website routes
 
 - `/` is About, with the introduction, activities, experience, and contact links.
-- `/projects` lists the selected projects. `/work/[slug]` opens a case study.
+- `/projects` lists ongoing work first, followed by past projects. `/work/[slug]` opens a case study.
 - `/build-log` lists Recent Updates. `/blog/[slug]` opens a published note. `/write` is the private writing desk.
 - `/about` and `/activities` lead to About. `/work` and `/blog` redirect to the current listings. Old homepage bookmarks for projects and posts also open the new listings.
 - Old `/v1` links permanently redirect to the corresponding current paths.
@@ -58,11 +58,11 @@ The bundled essays in `content/posts/*.md` supply the initial issue. New bundled
 
 | Content                      | Location                                                             |
 | ---------------------------- | -------------------------------------------------------------------- |
-| Project records              | `content/projects.ts`                                                |
+| Project records              | `content/projects.ts`, `content/additional-projects.ts`              |
 | Case-study text and figures  | `content/project-studies.ts`                                         |
 | Cover and thumbnail copy     | `content/project-images.ts`                                          |
 | Project image dimensions     | `docs/current-project-assets.json`                                   |
-| Selected project order       | `content/academic.ts`                                                |
+| Featured project order       | `content/academic.ts`                                                |
 | Biography and experience     | `content/profile.ts`                                                 |
 | About                        | `app/page.tsx`                                                       |
 | Projects and Build Log       | `app/projects/page.tsx`, `app/build-log/page.tsx`                    |
