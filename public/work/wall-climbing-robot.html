@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wall-Climbing Robot — P S Mithul Sourav</title>
+    <meta name="description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <link rel="canonical" href="https://psmithul.com/work/wall-climbing-robot">
+    <meta property="og:title" content="Wall-Climbing Robot">
+    <meta property="og:description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <meta property="og:url" content="https://psmithul.com/work/wall-climbing-robot">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Wall-Climbing Robot">
+    <meta name="twitter:description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a class="academic-header-logo" href="/" aria-label="Mithul Sourav home"><img src="/images/mithul-logo.png" alt="" width="480" height="160"></a>
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-wall-climbing-robot">← Back to Projects</a>
+        <header class="project-intro">
+          <h1>Wall-Climbing Robot</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>ISTE NITK · CLUTCH team project · <time datetime="2024-10">October 2024</time> — <time datetime="2025-03">March 2025</time></p>
+              <p>We wanted a small robot that could climb a concrete wall and send back video for crack inspection. We chose a ducted fan to press the robot against the wall and four driven wheels to move it along the surface.</p>
+            </div>
+            <figure class="project-cover">
+              <img src="/images/projects/wall-climbing-robot-adhesion.webp" alt="Side-view schematic showing the fan pushing the chassis towards the wall, wheel traction pointing up, and the robot’s weight pointing down." width="1200" height="675" decoding="async" data-framing="full-frame">
+              <figcaption>Design schematic. The fan presses the wheels into the wall, giving them the grip needed to climb.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="keeping-grip">Keeping grip on the wall</h2>
+            <div class="project-stage-copy">
+              <p>On a vertical surface, the wheels have to support the robot’s weight through friction. The fan pushes the chassis towards the wall, increasing the force at the tyres. The wheel motors turn that grip into motion along the wall. If the tyres have less grip on a particular surface, the fan needs to press harder to support the same weight.</p>
+              <p>Our sizing plan was to estimate how much thrust we needed using the robot’s weight and an assumed friction coefficient for each surface. We also planned an ANSYS airflow study to see how moving the fan closer to the wall would change the thrust it produced.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="driving-the-robot">Driving the robot</h2>
+            <div class="project-stage-copy">
+              <p>The control design used a wireless remote, an Arduino, and motor drivers for the four DC wheel motors. A separate electronic speed controller set the speed of the ducted fan. This gave the operator a way to adjust the force into the wall independently of the direction of travel.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="looking-for-cracks">Looking for cracks</h2>
+            <div class="project-stage-copy">
+              <p>A wireless camera on the chassis would send video of the concrete surface back to the operator. The proposal identified percolation-based image processing as a way to look for connected crack-like regions in those frames.</p>
+            </div>
+          </section>
+        </article>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/uncertainty-aware-navigation" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Uncertainty-Aware Navigation for an Indoor Mobile Robot</span>
+          </a>
+          <a href="/work/fireworks-galaxy" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Exploring the Fireworks Galaxy</span>
+          </a>
+        </nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

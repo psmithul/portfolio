@@ -2,6 +2,14 @@
   "review_date": "2026-11-12",
   "assets": [
     {
+      "path": "public/images/projects/wall-climbing-robot-adhesion.webp",
+      "source": "Concept schematic drawn from the technical overview on page 2 of the ISTE NITK Wall Climbing Robot proposal supplied by Mithul",
+      "width": 1200,
+      "height": 675,
+      "sha256": "85364d552e6cfc49cbdde7a36aab284b0ba3b94f134710a0e16a08ae81ed7ae0",
+      "role": "side-view schematic showing thrust into the wall, upward wheel traction, and downward weight"
+    },
+    {
       "path": "public/images/projects/3-lb-flipper-chassis.jpg",
       "source": "3 lb flipper photograph supplied by Mithul",
       "width": 900,
