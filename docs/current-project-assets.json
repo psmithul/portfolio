@@ -482,6 +482,46 @@
       "role": "calculated static tendon loads in one sizing case"
     },
     {
+      "path": "public/images/projects/tensegrity-knee-fixed-base-force.jpg",
+      "source": "Major project presentation-2.pdf, PDF page 37, embedded Image90.jpg",
+      "width": 2045,
+      "height": 785,
+      "sha256": "7d778a199c3f223fb5598c31e585b5ad0b7a27344d24af90ceb0499c35e4c32d",
+      "role": "transmitted force from the fixed-base spring–damper simulation"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-rotating-support-force.jpg",
+      "source": "Major project presentation-2.pdf, PDF page 58, embedded Image193.jpg",
+      "width": 2046,
+      "height": 954,
+      "sha256": "be7b584cb4fbc4b53059aa4c48b7d94c5ff5385b7f7d07987925e5dfa0543a26",
+      "role": "transmitted force from the spring–damper simulation with a rotating lower support"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-tibial-stress.jpg",
+      "source": "Major project presentation-2.pdf, PDF page 71, embedded Image248.jpg",
+      "width": 1280,
+      "height": 688,
+      "sha256": "781e28466c813906b3b5dc0d992bcc9762bd7e0a6342d38f4b3bcbeb43bab49f",
+      "role": "von Mises stress map for the tibial stem"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-femoral-stress.jpg",
+      "source": "Major project presentation-2.pdf, PDF page 71, embedded Image249.jpg",
+      "width": 1280,
+      "height": 698,
+      "sha256": "322bdef6149017199c5fdda92d86d737d6b080441562d67c7ecef9ceadaa0688",
+      "role": "von Mises stress map for the femoral stem"
+    },
+    {
+      "path": "public/images/projects/tensegrity-knee-tristar-stress.jpg",
+      "source": "Major project presentation-2.pdf, PDF page 72, embedded Image250.jpg",
+      "width": 1280,
+      "height": 681,
+      "sha256": "f9e7ccf62e0261a4d41bb801d1678e35ca750668bdfadc33b6a62408b01e833a",
+      "role": "von Mises stress map for the floating tristar"
+    },
+    {
       "path": "public/images/projects/leaf-cleaning-module-rear.webp",
       "source": "Sweeper one (2).step; rear view rendered from the supplied CAD geometry",
       "width": 1440,

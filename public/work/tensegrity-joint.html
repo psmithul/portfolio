@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton — P S Mithul Sourav</title>
-    <meta name="description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <title>Tensegrity-Based Variable-Stiffness Actuator for a Knee Exoskeleton — P S Mithul Sourav</title>
+    <meta name="description" content="Our NITK major project explores a tendon-supported knee joint through CAD, MATLAB and Simulink load models, and stress analysis of the three rigid parts.">
     <link rel="canonical" href="https://psmithul.com/work/tensegrity-joint">
-    <meta property="og:title" content="Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton">
-    <meta property="og:description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <meta property="og:title" content="Tensegrity-Based Variable-Stiffness Actuator for a Knee Exoskeleton">
+    <meta property="og:description" content="Our NITK major project explores a tendon-supported knee joint through CAD, MATLAB and Simulink load models, and stress analysis of the three rigid parts.">
     <meta property="og:url" content="https://psmithul.com/work/tensegrity-joint">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton">
-    <meta name="twitter:description" content="This knee joint uses 12 tendons to suspend a three-armed piece between two rigid frames. I’m using MATLAB to find out how much initial tension the tendons need to stay taut under load.">
+    <meta name="twitter:title" content="Tensegrity-Based Variable-Stiffness Actuator for a Knee Exoskeleton">
+    <meta name="twitter:description" content="Our NITK major project explores a tendon-supported knee joint through CAD, MATLAB and Simulink load models, and stress analysis of the three rigid parts.">
     <link rel="stylesheet" href="/styles/site.css">
     <link rel="stylesheet" href="/styles/project.css">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
@@ -30,12 +30,12 @@
       <main id="main" tabindex="-1" class="project-page">
         <a class="detail-back" href="/projects#project-tensegrity-joint">← Back to Projects</a>
         <header class="project-intro">
-          <h1>Tensegrity-Based Variable-Stiffness Knee Joint for a Knee Exoskeleton</h1>
+          <h1>Tensegrity-Based Variable-Stiffness Actuator for a Knee Exoskeleton</h1>
           <div class="project-intro-grid">
             <div class="project-intro-copy">
-              <p>Joint modeling and preliminary mechanical design · May 2026 — Present</p>
-              <p>I used a tensegrity support network to explore how a wearable knee joint’s geometry and internal tension affect its stiffness. In the design, 12 tendons suspend a floating centre piece between two rigid frames.</p>
-              <p>The assembly and the MATLAB results describe a preliminary mechanical design and a static load case at a reference pose.</p>
+              <p>NITK Mechanical Engineering major project · May 2026 — Present</p>
+              <p>We wanted to make a wearable knee joint that could flex under a sudden load and provide support when needed. Our design uses tendon tension to explore how the joint’s stiffness could be adjusted. Twelve support tendons suspend a three-armed piece between the upper and lower frames.</p>
+              <p>We modelled walking, running, and squatting in Simulink, then checked how the support tendons and rigid parts carried loads in separate sizing analyses.</p>
             </div>
             <figure class="project-cover">
               <img alt="Two views of the assembled tensegrity knee with red support tendons fastened to collars on the amber tristar and pins on the blue and teal frames." width="1800" height="1012" decoding="async" src="/images/projects/tensegrity-knee-support-assembly.webp">
@@ -45,24 +45,24 @@
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="why-use-a-tension-network">Tension network</h2>
+            <h2 id="why-use-a-tension-network">Why use tendons?</h2>
             <div class="project-stage-copy">
-              <p>I wanted to see how an external load redistributes tension through the spans holding the centre piece in place. The rigid parts define the attachment geometry, while the tendons can only pull. A span that needs to push in the model would go slack.</p>
+              <p>Walking, running, and squatting ask different things of a knee joint. Running applies a load quickly, while a squat loads the knee through a slower change in posture. We wanted the same joint to allow some movement under a sudden load and offer more support when needed.</p>
+              <p>The tendons are pulled tight before the joint carries any external load. That initial tension is a way to change how the joint responds. It also helps keep the network stable as some tendons take more load and others lose tension. Since a tendon can only pull, a span that loses all its tension goes slack.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="how-the-support-network-is-arranged">Attachment geometry</h2>
             <div class="project-stage-copy">
-              <p>I started with two Y-frames and a floating tristar, drawing on a tensegrity leg study by Mortensen and colleagues. Each tristar tip connects to all four frame tips. The tristar arms are 120° apart, and the four frame tips sit on the intended flexion axis. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
-              <p id="checking-the-geometry-before-a-build">I checked the attachment points in the STEP assembly against the drawing at 60° of knee flexion. Moving an anchor changes the line of pull through several tendons, so it can redistribute load even when the external force stays the same.</p>
-              <p>I used the 60° pose as a common reference for the STEP assembly and the force model. That matters because moving an anchor changes the direction of more than one tendon. Comparing the same pose keeps a change in the load distribution tied to the attachment geometry I was studying.</p>
+              <p>We started with two Y-frames and a floating tristar, drawing on the tensegrity leg design by Mortensen and colleagues. Each of the three tristar tips connects to all four frame tips, giving us 12 support spans. The tristar arms are 120° apart, and the frame tips sit on the intended flexion axis. <a href="https://arxiv.org/abs/2504.19685" rel="noreferrer">Read the study</a>.</p>
+              <p id="checking-the-geometry-before-a-build">We used 60° of knee flexion as a common reference for the STEP assembly and the force model. Moving one anchor changes the pull direction of several tendons. Using the same pose let us see how the attachment geometry redistributed load.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
                 <div>
                   <img src="/images/projects/tensegrity-knee-step-parts.webp" alt="The two Y-frames and central tristar shown individually at a common CAD scale." width="1800" height="1012" loading="lazy" decoding="async">
                 </div>
-                <figcaption>The three rigid parts rendered from my STEP files. Their connection points establish where the support tendons can attach.</figcaption>
+                <figcaption>The two frames and the tristar, rendered from the project STEP files at the same scale.</figcaption>
               </figure>
               <figure class="reading-figure">
                 <div>
@@ -73,11 +73,10 @@
             </div>
           </section>
           <section class="project-stage">
-            <h2 id="member-force-analysis">Tendon loads in MATLAB</h2>
+            <h2 id="member-force-analysis">How the tendons share load</h2>
             <div class="project-stage-copy">
-              <p>In one static sizing case, I applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load. The model gave tensions from <strong>0.50 to 5.69 kN per support span</strong>.</p>
-              <p>I compared the lowest and highest tensions when changing the preload. The lowest shows which span is closest to slack. The highest shows where the connection carries the largest load. Increasing preload helps keep the lightest span taut and also raises the load on the connections before an external force is applied.</p>
-              <p>The two frames did not share the load equally at every tip in that case. At P1, the model gave about 5.69 kN in each Frame A span and 0.50 kN in each Frame B span. That pair shows why I checked individual spans when choosing the initial tension. One connection is heavily loaded at the same tip where another span is closest to slack.</p>
+              <p>In one static sizing case, we applied an assumed 3.2 kN horizontal load and 5.25 kN vertical load. At the same tristar tip, P1, the model gave about <strong>5.69 kN</strong> in each span to the upper frame and <strong>0.50 kN</strong> in each span to the lower frame.</p>
+              <p>That difference is why we checked individual spans. The lightest span tells us which is closest to going slack, and the heaviest tells us which connection carries the most load. Adding pretension gives the lightest span more room before it goes slack and also raises the load at the anchors.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
@@ -86,8 +85,57 @@
               </figure>
             </div>
           </section>
+          <section class="project-stage project-stage-wide">
+            <h2 id="modelling-everyday-loads">Modelling everyday loads</h2>
+            <div class="project-stage-copy">
+              <p>We began with a mass, spring, and damper on a fixed support. The spring responds to displacement, the damper responds to speed, and the two forces add at the support. We ran 20 cycles each of walking, running, and squatting to see how much travel and force the model predicted.</p>
+              <p>We then let the lower support rotate to represent motion at the ankle. That changed what the spring and damper felt because both of their ends could now move. Running produced the highest transmitted force in both models. Its peak went from <strong>4.28 kN</strong> with the fixed base to <strong>4.33 kN</strong> with the rotating support, and the mass’s peak displacement rose from about 198 to 207 mm.</p>
+              <p>Both reference models use constant stiffness and damping. The runs compare load cases and support conditions. The relationship between tendon pretension, knee angle, and the assembled joint’s stiffness remains open.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-knee-fixed-base-force.jpg" alt="Fixed-base simulation plot over 20 cycles. Running peaks above 4 kN, while walking and squatting peak near 2 kN." width="2045" height="785" loading="lazy" decoding="async">
+                <figcaption>Transmitted force with the lower support fixed. <a href="/images/projects/tensegrity-knee-fixed-base-force.jpg">Open the full-size fixed-base plot</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-knee-rotating-support-force.jpg" alt="Coupled simulation plot over 20 cycles with a rotating lower support. Running still has the highest transmitted force." width="2046" height="954" loading="lazy" decoding="async">
+                <figcaption>Transmitted force with the lower support free to rotate against a torsional spring and damper. <a href="/images/projects/tensegrity-knee-rotating-support-force.jpg">Open the full-size rotating-support plot</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage project-stage-wide">
+            <h2 id="stress-in-the-rigid-parts">Stress in the rigid parts</h2>
+            <div class="project-stage-copy">
+              <p>We checked the upper frame, lower frame, and tristar separately to see where stress builds up. The maps show a representative setup with a fixed region and a force applied to one arm. In the separate activity cases, the lower frame, or tibial stem, had the highest reported stress and displacement of the three parts.</p>
+              <table aria-label="Simulated tibial stem results">
+                <thead>
+                  <tr><th scope="col">Activity</th><th scope="col">Stress (MPa)</th><th scope="col">Displacement (mm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Walking</th><td>34.3</td><td>4.96</td></tr>
+                  <tr><th scope="row">Running</th><td>85.1</td><td>12.32</td></tr>
+                  <tr><th scope="row">Squat</th><td>107.2</td><td>16.00</td></tr>
+                </tbody>
+              </table>
+              <p>The squat case gave the largest stress in the tibial stem, while running gave the largest transmitted force in the separate Simulink model. Those results helped us distinguish the load on the support from the stress within an individual part.</p>
+            </div>
+            <div class="project-stage-figures project-stage-figures-three">
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-knee-tibial-stress.jpg" alt="Tibial stem stress map with a concentration near the root of the loaded arm." width="1280" height="688" loading="lazy" decoding="async">
+                <figcaption>Von Mises stress in the tibial stem. <a href="/images/projects/tensegrity-knee-tibial-stress.jpg">Open the tibial stem map</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-knee-femoral-stress.jpg" alt="Femoral stem stress map showing higher stress where the loaded branch meets the stem." width="1280" height="698" loading="lazy" decoding="async">
+                <figcaption>Von Mises stress in the femoral stem. <a href="/images/projects/tensegrity-knee-femoral-stress.jpg">Open the femoral stem map</a>.</figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <img src="/images/projects/tensegrity-knee-tristar-stress.jpg" alt="Tristar stress map showing a concentration around the base of the loaded arm." width="1280" height="681" loading="lazy" decoding="async">
+                <figcaption>Von Mises stress in the floating tristar. <a href="/images/projects/tensegrity-knee-tristar-stress.jpg">Open the tristar map</a>.</figcaption>
+              </figure>
+            </div>
+          </section>
         </article>
-        <p class="project-tools">Tools &amp; methods · MATLAB · Member-force modeling · Mechanism design</p>
+        <p class="project-tools">Tools &amp; methods · CAD · MATLAB and Simulink · Tendon sizing · Stress analysis</p>
         <nav class="detail-pagination" aria-label="Project navigation">
           <a href="/work/nitk-battle-bots" rel="prev">
             <span class="detail-pagination-label">← Previous project</span>

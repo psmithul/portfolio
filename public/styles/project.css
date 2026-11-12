@@ -132,6 +132,10 @@
   min-width: 0;
 }
 
+.project-page .project-stage-copy table + p {
+  margin-top: 14px;
+}
+
 .academic-site .project-page .project-stage-copy h3 {
   margin: 20px 0 8px;
   color: #111;
@@ -253,7 +257,7 @@
     row-gap: 18px;
   }
 
-  .project-page .project-stage-figures.mount-comparison {
+  .project-page .project-stage-figures:is(.mount-comparison, .project-stage-figures-three) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
