@@ -15,3 +15,5 @@ Articles distinguish announcement claims from personal results. Suggested compar
 The rover controls note was first published on 30 September 2026 and revised on 13 November 2026 using the rover case study. The leaf pickup note uses the cleaning module case study and the team’s single-unit motion study.
 
 The Restia entry is dated 20 July 2026, the date of the development revision shown in the screenshots. [Restia commit](https://github.com/psmithul/restia/commit/5f506055f06685b3691717b7d15c0ba27aacda15)
+
+The Hermes Memory Workspace entry is dated 15 June 2026, when the vault history records the Obsidian memory setup and the handoff registry and task queue.

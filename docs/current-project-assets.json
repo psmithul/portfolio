@@ -484,6 +484,22 @@
       "role": "in-game screenshot of the archive mural"
     },
     {
+      "path": "public/images/projects/hermes-memory-workflow.png",
+      "source": "Portfolio diagram based on the Hermes memory and profile-cleanup records",
+      "width": 720,
+      "height": 405,
+      "sha256": "4a21297a0fe56df1bb34a1e2bdba87fc77219ec68c7b91e64199480fcad27cec",
+      "role": "diagram of daily and living notes, specialist handoffs, and the recorded cleanup count"
+    },
+    {
+      "path": "public/images/projects/hermes-obsidian-workspace.jpg",
+      "source": "Screenshot of Obsidian 1.15.0 running a sample vault using the Hermes daily and living note structure",
+      "width": 1600,
+      "height": 899,
+      "sha256": "1d5f41d033737848d60a2b8270ed7cda63f00f2de7a6bd962dfe4c29495926d1",
+      "role": "Hermes vault screenshot and Projects thumbnail"
+    },
+    {
       "path": "public/images/projects/briskfit-app-store.jpg",
       "source": "Napses Technologies screenshots from https://apps.apple.com/in/app/brisk-fit/id6762797940",
       "width": 720,
