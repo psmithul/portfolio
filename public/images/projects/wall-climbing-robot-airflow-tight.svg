@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" width="640" height="420">
+  <title>Tighter clearance between wall and fan inlet</title>
+  <defs>
+    <pattern id="wall" width="15" height="15" patternUnits="userSpaceOnUse" patternTransform="rotate(38)">
+      <rect width="15" height="15" fill="#e0e8e6"/>
+      <path d="M0 0v15" stroke="#a3b9b6" stroke-width="2"/>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto-start-reverse">
+      <path d="m0 0 10 5-10 5z" fill="#28746a"/>
+    </marker>
+  </defs>
+  <rect width="640" height="420" fill="#f5f8f7"/>
+  <rect x="98" y="95" width="40" height="276" fill="url(#wall)"/>
+  <path d="M138 95v276" fill="none" stroke="#365252" stroke-width="3"/>
+  <rect x="138" y="171" width="60" height="114" fill="#d9eae5"/>
+  <g fill="#a6bbb7" stroke="#365252" stroke-width="2.5">
+    <path d="M198 171Q222 189 246 189H398V175H246Q222 175 198 155Z"/>
+    <path d="M198 285Q222 267 246 267H398V281H246Q222 281 198 301Z"/>
+  </g>
+  <g fill="none" stroke="#28746a" stroke-width="3.5" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M165 112V179Q165 217 210 217H283"/>
+    <path d="M165 307V277Q165 239 210 239H283"/>
+    <path d="M325 218H561"/>
+    <path d="M325 239H561"/>
+  </g>
+  <path d="M295 195l24 66" fill="none" stroke="#365252" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="307" cy="228" r="9" fill="#365252"/>
+  <g fill="none" stroke="#657c78" stroke-width="2">
+    <path d="M138 313v28m60-28v28M138 327H198"/>
+    <path d="m146 322-8 5 8 5m44-10 8 5-8 5"/>
+  </g>
+  <g fill="#203733" font-family="system-ui,sans-serif">
+    <text x="32" y="49" font-size="32" font-weight="650">Tighter clearance</text>
+    <g font-size="23" font-weight="550">
+      <text x="36" y="226">Wall</text>
+      <text x="165" y="90" text-anchor="middle">Air in</text>
+      <text x="298" y="148" text-anchor="middle">Ducted fan</text>
+      <text x="588" y="206" text-anchor="end">Exhaust</text>
+      <text x="168" y="396" text-anchor="middle">Inlet gap</text>
+    </g>
+  </g>
+</svg>

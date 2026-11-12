@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400">
+  <title>Illustrative example of connected crack pixels</title>
+  <defs>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#c8d5d2" stroke-width="1"/>
+    </pattern>
+    <path id="trace" d="M78 0h26v52h26v26h26v26h26v26h26v52h26v26h26v52h-26v-26h-26v-26h-26v-52h-26v-26h-26v-26h-26V78H78Z M130 104h-26v26H78v26H52v26H26v26h26v-26h26v-26h26v-26h26Z"/>
+  </defs>
+  <rect width="900" height="400" fill="#f5f8f7"/>
+  <g transform="translate(58 96)">
+    <rect width="312" height="260" fill="#e7efed"/>
+    <use href="#trace" fill="#465b58"/>
+    <path d="M26 26h26v26H26zM234 52h26v26h-26zM260 104h26v26h-26zM0 130h26v26H0zM78 208h26v26H78zM130 182h26v26h-26zM286 234h26v26h-26z" fill="#687c79"/>
+    <rect width="312" height="260" fill="url(#grid)" stroke="#c8d5d2"/>
+  </g>
+  <path d="M415 225h68m-16-13 16 13-16 13" fill="none" stroke="#527e78" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(530 96)">
+    <rect width="312" height="260" fill="#e7efed"/>
+    <use href="#trace" fill="#28746a"/>
+    <rect width="312" height="260" fill="url(#grid)" stroke="#c8d5d2"/>
+  </g>
+  <g fill="#203733" font-family="system-ui,sans-serif" font-size="28" font-weight="600" text-anchor="middle">
+    <text x="214" y="63">Candidate pixels</text>
+    <text x="686" y="63">Connected trace</text>
+  </g>
+</svg>

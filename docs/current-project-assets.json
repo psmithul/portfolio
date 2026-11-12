@@ -2,30 +2,45 @@
   "review_date": "2026-11-12",
   "assets": [
     {
-      "path": "public/images/projects/wall-climbing-robot-render.webp",
-      "source": "Built-in ImageGen, based on the Wall-Climbing Robot proposal and Mithul’s confirmation of the completed project",
+      "path": "public/images/projects/wall-climbing-robot-reconstruction.webp",
+      "source": "Built-in ImageGen edit of a Three.js reference model based on the project description. Four tire contact points and positive wall clearance for the remaining geometry were verified on the reference model.",
       "width": 1672,
       "height": 941,
-      "sha256": "8b8bcea7ecfc803676c4f301fac56d57e19f7aba91649b6779323597733257ab",
-      "role": "generated concept render of the completed project’s climbing mechanism",
-      "prompt": "Create a wide landscape engineering concept render for a student robotics portfolio. Show a compact four-wheel wall-climbing robot against a vertical, lightly textured concrete wall. It has a simple rectangular open chassis, four rubber drive wheels arranged two on each long side with their treads touching the wall, a single prominent electric ducted fan whose axis is perpendicular to the wall and whose outlet faces the viewer, and a small inspection camera near the leading edge. Show the entire robot in a three-quarter view so the wheel-to-wall contact is clear. Use an understated grey and teal CAD-style illustration with realistic materials and a matte finish. Keep the robot centered with room around it for a portfolio thumbnail. No text, arrows, branding, people, extra fans, or floor beneath the robot."
+      "sha256": "efdd3492e65334b1d0c6277c3eb03bf77c66787a0d4a7c572d78579a89d49498",
+      "role": "photo-style reconstruction of the wall-climbing robot with a ducted fan, four wheels, and a wall-facing camera",
+      "prompt": "Edit this exact 3D reference into a plain, candid-looking engineering photograph of a small student wall-climbing prototype. Retain the original three-quarter camera angle and the exact geometry, placement, scale, silhouettes and orientation of all parts in the reference. In particular preserve the four wheel silhouettes and their tangent contact with the same uninterrupted wall plane. Keep the chassis and fan intake visibly spaced off the wall. Keep the camera on the wall-facing side of its board. Preserve the single fan and the simple flat metal plate, battery, boards and exposed wires. The requested change is materials and lighting only: physically natural soft room light, fine textured dark rubber, scratched and fingerprinted unpainted aluminium, ordinary plastic boards and fasteners, realistic concrete pores and slightly uneven surface color. Use modest depth of field and leave the full robot in focus. Keep the entire source composition in landscape and the result ordinary and slightly rough like a prototype photograph, with no added parts, markings, text, smoke, braces, wheel overlap, feet or polished advertising effect. Maintain the exact clearance and tire contact from the input."
     },
     {
-      "path": "public/images/projects/wall-climbing-robot-crack-illustration.webp",
-      "source": "Built-in ImageGen, based on the Wall-Climbing Robot proposal and Mithul’s confirmation of the completed project",
-      "width": 1774,
-      "height": 887,
-      "sha256": "24479839475454147df9bcbb688b598eceac7c45e6733dd19d60d6ce7f1809dc",
-      "role": "synthetic illustration of a concrete crack and its traced shape",
-      "prompt": "Create a wide landscape technical illustration for a student wall-inspection robotics portfolio. Use two equally sized panels separated by a slim light gutter. On the left, show a close, straight-on synthetic view of light grey concrete with a single fine branching crack. On the right, show the same crack geometry as a clean teal trace on a pale neutral field to illustrate what a connected-crack mask represents. Align the two views precisely and keep the branching trace legible. Treat this as an explanatory illustration using invented input, with no measurements, axes, titles, labels, watermarks, or interface chrome."
+      "path": "public/images/projects/wall-climbing-robot-layout.svg",
+      "source": "Engineering schematic drawn for the Wall-Climbing Robot case study from the project description",
+      "width": 960,
+      "height": 540,
+      "sha256": "837026e328d22808c8bf58a6bddcc4c184dc8d2b1626df4c601f76240326afa2",
+      "role": "simplified chassis layout with four drive wheels, fan and camera"
     },
     {
-      "path": "public/images/projects/wall-climbing-robot-adhesion.webp",
-      "source": "Concept schematic drawn from the technical overview on page 2 of the ISTE NITK Wall Climbing Robot proposal supplied by Mithul",
-      "width": 1200,
-      "height": 675,
-      "sha256": "85364d552e6cfc49cbdde7a36aab284b0ba3b94f134710a0e16a08ae81ed7ae0",
-      "role": "side-view schematic showing thrust into the wall, upward wheel traction, and downward weight"
+      "path": "public/images/projects/wall-climbing-robot-airflow-wide.svg",
+      "source": "Engineering schematic drawn for the Wall-Climbing Robot case study from the project description",
+      "width": 640,
+      "height": 420,
+      "sha256": "ba07263782b4babe3a7a08829066da60ef9a0ddf9d0adc61f527fc066017a32d",
+      "role": "qualitative cross-section of airflow with more wall-to-inlet clearance"
+    },
+    {
+      "path": "public/images/projects/wall-climbing-robot-airflow-tight.svg",
+      "source": "Engineering schematic drawn for the Wall-Climbing Robot case study from the project description",
+      "width": 640,
+      "height": 420,
+      "sha256": "29529d04952da053635bfc2c3edaa7fb0a06025a982bd827fe24f315d6d38f53",
+      "role": "qualitative cross-section of airflow with tighter wall-to-inlet clearance"
+    },
+    {
+      "path": "public/images/projects/wall-climbing-robot-crack-pixels.svg",
+      "source": "Engineering schematic drawn for the Wall-Climbing Robot case study from the project description",
+      "width": 900,
+      "height": 400,
+      "sha256": "3381479739c517fe1cc543275b26dc71e68a55b88c3425b7a2427e80e8fe7d62",
+      "role": "illustrative pixel example of a connected crack-like trace"
     },
     {
       "path": "public/images/projects/3-lb-flipper-chassis.jpg",
