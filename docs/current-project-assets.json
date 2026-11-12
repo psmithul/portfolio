@@ -378,6 +378,30 @@
       "role": "Restia project thumbnail and case-study cover"
     },
     {
+      "path": "public/images/projects/restia-dev-projects.jpg",
+      "source": "Screenshot of public Restia dev revision 5f506055f06685b3691717b7d15c0ba27aacda15 running locally with sample data",
+      "width": 1280,
+      "height": 720,
+      "sha256": "7123a4cfc73c437603410a84c725cbe5a43ffaf95ee77cbf698e13b451bc27cb",
+      "role": "Restia project board and Projects thumbnail"
+    },
+    {
+      "path": "public/images/projects/restia-dev-brief.jpg",
+      "source": "Screenshot of public Restia dev revision 5f506055f06685b3691717b7d15c0ba27aacda15 running locally with sample data",
+      "width": 1280,
+      "height": 720,
+      "sha256": "237b4a4160a3be18424c8da96b659191b4501b32034deb1f5c64ae0994eb3d5c",
+      "role": "Restia project brief"
+    },
+    {
+      "path": "public/images/projects/restia-dev-calendar.jpg",
+      "source": "Screenshot of public Restia dev revision 5f506055f06685b3691717b7d15c0ba27aacda15 running locally with sample data",
+      "width": 1280,
+      "height": 720,
+      "sha256": "dd691147db371a208f68dcead3145dbb467914de523c0b701a55e17297dc8916",
+      "role": "Restia weekly calendar"
+    },
+    {
       "path": "public/images/projects/fem-mesh-convergence.jpg",
       "source": "Group_5_Final_Submission.pdf, page 20; original embedded image",
       "width": 2788,
@@ -416,6 +440,14 @@
       "height": 405,
       "sha256": "4a21297a0fe56df1bb34a1e2bdba87fc77219ec68c7b91e64199480fcad27cec",
       "role": "diagram of daily and living notes, specialist handoffs, and the recorded cleanup count"
+    },
+    {
+      "path": "public/images/projects/hermes-obsidian-workspace.jpg",
+      "source": "Screenshot of Obsidian 1.15.0 running a sample vault using the Hermes daily and living note structure",
+      "width": 1600,
+      "height": 899,
+      "sha256": "1d5f41d033737848d60a2b8270ed7cda63f00f2de7a6bd962dfe4c29495926d1",
+      "role": "Hermes vault screenshot and Projects thumbnail"
     },
     {
       "path": "public/images/projects/briskfit-app-store.jpg",
@@ -531,11 +563,19 @@
     },
     {
       "path": "public/images/projects/hands-free-cursor-preview.jpg",
+      "source": "OpenCV preview frame captured from the portfolio cursor prototype running MediaPipe 0.10.9 against a recording made from the public MediaPipe pointing_up.jpg test photo",
+      "width": 720,
+      "height": 480,
+      "sha256": "d89b6b43276deabcc9a1809fe067a3c374b31b6b57a757ad80f9fef072deafc0",
+      "role": "hand tracking cover and Projects thumbnail"
+    },
+    {
+      "path": "public/images/projects/hands-free-cursor-demo-poster.jpg",
       "source": "Frame at 2.5 seconds in Mithul’s screen recording of the cursor prototype",
       "width": 960,
       "height": 514,
       "sha256": "85dcfa02007c986aac51495d0d2d5a1907b899969c9ff1049fd79df4a0b04c26",
-      "role": "hand tracking video poster and Projects thumbnail"
+      "role": "hand tracking video poster"
     }
   ]
 }

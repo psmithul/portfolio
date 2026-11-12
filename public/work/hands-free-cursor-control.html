@@ -37,11 +37,8 @@
               <p>I built a Python prototype to move the cursor without a mouse. I tried pointing with a finger and moving my eyes to control the same pointer.</p>
             </div>
             <figure class="project-cover">
-              <video controls playsinline preload="metadata" poster="/images/projects/hands-free-cursor-preview.jpg" width="1440" height="772" aria-label="Hand tracking demo" aria-describedby="hand-tracking-demo-caption">
-                <source src="/videos/hands-free-cursor-demo.mp4" type="video/mp4">
-                <a href="/videos/hands-free-cursor-demo.mp4">Watch the hand tracking demo</a>
-              </video>
-              <figcaption id="hand-tracking-demo-caption">The green dot shows where the prototype maps my index finger in the live camera preview.</figcaption>
+              <img src="/images/projects/hands-free-cursor-preview.jpg" alt="The cursor preview shows a green tracking dot beside a raised index finger." width="720" height="480" data-framing="full-frame" decoding="async">
+              <figcaption>The prototype tracking an index finger in a <a href="https://storage.googleapis.com/mediapipe-assets/pointing_up.jpg" rel="noreferrer">MediaPipe test photo</a>.</figcaption>
             </figure>
           </div>
         </header>
@@ -51,6 +48,15 @@
             <div class="project-stage-copy">
               <p>In hand mode, the script takes the index fingertip from each frame and maps a rectangle in the camera view to the screen. Using an inner rectangle means the pointer can reach the edges without the hand leaving the frame.</p>
               <p>Small shifts in the detected fingertip can make the cursor jitter. The filter moves the cursor partway toward each new target. In the <a href="/images/projects/hands-free-cursor-tracking.webp">sample input trace</a>, the cursor moves more steadily and lags slightly when the input changes direction.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <video controls playsinline preload="metadata" poster="/images/projects/hands-free-cursor-demo-poster.jpg" width="1440" height="772" aria-label="Hand tracking demo" aria-describedby="hand-tracking-demo-caption">
+                  <source src="/videos/hands-free-cursor-demo.mp4" type="video/mp4">
+                  <a href="/videos/hands-free-cursor-demo.mp4">Watch the hand tracking demo</a>
+                </video>
+                <figcaption id="hand-tracking-demo-caption">The green dot shows where the prototype maps my index finger in the live camera preview.</figcaption>
+              </figure>
             </div>
           </section>
           <section class="project-stage">
