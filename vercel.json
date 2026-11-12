@@ -18,7 +18,8 @@
     { "source": "/work/briskfit", "destination": "/experience/briskfit", "permanent": true },
     { "source": "/work/portfolio-website", "destination": "/projects", "permanent": true },
     { "source": "/work/restia", "destination": "/blog/restia", "permanent": true },
-    { "source": "/work/hermes-memory-workspace", "destination": "/blog/hermes-memory-workspace", "permanent": true },
+    { "source": "/work/hermes-memory-workspace", "destination": "/build-log", "permanent": true },
+    { "source": "/blog/hermes-memory-workspace", "destination": "/build-log", "permanent": true },
     { "source": "/write/:path*", "destination": "/build-log", "permanent": true },
     { "source": "/v1/:path*", "destination": "/:path*", "permanent": true }
   ],
