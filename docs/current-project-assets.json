@@ -490,20 +490,36 @@
       "role": "single-door kinematic model at 90 degrees"
     },
     {
-      "path": "public/images/projects/brain-tumour-mri-example.webp",
-      "source": "Jun Cheng, Brain Tumor Dataset, Figshare v5 (2017), DOI 10.6084/m9.figshare.1512427.v5, CC BY 4.0; slice 301, rescaled for display",
-      "width": 512,
-      "height": 512,
-      "sha256": "6734054128742b897231e025a799b42c11b28e522d260c6d37e30f503836d567",
-      "role": "illustrative MRI image, separate from the detector training dataset"
-    },
-    {
       "path": "public/images/projects/brain-tumour-detection-results.webp",
       "source": "TensorFlow 2.7 run of the supplied binary CNN on the original notebook dataset, with exact duplicates removed",
       "width": 1440,
       "height": 720,
       "sha256": "2c13bb93a47f9f40fd97e9c8c862bbd67d82815b41980853c729f510e16b7349",
       "role": "training and validation curves with binary confusion matrix"
+    },
+    {
+      "path": "public/images/projects/brain-mri-tumour.jpg",
+      "source": "Navoneel Chakrabarty, Brain MRI Images for Brain Tumor Detection (2019), original Colab archive, brain_tumor_dataset/yes/Y7.jpg",
+      "width": 374,
+      "height": 456,
+      "sha256": "a66911b8e185964e9f9cb2c8db56eb63b2832c586635b864d29241bc68d2470f",
+      "role": "held-out MRI labelled tumour"
+    },
+    {
+      "path": "public/images/projects/brain-mri-no-tumour.jpg",
+      "source": "Navoneel Chakrabarty, Brain MRI Images for Brain Tumor Detection (2019), original Colab archive, brain_tumor_dataset/no/7 no.jpg",
+      "width": 428,
+      "height": 417,
+      "sha256": "4cfec6cb822f28e3e61f07804637656fa1545a67e0c6e54f38cfea363c33e35c",
+      "role": "held-out MRI labelled no tumour"
+    },
+    {
+      "path": "public/images/projects/iste-nitk-homepage.jpg",
+      "source": "Browser capture of the published homepage HTML, styles and assets from http://iste.nitk.ac.in/",
+      "width": 1265,
+      "height": 712,
+      "sha256": "483e3da77c0a8816f9aeb4eaffaebe003ba00399a0a90ae6dd47bb8ad16cfbfd",
+      "role": "official ISTE NITK homepage"
     }
   ]
 }
