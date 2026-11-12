@@ -466,20 +466,44 @@
       "role": "sample input and smoothed cursor path"
     },
     {
-      "path": "public/images/projects/brain-mri-demo-images.webp",
-      "source": "mri_classifier.py demo-data command, test split",
+      "path": "public/images/projects/brain-mri-figshare-slices.webp",
+      "source": "Jun Cheng, Brain Tumor Dataset, Figshare v5 (2017), DOI 10.6084/m9.figshare.1512427.v5, CC BY 4.0; slices 2208, 301 and 1247 plotted in Brain_MRI_Classification.ipynb",
       "width": 1440,
-      "height": 810,
-      "sha256": "afe083f713dbc50f7bb2e7c3c5f3e4ce05b2b0a16600ed9c6c99a78beecd23eb",
-      "role": "synthetic examples for the classification demo"
+      "height": 648,
+      "sha256": "f6c0e76a90aa7da7c2795621a7fa691c947a9cef5556430a70dfe6c581cc4a41",
+      "role": "real MRI cover; converted and rescaled for display"
     },
     {
-      "path": "public/images/projects/brain-mri-demo-training.webp",
-      "source": "mri_classifier.py training history after 12 epochs on synthetic demo data using TensorFlow 2.7.0",
+      "path": "public/images/projects/brain-mri-figshare-results.webp",
+      "source": "Brain_MRI_Classification.ipynb, TensorFlow 2.7 run on a patient-level split of Figshare v5",
       "width": 1440,
-      "height": 750,
-      "sha256": "ff411fcdc4bdef04a20b84e2d2e606fde3cdcb9c0b30b48ae0f6d913862c84db",
-      "role": "example learning curves from the demo run"
+      "height": 732,
+      "sha256": "8c15280db0ff6838df766e7f208f3eaa1bf68b939ae65e6a79517ebce4017d9e",
+      "role": "training accuracy and test confusion matrix on real MRI slices"
+    },
+    {
+      "path": "public/images/projects/four-bar-pose-closed.webp",
+      "source": "psmithul/four-bar-door at 2abc221b, results/revised_motion.csv and results/geometry.png",
+      "width": 1260,
+      "height": 777,
+      "sha256": "5f82db9792bc9b986638f7aad1d90ff4a2c7b972e954af613fa3069a5cec5a90",
+      "role": "single-door kinematic model at 0 degrees"
+    },
+    {
+      "path": "public/images/projects/four-bar-pose-mid.webp",
+      "source": "psmithul/four-bar-door at 2abc221b, results/revised_motion.csv and results/geometry.png",
+      "width": 1260,
+      "height": 777,
+      "sha256": "db7672544f6d73790ec8b91ed643ff1b540bbcafb9b2c23ad35693ded4c9945c",
+      "role": "single-door kinematic model at 45 degrees"
+    },
+    {
+      "path": "public/images/projects/four-bar-pose-open.webp",
+      "source": "psmithul/four-bar-door at 2abc221b, results/revised_motion.csv and results/geometry.png",
+      "width": 1260,
+      "height": 777,
+      "sha256": "dcd06146415386273662abd28e957387a2a7e6ca7b3fff0b1d801066f7e5e753",
+      "role": "single-door kinematic model at 90 degrees"
     }
   ]
 }

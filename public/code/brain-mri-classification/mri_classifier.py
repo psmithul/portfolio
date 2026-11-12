@@ -37,7 +37,9 @@ def build_model(tf, classes):
         layers.Conv2D(32, 3, padding="same", activation="relu"),
         layers.MaxPooling2D(),
         layers.Conv2D(64, 3, padding="same", activation="relu"),
-        layers.GlobalAveragePooling2D(),
+        layers.MaxPooling2D(),
+        layers.Flatten(),
+        layers.Dense(32, activation="relu"),
         layers.Dropout(0.25, seed=SEED),
         layers.Dense(classes, activation="softmax"),
     ])
@@ -73,8 +75,11 @@ def train(dataset, output, epochs, batch_size):
     test_images = load_images(evaluation_data, dataset, "test", class_names, batch_size)
 
     model = build_model(tf, len(class_names))
+    counts = np.bincount(train_images.classes)
+    class_weights = {index: train_images.samples / (len(class_names) * count)
+                     for index, count in enumerate(counts)}
     history = model.fit(
-        train_images, validation_data=val_images, epochs=epochs,
+        train_images, validation_data=val_images, epochs=epochs, class_weight=class_weights,
         callbacks=[tf.keras.callbacks.EarlyStopping(
             monitor="val_loss", patience=4, restore_best_weights=True,
         )],
@@ -83,7 +88,13 @@ def train(dataset, output, epochs, batch_size):
     output.mkdir(parents=True)
     model.save(str(output / "model.h5"), include_optimizer=False)
     (output / "classes.json").write_text(json.dumps(class_names, indent=2) + "\n", encoding="utf-8")
-    report = {"epochs": history.history, "test": scores}
+    predictions = model.predict(test_images).argmax(axis=1)
+    confusion = np.zeros((len(class_names), len(class_names)), dtype=int)
+    np.add.at(confusion, (test_images.classes, predictions), 1)
+    report = {
+        "epochs": history.history, "test": scores, "classes": class_names,
+        "confusion_matrix": confusion.tolist(),
+    }
     (output / "training.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"Test accuracy: {scores['accuracy']:.1%}")
 
@@ -105,29 +116,6 @@ def predict(output, image_file):
         print(f"{label:20s} {score:.3f}")
 
 
-def make_demo(root):
-    from PIL import Image, ImageDraw, ImageFilter
-
-    if root.exists():
-        raise ValueError(f"Choose an unused demo directory: {root}")
-    rng = random.Random(SEED)
-    for split, count in (("train", 64), ("val", 16), ("test", 16)):
-        for label, size in (("horizontal", (25, 7)), ("vertical", (7, 25))):
-            folder = root / split / label
-            folder.mkdir(parents=True)
-            for index in range(count):
-                image = Image.new("L", (96, 96))
-                image.putdata([rng.randint(10, 55) for _ in range(96 * 96)])
-                x, y = rng.randint(32, 64), rng.randint(32, 64)
-                width, height = size
-                ImageDraw.Draw(image).ellipse(
-                    (x - width, y - height, x + width, y + height), fill=rng.randint(170, 235),
-                )
-                image = image.rotate(rng.uniform(-12, 12), resample=Image.BILINEAR,
-                                     fillcolor=30).filter(ImageFilter.GaussianBlur(1))
-                image.save(folder / f"{index:03d}.png")
-
-
 def positive_integer(value):
     number = int(value)
     if number < 1:
@@ -138,8 +126,6 @@ def positive_integer(value):
 def main():
     parser = argparse.ArgumentParser(description="Train a grayscale image classifier and predict labels.")
     commands = parser.add_subparsers(dest="command", required=True)
-    demo = commands.add_parser("demo-data", help="Generate abstract sample images")
-    demo.add_argument("dataset", type=Path)
     training = commands.add_parser("train", help="Train and evaluate on a directory of images")
     training.add_argument("dataset", type=Path)
     training.add_argument("output", type=Path)
@@ -151,9 +137,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        if args.command == "demo-data":
-            make_demo(args.dataset)
-        elif args.command == "train":
+        if args.command == "train":
             train(args.dataset, args.output, args.epochs, args.batch_size)
         else:
             predict(args.output, args.image)
