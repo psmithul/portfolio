@@ -37,8 +37,17 @@
               <p>We built a CNN to answer one question for each MRI image. Does the image show a tumour? We prepared and augmented the scans, trained the model, and ran it on individual images. Our team placed second at NITK EngiConnect.</p>
             </div>
             <figure class="project-cover">
-              <img src="/images/projects/brain-tumour-mri-example.webp" alt="Contrast-enhanced coronal MRI slice showing a tumour in the upper part of the brain." width="512" height="512" data-framing="full-frame" decoding="async">
-              <figcaption>Illustrative MRI slice from <a href="https://doi.org/10.6084/m9.figshare.1512427.v5" rel="noreferrer">Jun Cheng’s Figshare collection</a>, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer">CC BY 4.0</a>. The notebook uses the separate yes/no dataset linked below.</figcaption>
+              <div class="mri-samples">
+                <div>
+                  <img src="/images/projects/brain-mri-tumour.jpg" alt="Axial brain MRI with a bright area on the left side of the image." width="374" height="456" decoding="async">
+                  <strong>Tumour</strong>
+                </div>
+                <div>
+                  <img src="/images/projects/brain-mri-no-tumour.jpg" alt="Axial brain MRI from the no-tumour group." width="428" height="417" decoding="async">
+                  <strong>No tumour</strong>
+                </div>
+              </div>
+              <figcaption>Two held-out examples, labelled as in the <a href="https://www.kaggle.com/datasets/navoneel/brain-mri-images-for-brain-tumor-detection" rel="noreferrer">Colab dataset published by Navoneel Chakrabarty</a>.</figcaption>
             </figure>
           </div>
         </header>
