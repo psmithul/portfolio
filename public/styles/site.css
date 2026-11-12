@@ -663,6 +663,31 @@ body {
 .portfolio-page .academic-note-list .academic-note-meta {
   margin-bottom: 4px;
 }
+.portfolio-activities {
+  grid-template-columns: minmax(0, 2.25fr) minmax(0, 1fr);
+}
+.portfolio-activities :is(.portfolio-activity-layout, .portfolio-skills) > h2 {
+  margin-bottom: 18px;
+}
+.portfolio-skills {
+  padding-inline-start: clamp(16px, 2.5vw, 28px);
+  border-inline-start: 1px solid var(--academic-line);
+  scroll-margin-top: var(--academic-anchor-offset);
+}
+.portfolio-skill-group + .portfolio-skill-group {
+  margin-top: 20px;
+}
+.portfolio-skills .portfolio-skill-group h3 {
+  margin: 0 0 6px;
+}
+.portfolio-skill-group ul {
+  margin: 0;
+  padding-inline-start: 18px;
+  font-size: 15px;
+}
+.portfolio-skill-group li + li {
+  margin-top: 4px;
+}
 .portfolio-activity-layout .academic-activity-group + .academic-activity-group {
   margin-top: 26px;
 }
@@ -716,6 +741,15 @@ body {
   .portfolio-portrait {
     width: min(60%, 200px);
     justify-self: center;
+  }
+  .portfolio-activities {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+  }
+  .portfolio-skills {
+    padding: 20px 0 0;
+    border-inline-start: 0;
+    border-top: 1px solid var(--academic-line);
   }
 }
 @media (max-width: 620px) {
