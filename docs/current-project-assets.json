@@ -370,6 +370,14 @@
       "role": "published Restia V2 messages screenshot"
     },
     {
+      "path": "public/images/projects/restia-v3-1-2.jpg",
+      "source": "Screenshot of the Restia chat screen captured from a clean local instance of the published v3.1.2 release (https://github.com/psmithul/restia/releases/tag/v3.1.2)",
+      "width": 1280,
+      "height": 720,
+      "sha256": "ee8b387dedfaebfedc9ff5756273cef1e9d6a98853718631da29924ddfb96425",
+      "role": "Restia project thumbnail and case-study cover"
+    },
+    {
       "path": "public/images/projects/fem-mesh-convergence.jpg",
       "source": "Group_5_Final_Submission.pdf, page 20; original embedded image",
       "width": 2788,
@@ -520,6 +528,14 @@
       "height": 712,
       "sha256": "483e3da77c0a8816f9aeb4eaffaebe003ba00399a0a90ae6dd47bb8ad16cfbfd",
       "role": "official ISTE NITK homepage"
+    },
+    {
+      "path": "public/images/projects/hands-free-cursor-preview.jpg",
+      "source": "OpenCV preview frame captured from the portfolio cursor prototype running MediaPipe 0.10.9 against a recording made from the public MediaPipe pointing_up.jpg test photo",
+      "width": 720,
+      "height": 480,
+      "sha256": "d89b6b43276deabcc9a1809fe067a3c374b31b6b57a757ad80f9fef072deafc0",
+      "role": "actual hand tracking preview"
     }
   ]
 }
