@@ -34,12 +34,13 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>Working prototype · Team build · Feb — Apr 2024</p>
+              <p>Supervised by Dr. Khyati Verma.</p>
               <p id="why-use-a-linkage">Turn a crank and the door swings open. We built a working mechanism to see how four links could make that happen. Once the links and pivots were on the frame, we could turn the input by hand and watch the door follow.</p>
               <p><a href="#laying-out-the-links">Try the linkage motion ↓</a></p>
             </div>
             <figure class="project-cover">
-              <img alt="Single-door linkage model with the door halfway open, showing the input crank, connecting link and rocker." width="1260" height="777" data-framing="full-frame" decoding="async" src="/images/projects/four-bar-pose-mid.webp">
-              <figcaption>The single-door motion model halfway through its swing.</figcaption>
+              <img src="/images/projects/four-bar-twin-lid-open.webp" alt="Isometric CAD render of the twin-lid mechanism with both lids open and the blue and amber connecting rods meeting at the purple crank." width="1440" height="900" data-framing="full-frame" decoding="async">
+              <figcaption>Twin-lid CAD reconstruction with both lids open to 75°.</figcaption>
             </figure>
           </div>
         </header>
@@ -82,19 +83,25 @@
               </fieldset>
             </div>
           </section>
-          <section class="project-stage">
+          <section class="project-stage project-stage-wide">
             <h2 id="revisiting-the-layout-in-cad">Two-lid CAD study</h2>
             <div class="project-stage-copy">
               <p>I reconstructed a version with two connecting rods on one crank. Each rod has its own geometry, so I compared how far the lids opened, how much input effort the motion required, and how sensitive the result was to small changes in dimensions.</p>
               <p>The first crank took one lid to 24° and the other to 38°. Giving the crank more travel made one lid turn back before the stroke ended. Changing both the linkage geometry and the crank’s travel brought the revised model to 75° on each side.</p>
-              <p><a href="https://github.com/psmithul/four-bar-door/blob/main/docs/twin_lid_analysis.md" rel="noreferrer">Two-lid analysis</a>.</p>
+              <p>The two connecting rods are blue and amber. Both pivot on the same pin at the end of the purple crank. <a href="https://github.com/psmithul/four-bar-door/blob/main/docs/twin_lid_analysis.md" rel="noreferrer">Two-lid analysis</a>.</p>
             </div>
-            <div class="project-stage-figures">
+            <div class="project-stage-figures project-stage-figures-three">
               <figure class="reading-figure">
-                <div>
-                  <img src="/images/projects/four-bar-twin-lid-cad.png" alt="Parametric CAD of the twin-lid assembly with both lids open and two rods meeting at the shared crank." width="1600" height="1150" loading="lazy" decoding="async">
-                </div>
-                <figcaption>The later CAD reconstruction at 75° opening. <a href="/images/projects/four-bar-twin-lid-cad.png">Full-size CAD view</a> · <a href="https://github.com/psmithul/four-bar-door" rel="noreferrer">Design files and report</a>.</figcaption>
+                <a href="/images/projects/four-bar-twin-lid-closed.webp"><img src="/images/projects/four-bar-twin-lid-closed.webp" alt="Both lids sit closed and the common crank pin is at the lower stop." width="1440" height="900" loading="lazy" decoding="async"></a>
+                <figcaption>Closed · <a href="https://github.com/psmithul/four-bar-door/blob/2abc221ba641e4c116c45fcdfc3ef283565d9f5c/results/twin_lid/cad/revised_closed.step">Closed STEP model</a></figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <a href="/images/projects/four-bar-twin-lid-midstroke.webp"><img src="/images/projects/four-bar-twin-lid-midstroke.webp" alt="The crank is halfway through its stroke and the two lids sit at different angles." width="1440" height="900" loading="lazy" decoding="async"></a>
+                <figcaption>Midstroke · <a href="https://github.com/psmithul/four-bar-door/blob/2abc221ba641e4c116c45fcdfc3ef283565d9f5c/results/twin_lid/cad/revised_midstroke.step">Midstroke STEP model</a></figcaption>
+              </figure>
+              <figure class="reading-figure">
+                <a href="/images/projects/four-bar-twin-lid-open.webp"><img src="/images/projects/four-bar-twin-lid-open.webp" alt="Both lids are open to 75 degrees and the common crank pin is at the upper stop." width="1440" height="900" loading="lazy" decoding="async"></a>
+                <figcaption>Both lids at 75° · <a href="https://github.com/psmithul/four-bar-door/blob/2abc221ba641e4c116c45fcdfc3ef283565d9f5c/results/twin_lid/cad/revised_open.step">Open STEP model</a></figcaption>
               </figure>
             </div>
           </section>

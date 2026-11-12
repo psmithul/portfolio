@@ -396,12 +396,28 @@
       "role": "public project brochure"
     },
     {
-      "path": "public/images/projects/four-bar-twin-lid-cad.png",
-      "source": "psmithul/four-bar-door at 2abc221b, results/drive_design/open_preview.png",
-      "width": 1600,
-      "height": 1150,
-      "sha256": "05c0c020d19fd87c5996a37e8d0ae5f3151f5e115209197fdd64d4814898aa5b",
-      "role": "original CAD view of the reconstructed twin-lid mechanism at 75°"
+      "path": "public/images/projects/four-bar-twin-lid-open.webp",
+      "source": "Blender render of the source STEP assembly at psmithul/four-bar-door@2abc221b, results/twin_lid/cad/revised_open.step. CAD tessellated with CadQuery.",
+      "width": 1440,
+      "height": 900,
+      "sha256": "e64ab03a7e2539f21d90d8ef138d9a0089f4ce02cedb0233d7d545aa31403123",
+      "role": "Isometric CAD view of the twin-lid assembly with both lids open to 75°."
+    },
+    {
+      "path": "public/images/projects/four-bar-twin-lid-closed.webp",
+      "source": "Blender render of the source STEP assembly at psmithul/four-bar-door@2abc221b, results/twin_lid/cad/revised_closed.step. CAD tessellated with CadQuery.",
+      "width": 1440,
+      "height": 900,
+      "sha256": "f63f957656202b7beb7d8ace8c85f8c44ed6c5f6077ab5c3cef3009541f06572",
+      "role": "CAD view of the twin-lid mechanism at the closed input stop."
+    },
+    {
+      "path": "public/images/projects/four-bar-twin-lid-midstroke.webp",
+      "source": "Blender render of the source STEP assembly at psmithul/four-bar-door@2abc221b, results/twin_lid/cad/revised_midstroke.step. CAD tessellated with CadQuery.",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ce8f5598eff868b6a4d39817a5540acc8728d9bd7c9837f54fc5547bd5e9aa97",
+      "role": "CAD view of the twin-lid mechanism halfway through the input crank stroke."
     },
     {
       "path": "public/images/projects/navigation-trajectory.png",
