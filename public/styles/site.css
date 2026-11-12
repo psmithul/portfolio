@@ -440,11 +440,6 @@ body {
   gap: 14px var(--portfolio-gutter);
   scroll-margin-top: var(--academic-anchor-offset);
 }
-.portfolio-page .portfolio-affiliation {
-  color: var(--academic-muted);
-  font-size: clamp(1.25rem, 2.8vw, 1.5rem);
-  margin: 0;
-}
 .portfolio-portrait {
   grid-area: portrait;
   position: relative;
@@ -480,20 +475,17 @@ body {
   gap: 4px 20px;
   font-size: 14px;
 }
-:is(.portfolio-section, .portfolio-index) {
+.portfolio-section {
   display: grid;
   grid-template-columns: var(--portfolio-column) minmax(0, 1fr);
   gap: 10px var(--portfolio-gutter);
   align-items: start;
-}
-.portfolio-section {
   margin-top: 34px;
   padding-top: 24px;
   border-top: 1px solid var(--academic-line);
   scroll-margin-top: var(--academic-anchor-offset);
 }
-.portfolio-page .portfolio-section h2,
-.academic-site .portfolio-index h1 {
+.portfolio-page .portfolio-section h2 {
   margin: 0;
   font-size: clamp(1.25rem, 2.7vw, 1.45rem);
   font-weight: 550;
@@ -502,9 +494,6 @@ body {
 }
 .projects-page .portfolio-section h2 {
   scroll-margin-top: var(--academic-anchor-offset);
-}
-.portfolio-section-heading .portfolio-affiliation {
-  margin-top: 4px;
 }
 .project-list {
   list-style: none;
@@ -575,6 +564,28 @@ body {
   font:
     400 0.82em/1.1 system-ui,
     sans-serif;
+}
+.build-log-intro {
+  margin-bottom: clamp(36px, 6vw, 76px);
+}
+.build-log-intro h1 {
+  margin: 0 0 clamp(22px, 4vw, 52px);
+  font-size: clamp(2.125rem, 6vw, 4.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.build-log-intro p,
+.build-log-page > .academic-note-list {
+  width: min(100%, 720px);
+  margin-inline: auto;
+}
+.build-log-intro p {
+  margin-bottom: 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
 }
 .academic-note-list {
   list-style: none;
@@ -719,10 +730,8 @@ body {
   }
 }
 @media (max-width: 620px) {
-  :is(.portfolio-section, .portfolio-index) {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .portfolio-section {
+    grid-template-columns: minmax(0, 1fr);
     margin-top: 28px;
     padding-top: 20px;
   }
