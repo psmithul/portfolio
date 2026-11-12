@@ -37,8 +37,8 @@
               <p>I built a Python prototype to move the cursor without a mouse. I tried pointing with a finger and moving my eyes to control the same pointer.</p>
             </div>
             <figure class="project-cover">
-              <img src="/images/projects/hands-free-cursor-tracking.webp" alt="Two plots show a synthetic fingertip trace and the smoother path produced by the cursor filter." width="1440" height="708" data-framing="full-frame" decoding="async">
-              <figcaption>Cursor path from a sample input trace</figcaption>
+              <img src="/images/projects/hands-free-cursor-preview.jpg" alt="The cursor preview shows a green tracking dot beside a raised index finger." width="720" height="480" data-framing="full-frame" decoding="async">
+              <figcaption>The prototype tracking an index finger in a <a href="https://storage.googleapis.com/mediapipe-assets/pointing_up.jpg" rel="noreferrer">MediaPipe test photo</a>.</figcaption>
             </figure>
           </div>
         </header>
@@ -47,7 +47,7 @@
             <h2 id="tracking-the-finger">Tracking the index finger</h2>
             <div class="project-stage-copy">
               <p>In hand mode, the script takes the index fingertip from each frame and maps a rectangle in the camera view to the screen. Using an inner rectangle means the pointer can reach the edges without the hand leaving the frame.</p>
-              <p>Small shifts in the detected fingertip can make the cursor jitter. The filter moves the cursor partway toward each new target. In the example trace, the cursor moves more steadily and lags slightly when the input changes direction.</p>
+              <p>Small shifts in the detected fingertip can make the cursor jitter. The filter moves the cursor partway toward each new target. In the <a href="/images/projects/hands-free-cursor-tracking.webp">sample input trace</a>, the cursor moves more steadily and lags slightly when the input changes direction.</p>
             </div>
           </section>
           <section class="project-stage">
@@ -67,9 +67,9 @@
         </article>
         <p class="project-tools">Tools &amp; methods · Python 3.9 · OpenCV 4.8 · MediaPipe 0.10.9 · PyAutoGUI</p>
         <nav class="detail-pagination" aria-label="Project navigation">
-          <a href="/work/easy-access-wallet" rel="prev">
+          <a href="/work/four-bar-door-mechanism" rel="prev">
             <span class="detail-pagination-label">← Previous project</span>
-            <span>Wallet for Easier Card Access</span>
+            <span>Four-Bar Linkage Door-Opening Mechanism</span>
           </a>
           <a href="/work/brain-tumour-detection" rel="next">
             <span class="detail-pagination-label">Next project →</span>
