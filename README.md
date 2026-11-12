@@ -14,8 +14,8 @@ The site is plain HTML and CSS. Vercel serves the files in `public/` directly an
 
 To publish a post, add its HTML file to `public/blog/` and link it from Build Log. Add the same URL to `public/sitemap.xml`. For a new case study, add its HTML file to `public/work/` and link it from the appropriate group on Projects. Copy an existing page for the navigation, metadata, and document structure.
 
-Vercel serves `public/projects.html` at `/projects`. The routing rules, legacy redirects, and health endpoint are in `vercel.json`. GitHub branch pushes create previews. Check the preview’s public pages and links before merging.
+Vercel serves `public/projects.html` at `/projects`. The routing rules, legacy redirects, and health endpoint are in `vercel.json`. Check the site locally, including navigation, local links, and the sitemap. Commit and push to `main` as `@psmithul`, then confirm the Vercel production deployment at `psmithul.com`.
 
-The former Next.js application and writing desk are available in repository history at `144acf6`. The static site contains the published articles captured at migration. The previous private storage is separate from the deployed files.
+The former Next.js application and writing desk are available in repository history at `e75534c4d043`. The static site contains the published articles captured at migration. The previous private storage is separate from the deployed files.
 
 Project image sources are recorded in `docs/current-project-assets.json`. Article sources are in `docs/journal-sources.md`. Font and icon licenses are included beside the corresponding assets.
