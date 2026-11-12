@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 486" width="1000" height="486">
+  <title>Wall-climbing robot power and control paths</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="9" refY="5" orient="auto">
+      <path d="m0 0 10 5-10 5z" fill="#28746a"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="486" fill="#f5f8f7"/>
+  <path d="M35 219H965" stroke="#ccd9d6" stroke-width="2"/>
+  <g fill="#e5efed" stroke="#afc4bf" stroke-width="2">
+    <rect x="35" y="103" width="168" height="65" rx="6"/>
+    <rect x="280" y="103" width="176" height="65" rx="6"/>
+    <rect x="518" y="103" width="180" height="65" rx="6"/>
+    <rect x="760" y="103" width="204" height="65" rx="6"/>
+    <rect x="35" y="339" width="168" height="65" rx="6"/>
+    <rect x="280" y="282" width="176" height="65" rx="6"/>
+    <rect x="518" y="282" width="180" height="65" rx="6"/>
+    <rect x="280" y="397" width="176" height="65" rx="6"/>
+    <rect x="518" y="397" width="180" height="65" rx="6"/>
+    <rect x="760" y="397" width="204" height="65" rx="6"/>
+  </g>
+  <g fill="none" stroke="#28746a" stroke-width="3" stroke-linejoin="round">
+    <path d="M203 135h38V76h621"/>
+    <g marker-end="url(#arrow)">
+      <path d="M368 76v24"/>
+      <path d="M608 76v24"/>
+      <path d="M862 76v24"/>
+      <path d="M203 371h38v-57h35"/>
+      <path d="M241 371v58h35"/>
+      <path d="M456 314h58"/>
+      <path d="M456 429h58"/>
+      <path d="M698 429h58"/>
+    </g>
+  </g>
+  <g fill="#203733" font-family="system-ui,sans-serif" font-size="27" font-weight="600">
+    <text x="35" y="49" font-size="31" font-weight="700">Power distribution</text>
+    <text x="35" y="263" font-size="31" font-weight="700">Drive and fan commands</text>
+    <g text-anchor="middle">
+      <text x="119" y="145">LiPo pack</text>
+      <text x="368" y="145">Fan ESC</text>
+      <text x="608" y="145">Wheel drivers</text>
+      <text x="862" y="145">5 V regulator</text>
+      <text x="119" y="369">Radio</text>
+      <text x="119" y="395">receiver</text>
+      <text x="368" y="324">Fan ESC</text>
+      <text x="608" y="324">Ducted fan</text>
+      <text x="368" y="439">Arduino</text>
+      <text x="608" y="439">Wheel drivers</text>
+      <text x="862" y="439">4 DC motors</text>
+    </g>
+  </g>
+</svg>

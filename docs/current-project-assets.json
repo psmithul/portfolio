@@ -2,21 +2,29 @@
   "review_date": "2026-11-12",
   "assets": [
     {
-      "path": "public/images/projects/wall-climbing-robot-reconstruction.webp",
-      "source": "Built-in ImageGen edit of a Three.js reference model based on the project description. Four tire contact points and positive wall clearance for the remaining geometry were verified on the reference model.",
+      "path": "public/images/projects/wall-climbing-robot-bench.webp",
+      "source": "Built-in ImageGen material and lighting edit of a Three.js assembly reconstructed from the project plan.",
       "width": 1672,
       "height": 941,
-      "sha256": "efdd3492e65334b1d0c6277c3eb03bf77c66787a0d4a7c572d78579a89d49498",
-      "role": "photo-style reconstruction of the wall-climbing robot with a ducted fan, four wheels, and a wall-facing camera",
-      "prompt": "Edit this exact 3D reference into a plain, candid-looking engineering photograph of a small student wall-climbing prototype. Retain the original three-quarter camera angle and the exact geometry, placement, scale, silhouettes and orientation of all parts in the reference. In particular preserve the four wheel silhouettes and their tangent contact with the same uninterrupted wall plane. Keep the chassis and fan intake visibly spaced off the wall. Keep the camera on the wall-facing side of its board. Preserve the single fan and the simple flat metal plate, battery, boards and exposed wires. The requested change is materials and lighting only: physically natural soft room light, fine textured dark rubber, scratched and fingerprinted unpainted aluminium, ordinary plastic boards and fasteners, realistic concrete pores and slightly uneven surface color. Use modest depth of field and leave the full robot in focus. Keep the entire source composition in landscape and the result ordinary and slightly rough like a prototype photograph, with no added parts, markings, text, smoke, braces, wheel overlap, feet or polished advertising effect. Maintain the exact clearance and tire contact from the input."
+      "sha256": "6993614572294225df7e481dc3acd870d21c4733257b6630f316a98f29e900af",
+      "role": "desk photograph-style reconstruction of the lightweight chassis, open EDF and complete control electronics",
+      "prompt": "Make a candid, unstaged smartphone-style photograph from this exact reference model, keeping the camera angle and the slim lightweight chassis dimensions. The small student wall-climbing robot is resting on all four thin rubber tires on a worn electronics lab desk. Preserve the four lightweight open-spoke wheel hubs, narrow folded aluminum channel rails, small corner braces, end crossbars, open center and lightweight battery tray. Do not thicken rails or tires, add structural plates, make the battery larger, or change the robot silhouette. Keep the same single short black ducted fan with pitched rotor and hub, attached by four small brackets on its outer rim. The top exhaust is open. Keep the lower intake visibly above the desk, with a clear gap and no solid base plate. Preserve the four red motor driver boards, blue Arduino, little black radio receiver with antenna, small 5 V regulator, wall-facing camera, separate blue fan ESC, slim strapped LiPo, electrical connectors and all cables. Change only the materials, desk setting and lighting. Use real-looking slightly scuffed thin metal, dusty rubber, mildly untidy wire routing and real-looking unbranded circuit boards, under ordinary soft fluorescent lab lighting. On the sides of the used wood or laminate desk, include a few pliers, a screwdriver, short wire offcuts, loose screws and a soldering station in the background, as they would sit after someone has just been working. Keep the robot as the clear subject, all four wheels and full frame visible. Natural imperfect room photo, modest contrast, no artificial spotlight, showroom effects, composition polish, added robot parts, people, overlaid text, or graphics."
     },
     {
-      "path": "public/images/projects/wall-climbing-robot-layout.svg",
-      "source": "Engineering schematic drawn for the Wall-Climbing Robot case study from the project description",
-      "width": 960,
-      "height": 540,
-      "sha256": "837026e328d22808c8bf58a6bddcc4c184dc8d2b1626df4c601f76240326afa2",
-      "role": "simplified chassis layout with four drive wheels, fan and camera"
+      "path": "public/images/projects/wall-climbing-robot-clearance.webp",
+      "source": "Orthographic Three.js render of the reconstruction. Verified four tire contacts and open inlet and exhaust annuli in the model.",
+      "width": 1000,
+      "height": 920,
+      "sha256": "40f1c77478c21185082f991c663d892a91c70f9d70ec97662f16e9675562d3e4",
+      "role": "side view of wheel contact and ducted-fan clearance against a representative wall"
+    },
+    {
+      "path": "public/images/projects/wall-climbing-robot-controls.svg",
+      "source": "Engineering schematic based on the power and remote-control description on pages 2–3 of the ISTE NITK project proposal",
+      "width": 1000,
+      "height": 486,
+      "sha256": "135bbca067b14201d530bc95d99c82c902f05446b8ea9da5c3c017520e144dce",
+      "role": "battery distribution and separate fan and wheel control paths"
     },
     {
       "path": "public/images/projects/wall-climbing-robot-airflow-wide.svg",

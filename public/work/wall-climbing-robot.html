@@ -37,8 +37,8 @@
               <p>We built a small robot that climbed concrete walls and streamed video for crack inspection. A ducted fan pressed the four driven wheels against the wall, and a camera sent back footage that we processed to find cracks.</p>
             </div>
             <figure class="project-cover">
-              <img src="/images/projects/wall-climbing-robot-reconstruction.webp" alt="Reconstruction of the four-wheel robot with its tires against the concrete and the ducted fan clear of the wall." width="1672" height="941" decoding="async" data-framing="full-frame">
-              <figcaption>Generated reconstruction based on the project description.</figcaption>
+              <img src="/images/projects/wall-climbing-robot-bench.webp" alt="Reconstruction of the lightweight wall-climbing robot on a lab desk, showing four wheels, an open fan duct, and the mounted electronics." width="1672" height="941" decoding="async" data-framing="full-frame">
+              <figcaption>Generated bench view of the lightweight design reconstruction.</figcaption>
             </figure>
           </div>
         </header>
@@ -48,6 +48,13 @@
             <div class="project-stage-copy">
               <p>We modelled the chassis in CAD around the ducted fan, four wheel motors, and camera. The fan pushes the robot towards the wall. That increases the normal force on the tyres, giving them more grip to support the robot’s weight and drive it along the surface.</p>
               <p>We used the robot’s weight and assumed friction coefficients for different surfaces to estimate the minimum thrust needed to keep the wheels from slipping.</p>
+              <p>The reconstruction uses thin channel rails, braced corners, and small trays for the battery and control boards. Mounting the fan on its outer rim leaves the middle of the frame open. Keeping the chassis light also reduces the thrust the wheels need for grip.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/wall-climbing-robot-clearance.webp" alt="Side view of the reconstructed robot with both visible tires tangent to the wall and a clear gap behind the wall-facing fan inlet." width="1000" height="920" loading="lazy" decoding="async">
+                <figcaption>Side view of the model showing the gap between the wall and the fan inlet.</figcaption>
+              </figure>
             </div>
           </section>
           <section class="project-stage project-stage-wide">
@@ -70,12 +77,12 @@
           <section class="project-stage">
             <h2 id="driving-the-robot">Driving the robot</h2>
             <div class="project-stage-copy">
-              <p>We built the chassis and integrated four DC wheel motors, an Arduino, and a wireless remote. The Arduino sent drive commands through the motor drivers, and a separate electronic speed controller set the speed of the ducted fan. We could adjust the force into the wall while steering the robot.</p>
+              <p>A LiPo battery supplied the wheel drivers and the fan’s electronic speed controller (ESC). A regulated 5 V supply fed the control electronics. The wireless receiver sent steering and drive commands to the Arduino, which controlled the four DC wheel motors through their drivers. A separate radio channel set the fan speed through the brushless ESC.</p>
             </div>
             <div class="project-stage-figures">
               <figure class="reading-figure">
-                <img src="/images/projects/wall-climbing-robot-layout.svg" alt="Layout schematic showing four drive wheels, a central ducted fan, and an inspection camera." width="960" height="540" loading="lazy" decoding="async">
-                <figcaption>Simplified layout of the drive wheels, fan, and camera.</figcaption>
+                <img src="/images/projects/wall-climbing-robot-controls.svg" alt="Power and control diagram. The battery feeds the fan controller, wheel drivers, and 5-volt regulator. The radio receiver controls the fan ESC and sends drive commands through the Arduino and wheel drivers to four DC motors." width="1000" height="486" loading="lazy" decoding="async">
+                <figcaption>Power and command paths from the project plan.</figcaption>
               </figure>
             </div>
           </section>
