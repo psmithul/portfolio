@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Wall-Climbing Robot — P S Mithul Sourav</title>
-    <meta name="description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <meta name="description" content="We built an ISTE NITK wall-climbing robot with a ducted fan, four driven wheels, and a camera for detecting cracks in concrete.">
     <link rel="canonical" href="https://psmithul.com/work/wall-climbing-robot">
     <meta property="og:title" content="Wall-Climbing Robot">
-    <meta property="og:description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <meta property="og:description" content="We built an ISTE NITK wall-climbing robot with a ducted fan, four driven wheels, and a camera for detecting cracks in concrete.">
     <meta property="og:url" content="https://psmithul.com/work/wall-climbing-robot">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Wall-Climbing Robot">
-    <meta name="twitter:description" content="An ISTE NITK team project exploring a fan-assisted, four-wheel robot for inspecting cracks on concrete walls.">
+    <meta name="twitter:description" content="We built an ISTE NITK wall-climbing robot with a ducted fan, four driven wheels, and a camera for detecting cracks in concrete.">
     <link rel="stylesheet" href="/styles/site.css">
     <link rel="stylesheet" href="/styles/project.css">
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
@@ -34,11 +34,11 @@
           <div class="project-intro-grid">
             <div class="project-intro-copy">
               <p>ISTE NITK · CLUTCH team project · <time datetime="2024-10">October 2024</time> — <time datetime="2025-03">March 2025</time></p>
-              <p>We wanted a small robot that could climb a concrete wall and send back video for crack inspection. We chose a ducted fan to press the robot against the wall and four driven wheels to move it along the surface.</p>
+              <p>We built a small robot that climbed concrete walls and streamed video for crack inspection. A ducted fan pressed the four driven wheels against the wall, and a camera sent back footage that we processed to find cracks.</p>
             </div>
             <figure class="project-cover">
-              <img src="/images/projects/wall-climbing-robot-adhesion.webp" alt="Side-view schematic showing the fan pushing the chassis towards the wall, wheel traction pointing up, and the robot’s weight pointing down." width="1200" height="675" decoding="async" data-framing="full-frame">
-              <figcaption>Design schematic. The fan presses the wheels into the wall, giving them the grip needed to climb.</figcaption>
+              <img src="/images/projects/wall-climbing-robot-render.webp" alt="Illustration of a four-wheel robot against a concrete wall, with a central ducted fan and a small inspection camera." width="1672" height="941" decoding="async" data-framing="full-frame">
+              <figcaption>Generated illustration of the climbing robot, based on the project description.</figcaption>
             </figure>
           </div>
         </header>
@@ -46,20 +46,32 @@
           <section class="project-stage">
             <h2 id="keeping-grip">Keeping grip on the wall</h2>
             <div class="project-stage-copy">
-              <p>On a vertical surface, the wheels have to support the robot’s weight through friction. The fan pushes the chassis towards the wall, increasing the force at the tyres. The wheel motors turn that grip into motion along the wall. If the tyres have less grip on a particular surface, the fan needs to press harder to support the same weight.</p>
-              <p>Our sizing plan was to estimate how much thrust we needed using the robot’s weight and an assumed friction coefficient for each surface. We also planned an ANSYS airflow study to see how moving the fan closer to the wall would change the thrust it produced.</p>
+              <p>We modelled the chassis in CAD around the ducted fan, four wheel motors, and camera. The fan pushes the robot towards the wall. That increases the normal force on the tyres, giving them more grip to support the robot’s weight and drive it along the surface.</p>
+              <p>We used the robot’s weight and assumed friction coefficients for different surfaces to estimate the minimum thrust. We also ran an airflow study in ANSYS to compare the thrust at different distances from the wall.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/wall-climbing-robot-adhesion.webp" alt="Side-view schematic showing fan thrust towards the wall, upward wheel traction, and downward weight." width="1200" height="675" loading="lazy" decoding="async">
+                <figcaption>The fan increases the grip at the wheels so they can support the robot’s weight.</figcaption>
+              </figure>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="driving-the-robot">Driving the robot</h2>
             <div class="project-stage-copy">
-              <p>The control design used a wireless remote, an Arduino, and motor drivers for the four DC wheel motors. A separate electronic speed controller set the speed of the ducted fan. This gave the operator a way to adjust the force into the wall independently of the direction of travel.</p>
+              <p>We built the chassis and integrated four DC wheel motors, an Arduino, and a wireless remote. The Arduino sent drive commands through the motor drivers, and a separate electronic speed controller set the speed of the ducted fan. We could adjust the force into the wall while steering the robot.</p>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="looking-for-cracks">Looking for cracks</h2>
             <div class="project-stage-copy">
-              <p>A wireless camera on the chassis would send video of the concrete surface back to the operator. The proposal identified percolation-based image processing as a way to look for connected crack-like regions in those frames.</p>
+              <p>We mounted a wireless camera on the chassis and streamed video of the concrete surface as the robot moved. We processed the frames using a percolation method to find connected regions that followed the shape of a crack.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/wall-climbing-robot-crack-illustration.webp" alt="A synthetic image of a branching crack in concrete next to an illustration that traces the same crack in teal." width="1774" height="887" loading="lazy" decoding="async">
+                <figcaption>Generated example of a concrete crack and its traced shape.</figcaption>
+              </figure>
             </div>
           </section>
         </article>
