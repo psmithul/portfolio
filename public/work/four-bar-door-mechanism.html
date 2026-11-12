@@ -33,41 +33,60 @@
           <h1>Four-Bar Linkage Door-Opening Mechanism</h1>
           <div class="project-intro-grid">
             <div class="project-intro-copy">
-              <p>Team build · Feb — Apr 2024</p>
-              <p id="why-use-a-linkage">We built a four-bar door opener to see how one turning input could produce a particular door path. We worked back from the desired motion to the pivot positions and link lengths. I later used CAD to study a two-lid version driven by one crank.</p>
+              <p>Working prototype · Team build · Feb — Apr 2024</p>
+              <p id="why-use-a-linkage">Turn a crank and the door swings open. We built a working mechanism to see how four links could make that happen. Once the links and pivots were on the frame, we could turn the input by hand and watch the door follow.</p>
+              <p><a href="#laying-out-the-links">Try the linkage motion ↓</a></p>
             </div>
             <figure class="project-cover">
-              <img alt="CAD view of two raised lids linked to one shared crank by a blue rod and a green rod." width="1600" height="1150" decoding="async" src="/images/projects/four-bar-twin-lid-cad.png">
-              <figcaption>The later parametric CAD reconstruction with both lids open to 75°.</figcaption>
+              <img alt="Single-door linkage model with the door halfway open, showing the input crank, connecting link and rocker." width="1260" height="777" data-framing="full-frame" decoding="async" src="/images/projects/four-bar-pose-mid.webp">
+              <figcaption>The single-door motion model halfway through its swing.</figcaption>
             </figure>
           </div>
         </header>
         <article class="article-prose">
           <section class="project-stage">
-            <h2 id="laying-out-the-links">Link geometry</h2>
+            <h2 id="trying-the-assembled-mechanism">Making the door swing</h2>
             <div class="project-stage-copy">
-              <p>We started with the fixed pivots and compared how the moving links fit together in the closed and open positions. The link lengths and pivot positions determine how far the door opens and what path it takes between those positions.</p>
-            </div>
-            <div class="project-stage-figures">
-              <figure class="reading-figure">
-                <div>
-                  <img src="/images/projects/process-four-bar.webp" alt="A schematic four-bar linkage in two positions with the two fixed pivots staying in place." width="1280" height="660" loading="lazy" decoding="async">
-                </div>
-                <figcaption>Design schematic showing two positions of a four-bar linkage. The fixed pivots stay in place as the three moving links change angle.</figcaption>
-              </figure>
+              <p id="what-i-learned">We made the links, set the two fixed pivots on the frame, and joined the moving parts. The input crank moves the connecting link, which turns the rocker at the door hinge. The frame holds the two fixed pivots and acts as the fourth link.</p>
+              <p>Once it was assembled, we turned the crank through the stroke and watched where the door started, how it moved between the stops, and where it ended up. It made the role of the pivots much easier to see. The door follows an arc because the rocker and the door rotate around the same hinge.</p>
             </div>
           </section>
-          <section class="project-stage">
-            <h2 id="trying-the-assembled-mechanism">Build and motion check</h2>
+          <section class="project-stage project-stage-wide">
+            <h2 id="laying-out-the-links">Turn the crank</h2>
             <div class="project-stage-copy">
-              <p id="what-i-learned">We made the links and pivots, assembled the opener, and turned the input to see where the door moved and stopped. Watching the full motion made the effect of pivot placement easier to see than it had been in the layout drawing.</p>
+              <p>Step through three positions in the single-door model. Follow the blue crank and watch how the copper link carries that motion to the hinge.</p>
+            </div>
+            <div class="project-stage-figures">
+              <fieldset class="linkage-demo">
+                <legend>Choose a door position</legend>
+                <input type="radio" name="door-position" id="door-closed" checked>
+                <label for="door-closed">Closed</label>
+                <input type="radio" name="door-position" id="door-halfway">
+                <label for="door-halfway">Halfway</label>
+                <input type="radio" name="door-position" id="door-open">
+                <label for="door-open">Open</label>
+                <div class="linkage-poses">
+                  <figure class="reading-figure linkage-closed">
+                    <img src="/images/projects/four-bar-pose-closed.webp" alt="The door sits flat at zero degrees. The blue crank points toward the hinge and the purple rocker points up." width="1260" height="777" decoding="async">
+                    <figcaption>At the start, the door is flat and the rocker is upright.</figcaption>
+                  </figure>
+                  <figure class="reading-figure linkage-halfway">
+                    <img src="/images/projects/four-bar-pose-mid.webp" alt="The door sits at 45 degrees. The input crank has swung down and the connecting link has turned the hinge." width="1260" height="777" decoding="async">
+                    <figcaption>The crank swings down as the connecting link turns the rocker.</figcaption>
+                  </figure>
+                  <figure class="reading-figure linkage-open">
+                    <img src="/images/projects/four-bar-pose-open.webp" alt="The door stands upright at 90 degrees. The fixed input and door pivots remain in place." width="1260" height="777" decoding="async">
+                    <figcaption>The model reaches 90°. The frame pivots have stayed in the same place throughout the swing.</figcaption>
+                  </figure>
+                </div>
+              </fieldset>
             </div>
           </section>
           <section class="project-stage">
             <h2 id="revisiting-the-layout-in-cad">Two-lid CAD study</h2>
             <div class="project-stage-copy">
               <p>I reconstructed a version with two connecting rods on one crank. Each rod has its own geometry, so I compared how far the lids opened, how much input effort the motion required, and how sensitive the result was to small changes in dimensions.</p>
-              <p>With the first short crank, both lids opened less than I wanted, and their final angles differed by 14°. I tried giving that layout more travel, but one lid started to reverse before the sweep ended. I changed the linkage geometry and the range of crank travel together. In the revised CAD motion both lids reached 75°.</p>
+              <p>The first crank took one lid to 24° and the other to 38°. Giving the crank more travel made one lid turn back before the stroke ended. Changing both the linkage geometry and the crank’s travel brought the revised model to 75° on each side.</p>
               <p><a href="https://github.com/psmithul/four-bar-door/blob/main/docs/twin_lid_analysis.md" rel="noreferrer">Two-lid analysis</a>.</p>
             </div>
             <div class="project-stage-figures">
