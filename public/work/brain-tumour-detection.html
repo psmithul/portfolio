@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Brain Tumour Detection — P S Mithul Sourav</title>
+    <meta name="description" content="We trained a CNN to detect whether a brain MRI image contains a tumour. Our team placed second at NITK EngiConnect.">
+    <link rel="canonical" href="https://psmithul.com/work/brain-tumour-detection">
+    <meta property="og:title" content="Brain Tumour Detection">
+    <meta property="og:description" content="We trained a CNN to detect whether a brain MRI image contains a tumour. Our team placed second at NITK EngiConnect.">
+    <meta property="og:url" content="https://psmithul.com/work/brain-tumour-detection">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Brain Tumour Detection">
+    <meta name="twitter:description" content="We trained a CNN to detect whether a brain MRI image contains a tumour. Our team placed second at NITK EngiConnect.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="stylesheet" href="/styles/project.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a class="academic-header-logo" href="/" aria-label="Mithul Sourav home"><img src="/images/mithul-logo.png" alt="" width="480" height="160"></a>
+          <a href="/">About</a>
+          <a href="/projects" aria-current="location">Projects</a>
+          <a href="/build-log">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="project-page">
+        <a class="detail-back" href="/projects#project-brain-tumour-detection">← Back to Projects</a>
+        <header class="project-intro">
+          <h1>Brain Tumour Detection</h1>
+          <div class="project-intro-grid">
+            <div class="project-intro-copy">
+              <p>Python · Machine learning · 2021</p>
+              <p>We built a CNN to answer one question for each MRI image. Does the image show a tumour? We prepared and augmented the scans, trained the model, and ran it on individual images. Our team placed second at NITK EngiConnect.</p>
+            </div>
+            <figure class="project-cover">
+              <img src="/images/projects/brain-tumour-mri-example.webp" alt="Contrast-enhanced coronal MRI slice showing a tumour in the upper part of the brain." width="512" height="512" data-framing="full-frame" decoding="async">
+              <figcaption>Illustrative MRI slice from <a href="https://doi.org/10.6084/m9.figshare.1512427.v5" rel="noreferrer">Jun Cheng’s Figshare collection</a>, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noreferrer">CC BY 4.0</a>. The notebook uses the separate yes/no dataset linked below.</figcaption>
+            </figure>
+          </div>
+        </header>
+        <article class="article-prose">
+          <section class="project-stage">
+            <h2 id="preprocessing-and-augmentation">Preprocessing and augmentation</h2>
+            <div class="project-stage-copy">
+              <p>The original notebook used a dataset with two folders. There were 155 images labelled tumour and 98 labelled no tumour. I removed exact duplicates before splitting the images for the run shown here. That left 160 images for training, 34 for validation, and 34 for testing. <a href="https://www.kaggle.com/datasets/navoneel/brain-mri-images-for-brain-tumor-detection" rel="noreferrer">Dataset listing</a>.</p>
+              <p>The Keras generator resizes the images to 224 × 224 and scales their pixel values. It applies zoom, shear, and horizontal flips during training so the CNN sees some variation in how the brain sits in the frame.</p>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="training-and-classification">Training and testing</h2>
+            <div class="project-stage-copy">
+              <p>The CNN uses four convolutional layers, followed by a single output score. A score of 0.5 or higher assigns the tumour label. I selected the checkpoint using validation accuracy and evaluated it on the held-out images.</p>
+              <p>In this run, the model matched 26 of 34 test labels. It missed two images labelled tumour and flagged six images labelled no tumour. The split is by image because the dataset supplies no patient identifiers. The project has no clinical validation.</p>
+            </div>
+            <div class="project-stage-figures">
+              <figure class="reading-figure">
+                <img src="/images/projects/brain-tumour-detection-results.webp" alt="Training and validation accuracy and a two-class confusion matrix showing 26 of 34 correctly labelled test images." width="1440" height="720" loading="lazy" decoding="async">
+                <figcaption>Training history and test results from a fresh run on the notebook’s yes/no dataset.</figcaption>
+              </figure>
+            </div>
+          </section>
+          <section class="project-stage">
+            <h2 id="run-the-classifier">Run the detector</h2>
+            <div class="project-stage-copy">
+              <p>The notebook downloads the project dataset, displays a sample from each class, trains the CNN, and scores a held-out image. The ZIP includes the Python scripts and an optional local Streamlit demo.</p>
+              <p><a href="https://colab.research.google.com/github/psmithul/portfolio/blob/main/public/notebooks/Brain_Tumour_Detection.ipynb" rel="noreferrer">Open in Google Colab</a> · <a href="/code/brain-tumour-detection.zip" download>Download project</a> · <a href="/code/brain-tumour-detection/README.txt">Setup and usage</a></p>
+            </div>
+          </section>
+        </article>
+        <p class="project-tools">Tools &amp; methods · Python 3.9 · TensorFlow 2.7 · Keras · Image preprocessing</p>
+        <nav class="detail-pagination" aria-label="Project navigation">
+          <a href="/work/hands-free-cursor-control" rel="prev">
+            <span class="detail-pagination-label">← Previous project</span>
+            <span>Hands-free Cursor Control</span>
+          </a>
+          <a href="/work/solar-smart-home" rel="next">
+            <span class="detail-pagination-label">Next project →</span>
+            <span>Arduino-Based Smart Home with Solar Power</span>
+          </a>
+        </nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

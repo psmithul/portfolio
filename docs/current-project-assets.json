@@ -466,22 +466,6 @@
       "role": "sample input and smoothed cursor path"
     },
     {
-      "path": "public/images/projects/brain-mri-figshare-slices.webp",
-      "source": "Jun Cheng, Brain Tumor Dataset, Figshare v5 (2017), DOI 10.6084/m9.figshare.1512427.v5, CC BY 4.0; slices 2208, 301 and 1247 plotted in Brain_MRI_Classification.ipynb",
-      "width": 1440,
-      "height": 648,
-      "sha256": "f6c0e76a90aa7da7c2795621a7fa691c947a9cef5556430a70dfe6c581cc4a41",
-      "role": "real MRI cover; converted and rescaled for display"
-    },
-    {
-      "path": "public/images/projects/brain-mri-figshare-results.webp",
-      "source": "Brain_MRI_Classification.ipynb, TensorFlow 2.7 run on a patient-level split of Figshare v5",
-      "width": 1440,
-      "height": 732,
-      "sha256": "8c15280db0ff6838df766e7f208f3eaa1bf68b939ae65e6a79517ebce4017d9e",
-      "role": "training accuracy and test confusion matrix on real MRI slices"
-    },
-    {
       "path": "public/images/projects/four-bar-pose-closed.webp",
       "source": "psmithul/four-bar-door at 2abc221b, results/revised_motion.csv and results/geometry.png",
       "width": 1260,
@@ -504,6 +488,22 @@
       "height": 777,
       "sha256": "dcd06146415386273662abd28e957387a2a7e6ca7b3fff0b1d801066f7e5e753",
       "role": "single-door kinematic model at 90 degrees"
+    },
+    {
+      "path": "public/images/projects/brain-tumour-mri-example.webp",
+      "source": "Jun Cheng, Brain Tumor Dataset, Figshare v5 (2017), DOI 10.6084/m9.figshare.1512427.v5, CC BY 4.0; slice 301, rescaled for display",
+      "width": 512,
+      "height": 512,
+      "sha256": "6734054128742b897231e025a799b42c11b28e522d260c6d37e30f503836d567",
+      "role": "illustrative MRI image, separate from the detector training dataset"
+    },
+    {
+      "path": "public/images/projects/brain-tumour-detection-results.webp",
+      "source": "TensorFlow 2.7 run of the supplied binary CNN on the original notebook dataset, with exact duplicates removed",
+      "width": 1440,
+      "height": 720,
+      "sha256": "2c13bb93a47f9f40fd97e9c8c862bbd67d82815b41980853c729f510e16b7349",
+      "role": "training and validation curves with binary confusion matrix"
     }
   ]
 }
