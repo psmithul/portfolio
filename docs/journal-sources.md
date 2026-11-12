@@ -13,3 +13,7 @@ X was searched for the release timing. Search returned secondary trend summaries
 Articles distinguish announcement claims from personal results. Suggested comparisons and experiments are described as plans, without invented first-hand measurements. The efficiency article uses the real Sol and Luna model names rather than inventing a model called GPT-6.0.
 
 The controls article is a learning note dated 30 September 2026. Technical background comes from the linked MathWorks PID introduction and neural-network predictive-control example. The latter's Spanish documentation retains the example that the English URL currently redirects away from.
+
+The Restia entry is dated 20 July 2026, the date of the development revision shown in the screenshots. [Restia commit](https://github.com/psmithul/restia/commit/5f506055f06685b3691717b7d15c0ba27aacda15)
+
+The Hermes Memory Workspace entry is dated 15 June 2026, when the vault history records the Obsidian memory setup and the handoff registry and task queue.

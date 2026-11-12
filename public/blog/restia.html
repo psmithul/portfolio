@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restia — Mika’s Life — P S Mithul Sourav</title>
+    <meta name="description" content="A self-hosted workspace that brings model chat, projects, study tools, and documents together.">
+    <link rel="canonical" href="https://psmithul.com/blog/restia">
+    <meta property="og:title" content="Restia">
+    <meta property="og:description" content="A self-hosted workspace that brings model chat, projects, study tools, and documents together.">
+    <meta property="og:url" content="https://psmithul.com/blog/restia">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-07-20">
+    <meta property="article:author" content="Mithul Sourav">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Restia">
+    <meta name="twitter:description" content="A self-hosted workspace that brings model chat, projects, study tools, and documents together.">
+    <link rel="stylesheet" href="/styles/site.css">
+    <link rel="icon" href="/favicon.svg">
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="academic-site">
+      <header class="academic-header">
+        <nav class="academic-header-inner" aria-label="Main navigation">
+          <a class="academic-header-logo" href="/" aria-label="Mithul Sourav home"><img src="/images/mithul-logo.png" alt="" width="480" height="160"></a>
+          <a href="/">About</a>
+          <a href="/projects">Projects</a>
+          <a href="/build-log" aria-current="location">Build Log</a>
+        </nav>
+      </header>
+      <main id="main" tabindex="-1" class="academic-content academic-case">
+        <a class="detail-back" href="/build-log#note-restia">← Back to Build Log</a>
+        <header>
+          <p class="academic-kicker">AI / Software</p>
+          <h1>Restia</h1>
+          <p class="academic-deck">A self-hosted workspace that brings model chat, projects, study tools, and documents together.</p>
+          <div class="academic-article-byline"><span>By <a href="/">Mithul Sourav</a></span><time datetime="2026-07-20">20 July 2026</time><span>2 min read</span></div>
+        </header>
+        <nav class="reading-contents" aria-label="On this page">
+          <p class="eyebrow">On this page</p>
+          <ol>
+            <li><a href="#bringing-the-workspace-together">Workspace and model choices</a></li>
+            <li><a href="#planning-the-work">Calendar and project planning</a></li>
+            <li><a href="#keeping-the-data-close">Self-hosting and collaboration</a></li>
+          </ol>
+        </nav>
+        <article class="article-prose">
+          <p id="why-build-restia">I built Restia because I wanted model conversations to sit alongside the projects, files, and tasks they help with. I explored a web interface, a desktop-style dashboard, and Python services before combining them in a self-hosted workspace.</p>
+          <figure class="reading-figure">
+            <a href="/images/projects/restia-dev-projects.jpg"><img src="/images/projects/restia-dev-projects.jpg" alt="Restia project board showing sample robotics tasks in the Ideas, Planned, and Setup stages." width="1280" height="720" decoding="async"></a>
+            <figcaption>A sample robotics project in the <a href="https://github.com/psmithul/restia/tree/5f506055f06685b3691717b7d15c0ba27aacda15">Restia development build</a>.</figcaption>
+          </figure>
+          <h2 id="bringing-the-workspace-together">Workspace and model choices</h2>
+          <p id="what-i-learned">I gave projects their own boards and documents. The study area holds goals and focus sessions, and chat sits alongside that work. Building the early versions separately helped me see which things need to last beyond a conversation, such as a document or a decision saved to a project.</p>
+          <p>I kept model selection separate from the workspace layout. Restia can use a local model or a hosted provider while the project’s files and tasks stay in the same place.</p>
+          <p>The early prototypes gave me different places to put the same information. I settled on saving decisions and documents inside projects because they need to be easy to find after a chat ends. I kept provider choice on the chat side of the workspace so changing models leaves the board and files where they are.</p>
+          <figure class="reading-figure">
+            <a href="/images/projects/restia-dev-brief.jpg"><img src="/images/projects/restia-dev-brief.jpg" alt="Restia project brief showing progress, open items, and the next actions for a sample project." width="1280" height="720" loading="lazy" decoding="async"></a>
+            <figcaption>The project brief pulls progress and next actions from the board.</figcaption>
+          </figure>
+          <h2 id="planning-the-work">Calendar and project planning</h2>
+          <p>The board keeps track of work that needs to move through stages. The calendar is where I put work tied to a date or time, such as a test slot or a review. In this example, the calibration and review are calendar events, while the preparation and analysis stay on the project board.</p>
+          <figure class="reading-figure">
+            <a href="/images/projects/restia-dev-calendar.jpg"><img src="/images/projects/restia-dev-calendar.jpg" alt="Restia’s weekly calendar showing a sensor calibration session and a review of vibration traces." width="1280" height="720" loading="lazy" decoding="async"></a>
+            <figcaption>Weekly calendar with sample test and review sessions.</figcaption>
+          </figure>
+          <h2 id="keeping-the-data-close">Self-hosting and collaboration</h2>
+          <p>The files and database stay on the owner’s infrastructure. I also built a way to share a project between Restia installations. The owner can grant viewer or editor access, which let me handle collaboration at the project level.</p>
+          <p>Sharing between installations raised two separate questions: who serves the file and who can change it. I kept the owner’s installation in charge of the file and made viewing and editing separate permissions. That lets someone read a shared project before the owner decides whether to give them write access.</p>
+          <p class="academic-kicker">Tools &amp; methods · Python · TypeScript</p>
+        </article>
+        <nav class="detail-pagination" aria-label="Post navigation">
+          <a href="/blog/what-excites-me-about-gpt-6-astra" rel="prev">
+            <span class="detail-pagination-label">← Previous post</span>
+            <span>What I’m curious about with GPT-6 Astra</span>
+          </a>
+          <a href="/blog/gpt-5-6-sol-and-what-i-want-to-build" rel="next">
+            <span class="detail-pagination-label">Next post →</span>
+            <span>GPT-5.6 Sol makes me want to try a few things</span>
+          </a>
+        </nav>
+      </main>
+      <footer class="academic-footer">
+        <div>
+          <span>© 2024–2026 Mithul Sourav</span>
+          <a href="/Mithul-Sourav-CV.pdf" target="_blank" rel="noreferrer">Résumé</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
